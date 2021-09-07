@@ -31,12 +31,19 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Create NuGet'
+  displayName: 'Create NuGet and Zip'
   inputs:
     command: 'pack'
     arguments: '--configuration $(buildConfiguration)'
     packagesToPack: '$(project)'
     versioningScheme: 'off'
+
+- task: CopyFiles@2
+  displayName: 'Copy Zip Artifact To Staging'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)\src\$(projectName)\bin\$(buildConfiguration)\'
+    Contents: '$(projectName).*.zip'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Build Artifacts'
