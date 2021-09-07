@@ -1,11 +1,5 @@
 ﻿using Umbraco.Cms.Integrations.Commerce.CommerceTools.Models.Search.Sorting;
-
-#if NETCOREAPP
-using Umbraco.Cms.Core;
-
-#else
 using Umbraco.Core.Persistence.DatabaseModelDefinitions;
-#endif
 
 namespace Umbraco.Cms.Integrations.Commerce.CommerceTools.Extensions
 {

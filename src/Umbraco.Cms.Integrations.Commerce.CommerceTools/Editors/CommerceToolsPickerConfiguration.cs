@@ -1,9 +1,5 @@
 ﻿using System.Runtime.Serialization;
-#if NETCOREAPP
-using Umbraco.Cms.Core.PropertyEditors;
-#else
 using Umbraco.Core.PropertyEditors;
-#endif
 
 namespace Umbraco.Cms.Integrations.Commerce.CommerceTools.Editors
 {

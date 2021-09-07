@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -11,19 +13,8 @@ using Umbraco.Cms.Integrations.Commerce.CommerceTools.Extensions;
 using Umbraco.Cms.Integrations.Commerce.CommerceTools.Models;
 using Umbraco.Cms.Integrations.Commerce.CommerceTools.Models.Search.Filters;
 using Umbraco.Cms.Integrations.Commerce.CommerceTools.Models.Search.Sorting;
-
-#if NETCOREAPP
-using System.Text.Json;
-using Microsoft.Extensions.Options;
-using Umbraco.Cms.Core;
-using Umbraco.Extensions;
-
-#else
-using System.Configuration;
 using Umbraco.Core;
 using Umbraco.Core.Persistence.DatabaseModelDefinitions;
-using Newtonsoft.Json;
-#endif
 
 namespace Umbraco.Cms.Integrations.Commerce.CommerceTools.Services
 {
@@ -37,19 +28,11 @@ namespace Umbraco.Cms.Integrations.Commerce.CommerceTools.Services
 
         private DateTime? Expiration { get; set; }
 
-#if NETCOREAPP
-        public CommerceToolsService(IOptions<CommerceToolsSettings> options)
-        {
-            _options = options.Value;
-            Scope = $"manage_project:{_options.ProjectKey}";
-        }
-#else
         public CommerceToolsService()
         {
             _options = new CommerceToolsSettings(ConfigurationManager.AppSettings);
             Scope = $"manage_project:{_options.ProjectKey}";
         }
-#endif
 
         public async Task<Product> GetProductByIdAsync(Guid id, string languageCode = null)
         {
@@ -298,16 +281,6 @@ namespace Umbraco.Cms.Integrations.Commerce.CommerceTools.Services
         /// <typeparam name="T"></typeparam>
         /// <param name="jsonString"></param>
         /// <returns></returns>
-        private T DeserializeJson<T>(string jsonString)
-        {
-#if NETCOREAPP
-            return JsonSerializer.Deserialize<T>(jsonString, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
-#else
-            return JsonConvert.DeserializeObject<T>(jsonString);
-#endif
-        }
+        private T DeserializeJson<T>(string jsonString) => JsonConvert.DeserializeObject<T>(jsonString);
     }
 }

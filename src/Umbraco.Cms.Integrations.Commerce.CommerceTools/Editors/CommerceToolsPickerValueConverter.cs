@@ -3,15 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Cms.Integrations.Commerce.CommerceTools.Models;
 using Umbraco.Cms.Integrations.Commerce.CommerceTools.Services;
-#if NETCOREAPP
-using UmbracoConstants = Umbraco.Cms.Core.Constants;
-using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Cms.Core.PropertyEditors;
-#else
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
-using UmbracoConstants = Umbraco.Core.Constants;
-#endif
+
 
 namespace Umbraco.Cms.Integrations.Commerce.CommerceTools.Editors
 {
@@ -54,11 +48,7 @@ namespace Umbraco.Cms.Integrations.Commerce.CommerceTools.Editors
             if (source == null) return null;
 
             var entityIds = source.ToString()
-#if NETCOREAPP
-                .Split(UmbracoConstants.CharArrays.Comma, StringSplitOptions.RemoveEmptyEntries)
-#else
                 .Split(new [] {','}, StringSplitOptions.RemoveEmptyEntries)
-#endif
                 .Select(Guid.Parse)
                 .ToArray();
             return entityIds;

@@ -4,10 +4,6 @@ namespace Umbraco.Cms.Integrations.Commerce.CommerceTools.Configuration
 {
     public class CommerceToolsSettings
     {
-        public CommerceToolsSettings()
-        {
-        }
-
         public CommerceToolsSettings(NameValueCollection appSettings)
         {
             ApiUrl = appSettings["Umbraco.Cms.Integrations.Commerce.CommerceTools.ApiUrl"];

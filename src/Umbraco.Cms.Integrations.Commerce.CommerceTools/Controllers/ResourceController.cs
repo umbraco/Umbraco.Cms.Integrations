@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Http;
 using Umbraco.Cms.Integrations.Commerce.CommerceTools.Models;
+using Umbraco.Cms.Integrations.Commerce.CommerceTools.Models.Search;
 using Umbraco.Cms.Integrations.Commerce.CommerceTools.Models.Search.Sorting;
 using Umbraco.Cms.Integrations.Commerce.CommerceTools.Services;
-using Umbraco.Cms.Integrations.Commerce.CommerceTools.Models.Search;
-using System.Threading.Tasks;
-
-#if NETCOREAPP
-using Microsoft.AspNetCore.Mvc;
-using Umbraco.Cms.Core;
-using Umbraco.Cms.Web.BackOffice.Controllers;
-using Umbraco.Cms.Web.BackOffice.ModelBinders;
-using Umbraco.Cms.Web.Common.Attributes;
-
-#else
-using System.Web.Http;
 using Umbraco.Core.Persistence.DatabaseModelDefinitions;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
-#endif
 
 namespace Umbraco.Cms.Integrations.Commerce.CommerceTools.Controllers
 {

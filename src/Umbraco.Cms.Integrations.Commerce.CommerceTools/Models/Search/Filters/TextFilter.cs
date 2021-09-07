@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-#if NETCOREAPP
-using Umbraco.Extensions;
-#else
-using Umbraco.Core;
-#endif
+﻿using Umbraco.Core;
 
 namespace Umbraco.Cms.Integrations.Commerce.CommerceTools.Models.Search.Filters
 {

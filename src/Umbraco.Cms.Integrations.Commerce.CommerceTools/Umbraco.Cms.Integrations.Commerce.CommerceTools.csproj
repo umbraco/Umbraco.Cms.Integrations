@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net50;net472</TargetFrameworks>
+    <TargetFramework>net472</TargetFramework>
     <ContentTargetFolders>.</ContentTargetFolders>
     <PackageId>Umbraco.Cms.Integrations.Commerce.CommerceTools</PackageId>
     <Product>Umbraco.Cms.Integrations.Commerce.CommerceTools</Product>
@@ -8,20 +8,9 @@
     <Version>1.0.0</Version>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <PackageReference Include="UmbracoCms.Web" version="8.5.4" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net50'">
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.0.0-rc001" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.0.0-rc001" />
-  </ItemGroup>
-
   <ItemGroup>
-    <None Include="build\**\*.*">
-      <Pack>True</Pack>
-      <PackagePath>buildTransitive</PackagePath>
-    </None>
+    <PackageReference Include="MSBuild.Umbraco.Packaging" Version="1.0.2" />
+    <PackageReference Include="UmbracoCms.Web" version="8.5.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,11 +20,37 @@
     </Content>
   </ItemGroup>
 
-  <!-- Workaround for this bug (replace the analyzer name with the one you need to exclude (filename only, no extension) -->
-  <Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
-    <ItemGroup>
-      <Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
-    </ItemGroup>
+  <!--
+  Create Umbraco package zip along with NuGet when dotnet pack is called.
+  See and hat-tip:
+   - https://24days.in/umbraco-cms/2019/umbraco-packages-2019/packaging/
+   - https://github.com/callumbwhyte/msbuild-umbraco-packaging
+  -->
+  <UsingTask AssemblyFile="$(TargetDir)\MSBuild.Umbraco.Packaging.dll" TaskName="MSBuild.Umbraco.Packaging.GatherAssemblies" />
+
+  <Target Name="UmbracoGatherFiles">
+    <GatherAssemblies Dependencies="@(ReferenceCopyLocalPaths)" PackageRefs="@(PackageReference);@(ProjectReference)">
+      <Output TaskParameter="Assemblies" ItemName="PackageAssemblies" />
+    </GatherAssemblies>
+
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(TempFolder)\bin\" />
+    <Copy SourceFiles="@(PackageAssemblies)" DestinationFolder="$(TempFolder)\bin\" />
+
+    <Copy SourceFiles="@(Content)" DestinationFiles="$(TempFolder)%(RelativeDir)%(Filename)%(Extension)" />
+  </Target>
+
+  <UsingTask AssemblyFile="$(TargetDir)\MSBuild.Umbraco.Packaging.dll" TaskName="MSBuild.Umbraco.Packaging.GenerateManifest" />
+
+  <Target Name="UmbracoPackage" AfterTargets="Pack" DependsOnTargets="UmbracoClean;UmbracoGatherFiles">
+    <GenerateManifest TargetDirectory="$(TempFolder)" Name="$(Product)" Description="$(Description)" Version="$(Version)" UmbracoVersion="$(UmbracoVersion)" Author="$(Authors)" AuthorUrl="$(AuthorUrl)" ProjectUrl="$(PackageProjectUrl)" IconUrl="$(PackageIconUrl)" LicenseUrl="$(PackageLicenseUrl)" />
+  </Target>
+
+  <Target Name="UmbracoPackage" AfterTargets="Pack" DependsOnTargets="UmbracoClean;UmbracoGatherFiles">
+    <ZipDirectory SourceDirectory="$(TempFolder)" DestinationFile="$(DestFolder)\$(Product).$(Version).zip" Overwrite="true" />
+  </Target>
+
+  <Target Name="UmbracoClean" AfterTargets="Clean">
+    <RemoveDir Directories="$(TempFolder)" />
   </Target>
 
 </Project>
