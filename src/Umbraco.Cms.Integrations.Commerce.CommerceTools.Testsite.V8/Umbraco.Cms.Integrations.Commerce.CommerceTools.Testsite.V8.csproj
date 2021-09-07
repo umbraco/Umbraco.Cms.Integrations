@@ -408,13 +408,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Umbraco.Cms.Integrations.Commerce.CommerceTools.Core\Umbraco.Cms.Integrations.Commerce.CommerceTools.Core.csproj">
+    <ProjectReference Include="..\Umbraco.Cms.Integrations.Commerce.CommerceTools\Umbraco.Cms.Integrations.Commerce.CommerceTools.csproj">
       <Project>{85a73911-0146-409f-9488-33ea5750a07c}</Project>
-      <Name>Umbraco.Cms.Integrations.Commerce.CommerceTools.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Umbraco.Cms.Integrations.Commerce.CommerceTools.Web\Umbraco.Cms.Integrations.Commerce.CommerceTools.Web.csproj">
-      <Project>{29566caa-7fd7-4e03-87f2-ab357cb59f2c}</Project>
-      <Name>Umbraco.Cms.Integrations.Commerce.CommerceTools.Web</Name>
+      <Name>Umbraco.Cms.Integrations.Commerce.CommerceTools</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

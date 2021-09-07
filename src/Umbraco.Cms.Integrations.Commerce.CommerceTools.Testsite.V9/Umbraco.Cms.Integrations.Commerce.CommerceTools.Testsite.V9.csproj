@@ -9,7 +9,7 @@
         <PackageReference Include="Umbraco.SqlServerCE" Version="4.0.0.1" />
     </ItemGroup>
 
-    <Import Project="..\Umbraco.Cms.Integrations.Commerce.CommerceTools.Web\build\Umbraco.Cms.Integrations.Commerce.CommerceTools.targets" />
+    <Import Project="..\Umbraco.Cms.Integrations.Commerce.CommerceTools\build\Umbraco.Cms.Integrations.Commerce.CommerceTools.targets" />
 
     <ItemGroup>
         <Compile Remove="umbraco\Data\**" />
@@ -68,7 +68,7 @@
       <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\Resources\CommerceToolsResource.js" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\Umbraco.Cms.Integrations.Commerce.CommerceTools.Web\Umbraco.Cms.Integrations.Commerce.CommerceTools.Web.csproj" />
+      <ProjectReference Include="..\Umbraco.Cms.Integrations.Commerce.CommerceTools\Umbraco.Cms.Integrations.Commerce.CommerceTools.csproj" />
     </ItemGroup>
 
     <!-- Set this to true if ModelsBuilder mode is not InMemoryAuto-->
