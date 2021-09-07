@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<language alias="en" intName="English (UK)" localName="English (UK)" lcid="" culture="en-GB">
+  <area alias="commerceTools">
+    <key alias="key">Key</key>
+    <key alias="variants">Variants</key>
+    <key alias="prices">Prices</key>
+    <key alias="selectProduct">Select Product</key>
+    <key alias="selectCategory">Select Category</key>
+    <key alias="selectProductMulti">Select Products</key>
+    <key alias="selectCategoryMulti">Select Categories</key>
+  </area>
+</language>

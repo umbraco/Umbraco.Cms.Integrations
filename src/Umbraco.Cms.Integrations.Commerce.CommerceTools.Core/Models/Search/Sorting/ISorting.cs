@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Umbraco.Cms.Integrations.Commerce.CommerceTools.Core.Models.Search.Sorting
+{
+    public interface ISorting
+    {
+        /// <summary>
+        /// Return a string that represents the state of the sorting object.
+        /// </summary>
+        /// <returns></returns>
+        string Stringify();
+    }
+}

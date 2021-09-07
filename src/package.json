@@ -1,0 +1,14 @@
+{
+  "name": "commercetools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "copy-and-watch": "copy-and-watch --watch UmbracoCommerceTools/App_Plugins/**/* UmbracoCommerceTools.Testsite9/App_Plugins"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "copy-and-watch": "^0.1.5"
+  }
+}

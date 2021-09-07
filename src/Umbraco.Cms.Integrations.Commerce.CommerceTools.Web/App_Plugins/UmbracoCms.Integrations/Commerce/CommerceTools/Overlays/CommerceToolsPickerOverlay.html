@@ -1,0 +1,126 @@
+﻿<div ng-controller="Umbraco.Cms.Integrations.Commerce.CommerceTools.Overlays.CommerceToolsPickerOverlayController as vm">
+
+    <form name="commerceToolsPickerOverlayForm" novalidate val-form-manager>
+
+        <umb-editor-view>
+
+            <umb-editor-header name="model.title"
+                               name-locked="true"
+                               hide-alias="true"
+                               hide-icon="true"
+                               hide-description="true">
+            </umb-editor-header>
+
+            <umb-editor-container>
+
+                <umb-editor-sub-header>
+                    <umb-editor-sub-header-content-left>
+                        <strong class="umb-editor-sub-header__section" ng-if="vm.selectedItems.length > 0">
+                            {{ vm.selectedItems.length }}&nbsp;<localize key="general_selected">selected</localize>
+                        </strong>
+                    </umb-editor-sub-header-content-left>
+                    <umb-editor-sub-header-content-right>
+                        <umb-mini-search model="vm.terms" on-search="vm.makeSearch()" on-start-typing="vm.onSearchStartTyping()">
+                        </umb-mini-search>
+                    </umb-editor-sub-header-content-right>
+                </umb-editor-sub-header>
+
+                <umb-load-indicator ng-show="vm.loading"></umb-load-indicator>
+
+                <div class="umb-table" ng-show="!vm.loading">
+                    <div class="umb-table-head">
+                        <div class="umb-table-row">
+                            <div class="umb-table-cell"></div>
+                            <div class="umb-table-cell umb-table__name">
+                                <button type="button"
+                                        class="umb-table-head__link sortable"
+                                        ng-click="vm.sort('Name')">
+                                    <localize key="general_name">Name</localize>
+                                    <i class="umb-table-head__icon icon" aria-hidden="true" ng-class="{'icon-navigation-up': vm.isSortDirection('Name', 'asc'), 'icon-navigation-down': vm.isSortDirection('Name', 'desc')}"></i>
+                                </button>
+                            </div>
+                            <div class="umb-table-cell">
+                                <button type="button"
+                                        class="umb-table-head__link sortable"
+                                        ng-click="vm.sort('Key')">
+                                    <localize key="commerceTools_key">Key</localize>
+                                    <i class="umb-table-head__icon icon" aria-hidden="true" ng-class="{'icon-navigation-up': vm.isSortDirection('Key', 'asc'), 'icon-navigation-down': vm.isSortDirection('Key', 'desc')}"></i>
+                                </button>
+                            </div>
+                            <div class="umb-table-cell" ng-if="vm.columns.variants">
+                                <localize key="commerceTools_variants">Variants</localize>
+                            </div>
+                            <div class="umb-table-cell" ng-if="vm.columns.prices">
+                                <localize key="commerceTools_prices">Prices</localize>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-table-body">
+                        <div class="umb-table-row -selectable umb-outline"
+                             ng-repeat="item in vm.items"
+                             ng-class="{'-selected':vm.isSelected(item)}"
+                             ng-click="vm.selectItem(item, $index, $event)">
+
+                            <div class="umb-table-cell">
+                                <div class="umb-table-body__icon umb-table-body__fileicon " ng-if="item.images.length > 0">
+                                    <img ng-src="{{ item.images[0].url }}" width="{{item.images[0].width}}" height="{{item.images[0].height}}" style="max-height:1em;max-width:auto;" />
+                                </div>
+                                <umb-icon icon="{{ item.icon }}" class="icon-tag umb-table-body__icon umb-table-body__fileicon" ng-if="!item.images || item.images.length === 0"></umb-icon>
+                                <umb-icon icon="icon-check" class="icon-check umb-table-body__icon umb-table-body__checkicon"></umb-icon>
+                            </div>
+                            <div class="umb-table-cell umb-table__name">
+                                {{ item.name }}
+                            </div>
+                            <div class="umb-table-cell">
+                                {{ item.key }}
+                            </div>
+                            <div class="umb-table-cell" ng-if="vm.columns.variants">
+                                {{ item.variantNames | truncate:true:32 }}
+                            </div>
+                            <div class="umb-table-cell" ng-if="vm.columns.prices">
+                                {{ item.prices }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center" ng-show="!vm.loading">
+                    <umb-pagination page-number="vm.pagination.pageNumber"
+                                    total-pages="vm.pagination.totalPages"
+                                    on-next="vm.nextPage"
+                                    on-prev="vm.prevPage"
+                                    on-change="vm.changePage"
+                                    on-go-to-page="vm.goToPage">
+                    </umb-pagination>
+                </div>
+
+            </umb-editor-container>
+
+            <umb-editor-footer>
+
+                <umb-editor-footer-content-right>
+
+                    <umb-button type="button"
+                                button-style="link"
+                                label-key="general_close"
+                                shortcut="esc"
+                                action="vm.close()">
+                    </umb-button>
+
+                    <umb-button ng-if="model.multiPicker"
+                                type="button"
+                                button-style="success"
+                                label-key="general_submit"
+                                action="vm.submit(model)">
+                    </umb-button>
+
+                </umb-editor-footer-content-right>
+
+            </umb-editor-footer>
+
+        </umb-editor-view>
+
+    </form>
+
+</div>

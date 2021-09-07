@@ -1,0 +1,27 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <UmbracoCmsIntegrationsCommerceToolsContentFilesPath>$(MSBuildThisFileDirectory)..\App_Plugins\Umbraco.Cms.Integrations.Commerce.CommerceTools\**\*.*</UmbracoCmsIntegrationsCommerceToolsContentFilesPath>
+    </PropertyGroup>
+
+    <Target Name="CopyCommerceToolsAssets" BeforeTargets="Build">
+        <ItemGroup>
+            <UmbracoCmsIntegrationsCommerceToolsContentFiles Include="$(UmbracoCmsIntegrationsCommerceToolsContentFilesPath)" />
+        </ItemGroup>
+        <Message Text="Copying Umbraco.Cms.Integrations.Commerce.CommerceTools files: $(UmbracoCmsIntegrationsCommerceToolsContentFilesPath) - #@(UmbracoCmsIntegrationsCommerceToolsContentFiles->Count()) files" Importance="high" />
+        <Copy
+            SourceFiles="@(UmbracoCmsIntegrationsCommerceToolsContentFiles)"
+            DestinationFiles="@(UmbracoCmsIntegrationsCommerceToolsContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\Umbraco.Cms.Integrations.Commerce.CommerceTools\%(RecursiveDir)%(Filename)%(Extension)')"
+            SkipUnchangedFiles="true" />
+
+    </Target>
+
+    <Target Name="ClearCommerceToolsAssets" BeforeTargets="Clean">
+        <ItemGroup>
+            <UmbracoCmsIntegrationsCommerceCommerceToolsDir Include="$(MSBuildProjectDirectory)\App_Plugins\Umbraco.Cms.Integrations.Commerce.CommerceTools\" />
+        </ItemGroup>
+        <Message Text="Clear old Umbraco.Cms.Integrations.Commerce.CommerceTools data"  Importance="high" />
+        <RemoveDir Directories="@(UmbracoCmsIntegrationsCommerceCommerceToolsDir)"  />
+    </Target>
+
+</Project>

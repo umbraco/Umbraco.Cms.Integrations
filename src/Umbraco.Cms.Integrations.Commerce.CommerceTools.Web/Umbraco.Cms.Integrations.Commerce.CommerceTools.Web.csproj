@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net50;net472</TargetFrameworks>
+    <ContentTargetFolders>.</ContentTargetFolders>
+    <Product>Umbraco.Cms.Integrations.Commerce.CommerceTools</Product>
+    <PackageId>Umbraco.Cms.Integrations.Commerce.CommerceTools</PackageId>
+    <Title>Umbraco.Cms.Integrations.Commerce.CommerceTools</Title>
+    <Description>...</Description>
+    <Product>...</Product>
+    <PackageTags>umbraco plugin package</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.0-beta</Version>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="UmbracoCms.Web" version="8.5.4" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net50'">
+    <PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.0-rc001" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.0-rc001" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\**\*.*">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+    <None Include="build\**\*.*">
+      <Pack>True</Pack>
+      <PackagePath>buildTransitive</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\PropertyEditors\OrderByPickerController.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\lang\da.xml" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\lang\en.xml" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\Overlays\CommerceToolsPickerOverlay.html" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\Overlays\CommerceToolsPickerOverlayController.js" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\package.manifest" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\PropertyEditors\CommerceToolsPicker.html" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\PropertyEditors\CommerceToolsPickerController.js" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\PropertyEditors\EntityTypePicker.html" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\PropertyEditors\EntityTypePickerController.js" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\PropertyEditors\OrderByPicker.html" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\Resources\CommerceToolsResource.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Umbraco.Cms.Integrations.Commerce.CommerceTools.Core\Umbraco.Cms.Integrations.Commerce.CommerceTools.Core.csproj" />
+  </ItemGroup>
+
+  <!-- Workaround for this bug (replace the analyzer name with the one you need to exclude (filename only, no extension) -->
+  <Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
+    </ItemGroup>
+  </Target>
+</Project>

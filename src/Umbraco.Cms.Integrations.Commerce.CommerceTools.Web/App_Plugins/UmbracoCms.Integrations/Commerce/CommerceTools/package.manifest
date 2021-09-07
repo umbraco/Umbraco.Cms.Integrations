@@ -1,0 +1,9 @@
+﻿{
+	"javascript": [
+		"~/App_Plugins/UmbracoCms.Integrations/Commerce/CommerceTools/Resources/CommerceToolsResource.js",
+		"~/App_Plugins/UmbracoCms.Integrations/Commerce/CommerceTools/Overlays/CommerceToolsPickerOverlayController.js",
+		"~/App_Plugins/UmbracoCms.Integrations/Commerce/CommerceTools/PropertyEditors/CommerceToolsPickerController.js",
+		"~/App_Plugins/UmbracoCms.Integrations/Commerce/CommerceTools/PropertyEditors/EntityTypePickerController.js",
+		"~/App_Plugins/UmbracoCms.Integrations/Commerce/CommerceTools/PropertyEditors/OrderByPickerController.js"
+	]
+}

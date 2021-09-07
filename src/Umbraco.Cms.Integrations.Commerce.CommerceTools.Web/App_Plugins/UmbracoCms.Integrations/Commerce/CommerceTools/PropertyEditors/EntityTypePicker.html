@@ -1,0 +1,27 @@
+﻿<div ng-controller="Umbraco.Cms.Integrations.Commerce.CommerceTools.PropertyEditors.EntityTypePickerController">
+
+    <ng-form name="entityTypePickerForm" class="flex">
+        <ul class="inline">
+            <li class="-no-padding-left">
+                <umb-radiobutton name="entityType"
+                                 value="Category"
+                                 model="model.value"
+                                 text="Category"
+                                 required="true">
+                </umb-radiobutton>
+            </li>
+            <li>
+                <umb-radiobutton name="entityType"
+                                 value="Product"
+                                 model="model.value"
+                                 text="Product"
+                                 required="true">
+                </umb-radiobutton>
+            </li>
+        </ul>
+
+        <span ng-messages="entityTypePickerForm.entityType.$error" show-validation-on-submit>
+            <span class="help-inline" ng-message="required"><localize key="general_required">Required</localize></span>
+        </span>
+    </ng-form>
+</div>
