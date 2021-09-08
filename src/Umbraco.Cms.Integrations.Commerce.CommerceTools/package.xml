@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<umbPackage>
+  <info>
+    <package>
+      <name>Umbraco.Cms.Integrations.Commerce.CommerceTools</name>
+      <version>1.0.0</version>
+      <iconUrl></iconUrl>
+      <licence url="https://opensource.org/licenses/MIT">MIT</licence>
+      <url>https://github.com/umbraco/Umbraco.Cms.Integrations</url>
+      <requirements type="strict">
+        <major>8</major>
+        <minor>1</minor>
+        <patch>0</patch>
+      </requirements>
+    </package>
+    <author>
+      <name>Umbraco HQ</name>
+      <website>https://github.com/umbraco/Umbraco.Cms.Integrations</website>
+    </author>
+    <contributors>
+      <contributor>Søren Kottal</contributor>
+      <contributor>Andy Butland</contributor>
+    </contributors>
+    <readme><![CDATA[An extension for Umbraco CMS providing product and category pickers for CommerceTools.]]></readme>
+  </info>
+  <files>
+    <folder path="App_Plugins/UmbracoCms.Integrations/Commerce/CommerceTools" orgPath="App_Plugins/UmbracoCms.Integrations/Commerce/CommerceTools" />
+    <file path="bin/release/net472/Umbraco.Cms.Integrations.Commerce.CommerceTools.dll" orgPath="bin/Umbraco.Cms.Integrations.Commerce.CommerceTools.dll" />
+  </files>
+</umbPackage>

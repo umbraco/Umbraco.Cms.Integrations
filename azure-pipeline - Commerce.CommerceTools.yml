@@ -31,19 +31,21 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Create NuGet and Zip'
+  displayName: 'Create NuGet Package'
   inputs:
     command: 'pack'
     arguments: '--configuration $(buildConfiguration)'
     packagesToPack: '$(project)'
     versioningScheme: 'off'
 
-- task: CopyFiles@2
-  displayName: 'Copy Zip Artifact To Staging'
+- task: CmdLine@2
+  displayName: 'Create Umbraco Package'
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)\src\$(projectName)\bin\$(buildConfiguration)\'
-    Contents: '$(projectName).*.zip'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    script: |
+      dotnet tool install --global Umbraco.Tools.Packages
+      cd src/$(projectName)/
+      umbpack pack .\package.xml -o $(Build.ArtifactStagingDirectory)
+      cd ../../
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Build Artifacts'

@@ -16,9 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MSBuild.Umbraco.Packaging" Version="1.0.2">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="UmbracoCms.Web" version="8.5.4" />
   </ItemGroup>
 
@@ -28,38 +25,5 @@
       <PackagePath>content\App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\</PackagePath>
     </Content>
   </ItemGroup>
-
-  <!--
-  Create Umbraco package zip along with NuGet when dotnet pack is called.
-  See and hat-tip:
-   - https://24days.in/umbraco-cms/2019/umbraco-packages-2019/packaging/
-   - https://github.com/callumbwhyte/msbuild-umbraco-packaging
-  -->
-  <UsingTask AssemblyFile="$(TargetDir)\MSBuild.Umbraco.Packaging.dll" TaskName="MSBuild.Umbraco.Packaging.GatherAssemblies" />
-
-  <Target Name="UmbracoGatherFiles">
-    <GatherAssemblies Dependencies="@(ReferenceCopyLocalPaths)" PackageRefs="@(PackageReference);@(ProjectReference)">
-      <Output TaskParameter="Assemblies" ItemName="PackageAssemblies" />
-    </GatherAssemblies>
-
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(TempFolder)\bin\" />
-    <Copy SourceFiles="@(PackageAssemblies)" DestinationFolder="$(TempFolder)\bin\" />
-
-    <Copy SourceFiles="@(Content)" DestinationFiles="$(TempFolder)%(RelativeDir)%(Filename)%(Extension)" />
-  </Target>
-
-  <UsingTask AssemblyFile="$(TargetDir)\MSBuild.Umbraco.Packaging.dll" TaskName="MSBuild.Umbraco.Packaging.GenerateManifest" />
-
-  <Target Name="UmbracoPackage" AfterTargets="Pack" DependsOnTargets="UmbracoClean;UmbracoGatherFiles">
-    <GenerateManifest TargetDirectory="$(TempFolder)" Name="$(Product)" Description="$(Description)" Version="$(Version)" UmbracoVersion="$(UmbracoVersion)" Author="$(Authors)" AuthorUrl="$(AuthorUrl)" ProjectUrl="$(PackageProjectUrl)" IconUrl="$(PackageIconUrl)" LicenseUrl="$(PackageLicenseUrl)" />
-  </Target>
-
-  <Target Name="UmbracoPackage" AfterTargets="Pack" DependsOnTargets="UmbracoClean;UmbracoGatherFiles">
-    <ZipDirectory SourceDirectory="$(TempFolder)" DestinationFile="$(DestFolder)\$(Product).$(Version).zip" Overwrite="true" />
-  </Target>
-
-  <Target Name="UmbracoClean" AfterTargets="Clean">
-    <RemoveDir Directories="$(TempFolder)" />
-  </Target>
 
 </Project>
