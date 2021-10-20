@@ -1,4 +1,4 @@
-# Umbraco.Cms.Integrations.Commerce.Hubspot
+# Umbraco.Cms.Integrations.Commerce.CommerceTools
 
 This integration provides a product and category picker, with data sourced from a [CommerceTools](https://commercetools.com/) installation.
 
