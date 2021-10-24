@@ -1,6 +1,6 @@
 # Umbraco.Cms.Integrations
 
-This repository houses open-source extensions, created for Umbraco CMS, that integrate with third-party plaforms.
+This repository houses open-source extensions, created for Umbraco CMS, that integrate with third-party platforms.
 
 ## Available Integrations
 
