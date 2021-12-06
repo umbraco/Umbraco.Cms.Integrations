@@ -1,0 +1,19 @@
+﻿<div ng-controller="Umbraco.Cms.Integrations.SEO.SemrushTools.SemrushToolsController as vm">
+    <umb-box>
+        <umb-box-header title="Content Properties"></umb-box-header>
+        <umb-box-content>
+            <label for="selProperties">Available properties</label>
+            <select id="selProperties" ng-model="vm.SelectedProperty" ng-change="vm.OnPropertyChange()">
+                <option value=""></option>
+                <option ng-repeat="prop in vm.CurrentNodeProperties" value="{{ prop.alias }}">{{ prop.label }}</option>
+            </select>
+
+            <div ng-if="(vm.SelectedProperty.length > 0)">
+                <label>Property <b>{{ vm.SelectedPropertyDetails.label }}</b> with value <b>{{ vm.SelectedPropertyDetails.value }}</b></label>
+            </div>
+        </umb-box-content>
+    </umb-box>
+    <umb-box>
+        <umb-box-header title="SEMRUSH - Related Phrases"></umb-box-header>
+    </umb-box>
+</div>
