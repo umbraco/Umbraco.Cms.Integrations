@@ -1,4 +1,6 @@
-﻿<div ng-controller="Umbraco.Cms.Integrations.SEO.SemrushTools.SemrushToolsController as vm">
+﻿<div ng-controller="UmbracoCms.Integrations.SemrushToolsController as vm">
+    <umb-load-indicator ng-if="vm.loading">
+    </umb-load-indicator>
     <umb-box>
         <umb-box-header title="Content Properties"></umb-box-header>
         <umb-box-content>
@@ -7,13 +9,54 @@
                 <option value=""></option>
                 <option ng-repeat="prop in vm.CurrentNodeProperties" value="{{ prop.alias }}">{{ prop.label }}</option>
             </select>
-
-            <div ng-if="(vm.SelectedProperty.length > 0)">
-                <label>Property <b>{{ vm.SelectedPropertyDetails.label }}</b> with value <b>{{ vm.SelectedPropertyDetails.value }}</b></label>
-            </div>
         </umb-box-content>
     </umb-box>
     <umb-box>
-        <umb-box-header title="SEMRUSH - Related Phrases"></umb-box-header>
+        <umb-box-header title="SEMRUSH - Related Phrases">
+            <umb-button action="vm.OnConnectClick()"
+                        type="button"
+                        button-style="primary"
+                        state="init"
+                        label="Connect"
+                        disabled="vm.isConnected">
+            </umb-button>
+        </umb-box-header>
+        <umb-box-content>
+            <div ng-if="(vm.SelectedPropertyDetails != undefined)">
+                <input type="text" ng-model="vm.SelectedPropertyDetails.value" />
+
+                <umb-button action="vm.OnGetRelatedPhrases()"
+                            type="button"
+                            button-style="primary"
+                            label="Get related phrases">
+                </umb-button>
+            </div>
+            <div ng-if="vm.relatedPhrasesList">
+                <div class="umb-table" ng-if="vm.relatedPhrasesList">
+                    <!-- Listviews head section -->
+                    <div class="umb-table-head">
+                        <div class="umb-table-row">
+                            <div class="umb-table-cell" ng-repeat="column in vm.relatedPhrasesList.data.columnNames">
+                                <span ng-bind="column"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Listview body section -->
+                    <div class="umb-table-body">
+                        <div class="umb-table-row"
+                             ng-repeat="row in vm.relatedPhrasesList.data.rows">
+                            <div class="umb-table-cell" ng-repeat="item in row">
+                                <span ng-bind="item"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- If list is empty, then display -->
+                <umb-empty-state ng-if="!vm.relatedPhrasesList"
+                                 position="center">
+                    <localize key="content_listViewNoItems">There are no items show in the list.</localize>
+                </umb-empty-state>
+            </div>
+        </umb-box-content>
     </umb-box>
 </div>

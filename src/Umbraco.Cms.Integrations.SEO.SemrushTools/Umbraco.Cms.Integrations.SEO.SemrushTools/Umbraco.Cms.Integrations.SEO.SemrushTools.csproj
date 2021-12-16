@@ -270,9 +270,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\SemrushController.cs" />
+    <Compile Include="Models\Dtos\AuthorizationRequestDto.cs" />
+    <Compile Include="Models\Dtos\RelatedPhrasesDataDto.cs" />
+    <Compile Include="Models\Dtos\RelatedPhrasesDto.cs" />
+    <Compile Include="Models\Dtos\TokenDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SemrushToolsComponent.cs" />
     <Compile Include="SemrushToolsComposer.cs" />
     <Compile Include="SemrushToolsContentApp.cs" />
+    <Compile Include="Services\ISemrushService.cs" />
+    <Compile Include="Services\SemrushService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -283,6 +291,7 @@
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools\semrushTools.html" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools\semrushToolsController.js" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets" Condition="Exists('..\..\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
