@@ -270,8 +270,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\SemrushController.cs" />
     <Compile Include="Models\Dtos\AuthorizationRequestDto.cs" />
+    <Compile Include="Models\Dtos\AuthorizationResponseDto.cs" />
     <Compile Include="Models\Dtos\RelatedPhrasesDataDto.cs" />
     <Compile Include="Models\Dtos\RelatedPhrasesDto.cs" />
     <Compile Include="Models\Dtos\TokenDto.cs" />
@@ -279,7 +281,9 @@
     <Compile Include="SemrushToolsComponent.cs" />
     <Compile Include="SemrushToolsComposer.cs" />
     <Compile Include="SemrushToolsContentApp.cs" />
+    <Compile Include="Services\ISemrushCachingService.cs" />
     <Compile Include="Services\ISemrushService.cs" />
+    <Compile Include="Services\SemrushCachingService.cs" />
     <Compile Include="Services\SemrushService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -288,6 +292,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools\semrush.resources.js" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools\semrushTools.html" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools\semrushToolsController.js" />
   </ItemGroup>
@@ -300,4 +305,12 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>mkdir "$(SolutionDir)Umbraco.Cms.Integrations.SEO.SemrushTools.Testsite.V8\Testsite.V8\App_Plugins"
+mkdir "$(SolutionDir)Umbraco.Cms.Integrations.SEO.SemrushTools.Testsite.V8\Testsite.V8\App_Plugins\UmbracoCms.Integrations"
+mkdir "$(SolutionDir)Umbraco.Cms.Integrations.SEO.SemrushTools.Testsite.V8\Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO"
+mkdir "$(SolutionDir)Umbraco.Cms.Integrations.SEO.SemrushTools.Testsite.V8\Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools"
+
+copy /Y  "$(ProjectDir)App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools" "$(SolutionDir)Umbraco.Cms.Integrations.SEO.SemrushTools.Testsite.V8\Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

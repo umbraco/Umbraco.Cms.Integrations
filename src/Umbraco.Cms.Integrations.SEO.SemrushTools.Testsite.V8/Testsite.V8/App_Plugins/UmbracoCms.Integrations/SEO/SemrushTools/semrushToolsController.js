@@ -4,29 +4,38 @@
 
         var vm = this;
 
-        vm.loading = false;
-
-        vm.items = [
-            {
-                "icon": "icon-document",
-                "name": "My node 1",
-                "published": true,
-                "description": "A short description of my node",
-                "author": "Author 1"
-            },
-            {
-                "icon": "icon-document",
-                "name": "My node 2",
-                "published": true,
-                "description": "A short description of my node",
-                "author": "Author 2"
-            }
-        ];
-
         vm.isConnected = false;
+        vm.loading = false;
+        vm.relatedPhrasesList = {};
+
+        vm.pagination = {
+            pageNumber: 1,
+            totalPages: 1
+        };
+        vm.nextPage = nextPage;
+        vm.prevPage = prevPage;
+        vm.changePage = changePage;
+        vm.goToPage = goToPage;
+
+        umbracoCmsIntegrationsSemrushResources.validateToken().then(function(response) {
+
+            if (response.IsExpired) {
+                vm.isConnected = false;
+            } else {
+                if (response.IsValid === false) {
+                    umbracoCmsIntegrationsSemrushResources.refreshAccessToken().then(function(r) {
+                        console.log(r);
+                    });
+                }
+            }
+
+        });
+
+        umbracoCmsIntegrationsSemrushResources.getAuthorizationUrl().then(function (response) {
+            vm.authorizationUrl = response;
+        });
 
         umbracoCmsIntegrationsSemrushResources.getTokenDetails().then(function (response) {
-            console.log(response);
             vm.isConnected = response.IsAccessTokenAvailable;
         });
 
@@ -40,7 +49,7 @@
         });
 
         vm.OnConnectClick = function() {
-            vm.authWindow = window.open("https://oauth.semrush.com/oauth2/authorize?ref=0053752252&client_id=umbraco&redirect_uri=%2Foauth2%2Fumbraco%2Fsuccess&response_type=code&scope=user.id,domains.info,url.info,positiontracking.info",
+            vm.authWindow = window.open(vm.authorizationUrl,
                 "Semrush_Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
         }
 
@@ -53,14 +62,7 @@
         }
 
         vm.OnGetRelatedPhrases = function () {
-            vm.loading = true;
-            umbracoCmsIntegrationsSemrushResources.getRelatedPhrases(vm.SelectedPropertyDetails.value).then(function (response) {
-                vm.loading = false;
-
-                console.log(response);
-
-                vm.relatedPhrasesList = response;
-            });
+            searchRelatedPhrases(1);
         }
 
         // authorization listener
@@ -77,6 +79,8 @@
 
                 umbracoCmsIntegrationsSemrushResources.getAccessToken(code).then(function (response) {
                     console.log(response);
+
+                    if (response !== "error") vm.isConnected = true;
                 });
 
 
@@ -84,9 +88,34 @@
                 vm.showError("SEMrush API", "Access Denied");
 
                 vm.authWindow.close();
+
+                revokeToken();
             }
 
         }, false);
+
+        function revokeToken() {
+            umbracoCmsIntegrationsSemrushResources.revokeToken().then(function() {
+                vm.isConnected = false;
+            });
+        }
+
+        function searchRelatedPhrases(pageNumber) {
+            vm.loading = true;
+            umbracoCmsIntegrationsSemrushResources.getRelatedPhrases(vm.SelectedPropertyDetails.value, pageNumber).then(function (response) {
+
+                vm.loading = false;
+
+                console.log(response);
+
+                vm.pagination = {
+                    pageNumber: vm.pagination.pageNumber,
+                    totalPages: response.TotalPages
+                };
+
+                vm.relatedPhrasesList = response;
+            });
+        }
 
         // notifications
         vm.showSuccess = function (headline, message) {
@@ -99,6 +128,23 @@
 
         vm.showError = function (headline, message) {
             notificationsService.error(headline, message);
+        }
+
+        // pagination
+        function nextPage(pageNumber) {
+            searchRelatedPhrases(pageNumber);
+        }
+
+        function prevPage(pageNumber) {
+            searchRelatedPhrases(pageNumber);
+        }
+
+        function changePage(pageNumber) {
+            searchRelatedPhrases(pageNumber);
+        }
+
+        function goToPage(pageNumber) {
+            searchRelatedPhrases(pageNumber);
         }
     }
 

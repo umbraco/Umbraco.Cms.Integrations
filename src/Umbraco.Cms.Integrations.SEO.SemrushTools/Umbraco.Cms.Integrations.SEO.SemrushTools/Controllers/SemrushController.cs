@@ -1,53 +1,96 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Results;
+
 using Newtonsoft.Json;
+
 using Umbraco.Cms.Integrations.SEO.SemrushTools.Models.Dtos;
 using Umbraco.Cms.Integrations.SEO.SemrushTools.Services;
-using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
 
 namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
 {
     [PluginController("UmbracoCmsIntegrationsSemrush")]
-    public class SemrushController: UmbracoAuthorizedJsonController
+    public class SemrushController : BaseController
     {
-        private readonly ISemrushService<TokenDto> _semrushService;
+        private readonly HttpClient _client;
 
-        public SemrushController(ISemrushService<TokenDto> semrushService)
+
+        public SemrushController(ISemrushService<TokenDto> semrushService, ISemrushCachingService<RelatedPhrasesDto> cachingService)
+        : base(semrushService, cachingService)
         {
-            _semrushService = semrushService;
+            _client = new HttpClient();
         }
 
         [HttpGet]
         public string Ping() => "test API";
 
         [HttpGet]
+        public string GetAuthorizationUrl() => SemrushAuthorizationEndpoint;
+            
+
+        [HttpGet]
         public TokenDto GetTokenDetails()
         {
-            return _semrushService.TryGetParameters(out TokenDto tokenDto) ? tokenDto : new TokenDto();
+            return SemrushService.TryGetParameters(out TokenDto tokenDto) ? tokenDto : new TokenDto();
+        }
+
+        [HttpPost]
+        public void RevokeToken()
+        {
+            SemrushService.RemoveParameters();
         }
 
         [HttpPost]
         public async Task<string> GetAccessToken([FromBody] AuthorizationRequestDto request)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("https://localhost:44358/");
+            var requestData = new Dictionary<string, string> {{"code", request.Code}};
 
-            var requestData = new Dictionary<string, string>();
-            requestData.Add("code", request.Code);
-
-            var response = await client.PostAsync("/authorizationhubapi/semrush/access_token", 
+            var response = await _client.PostAsync($"{BaseAuthorizationHubAddress}access_token",
                 new FormUrlEncodedContent(requestData));
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                _semrushService.SaveParameters(result);
+                SemrushService.SaveParameters(result);
+
+                return result;
+            }
+
+            return "error";
+        }
+
+        [HttpPost]
+        public async Task<AuthorizationResponseDto> ValidateToken()
+        {
+            SemrushService.TryGetParameters(out TokenDto token);
+
+            if (string.IsNullOrEmpty(token.AccessToken)) return new AuthorizationResponseDto {IsExpired = true};
+
+                var response = await _client.GetAsync(string.Format(KeywordsEndpoint, token.AccessToken, "ping"));
+
+            return new AuthorizationResponseDto
+            {
+                IsValid = response.StatusCode != HttpStatusCode.Unauthorized
+            };
+        }
+
+        [HttpPost]
+        public async Task<string> RefreshAccessToken()
+        {
+            SemrushService.TryGetParameters(out TokenDto token);
+
+            var requestData = new Dictionary<string, string> { { "refresh_token", token.RefreshToken } };
+
+            var response = await _client.PostAsync($"{BaseAuthorizationHubAddress}refresh_access_token", new FormUrlEncodedContent(requestData));
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+
+                SemrushService.SaveParameters(result);
 
                 return result;
             }
@@ -56,39 +99,35 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
         }
 
         [HttpGet]
-        public async Task<RelatedPhrasesDto> GetRelatedPhrases(string phrase)
+        public async Task<RelatedPhrasesDto> GetRelatedPhrases(string phrase, int pageNumber)
         {
-            var client = new HttpClient();
-            client.BaseAddress = new Uri("https://oauth.semrush.com/");
+            if (CachingService.TryGetCachedItem(out var relatedPhrasesDto, phrase))
+            {
+                relatedPhrasesDto.TotalPages = relatedPhrasesDto.Data.Rows.Count / 10;
+                relatedPhrasesDto.Data.Rows = relatedPhrasesDto.Data.Rows.Skip((pageNumber - 1) * 10).Take(10).ToList();
 
-            _semrushService.TryGetParameters(out TokenDto token);
+                return relatedPhrasesDto;
+            }
 
-            var response = await client.GetAsync($"api/v1/keywords/phrase_related?access_token={token.AccessToken}&phrase={phrase}&database=us");
+            SemrushService.TryGetParameters(out TokenDto token);
+
+            var response = await _client.GetAsync(string.Format(KeywordsEndpoint, token.AccessToken, phrase));
 
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                var relatedPhrasesDto = JsonConvert.DeserializeObject<RelatedPhrasesDto>(responseContent);
+                var relatedPhrasesDeserialized = JsonConvert.DeserializeObject<RelatedPhrasesDto>(responseContent);
 
-                var l = new List<Dictionary<string, string>>();
+                CachingService.AddCachedItem(phrase, responseContent);
 
-                for (int i = 0; i < relatedPhrasesDto.Data.Rows.Count; i++)
-                {
-                    var d = new Dictionary<string, string>();
+                relatedPhrasesDeserialized.TotalPages = relatedPhrasesDeserialized.Data.Rows.Count / 10;
+                relatedPhrasesDeserialized.Data.Rows = relatedPhrasesDeserialized.Data.Rows.Skip((pageNumber - 1) * 10).Take(10).ToList();
 
-                    for (int j = 0; j < relatedPhrasesDto.Data.ColumnNames.Length; j++)
-                    {
-                        d.Add(relatedPhrasesDto.Data.ColumnNames[j], relatedPhrasesDto.Data.Rows[i][j]);
-                    }
-
-                    l.Add(d);
-                }
-
-                return relatedPhrasesDto;
+                return relatedPhrasesDeserialized;
             }
 
-            return new RelatedPhrasesDto();
+            return relatedPhrasesDto;
         }
 
 

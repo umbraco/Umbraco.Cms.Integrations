@@ -63,5 +63,36 @@ namespace Umbraco.Cms.Integrations.Web.AuthorizationHub.Controllers
 
             return "error";
         }
+
+        [HttpPost]
+        [Route("refresh_access_token")]
+        public async Task<string> RefreshAccessToken()
+        {
+            var refreshToken = Request.Form["refresh_token"].ToString();
+
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_settings.AuthBaseUrl);
+
+            var requestMessageDict = new Dictionary<string, string>();
+            requestMessageDict.Add("client_id", _settings.ClientId);
+            requestMessageDict.Add("client_secret", _settings.ClientSecret);
+            requestMessageDict.Add("grant_type", "refresh_token");
+            requestMessageDict.Add("refresh_token", refreshToken);
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "oauth2/access_token")
+            {
+                Content = new FormUrlEncodedContent(requestMessageDict)
+            };
+
+            var response = await client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var parsedResponse = await response.Content.ReadAsStringAsync();
+
+                return parsedResponse;
+            }
+
+            return "error";
+        }
     }
 }

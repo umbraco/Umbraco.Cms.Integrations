@@ -6,5 +6,7 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Services
         bool TryGetParameters(out T obj);
 
         void SaveParameters(string serializedParams);
+
+        void RemoveParameters();
     }
 }

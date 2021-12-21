@@ -2,7 +2,6 @@
 using Umbraco.Cms.Integrations.SEO.SemrushTools.Services;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
-using Umbraco.Core.Services;
 using Umbraco.Web;
 
 namespace Umbraco.Cms.Integrations.SEO.SemrushTools
@@ -16,6 +15,7 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools
             composition.Components().Append<SemrushToolsComponent>();
 
             composition.Register<ISemrushService<TokenDto>, SemrushService>(Lifetime.Singleton);
+            composition.Register<ISemrushCachingService<RelatedPhrasesDto>, SemrushCachingService>(Lifetime.Singleton);
         }
     }
 }

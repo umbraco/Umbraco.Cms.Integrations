@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Newtonsoft.Json;
 
 namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Models.Dtos
@@ -7,6 +8,8 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Models.Dtos
     {
         [JsonProperty("data")]
         public RelatedPhrasesDataDto Data { get; set; }
+
+        public int TotalPages { get; set; }
     }
 
 }

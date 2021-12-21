@@ -31,5 +31,10 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Services
         { 
             _kvService.SetValue(TOKEN_DB_KEY, serializedParams);
         }
+
+        public void RemoveParameters()
+        {
+            _kvService.SetValue(TOKEN_DB_KEY, string.Empty);
+        }
     }
 }
