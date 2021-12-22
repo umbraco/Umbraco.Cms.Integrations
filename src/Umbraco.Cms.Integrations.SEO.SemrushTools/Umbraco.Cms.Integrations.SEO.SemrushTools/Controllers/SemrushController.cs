@@ -18,7 +18,6 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
     {
         private readonly HttpClient _client;
 
-
         public SemrushController(ISemrushService<TokenDto> semrushService, ISemrushCachingService<RelatedPhrasesDto> cachingService)
         : base(semrushService, cachingService)
         {
@@ -30,24 +29,24 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
 
         [HttpGet]
         public string GetAuthorizationUrl() => SemrushAuthorizationEndpoint;
-            
+
 
         [HttpGet]
         public TokenDto GetTokenDetails()
         {
-            return SemrushService.TryGetParameters(out TokenDto tokenDto) ? tokenDto : new TokenDto();
+            return SemrushService.TryGetParameters(TokenDbKey, out TokenDto tokenDto) ? tokenDto : new TokenDto();
         }
 
         [HttpPost]
         public void RevokeToken()
         {
-            SemrushService.RemoveParameters();
+            SemrushService.RemoveParameters(TokenDbKey);
         }
 
         [HttpPost]
         public async Task<string> GetAccessToken([FromBody] AuthorizationRequestDto request)
         {
-            var requestData = new Dictionary<string, string> {{"code", request.Code}};
+            var requestData = new Dictionary<string, string> { { "code", request.Code } };
 
             var response = await _client.PostAsync($"{BaseAuthorizationHubAddress}access_token",
                 new FormUrlEncodedContent(requestData));
@@ -55,7 +54,7 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                SemrushService.SaveParameters(result);
+                SemrushService.SaveParameters(TokenDbKey, result);
 
                 return result;
             }
@@ -66,11 +65,11 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
         [HttpPost]
         public async Task<AuthorizationResponseDto> ValidateToken()
         {
-            SemrushService.TryGetParameters(out TokenDto token);
+            SemrushService.TryGetParameters(TokenDbKey, out TokenDto token);
 
-            if (string.IsNullOrEmpty(token.AccessToken)) return new AuthorizationResponseDto {IsExpired = true};
+            if (string.IsNullOrEmpty(token.AccessToken)) return new AuthorizationResponseDto { IsExpired = true };
 
-                var response = await _client.GetAsync(string.Format(KeywordsEndpoint, token.AccessToken, "ping"));
+            var response = await _client.GetAsync(string.Format(KeywordsEndpoint, "phrase_related", token.AccessToken, "ping", "us"));
 
             return new AuthorizationResponseDto
             {
@@ -81,7 +80,7 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
         [HttpPost]
         public async Task<string> RefreshAccessToken()
         {
-            SemrushService.TryGetParameters(out TokenDto token);
+            SemrushService.TryGetParameters(TokenDbKey, out TokenDto token);
 
             var requestData = new Dictionary<string, string> { { "refresh_token", token.RefreshToken } };
 
@@ -90,7 +89,7 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                SemrushService.SaveParameters(result);
+                SemrushService.SaveParameters(TokenDbKey, result);
 
                 return result;
             }
@@ -99,7 +98,7 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
         }
 
         [HttpGet]
-        public async Task<RelatedPhrasesDto> GetRelatedPhrases(string phrase, int pageNumber)
+        public async Task<RelatedPhrasesDto> GetRelatedPhrases(string phrase, int pageNumber, string dataSource, string method)
         {
             if (CachingService.TryGetCachedItem(out var relatedPhrasesDto, phrase))
             {
@@ -109,9 +108,9 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
                 return relatedPhrasesDto;
             }
 
-            SemrushService.TryGetParameters(out TokenDto token);
+            SemrushService.TryGetParameters(TokenDbKey, out TokenDto token);
 
-            var response = await _client.GetAsync(string.Format(KeywordsEndpoint, token.AccessToken, phrase));
+            var response = await _client.GetAsync(string.Format(KeywordsEndpoint, method, token.AccessToken, phrase, dataSource));
 
             if (response.IsSuccessStatusCode)
             {
@@ -128,6 +127,34 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
             }
 
             return relatedPhrasesDto;
+        }
+
+        [HttpGet]
+        public async Task<DataSourceDto> ImportDataSources()
+        {
+            var response = await _client.GetAsync($"{BaseAuthorizationHubAddress}import_datasources");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+
+                var dataSourceDto = new DataSourceDto
+                {
+                    Items = JsonConvert.DeserializeObject<Dictionary<string, string>>(result).Select(p =>
+                        new DataSourceItemDto
+                        {
+                            Key = p.Key,
+                            Value = p.Value
+                        })
+                };
+
+                return dataSourceDto;
+            }
+
+            return new DataSourceDto();
+
+
+
         }
 
 

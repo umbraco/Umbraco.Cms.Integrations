@@ -7,8 +7,6 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Services
 {
     public class SemrushService: ISemrushService<TokenDto>
     {
-        private const string TOKEN_DB_KEY = "Umbraco.Cms.Integrations.Semrush.TokenDbKey";
-
         private readonly IKeyValueService _kvService;
 
         public SemrushService(IKeyValueService kvService)
@@ -16,25 +14,25 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Services
             _kvService = kvService;
         }
 
-        public bool TryGetParameters(out TokenDto obj)
+        public bool TryGetParameters(string key, out TokenDto obj)
         {
             obj = new TokenDto();
 
-            if (string.IsNullOrEmpty(_kvService.GetValue(TOKEN_DB_KEY))) return false;
+            if (string.IsNullOrEmpty(_kvService.GetValue(key))) return false;
 
-            obj = JsonConvert.DeserializeObject<TokenDto>(_kvService.GetValue(TOKEN_DB_KEY));
+            obj = JsonConvert.DeserializeObject<TokenDto>(_kvService.GetValue(key));
 
             return true;
         }
 
-        public void SaveParameters(string serializedParams)
+        public void SaveParameters(string key, string serializedParams)
         { 
-            _kvService.SetValue(TOKEN_DB_KEY, serializedParams);
+            _kvService.SetValue(key, serializedParams);
         }
 
-        public void RemoveParameters()
+        public void RemoveParameters(string key)
         {
-            _kvService.SetValue(TOKEN_DB_KEY, string.Empty);
+            _kvService.SetValue(key, string.Empty);
         }
     }
 }

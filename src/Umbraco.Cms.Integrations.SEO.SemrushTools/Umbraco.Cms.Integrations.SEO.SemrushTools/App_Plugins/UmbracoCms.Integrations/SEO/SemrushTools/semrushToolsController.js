@@ -1,11 +1,39 @@
 ﻿(() => {
 
-    function semrushToolsController($scope, $window, editorState, contentResource, notificationsService, umbracoCmsIntegrationsSemrushResources) {
+    function semrushToolsController($scope, $window, editorState, notificationsService, editorService, contentResource, umbracoCmsIntegrationsSemrushResources) {
 
         var vm = this;
 
         vm.isConnected = false;
         vm.loading = false;
+
+        vm.dataSourceItems = [];
+        vm.supportedMethods = [
+            {
+                "Key": "phrase_fullsearch",
+                "Value": "phrase_fullsearch"
+            },
+            {
+                "Key": "phrase_kdl",
+                "Value": "phrase_kdl"
+            },
+            {
+                "Key": "phrase_organic",
+                "Value": "phrase_organic"
+            },
+            {
+                "Key": "phrase_related",
+                "Value": "phrase_related"
+            },
+            {
+                "Key": "phrase_these",
+                "Value": "phrase_these"
+            },
+            {
+                "Key": "phrase_this",
+                "Value": "phrase_this"
+            }
+        ];
         vm.relatedPhrasesList = {};
 
         vm.pagination = {
@@ -17,13 +45,21 @@
         vm.changePage = changePage;
         vm.goToPage = goToPage;
 
-        umbracoCmsIntegrationsSemrushResources.validateToken().then(function(response) {
+        umbracoCmsIntegrationsSemrushResources.importDataSources().then(function (response) {
+
+            if (response.Items.length > 0) {
+                vm.dataSourceItems = response.Items;
+            }
+
+        });
+
+        umbracoCmsIntegrationsSemrushResources.validateToken().then(function (response) {
 
             if (response.IsExpired) {
                 vm.isConnected = false;
             } else {
                 if (response.IsValid === false) {
-                    umbracoCmsIntegrationsSemrushResources.refreshAccessToken().then(function(r) {
+                    umbracoCmsIntegrationsSemrushResources.refreshAccessToken().then(function (r) {
                         console.log(r);
                     });
                 }
@@ -48,7 +84,8 @@
             vm.CurrentNodeProperties = properties;
         });
 
-        vm.OnConnectClick = function() {
+        // event handlers
+        vm.OnConnectClick = function () {
             vm.authWindow = window.open(vm.authorizationUrl,
                 "Semrush_Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
         }
@@ -95,26 +132,27 @@
         }, false);
 
         function revokeToken() {
-            umbracoCmsIntegrationsSemrushResources.revokeToken().then(function() {
+            umbracoCmsIntegrationsSemrushResources.revokeToken().then(function () {
                 vm.isConnected = false;
             });
         }
 
-        function searchRelatedPhrases(pageNumber) {
+        function searchRelatedPhrases(pageNumber, dataSource, method) {
             vm.loading = true;
-            umbracoCmsIntegrationsSemrushResources.getRelatedPhrases(vm.SelectedPropertyDetails.value, pageNumber).then(function (response) {
+            umbracoCmsIntegrationsSemrushResources.getRelatedPhrases(vm.SelectedPropertyDetails.value, pageNumber, vm.SelectedDataSource, vm.SelectedMethod)
+                .then(function (response) {
 
-                vm.loading = false;
+                    vm.loading = false;
 
-                console.log(response);
+                    console.log(response);
 
-                vm.pagination = {
-                    pageNumber: vm.pagination.pageNumber,
-                    totalPages: response.TotalPages
-                };
+                    vm.pagination = {
+                        pageNumber: vm.pagination.pageNumber,
+                        totalPages: response.TotalPages
+                    };
 
-                vm.relatedPhrasesList = response;
-            });
+                    vm.relatedPhrasesList = response;
+                });
         }
 
         // notifications
@@ -122,7 +160,7 @@
             notificationsService.success(headline, message);
         }
 
-        vm.showWarning = function(headline, message) {
+        vm.showWarning = function (headline, message) {
             notificationsService.warning(headline, message);
         }
 
@@ -145,6 +183,23 @@
 
         function goToPage(pageNumber) {
             searchRelatedPhrases(pageNumber);
+        }
+
+        // status
+        vm.OnViewStatus = function () {
+            var options = {
+                title: "SEMrush Authorization Details",
+                view: "/App_Plugins/UmbracoCms.Integrations/SEO/SemrushTools/statusEditor.html",
+                size: "small",
+                close: function () {
+
+                    vm.isConnected = false;
+
+                    editorService.close();
+                }
+            }
+
+            editorService.open(options);
         }
     }
 

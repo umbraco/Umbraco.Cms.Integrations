@@ -12,5 +12,7 @@ namespace Umbraco.Cms.Integrations.Web.AuthorizationHub.Configuration
         public string ClientSecret { get; set; }
 
         public string RedirectUri { get; set; }
+
+        public string DatabasesUrl { get; set; }
     }
 }

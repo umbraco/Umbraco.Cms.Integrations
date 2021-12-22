@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 using Umbraco.Cms.Integrations.Web.AuthorizationHub.Configuration;
+using Umbraco.Cms.Integrations.Web.AuthorizationHub.Services;
 
 namespace Umbraco.Cms.Integrations.Web.AuthorizationHub
 {
@@ -25,6 +26,8 @@ namespace Umbraco.Cms.Integrations.Web.AuthorizationHub
             services.AddHttpClient();
 
             services.Configure<SemrushSettings>(Configuration.GetSection(nameof(SemrushSettings)));
+
+            services.AddSingleton<IDataSourceHandler, FileHandlerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

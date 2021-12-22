@@ -29,11 +29,15 @@
             return umbRequestHelper.resourcePromise(
                 $http.post(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "RefreshAccessToken")), "Fail");
         },
-        getRelatedPhrases: function (selectedPhrase, pageNumber) {
+        getRelatedPhrases: function (selectedPhrase, pageNumber, dataSource, method) {
             var url = umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "GetRelatedPhrases");
             return umbRequestHelper.resourcePromise(
-                $http.get(url + "?phrase=" + selectedPhrase + "&pageNumber=" + pageNumber), "Fail");
-        }
+                $http.get(url + "?phrase=" + selectedPhrase + "&pageNumber=" + pageNumber + "&dataSource=" + dataSource + "&method=" + method), "Fail");
+        },
+        importDataSources: function () {
+            return umbRequestHelper.resourcePromise(
+                $http.get(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "ImportDataSources")), "Fail");
+        },
     };
 
 }

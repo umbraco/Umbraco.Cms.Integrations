@@ -18,7 +18,9 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
             = $"{SemrushBaseAddress}oauth2/authorize?ref=0053752252&client_id=umbraco&redirect_uri=%2Foauth2%2Fumbraco%2Fsuccess&response_type=code&scope=user.id,domains.info,url.info,positiontracking.info";
 
         public readonly string KeywordsEndpoint =
-            SemrushBaseAddress + "api/v1/keywords/phrase_related?access_token={0}&phrase={1}&database=us";
+            SemrushBaseAddress + "api/v1/keywords/{0}?access_token={1}&phrase={2}&database={3}";
+
+        public const string TokenDbKey = "Umbraco.Cms.Integrations.Semrush.TokenDbKey";
 
         public BaseController(ISemrushService<TokenDto> semrushService, ISemrushCachingService<RelatedPhrasesDto> cachingService)
         {

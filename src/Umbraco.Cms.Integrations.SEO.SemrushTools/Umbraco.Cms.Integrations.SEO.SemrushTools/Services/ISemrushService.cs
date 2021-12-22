@@ -3,10 +3,10 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Services
 {
     public interface ISemrushService<T>
     {
-        bool TryGetParameters(out T obj);
+        bool TryGetParameters(string key, out T obj);
 
-        void SaveParameters(string serializedParams);
+        void SaveParameters(string key, string serializedParams);
 
-        void RemoveParameters();
+        void RemoveParameters(string key);
     }
 }

@@ -20,10 +20,26 @@
                         label="Connect"
                         disabled="vm.isConnected">
             </umb-button>
+            <umb-button action="vm.OnViewStatus()"
+                        type="button"
+                        button-style="primary"
+                        state="init"
+                        label="Status">
+            </umb-button>
         </umb-box-header>
         <umb-box-content>
             <div ng-if="(vm.SelectedPropertyDetails != undefined)">
                 <input type="text" ng-model="vm.SelectedPropertyDetails.value" />
+
+                <select id="selDataSources" ng-model="vm.SelectedDataSource">
+                    <option value="">Please select a data source</option>
+                    <option ng-repeat="ds in vm.dataSourceItems" value="{{ ds.Key }}">{{ ds.Value }}</option>
+                </select>
+
+                <select id="selMethods" ng-model="vm.SelectedMethod">
+                    <option value="">Please select a method</option>
+                    <option ng-repeat="ds in vm.supportedMethods" value="{{ ds.Key }}">{{ ds.Value }}</option>
+                </select>
 
                 <umb-button action="vm.OnGetRelatedPhrases()"
                             type="button"

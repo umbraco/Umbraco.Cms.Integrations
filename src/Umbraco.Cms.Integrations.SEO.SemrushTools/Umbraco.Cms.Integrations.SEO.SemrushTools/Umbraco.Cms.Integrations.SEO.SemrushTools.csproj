@@ -274,6 +274,7 @@
     <Compile Include="Controllers\SemrushController.cs" />
     <Compile Include="Models\Dtos\AuthorizationRequestDto.cs" />
     <Compile Include="Models\Dtos\AuthorizationResponseDto.cs" />
+    <Compile Include="Models\Dtos\DataSourceDto.cs" />
     <Compile Include="Models\Dtos\RelatedPhrasesDataDto.cs" />
     <Compile Include="Models\Dtos\RelatedPhrasesDto.cs" />
     <Compile Include="Models\Dtos\TokenDto.cs" />
@@ -295,6 +296,8 @@
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools\semrush.resources.js" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools\semrushTools.html" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools\semrushToolsController.js" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools\statusController.js" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools\statusEditor.html" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
