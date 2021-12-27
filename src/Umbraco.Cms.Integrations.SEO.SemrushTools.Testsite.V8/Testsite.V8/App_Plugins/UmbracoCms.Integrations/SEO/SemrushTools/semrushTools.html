@@ -12,7 +12,7 @@
         </umb-box-content>
     </umb-box>
     <umb-box>
-        <umb-box-header title="SEMRUSH - Related Phrases">
+        <umb-box-header title="SEMRUSH - Keywords">
             <umb-button action="vm.OnConnectClick()"
                         type="button"
                         button-style="primary"
@@ -41,10 +41,10 @@
                     <option ng-repeat="ds in vm.supportedMethods" value="{{ ds.Key }}">{{ ds.Value }}</option>
                 </select>
 
-                <umb-button action="vm.OnGetRelatedPhrases()"
+                <umb-button action="vm.OnSearchKeywords()"
                             type="button"
                             button-style="primary"
-                            label="Get related phrases"
+                            label="Search keywords"
                             disabled="!vm.isConnected">
                 </umb-button>
             </div>

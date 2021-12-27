@@ -1,6 +1,21 @@
-﻿(() => {
+﻿(function () {
+    angular.module("umbSemrushModule", []);
 
-    function semrushToolsController($scope, $window, editorState, notificationsService, editorService, contentResource, umbracoCmsIntegrationsSemrushResources) {
+    var umbracoApp = angular.module("umbraco");
+    umbracoApp.requires.push("umbSemrushModule");
+
+    angular.module("umbSemrushModule")
+        .constant("umbPropertyTypeAlias",
+            {
+                "TEXTBOX": "textbox",
+                "TEXTAREA": "textarea"
+            });
+})();
+
+(() => {
+
+    function semrushToolsController($scope, $window, editorState, notificationsService, editorService, contentResource,
+        umbracoCmsIntegrationsSemrushResources, umbPropertyTypeAlias) {
 
         var vm = this;
 
@@ -35,6 +50,7 @@
             }
         ];
         vm.relatedPhrasesList = {};
+        vm.CurrentNodeProperties = [];
 
         vm.pagination = {
             pageNumber: 1,
@@ -44,6 +60,25 @@
         vm.prevPage = prevPage;
         vm.changePage = changePage;
         vm.goToPage = goToPage;
+
+        // content handling
+        vm.CurrentNodeId = editorState.current.id;
+        vm.CurrentNodeAlias = editorState.current.contentTypeAlias;
+
+        var currentVariant = editorState.current.variants.find(x => x.active === true);
+        var tabs = currentVariant.tabs;
+
+        for (var tabIndex = 0; tabIndex < tabs.length; tabIndex++) {
+            var properties = tabs[tabIndex].properties;
+
+            for (var index = 0; index < properties.length; index++) {
+                let currentProperty = properties[index];
+
+                if (isPropertyValid(currentProperty.view)) {
+                    vm.CurrentNodeProperties.push(currentProperty);
+                }
+            }
+        }
 
         umbracoCmsIntegrationsSemrushResources.importDataSources().then(function (response) {
 
@@ -75,15 +110,6 @@
             vm.isConnected = response.IsAccessTokenAvailable;
         });
 
-        vm.CurrentNodeId = editorState.current.id;
-        vm.CurrentNodeAlias = editorState.current.contentTypeAlias;
-
-        contentResource.getById(vm.CurrentNodeId).then(function (node) {
-            var properties = node.variants[0].tabs[0].properties;
-
-            vm.CurrentNodeProperties = properties;
-        });
-
         // event handlers
         vm.OnConnectClick = function () {
             vm.authWindow = window.open(vm.authorizationUrl,
@@ -98,7 +124,15 @@
 
         }
 
-        vm.OnGetRelatedPhrases = function () {
+        vm.OnSearchKeywords = function () {
+            // validation
+            let isConfigurationValid = isSemrushConfigurationValid();
+            console.log(isConfigurationValid);
+            if (isConfigurationValid === false) {
+                vm.showError("Search Keywords", "Please select a data source and method.");
+                return;
+            }
+
             searchRelatedPhrases(1);
         }
 
@@ -115,8 +149,6 @@
                 var code = event.data.url.slice(event.data.url.indexOf(codeParam) + codeParam.length);
 
                 umbracoCmsIntegrationsSemrushResources.getAccessToken(code).then(function (response) {
-                    console.log(response);
-
                     if (response !== "error") vm.isConnected = true;
                 });
 
@@ -137,7 +169,7 @@
             });
         }
 
-        function searchRelatedPhrases(pageNumber, dataSource, method) {
+        function searchRelatedPhrases(pageNumber) {
             vm.loading = true;
             umbracoCmsIntegrationsSemrushResources.getRelatedPhrases(vm.SelectedPropertyDetails.value, pageNumber, vm.SelectedDataSource, vm.SelectedMethod)
                 .then(function (response) {
@@ -201,8 +233,18 @@
 
             editorService.open(options);
         }
+
+        function isPropertyValid(propertyTypeAlias) {
+            return (propertyTypeAlias === umbPropertyTypeAlias.TEXTBOX
+                || propertyTypeAlias === umbPropertyTypeAlias.TEXTAREA
+                );
+        }
+
+        function isSemrushConfigurationValid() {
+            return vm.SelectedDataSource !== undefined && vm.SelectedMethod !== undefined && vm.SelectedDataSource.length > 0 && vm.SelectedMethod.length > 0;
+        }
     }
 
-    angular.module('umbraco')
+    angular.module('umbSemrushModule')
         .controller('UmbracoCms.Integrations.SemrushToolsController', semrushToolsController);
 })();

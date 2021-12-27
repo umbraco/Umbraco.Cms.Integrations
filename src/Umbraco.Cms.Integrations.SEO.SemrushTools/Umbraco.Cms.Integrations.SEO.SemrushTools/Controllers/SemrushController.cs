@@ -100,7 +100,9 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
         [HttpGet]
         public async Task<RelatedPhrasesDto> GetRelatedPhrases(string phrase, int pageNumber, string dataSource, string method)
         {
-            if (CachingService.TryGetCachedItem(out var relatedPhrasesDto, phrase))
+            string cacheKey = $"{dataSource}-{method}-{phrase}";
+
+            if (CachingService.TryGetCachedItem(out var relatedPhrasesDto, cacheKey))
             {
                 relatedPhrasesDto.TotalPages = relatedPhrasesDto.Data.Rows.Count / 10;
                 relatedPhrasesDto.Data.Rows = relatedPhrasesDto.Data.Rows.Skip((pageNumber - 1) * 10).Take(10).ToList();
@@ -118,7 +120,7 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
 
                 var relatedPhrasesDeserialized = JsonConvert.DeserializeObject<RelatedPhrasesDto>(responseContent);
 
-                CachingService.AddCachedItem(phrase, responseContent);
+                CachingService.AddCachedItem(cacheKey, responseContent);
 
                 relatedPhrasesDeserialized.TotalPages = relatedPhrasesDeserialized.Data.Rows.Count / 10;
                 relatedPhrasesDeserialized.Data.Rows = relatedPhrasesDeserialized.Data.Rows.Skip((pageNumber - 1) * 10).Take(10).ToList();
