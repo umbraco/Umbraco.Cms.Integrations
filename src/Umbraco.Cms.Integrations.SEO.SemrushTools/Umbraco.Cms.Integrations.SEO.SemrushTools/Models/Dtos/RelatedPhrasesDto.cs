@@ -1,10 +1,8 @@
-﻿
-using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Models.Dtos
 {
-    public class RelatedPhrasesDto
+    public class RelatedPhrasesDto: ErrorDto
     {
         [JsonProperty("data")]
         public RelatedPhrasesDataDto Data { get; set; }

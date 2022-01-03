@@ -80,12 +80,10 @@
             }
         }
 
-        umbracoCmsIntegrationsSemrushResources.importDataSources().then(function (response) {
-
+        umbracoCmsIntegrationsSemrushResources.getDataSources().then(function (response) {
             if (response.Items.length > 0) {
                 vm.dataSourceItems = response.Items;
             }
-
         });
 
         umbracoCmsIntegrationsSemrushResources.validateToken().then(function (response) {
@@ -176,14 +174,16 @@
 
                     vm.loading = false;
 
-                    console.log(response);
+                    if (response.IsSuccessful === false) {
+                        vm.showError("SEMrush API", response.error);
+                    } else {
+                        vm.pagination = {
+                            pageNumber: vm.pagination.pageNumber,
+                            totalPages: response.TotalPages
+                        };
 
-                    vm.pagination = {
-                        pageNumber: vm.pagination.pageNumber,
-                        totalPages: response.TotalPages
-                    };
-
-                    vm.relatedPhrasesList = response;
+                        vm.relatedPhrasesList = response;
+                    }
                 });
         }
 

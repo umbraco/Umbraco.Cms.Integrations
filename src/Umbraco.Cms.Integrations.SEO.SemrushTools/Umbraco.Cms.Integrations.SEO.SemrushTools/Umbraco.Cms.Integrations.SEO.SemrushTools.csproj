@@ -275,6 +275,7 @@
     <Compile Include="Models\Dtos\AuthorizationRequestDto.cs" />
     <Compile Include="Models\Dtos\AuthorizationResponseDto.cs" />
     <Compile Include="Models\Dtos\DataSourceDto.cs" />
+    <Compile Include="Models\Dtos\ErrorDto.cs" />
     <Compile Include="Models\Dtos\RelatedPhrasesDataDto.cs" />
     <Compile Include="Models\Dtos\RelatedPhrasesDto.cs" />
     <Compile Include="Models\Dtos\TokenDto.cs" />
@@ -290,6 +291,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools\package.manifest" />
+    <None Include="App_Plugins\UmbracoCms.Integrations\SEO\SemrushTools\semrushDataSources.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

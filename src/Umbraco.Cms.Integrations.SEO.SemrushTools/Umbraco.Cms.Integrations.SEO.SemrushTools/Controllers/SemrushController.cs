@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -17,6 +19,8 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
     public class SemrushController : BaseController
     {
         private readonly HttpClient _client;
+
+        private static readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
         public SemrushController(ISemrushService<TokenDto> semrushService, ISemrushCachingService<RelatedPhrasesDto> cachingService)
         : base(semrushService, cachingService)
@@ -46,9 +50,14 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
         [HttpPost]
         public async Task<string> GetAccessToken([FromBody] AuthorizationRequestDto request)
         {
-            var requestData = new Dictionary<string, string> { { "code", request.Code } };
+            var requestData = new Dictionary<string, string>
+            {
+                { "code", request.Code }
+            };
 
-            var response = await _client.PostAsync($"{BaseAuthorizationHubAddress}access_token",
+            _client.DefaultRequestHeaders.Add("service_type", "SemrushAuthorization");
+
+            var response = await _client.PostAsync($"{AuthProxyBaseAddress}{AuthProxyTokenEndpoint}",
                 new FormUrlEncodedContent(requestData));
             if (response.IsSuccessStatusCode)
             {
@@ -69,7 +78,8 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
 
             if (string.IsNullOrEmpty(token.AccessToken)) return new AuthorizationResponseDto { IsExpired = true };
 
-            var response = await _client.GetAsync(string.Format(KeywordsEndpoint, "phrase_related", token.AccessToken, "ping", "us"));
+            var response = await _client
+                .GetAsync(string.Format(SemrushKeywordsEndpoint, "phrase_related", token.AccessToken, "ping", "us"));
 
             return new AuthorizationResponseDto
             {
@@ -84,7 +94,9 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
 
             var requestData = new Dictionary<string, string> { { "refresh_token", token.RefreshToken } };
 
-            var response = await _client.PostAsync($"{BaseAuthorizationHubAddress}refresh_access_token", new FormUrlEncodedContent(requestData));
+            _client.DefaultRequestHeaders.Add("service_type", "SemrushReauthorization");
+
+            var response = await _client.PostAsync($"{AuthProxyBaseAddress}{AuthProxyTokenEndpoint}", new FormUrlEncodedContent(requestData));
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
@@ -102,7 +114,7 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
         {
             string cacheKey = $"{dataSource}-{method}-{phrase}";
 
-            if (CachingService.TryGetCachedItem(out var relatedPhrasesDto, cacheKey))
+            if (CachingService.TryGetCachedItem(out var relatedPhrasesDto, cacheKey) && relatedPhrasesDto.Data != null)
             {
                 relatedPhrasesDto.TotalPages = relatedPhrasesDto.Data.Rows.Count / 10;
                 relatedPhrasesDto.Data.Rows = relatedPhrasesDto.Data.Rows.Skip((pageNumber - 1) * 10).Take(10).ToList();
@@ -112,13 +124,16 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
 
             SemrushService.TryGetParameters(TokenDbKey, out TokenDto token);
 
-            var response = await _client.GetAsync(string.Format(KeywordsEndpoint, method, token.AccessToken, phrase, dataSource));
+            var response = await _client
+                .GetAsync(string.Format(SemrushKeywordsEndpoint, method, token.AccessToken, phrase, dataSource));
 
             if (response.IsSuccessStatusCode)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
 
                 var relatedPhrasesDeserialized = JsonConvert.DeserializeObject<RelatedPhrasesDto>(responseContent);
+
+                if (!relatedPhrasesDeserialized.IsSuccessful) return relatedPhrasesDeserialized;
 
                 CachingService.AddCachedItem(cacheKey, responseContent);
 
@@ -132,17 +147,24 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
         }
 
         [HttpGet]
-        public async Task<DataSourceDto> ImportDataSources()
+        public DataSourceDto GetDataSources()
         {
-            var response = await _client.GetAsync($"{BaseAuthorizationHubAddress}import_datasources");
+            _lock.EnterReadLock();
 
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var result = await response.Content.ReadAsStringAsync();
+                if (!File.Exists(SemrushDataSourcesPath))
+                {
+                    var fs = File.Create(SemrushDataSourcesPath);
+                    fs.Close();
 
+                    return new DataSourceDto();
+                }
+
+                var content = File.ReadAllText(SemrushDataSourcesPath);
                 var dataSourceDto = new DataSourceDto
                 {
-                    Items = JsonConvert.DeserializeObject<Dictionary<string, string>>(result).Select(p =>
+                    Items = JsonConvert.DeserializeObject<Dictionary<string, string>>(content).Select(p =>
                         new DataSourceItemDto
                         {
                             Key = p.Key,
@@ -152,11 +174,14 @@ namespace Umbraco.Cms.Integrations.SEO.SemrushTools.Controllers
 
                 return dataSourceDto;
             }
-
-            return new DataSourceDto();
-
-
-
+            catch (FileNotFoundException ex)
+            {
+                return new DataSourceDto();
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
 

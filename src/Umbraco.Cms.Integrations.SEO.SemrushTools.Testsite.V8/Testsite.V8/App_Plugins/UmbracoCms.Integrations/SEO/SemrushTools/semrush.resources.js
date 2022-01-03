@@ -38,6 +38,10 @@
             return umbRequestHelper.resourcePromise(
                 $http.get(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "ImportDataSources")), "Fail");
         },
+        getDataSources: function () {
+            return umbRequestHelper.resourcePromise(
+                $http.get(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "GetDataSources")), "Fail");
+        }
     };
 
 }
