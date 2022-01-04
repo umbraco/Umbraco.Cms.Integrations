@@ -6,7 +6,7 @@ pool:
 
 variables:
   projectName: 'Umbraco.Cms.Integrations.SEO.SemrushTools'
-  project: 'src/$(projectName)/$(projectName)/$(projectName).csproj'
+  project: 'src/$(projectName)/$(projectName).csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
