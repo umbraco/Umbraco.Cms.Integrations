@@ -1,7 +1,0 @@
-﻿{
-	"javascript": [
-		"~/App_Plugins/UmbracoCms.Integrations/SEO/SemrushTools/semrushToolsController.js",
-		"~/App_Plugins/UmbracoCms.Integrations/SEO/SemrushTools/statusController.js",
-		"~/App_Plugins/UmbracoCms.Integrations/SEO/SemrushTools/semrush.resources.js"
-	]
-}

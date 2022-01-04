@@ -1,0 +1,93 @@
+﻿<div ng-controller="UmbracoCms.Integrations.SemrushController as vm">
+    <umb-load-indicator ng-if="vm.loading">
+    </umb-load-indicator>
+    <umb-box>
+        <umb-box-header title="Content Properties"></umb-box-header>
+        <umb-box-content>
+            <select id="selProperties" ng-model="vm.selectedProperty" ng-change="vm.onPropertyChange()">
+                <option value="">Select content property</option>
+                <option ng-repeat="prop in vm.currentNodeProperties" value="{{ prop.alias }}">{{ prop.label }}</option>
+            </select>
+            <label> or </label>
+            <a href="" ng-click="vm.searchKeywordsBoxVisible = true; vm.searchQuery = '';">Search new</a>
+        </umb-box-content>
+    </umb-box>
+    <umb-box>
+        <umb-box-header title="SEMRUSH - Keywords">
+            <umb-button action="vm.onConnectClick()"
+                        type="button"
+                        button-style="primary"
+                        state="init"
+                        label="Connect"
+                        disabled="vm.isConnected">
+            </umb-button>
+            <umb-button action="vm.onViewStatus()"
+                        type="button"
+                        button-style="primary"
+                        state="init"
+                        label="Status">
+            </umb-button>
+        </umb-box-header>
+        <umb-box-content>
+            <div ng-if="vm.searchKeywordsBoxVisible">
+                <input type="text" ng-model="vm.searchQuery" />
+
+                <select id="selDataSources" ng-model="vm.selectedDataSource">
+                    <option value="">Please select a data source</option>
+                    <option ng-repeat="ds in vm.dataSourceItems" value="{{ ds.Key }}">{{ ds.Value }}</option>
+                </select>
+
+                <select id="selMethods" ng-model="vm.selectedMethod">
+                    <option value="">Please select a method</option>
+                    <option ng-repeat="ds in vm.supportedMethods" value="{{ ds.Key }}">{{ ds.Value }}</option>
+                </select>
+
+                <umb-button action="vm.onSearchKeywords()"
+                            type="button"
+                            button-style="primary"
+                            label="Search keywords"
+                            disabled="!vm.isConnected">
+                </umb-button>
+            </div>
+            <div ng-if="vm.relatedPhrasesList.data">
+                <div class="umb-table" ng-if="vm.relatedPhrasesList.data">
+                    <!-- Listviews head section -->
+                    <div class="umb-table-head">
+                        <div class="umb-table-row">
+                            <div class="umb-table-cell"></div>
+                            <div class="umb-table-cell" ng-repeat="column in vm.relatedPhrasesList.data.columnNames">
+                                <span ng-bind="column"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Listview body section -->
+                    <div class="umb-table-body">
+                        <div class="umb-table-row"
+                             ng-repeat="row in vm.relatedPhrasesList.data.rows track by $index">
+                            <div class="umb-table-cell"></div>
+                            <div class="umb-table-cell" ng-repeat="item in row track by $index">
+                                <span ng-bind="item"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- If list is empty, then display -->
+                <umb-empty-state ng-if="!vm.relatedPhrasesList"
+                                 position="center">
+                    <localize key="content_listViewNoItems">There are no items show in the list.</localize>
+                </umb-empty-state>
+
+                <div class="flex justify-center" ng-show="!vm.loading">
+                    <umb-pagination page-number="vm.pagination.pageNumber"
+                                    total-pages="vm.pagination.totalPages"
+                                    on-next="vm.nextPage"
+                                    on-prev="vm.prevPage"
+                                    on-change="vm.changePage"
+                                    on-go-to-page="vm.goToPage">
+                    </umb-pagination>
+                </div>
+
+            </div>
+        </umb-box-content>
+    </umb-box>
+</div>
