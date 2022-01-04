@@ -1,19 +1,19 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.Home>
 @using ContentModels = Umbraco.Web.PublishedModels;
 @{
-    Layout = "master.cshtml";
+    Layout = null;
     var backgroundImage = Model.HeroBackgroundImage != null ? Model.HeroBackgroundImage.Url : String.Empty;
 }
 
 <section class="section section--full-height">
-    <h3>@Model.SingleProduct.Name</h3>
-    @foreach(var image in Model.SingleProduct.Images)
-    {
-        <img src="@image.Url" width="100"/>
-    }
+    <h3>Product Detail: @Model.SingleProduct.Name</h3>
     @foreach(var variant in Model.SingleProduct.Variants.Where(x => x.InStock))
     {
-        <div>@variant.Key</div>
+        <div>@variant.SKU</div>
+        foreach(var image in variant.Images)
+        {
+            <img src="@image.Url" width="100"/>
+        }
         <ul>
             @foreach(var price in variant.Prices)
             {
