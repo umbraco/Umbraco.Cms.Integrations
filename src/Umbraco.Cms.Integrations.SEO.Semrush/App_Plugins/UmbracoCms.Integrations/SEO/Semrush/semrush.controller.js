@@ -224,6 +224,10 @@
                 title: "SEMrush Authorization Details",
                 view: "/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/statusEditor.html",
                 size: "small",
+                revoke: function() {
+                    vm.isConnected = false;
+                    editorService.close();
+                },
                 close: function () {
                     editorService.close();
                 }

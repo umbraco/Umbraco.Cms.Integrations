@@ -6,7 +6,7 @@
                 <umb-box-content>
                     <p><b>Connected: {{ vm.isAccessTokenAvailable }}</b></p>
                     <p ng-if="vm.isAccessTokenAvailable">{{ vm.AccessToken }}</p>
-                    <umb-button action="vm.OnRevokeToken()"
+                    <umb-button action="vm.onRevokeToken()"
                                 type="button"
                                 button-style="danger"
                                 state="init"

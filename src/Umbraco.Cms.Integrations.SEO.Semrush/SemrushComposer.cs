@@ -15,6 +15,8 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush
 
             composition.Register<ISemrushTokenService, SemrushTokenService>(Lifetime.Singleton);
             composition.Register<ICacheHelper, CacheHelper>(Lifetime.Singleton);
+
+            composition.Register<TokenBuilder>(Lifetime.Request);
         }
     }
 }
