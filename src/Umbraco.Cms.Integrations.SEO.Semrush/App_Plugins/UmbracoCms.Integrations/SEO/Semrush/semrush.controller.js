@@ -141,19 +141,22 @@
 
                 var codeParam = "?code=";
 
-                vm.showSuccess("SEMrush API", "Access Approved");
-
                 vm.authWindow.close();
 
                 var code = event.data.url.slice(event.data.url.indexOf(codeParam) + codeParam.length);
 
                 umbracoCmsIntegrationsSemrushResource.getAccessToken(code).then(function (response) {
-                    if (response !== "error") vm.isConnected = true;
+                    if (response !== "error") {
+                        vm.isConnected = true;
+                        vm.showSuccess("Semrush authentication", "Access Approved");
+                    } else {
+                        vm.showError("Semrush authentication", "Access Denied");
+                    }
                 });
 
 
             } else if (event.data.type === "semrush:oauth:denied") {
-                vm.showError("SEMrush API", "Access Denied");
+                vm.showError("Semrush authentication", "Access Denied");
 
                 vm.authWindow.close();
 
