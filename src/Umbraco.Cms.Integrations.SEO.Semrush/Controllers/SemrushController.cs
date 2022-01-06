@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -6,8 +8,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Lucene.Net.Analysis;
-using Newtonsoft.Json;
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
 using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
 using Umbraco.Cms.Integrations.SEO.Semrush.Services;
@@ -18,7 +18,11 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
     [PluginController("UmbracoCmsIntegrationsSemrush")]
     public class SemrushController : BaseController
     {
-        private static HttpClient _client = new HttpClient();
+        // Using a static HttpClient (see: https://www.aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/).
+        private readonly static HttpClient s_client = new HttpClient();
+
+        // Access to the client within the class is via ClientFactory(), allowing us to mock the responses in tests.
+        internal static Func<HttpClient> ClientFactory = () => s_client;
 
         private static readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
@@ -51,10 +55,15 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
         {
             var requestData = TokenBuilder.ForAccessToken(request.Code).Build();
 
-            _client.DefaultRequestHeaders.Add(SemrushSettings.SemrushServiceHeaderKey.Key, SemrushSettings.SemrushServiceHeaderKey.Value);
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri($"{SemrushSettings.AuthProxyBaseAddress}{SemrushSettings.AuthProxyTokenEndpoint}"),
+                Content = new FormUrlEncodedContent(requestData),
+            };
+            requestMessage.Headers.Add(SemrushSettings.SemrushServiceHeaderKey.Key, SemrushSettings.SemrushServiceHeaderKey.Value);
 
-            var response = await _client.PostAsync($"{SemrushSettings.AuthProxyBaseAddress}{SemrushSettings.AuthProxyTokenEndpoint}",
-                new FormUrlEncodedContent(requestData));
+            var response = await ClientFactory().SendAsync(requestMessage);
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
@@ -74,7 +83,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
 
             if (!token.IsAccessTokenAvailable) return new AuthorizationResponseDto { IsExpired = true };
 
-            var response = await _client
+            var response = await ClientFactory()
                 .GetAsync(string.Format(SemrushSettings.SemrushKeywordsEndpoint, "phrase_related", token.AccessToken, "ping", "us"));
 
             return new AuthorizationResponseDto
@@ -90,9 +99,15 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
 
             var requestData = TokenBuilder.ForRefreshToken(token.RefreshToken).Build();
 
-            _client.DefaultRequestHeaders.Add(SemrushSettings.SemrushServiceHeaderKey.Key, SemrushSettings.SemrushServiceHeaderKey.Value);
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri($"{SemrushSettings.AuthProxyBaseAddress}{SemrushSettings.AuthProxyTokenEndpoint}"),
+                Content = new FormUrlEncodedContent(requestData),
+            };
+            requestMessage.Headers.Add(SemrushSettings.SemrushServiceHeaderKey.Key, SemrushSettings.SemrushServiceHeaderKey.Value);
 
-            var response = await _client.PostAsync($"{SemrushSettings.AuthProxyBaseAddress}{SemrushSettings.AuthProxyTokenEndpoint}", new FormUrlEncodedContent(requestData));
+            var response = await ClientFactory().SendAsync(requestMessage);
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
@@ -123,7 +138,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
 
             SemrushTokenService.TryGetParameters(SemrushSettings.TokenDbKey, out TokenDto token);
 
-            var response = await _client
+            var response = await ClientFactory()
                 .GetAsync(string.Format(SemrushSettings.SemrushKeywordsEndpoint, method, token.AccessToken, phrase, dataSource));
 
             if (response.IsSuccessStatusCode)
