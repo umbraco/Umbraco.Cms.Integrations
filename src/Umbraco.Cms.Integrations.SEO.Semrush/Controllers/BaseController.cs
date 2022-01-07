@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web;
+﻿using System.Web;
 
 using Umbraco.Cms.Integrations.SEO.Semrush.Services;
 using Umbraco.Web.Editors;
@@ -16,6 +15,9 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
 
         public string SemrushDataSourcesPath = HttpContext.Current.Server.MapPath(
             "/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/semrushDataSources.json");
+
+        public string SemrushColumnsPath = HttpContext.Current.Server.MapPath(
+            "/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/semrushColumns.json");
 
         public BaseController(ISemrushTokenService semrushTokenService, ICacheHelper cacheHelper, TokenBuilder tokenBuilder)
         {

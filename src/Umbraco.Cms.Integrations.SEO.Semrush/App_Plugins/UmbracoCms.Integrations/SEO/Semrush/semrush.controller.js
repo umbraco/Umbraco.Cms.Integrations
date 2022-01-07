@@ -14,10 +14,15 @@
 
 (() => {
 
-    function semrushController($scope, $window, editorState, notificationsService, editorService, contentResource,
+    function semrushController($scope, $window, editorState,
+        notificationsService, editorService, userService,
         umbracoCmsIntegrationsSemrushResource, umbPropertyTypeAlias) {
 
         var vm = this;
+
+        userService.getCurrentUser().then(function (user) {
+            vm.isAdmin = user.userGroups.find(x => x === "admin").length > 0;
+        });
 
         vm.searchKeywordsBoxVisible = false;
         vm.isConnected = false;
@@ -25,34 +30,47 @@
 
         vm.searchQuery = '';
 
+        vm.selectedDataSource = '';
+        vm.selectedMethod = '';
+
         vm.dataSourceItems = [];
+        vm.columnItems = [];
+
         vm.supportedMethods = [
             {
-                "Key": "phrase_fullsearch",
-                "Value": "phrase_fullsearch"
+                "key": "phrase_fullsearch",
+                "value": "phrase_fullsearch",
+                "description": "List of broad matches and alternate search queries, including particular keywords or keyword expressions."
             },
             {
-                "Key": "phrase_kdl",
-                "Value": "phrase_kdl"
+                "key": "phrase_kdi",
+                "value": "phrase_kdi",
+                "description": "Keyword difficulty - an index that helps to estimate how difficult it would be to seize competitor's positions " +
+                    "in organic search within Google's top 100 with an indicated search term."
             },
             {
-                "Key": "phrase_organic",
-                "Value": "phrase_organic"
+                "key": "phrase_organic",
+                "value": "phrase_organic",
+                "description": "List of domains that are ranking in Google's top 100 organic search results with a requested keyword."
             },
             {
-                "Key": "phrase_related",
-                "Value": "phrase_related"
+                "key": "phrase_related",
+                "value": "phrase_related",
+                "description": "Extended list of related keywords, synonyms and variations relevant to a queried term in a chosen database."
             },
             {
-                "Key": "phrase_these",
-                "Value": "phrase_these"
+                "key": "phrase_these",
+                "value": "phrase_these",
+                "description": "Summary of up to 100 keywords, including volume, CPC, competition and the number of results in a chosen regional database."
             },
             {
-                "Key": "phrase_this",
-                "Value": "phrase_this"
+                "key": "phrase_this",
+                "value": "phrase_this",
+                "description": "Summary of a keyword, including volume, CPC, competition and the number of results in a chosen regional database."
             }
         ];
-        vm.relatedPhrasesList = {};
+        vm.searchKeywordsList = {};
+
         vm.currentNodeProperties = [];
 
         vm.pagination = {
@@ -86,6 +104,12 @@
         umbracoCmsIntegrationsSemrushResource.getDataSources().then(function (response) {
             if (response.Items.length > 0) {
                 vm.dataSourceItems = response.Items;
+            }
+        });
+
+        umbracoCmsIntegrationsSemrushResource.getColumns().then(function (response) {
+            if (response.length > 0) {
+                vm.columnItems = response;
             }
         });
 
@@ -132,7 +156,7 @@
                 return;
             }
 
-            searchRelatedPhrases(1);
+            searchKeywords(1);
         }
 
         // authorization listener
@@ -171,7 +195,7 @@
             });
         }
 
-        function searchRelatedPhrases(pageNumber) {
+        function searchKeywords(pageNumber) {
             vm.loading = true;
             umbracoCmsIntegrationsSemrushResource.getRelatedPhrases(vm.searchQuery, pageNumber, vm.selectedDataSource, vm.selectedMethod)
                 .then(function (response) {
@@ -186,7 +210,7 @@
                             totalPages: response.TotalPages
                         };
 
-                        vm.relatedPhrasesList = response;
+                        vm.searchKeywordsList = response;
                     }
                 });
         }
@@ -206,19 +230,19 @@
 
         // pagination
         function nextPage(pageNumber) {
-            searchRelatedPhrases(pageNumber);
+            searchKeywords(pageNumber);
         }
 
         function prevPage(pageNumber) {
-            searchRelatedPhrases(pageNumber);
+            searchKeywords(pageNumber);
         }
 
         function changePage(pageNumber) {
-            searchRelatedPhrases(pageNumber);
+            searchKeywords(pageNumber);
         }
 
         function goToPage(pageNumber) {
-            searchRelatedPhrases(pageNumber);
+            searchKeywords(pageNumber);
         }
 
         // status
@@ -227,7 +251,7 @@
                 title: "SEMrush Authorization Details",
                 view: "/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/statusEditor.html",
                 size: "small",
-                revoke: function() {
+                revoke: function () {
                     vm.isConnected = false;
                     editorService.close();
                 },
@@ -242,12 +266,86 @@
         function isPropertyValid(propertyTypeAlias) {
             return (propertyTypeAlias === umbPropertyTypeAlias.TEXTBOX
                 || propertyTypeAlias === umbPropertyTypeAlias.TEXTAREA
-                );
+            );
         }
 
         function isSemrushConfigurationValid() {
             return vm.selectedDataSource !== undefined && vm.selectedMethod !== undefined
                 && vm.selectedDataSource.length > 0 && vm.selectedMethod.length > 0;
+        }
+
+        // tooltips
+
+        // data sources select
+        vm.dataSourcesTooltip = {
+            show: false,
+            event: null
+        };
+
+        vm.dataSourcesMouseOver = function ($event) {
+            if (vm.selectedDataSource.length > 0) {
+                vm.dataSourcesTooltip = {
+                    show: true,
+                    event: $event
+                };
+            }
+        };
+
+        vm.dataSourcesMouseLeave = function () {
+            vm.dataSourcesTooltip = {
+                show: false,
+                event: null
+            };
+        }
+
+        // supported methods select
+        vm.supportedMethodsTooltip = {
+            show: false,
+            event: null
+        };
+
+        vm.supportedMethodsMouseOver = function ($event) {
+            if (vm.selectedMethod.length > 0) {
+                vm.supportedMethodsTooltip = {
+                    show: true,
+                    event: $event
+                };
+            }
+        };
+
+        vm.supportedMethodsMouseLeave = function () {
+            vm.supportedMethodsTooltip = {
+                show: false,
+                event: null
+            };
+        }
+
+        // table columns
+        vm.columnsTooltip = {
+            show: false,
+            event: null,
+            content: ''
+        };
+
+        vm.columnsTooltipMouseOver = function ($event, columnName) {
+
+            let columnItem = vm.columnItems.find(x => x.name === columnName);
+            if (columnItem !== undefined && columnItem !== null) {
+                console.log(columnItem.description);
+                vm.columnsTooltip = {
+                    show: true,
+                    event: $event,
+                    content: columnItem.description
+                };
+            }
+        };
+
+        vm.columnsTooltipMouseLeave = function () {
+            vm.columnsTooltip = {
+                show: false,
+                event: null,
+                content: ''
+            };
         }
     }
 

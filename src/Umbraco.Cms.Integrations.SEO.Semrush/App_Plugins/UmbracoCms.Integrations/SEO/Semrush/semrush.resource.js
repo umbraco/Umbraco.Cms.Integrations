@@ -41,6 +41,10 @@
         getDataSources: function () {
             return umbRequestHelper.resourcePromise(
                 $http.get(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "GetDataSources")), "Fail");
+        },
+        getColumns: function () {
+            return umbRequestHelper.resourcePromise(
+                $http.get(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "GetColumns")), "Fail");
         }
     };
 

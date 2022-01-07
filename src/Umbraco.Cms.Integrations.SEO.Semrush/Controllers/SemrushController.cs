@@ -181,11 +181,13 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
                 var content = File.ReadAllText(SemrushDataSourcesPath);
                 var dataSourceDto = new DataSourceDto
                 {
-                    Items = JsonConvert.DeserializeObject<Dictionary<string, string>>(content).Select(p =>
+                    Items = JsonConvert.DeserializeObject<List<DataSourceItemDto>>(content).Select(p =>
                         new DataSourceItemDto
                         {
-                            Key = p.Key,
-                            Value = p.Value
+                            Code = p.Code,
+                            Region = p.Region,
+                            ResearchTypes = p.ResearchTypes,
+                            GoogleSearchDomain = p.GoogleSearchDomain
                         })
                 };
 
@@ -194,6 +196,41 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
             catch (FileNotFoundException ex)
             {
                 return new DataSourceDto();
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
+        }
+
+        [HttpGet]
+        public IEnumerable<ColumnDto> GetColumns()
+        {
+            _lock.EnterReadLock();
+
+            try
+            {
+                if (!File.Exists(SemrushColumnsPath))
+                {
+                    var fs = File.Create(SemrushColumnsPath);
+                    fs.Close();
+
+                    return Enumerable.Empty<ColumnDto>();
+                }
+
+                var content = File.ReadAllText(SemrushColumnsPath);
+                return JsonConvert.DeserializeObject<IEnumerable<ColumnDto>>(content).Select(p =>
+                    new ColumnDto
+                    {
+                        Name = p.Name,
+                        Value = p.Value,
+                        Description = p.Description
+                    });
+
+            }
+            catch (FileNotFoundException ex)
+            {
+                return Enumerable.Empty<ColumnDto>();
             }
             finally
             {

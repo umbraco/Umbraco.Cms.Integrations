@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using Newtonsoft.Json;
+
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos
 {
     public class DataSourceDto
@@ -14,8 +16,16 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos
 
     public class DataSourceItemDto
     {
-        public string Key { get; set; }
+        [JsonProperty("code")]
+        public string Code { get; set; }
 
-        public string Value { get; set; }
+        [JsonProperty("region")]
+        public string Region { get; set; }
+
+        [JsonProperty("researchTypes")]
+        public string ResearchTypes { get; set; }
+
+        [JsonProperty("googleSearchDomain")]
+        public string GoogleSearchDomain { get; set; }
     }
 }
