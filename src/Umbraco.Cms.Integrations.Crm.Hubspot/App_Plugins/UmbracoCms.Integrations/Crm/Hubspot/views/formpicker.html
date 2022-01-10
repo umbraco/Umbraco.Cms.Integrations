@@ -1,0 +1,32 @@
+﻿<div ng-controller="Umbraco.Cms.Integrations.Crm.Hubspot.FormPickerController as vm">
+
+    <umb-load-indicator ng-if="vm.loading">
+    </umb-load-indicator>
+
+    <umb-node-preview ng-if="model.value"
+                      name="model.value.name"
+                      icon="model.icon"
+                      description="model.value.fields"
+                      allow-remove="true",
+
+                      on-remove="vm.remove()">
+    </umb-node-preview>
+
+    <a ng-if="!model.value && !vm.loading"
+       class="umb-node-preview-add"
+       href=""
+       ng-click="vm.openHubspotFormPickerOverlay()"
+       prevent-default>
+        <localize key="general_add">Add</localize>
+    </a>
+
+    <div ng-if="vm.error" class="alert alert-warning">
+        {{ vm.error }}
+    </div>
+
+    <umb-overlay ng-if="vm.hubspotFormPickerOverlay.show"
+                 model="vm.hubspotFormPickerOverlay"
+                 view="vm.hubspotFormPickerOverlay.view"
+                 position="right">
+    </umb-overlay>
+</div>

@@ -1,0 +1,31 @@
+﻿.hsOverlayGroup {
+    margin-bottom: 1rem;
+}
+
+.hsFormsList {
+    list-style-type: none;
+    margin: 0;
+}
+
+.hsFormsList a {
+    display: block;
+    position: relative;
+    padding: .25rem .375rem .25rem 1.5rem;
+}
+
+.hsFormsList a:hover {
+    text-decoration: none;
+    background-color: #eee;
+}
+
+    .hsFormsList a i {
+        position: absolute;
+        top: .25rem;
+        left: .25rem;
+    }
+
+.hsFormsList .formLine {
+    display: block;
+}
+
+

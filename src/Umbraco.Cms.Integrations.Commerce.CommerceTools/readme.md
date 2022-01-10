@@ -4,7 +4,7 @@ This integration provides a product and category picker, with data sourced from 
 
 ## Prerequisites
 
-Requires minimum versions of Umbraco CMS: 8.5.0
+Requires minimum version of Umbraco CMS: 8.5.4.
 
 ## How To Use
 
