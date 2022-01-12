@@ -71,7 +71,7 @@
         ];
         vm.searchKeywordsList = {};
 
-        vm.currentNodeProperties = [];
+        vm.contentProperties = [];
 
         vm.pagination = {
             pageNumber: 1,
@@ -92,13 +92,21 @@
         for (var tabIndex = 0; tabIndex < tabs.length; tabIndex++) {
             var properties = tabs[tabIndex].properties;
 
+            let tabItem = {
+                label: tabs[tabIndex].label,
+                properties: []
+            };
+
             for (var index = 0; index < properties.length; index++) {
                 let currentProperty = properties[index];
 
                 if (isPropertyValid(currentProperty.view)) {
-                    vm.currentNodeProperties.push(currentProperty);
+                    tabItem.properties.push(currentProperty);
                 }
             }
+
+            if (tabItem.properties.length > 0)
+                vm.contentProperties.push(tabItem);
         }
 
         umbracoCmsIntegrationsSemrushResource.getDataSources().then(function (response) {
@@ -141,11 +149,19 @@
 
         vm.onPropertyChange = function () {
             vm.searchKeywordsBoxVisible = vm.selectedProperty.length > 0;
-            vm.searchQuery = vm.selectedProperty.length > 0
-                ? vm.currentNodeProperties.find(obj => {
-                    return obj.alias == vm.selectedProperty;
-                }).value
-                : '';
+
+            if (vm.selectedProperty.length > 0) {
+                for (var i = 0; i < vm.contentProperties.length; i++) {
+                    for (var j = 0; j < vm.contentProperties[i].properties.length; j++) {
+                        if (vm.contentProperties[i].properties[j].alias === vm.selectedProperty) {
+                            vm.searchQuery = vm.contentProperties[i].properties[j].value;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                vm.searchQuery = '';
+            }
         }
 
         vm.onSearchKeywords = function () {

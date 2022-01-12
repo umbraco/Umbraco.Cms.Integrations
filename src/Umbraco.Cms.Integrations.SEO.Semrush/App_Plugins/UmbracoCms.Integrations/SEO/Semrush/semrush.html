@@ -4,16 +4,50 @@
     <umb-box>
         <umb-box-header title="Content Properties"></umb-box-header>
         <umb-box-content>
-            <select id="selProperties" ng-model="vm.selectedProperty" ng-change="vm.onPropertyChange()">
-                <option value="">Select content property</option>
-                <option ng-repeat="prop in vm.currentNodeProperties" value="{{ prop.alias }}">{{ prop.label }}</option>
-            </select>
-            <label> or </label>
-            <a href="" ng-click="vm.searchKeywordsBoxVisible = true; vm.searchQuery = '';">Search new</a>
+            <div>
+                <p>
+                    Semrush is a marketing SaaS platform that provides online visibility management and content marketing through
+                    a single platform, on all key channels.
+                </p>
+                <p>
+                    It analyzes the data from the world's largest database of 20 billion keywords, 310 million ads and 17 billion
+                    URLs crawled per day, and gives you instant recommendations on SEO, content marketing and advertising that can
+                    help you improve your online visibility in days.
+                </p>
+                <p>
+                    Keyword search is a powerful tool that runs a full analysis of your keyword and helps you decide whether you
+                    should enter into competition for it. As an integral part of any digital marketing strategy, it's importance
+                    will never fade away.
+                </p>
+                <p>
+                    <a href="https://www.semrush.com" target="_blank">
+                        <umb-icon icon="icon-autofill" class="small"></umb-icon>
+                        read more
+                    </a>
+                </p>
+                <p ng-if="!vm.isAdmin">
+                    You need to be logged in against Semrush in order take advantage of the tool's full potential. If you cannot do that,
+                    please contact one of the administrators.
+                </p>
+                <p>
+                    You can enable the keywords lookup tool by picking one of the content fields or choosing a new blank search from the
+                    controls below:
+                </p>
+            </div>
+            <div class="mt3">
+                <select id="selProperties" ng-model="vm.selectedProperty" ng-change="vm.onPropertyChange()">
+                    <option value="">Select content property</option>
+                    <optgroup ng-repeat="tab in vm.contentProperties" label="{{ tab.label }}">
+                        <option ng-repeat="prop in tab.properties" value="{{ prop.alias }}">{{ prop.label }}</option>
+                    </optgroup>
+                </select>
+                <label> or </label>
+                <a href="" ng-click="vm.searchKeywordsBoxVisible = true; vm.searchQuery = '';">Search new</a>
+            </div>
         </umb-box-content>
     </umb-box>
     <umb-box>
-        <umb-box-header title="SEMRUSH - Keywords">
+        <umb-box-header title="Keyword Search">
             <umb-button action="vm.onConnectClick()"
                         type="button"
                         ng-if="vm.isAdmin"
@@ -29,6 +63,11 @@
                         state="init"
                         label="Status">
             </umb-button>
+
+            <div ng-if="!vm.isAdmin">
+                <label><b>Status: </b></label>
+                <label>{{ vm.isConnected ? 'Connected' : 'Disconnected, please contact an administrator.' }}</label>
+            </div>
         </umb-box-header>
         <umb-box-content>
             <div ng-if="vm.searchKeywordsBoxVisible">
@@ -68,14 +107,17 @@
                             disabled="!vm.isConnected">
                 </umb-button>
             </div>
-            <div ng-if="vm.searchKeywordsList.data">
+            <div ng-if="vm.searchKeywordsList.data" class="mt-30">
+                <a href="https://www.semrush.com/analytics/keywordoverview" target="_blank">
+                    Get more details on Semrush
+                </a>
                 <umb-tooltip ng-if="vm.columnsTooltip.show"
                              event="vm.columnsTooltip.event">
                     <span>
                         {{ vm.columnsTooltip.content }}
                     </span>
                 </umb-tooltip>
-                <div class="umb-table mt-30" ng-if="vm.searchKeywordsList.data">
+                <div class="umb-table" ng-if="vm.searchKeywordsList.data">
                     <!-- Listviews head section -->
                     <div class="umb-table-head">
                         <div class="umb-table-row">
