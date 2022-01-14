@@ -30,5 +30,10 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
         {
             _cache.InsertCacheItem(key, () => item, TimeSpan.FromHours(1));
         }
+
+        public void ClearCachedItems()
+        {
+            _cache.Clear();
+        }
     }
 }

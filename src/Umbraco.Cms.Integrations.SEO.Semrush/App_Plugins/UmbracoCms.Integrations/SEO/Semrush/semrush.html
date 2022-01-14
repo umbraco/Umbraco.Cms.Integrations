@@ -108,9 +108,6 @@
                 </umb-button>
             </div>
             <div ng-if="vm.searchKeywordsList.data" class="mt-30">
-                <a href="https://www.semrush.com/analytics/keywordoverview" target="_blank">
-                    Get more details on Semrush
-                </a>
                 <umb-tooltip ng-if="vm.columnsTooltip.show"
                              event="vm.columnsTooltip.event">
                     <span>
@@ -159,6 +156,10 @@
                                     on-go-to-page="vm.goToPage">
                     </umb-pagination>
                 </div>
+
+                <a href="https://www.semrush.com/analytics/keywordoverview" target="_blank">
+                    Get more insights at Semrush
+                </a>
 
             </div>
         </umb-box-content>

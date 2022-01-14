@@ -12,12 +12,7 @@
         });
 
         vm.onRevokeToken = function() {
-            umbracoCmsIntegrationsSemrushResource.revokeToken().then(function () {
-
-                vm.revoke();
-
-                //vm.close();
-            });
+            vm.revoke();
         }
 
         vm.revoke = function() {

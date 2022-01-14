@@ -21,7 +21,9 @@
         var vm = this;
 
         userService.getCurrentUser().then(function (user) {
-            vm.isAdmin = user.userGroups.find(x => x === "admin").length > 0;
+            var isPartOfAdminUserGroup = user.userGroups.find(x => x === "admin");
+            
+            vm.isAdmin = isPartOfAdminUserGroup !== undefined;
         });
 
         vm.searchKeywordsBoxVisible = false;
@@ -143,8 +145,10 @@
 
         // event handlers
         vm.onConnectClick = function () {
+           
             vm.authWindow = window.open(vm.authorizationUrl,
                 "Semrush_Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
+
         }
 
         vm.onPropertyChange = function () {
@@ -208,6 +212,7 @@
         function revokeToken() {
             umbracoCmsIntegrationsSemrushResource.revokeToken().then(function () {
                 vm.isConnected = false;
+                vm.searchKeywordsList = {};
             });
         }
 
@@ -268,7 +273,8 @@
                 view: "/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/statusEditor.html",
                 size: "small",
                 revoke: function () {
-                    vm.isConnected = false;
+                    revokeToken();
+
                     editorService.close();
                 },
                 close: function () {

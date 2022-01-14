@@ -48,6 +48,8 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
         public void RevokeToken()
         {
             SemrushTokenService.RemoveParameters(SemrushSettings.TokenDbKey);
+
+            CacheHelper.ClearCachedItems();
         }
 
         [HttpPost]
