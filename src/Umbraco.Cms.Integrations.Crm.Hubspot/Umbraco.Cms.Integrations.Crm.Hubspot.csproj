@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="UmbracoCms.Web" version="8.5.4" />
+    <PackageReference Include="UmbracoCms.Web" version="8.17.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,5 +25,14 @@
       <PackagePath>content\App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
     </Content>
   </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\Render\HubspotForm.cshtml" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\formpickereditor.html" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="set TestsiteV8Name=$(ProjectName).Testsite.V8&#xD;&#xA;set TestsiteV8AppPluginsPath=$(solutionDir)%25TestsiteV8Name%25\App_Plugins&#xD;&#xA;set TestsiteV8IntegrationsPath=$(solutionDir)%25TestsiteV8Name%25\App_Plugins\UmbracoCms.Integrations&#xD;&#xA;set TestsiteV8CrmPath=$(solutionDir)%25TestsiteV8Name%25\App_Plugins\UmbracoCms.Integrations\Crm&#xD;&#xA;set TestsiteV8HubspotPath=$(solutionDir)%25TestsiteV8Name%25\App_Plugins\UmbracoCms.Integrations\Crm\Hubspot&#xD;&#xA;&#xD;&#xA;if not exist %25TestsiteV8AppPluginsPath%25 mkdir %25TestsiteV8AppPluginsPath%25&#xD;&#xA;if not exist %25TestsiteV8IntegrationsPath%25 mkdir %25TestsiteV8IntegrationsPath%25&#xD;&#xA;if not exist %25TestsiteV8CrmPath%25 mkdir %25TestsiteV8CrmPath%25&#xD;&#xA;if not exist %25TestsiteV8HubspotPath%25 mkdir %25TestsiteV8HubspotPath%25&#xD;&#xA;&#xD;&#xA;xcopy &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Crm\Hubspot&quot; &quot;%25TestsiteV8HubspotPath%25&quot; /e /y&#xD;&#xA;" />
+  </Target>
 
 </Project>

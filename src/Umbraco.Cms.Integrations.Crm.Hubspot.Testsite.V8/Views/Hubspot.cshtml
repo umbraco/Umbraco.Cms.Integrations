@@ -1,0 +1,17 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.Hubspot>
+
+@using ContentModels = Umbraco.Web.PublishedModels;
+
+@{
+    Layout = "master.cshtml";
+
+}
+
+<script charset="utf-8" type="text/javascript" src="//js-eu1.hsforms.net/forms/shell.js"></script>
+<script>
+    hbspt.forms.create({
+        region: "eu1",
+        portalId: "25480247",
+        formId: "adce7c38-f600-4d37-aba2-40c0e9a105b2"
+    });
+</script>

@@ -324,3 +324,8 @@ src/Umbraco.Cms.Integrations.Commerce.CommerceTools.Testsite.V9/App_Plugins
 src/Umbraco.Cms.Integrations.Commerce.CommerceTools.Testsite.V9/umbraco
 src/Umbraco.Cms.Integrations.Commerce.CommerceTools.Testsite.V9/wwwroot/media
 
+src/Umbraco.Cms.Integrations.Crm.Hubspot.Testsite.V8/App_Data/
+src/Umbraco.Cms.Integrations.Crm.Hubspot.Testsite.V8/App_Plugins/
+src/Umbraco.Cms.Integrations.Crm.Hubspot.Testsite.V8/Media/
+src/Umbraco.Cms.Integrations.SEO.Semrush.Testsite.V8/App_Data/
+src/Umbraco.Cms.Integrations.SEO.Semrush.Testsite.V8/App_Plugins/
