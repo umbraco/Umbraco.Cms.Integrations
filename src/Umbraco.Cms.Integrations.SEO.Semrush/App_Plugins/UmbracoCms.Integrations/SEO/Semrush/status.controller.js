@@ -4,6 +4,9 @@
 
         var vm = this;
 
+        vm.isFreeAccount = $scope.model.isFreeAccount !== null
+            ? ($scope.model.isFreeAccount === true ? "Free" : "Paid") : "N.A.";
+
         umbracoCmsIntegrationsSemrushResource.getTokenDetails().then(function (response) {
 
             vm.isAccessTokenAvailable = response.isAccessTokenAvailable;

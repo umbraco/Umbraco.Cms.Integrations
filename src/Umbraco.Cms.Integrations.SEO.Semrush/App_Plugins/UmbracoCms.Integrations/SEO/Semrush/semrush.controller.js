@@ -123,17 +123,7 @@
             }
         });
 
-        umbracoCmsIntegrationsSemrushResource.validateToken().then(function (response) {
-
-            if (response.IsExpired) {
-                vm.isConnected = false;
-            } else {
-                if (response.IsValid === false) {
-                    umbracoCmsIntegrationsSemrushResource.refreshAccessToken();
-                }
-            }
-
-        });
+        validateToken();
 
         umbracoCmsIntegrationsSemrushResource.getAuthorizationUrl().then(function (response) {
             vm.authorizationUrl = response;
@@ -193,12 +183,11 @@
                     if (response !== "error") {
                         vm.isConnected = true;
                         vm.showSuccess("Semrush authentication", "Access Approved");
+                        validateToken();
                     } else {
                         vm.showError("Semrush authentication", "Access Denied");
                     }
                 });
-
-
             } else if (event.data.type === "semrush:oauth:denied") {
                 vm.showError("Semrush authentication", "Access Denied");
 
@@ -209,9 +198,23 @@
 
         }, false);
 
+        function validateToken() {
+            umbracoCmsIntegrationsSemrushResource.validateToken().then(function (response) {
+                vm.isFreeAccount = response.isFreeAccount;
+                if (response.isExpired) {
+                    vm.isConnected = false;
+                } else {
+                    if (response.isValid === false) {
+                        umbracoCmsIntegrationsSemrushResource.refreshAccessToken();
+                    }
+                }
+            });
+        }
+
         function revokeToken() {
             umbracoCmsIntegrationsSemrushResource.revokeToken().then(function () {
                 vm.isConnected = false;
+                vm.isFreeAccount = null;
                 vm.searchKeywordsList = {};
             });
         }
@@ -270,6 +273,7 @@
         vm.onViewStatus = function () {
             var options = {
                 title: "SEMrush Authorization Details",
+                isFreeAccount: vm.isFreeAccount,
                 view: "/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/statusEditor.html",
                 size: "small",
                 revoke: function () {

@@ -23,5 +23,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Configuration
             SemrushBaseAddress + "api/v1/keywords/{0}?access_token={1}&phrase={2}&database={3}";
 
         public static string TokenDbKey = "Umbraco.Cms.Integrations.Semrush.TokenDbKey";
+
+        public static string AllowLimitOffsetHeaderName = "Allow-Limit-Offset";
     }
 }

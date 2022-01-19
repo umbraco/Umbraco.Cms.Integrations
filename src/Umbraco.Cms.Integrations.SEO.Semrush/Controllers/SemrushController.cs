@@ -90,7 +90,11 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
 
             return new AuthorizationResponseDto
             {
-                IsValid = response.StatusCode != HttpStatusCode.Unauthorized
+                IsValid = response.StatusCode != HttpStatusCode.Unauthorized,
+                IsFreeAccount = response.Headers.TryGetValues(SemrushSettings.AllowLimitOffsetHeaderName,
+                    out IEnumerable<string> values)
+                    ? values.First().Equals("0")
+                    : (bool?) null
             };
         }
 

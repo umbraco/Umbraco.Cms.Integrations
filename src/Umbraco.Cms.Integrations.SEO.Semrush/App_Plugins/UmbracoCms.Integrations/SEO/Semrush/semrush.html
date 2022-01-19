@@ -35,7 +35,7 @@
                 </p>
             </div>
             <div class="mt3">
-                <select id="selProperties" ng-model="vm.selectedProperty" ng-change="vm.onPropertyChange()">
+                <select id="selProperties" ng-model="vm.selectedProperty" ng-change="vm.onPropertyChange()" class="semrush-ctrl">
                     <option value="">Select content property</option>
                     <optgroup ng-repeat="tab in vm.contentProperties" label="{{ tab.label }}">
                         <option ng-repeat="prop in tab.properties" value="{{ prop.alias }}">{{ prop.label }}</option>
@@ -71,9 +71,9 @@
         </umb-box-header>
         <umb-box-content>
             <div ng-if="vm.searchKeywordsBoxVisible">
-                <input type="text" ng-model="vm.searchQuery" />
+                <input id="inQuery" type="text" ng-model="vm.searchQuery" class="semrush-ctrl" />
 
-                <select id="selDataSources" ng-model="vm.selectedDataSource"
+                <select id="selDataSources" ng-model="vm.selectedDataSource" class="semrush-ctrl"
                         ng-mouseover="vm.dataSourcesMouseOver($event)"
                         ng-mouseleave="vm.dataSourcesMouseLeave()">
                     <option value="">Please select a data source</option>
@@ -87,7 +87,7 @@
                     </p>
                 </umb-tooltip>
 
-                <select id="selMethods" ng-model="vm.selectedMethod"
+                <select id="selMethods" ng-model="vm.selectedMethod" class="semrush-ctrl"
                         ng-mouseover="vm.supportedMethodsMouseOver($event)"
                         ng-mouseleave="vm.supportedMethodsMouseLeave()">
                     <option value="">Please select a method</option>
@@ -157,10 +157,16 @@
                     </umb-pagination>
                 </div>
 
+                <div ng-if="vm.isFreeAccount">
+                    <label>
+                        Because you are using a free account, the number of results is limited to 10 records.
+                        Please upgrade your subscription for enhanced results.
+                    </label>
+                </div>
+
                 <a href="https://www.semrush.com/analytics/keywordoverview" target="_blank">
                     Get more insights at Semrush
                 </a>
-
             </div>
         </umb-box-content>
     </umb-box>
