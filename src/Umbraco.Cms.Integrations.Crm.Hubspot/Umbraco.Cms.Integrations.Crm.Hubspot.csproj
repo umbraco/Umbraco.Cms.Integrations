@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="UmbracoCms.Web" version="8.17.1" />
+    <PackageReference Include="UmbracoCms.Web" version="8.4.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,8 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\settings.controller.js" />
     <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\Render\HubspotForm.cshtml" />
     <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\formpickereditor.html" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\settings.html" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

@@ -1,21 +1,22 @@
 ﻿{
-  "propertyEditors": [
-    {
-      "alias": "Umbraco.Cms.Integrations.Crm.Hubspot.FormPicker",
-      "name": "Hubspot Form Picker",
-      "isParameterEditor": true,
-      "group": "Pickers",
-      "icon": "icon-handshake",
-      "editor": {
-        "view": "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/views/formpicker.html"
-      }
-    }
-  ],
-  "css": [
-    "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/css/styles.css" 
-  ],
+  //"propertyEditors": [
+  //  {
+  //    "alias": "Umbraco.Cms.Integrations.Crm.Hubspot.FormPicker",
+  //    "name": "Hubspot Form Picker",
+  //    "isParameterEditor": true,
+  //    "group": "Pickers",
+  //    "icon": "icon-handshake",
+  //    "editor": {
+  //      "view": "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/views/formpicker.html"
+  //    }
+  //  }
+  //],
   "javascript": [
     "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/js/formpicker.controller.js",
+    "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/js/settings.controller.js",
     "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/js/hubspot.resource.js"
+  ],
+  "css": [
+    "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/css/styles.css"
   ]
 }
