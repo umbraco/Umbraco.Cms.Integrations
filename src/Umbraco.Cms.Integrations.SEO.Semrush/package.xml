@@ -2,7 +2,7 @@
 <umbPackage>
   <info>
     <package>
-      <name>Umbraco.Cms.Integrations.Commerce.CommerceTools</name>
+      <name>Umbraco.Cms.Integrations.SEO.Semrush</name>
       <version>1.0.0</version>
       <iconUrl></iconUrl>
       <licence url="https://opensource.org/licenses/MIT">MIT</licence>
@@ -18,13 +18,12 @@
       <website>https://github.com/umbraco/Umbraco.Cms.Integrations</website>
     </author>
     <contributors>
-      <contributor>Søren Kottal</contributor>
-      <contributor>Andy Butland</contributor>
+      <contributor>Adrian Cojocariu</contributor>
     </contributors>
-    <readme><![CDATA[An extension for Umbraco CMS providing product and category pickers for CommerceTools.]]></readme>
+    <readme><![CDATA[An extension for Umbraco CMS providing keyword research tools powered by Semrush via a content app.]]></readme>
   </info>
   <files>
-    <folder path="App_Plugins/UmbracoCms.Integrations/Commerce/CommerceTools" orgPath="App_Plugins/UmbracoCms.Integrations/Commerce/CommerceTools" />
-    <file path="bin/release/net472/Umbraco.Cms.Integrations.Commerce.CommerceTools.dll" orgPath="bin/Umbraco.Cms.Integrations.Commerce.CommerceTools.dll" />
+    <folder path="App_Plugins/UmbracoCms.Integrations/SEO/Semrush" orgPath="App_Plugins/UmbracoCms.Integrations/SEO/Semrush" />
+    <file path="bin/release/net472/Umbraco.Cms.Integrations.SEO.Semrush.dll" orgPath="bin/Umbraco.Cms.Integrations.SEO.Semrush.dll" />
   </files>
 </umbPackage>

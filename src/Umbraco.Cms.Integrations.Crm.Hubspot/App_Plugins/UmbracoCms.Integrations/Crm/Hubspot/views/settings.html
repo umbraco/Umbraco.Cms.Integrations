@@ -14,6 +14,7 @@
         </umb-box-header>
         <umb-box-content>
             <p ng-if="!vm.settingsValidation.isValid">{{ vm.settingsValidation.message }}</p>
+            <p><b>Status:</b> {{ vm.oauthSetup.isConnected ? 'Connected' : 'Disconnected' }}</p>
         </umb-box-content>
     </umb-box>
 </div>

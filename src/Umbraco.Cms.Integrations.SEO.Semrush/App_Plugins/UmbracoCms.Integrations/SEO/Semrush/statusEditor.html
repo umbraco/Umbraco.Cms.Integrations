@@ -1,0 +1,33 @@
+﻿<div ng-controller="UmbracoCms.Integrations.SemrushStatusController as vm">
+    <umb-editor-view>
+
+        <umb-editor-container>
+            <umb-box>
+                <umb-box-content>
+                    <p><b>Connected:</b> {{ vm.isAccessTokenAvailable }}</p>
+                    <p><b>Account:</b> {{ vm.isFreeAccount }}</p>
+                    <p ng-if="vm.isAccessTokenAvailable"><b>Access Token:</b> {{ vm.AccessToken }}</p>
+                    <umb-button action="vm.onRevokeToken()"
+                                type="button"
+                                button-style="danger"
+                                state="init"
+                                label="Revoke"
+                                disabled="!vm.isAccessTokenAvailable">
+                    </umb-button>
+                </umb-box-content>
+            </umb-box>
+        </umb-editor-container>
+
+        <umb-editor-footer>
+            <umb-editor-footer-content-right>
+                <umb-button type="button"
+                            button-style="link"
+                            label-key="general_close"
+                            shortcut="esc"
+                            action="vm.close()">
+                </umb-button>
+            </umb-editor-footer-content-right>
+        </umb-editor-footer>
+
+    </umb-editor-view>
+</div>

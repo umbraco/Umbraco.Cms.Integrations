@@ -2,6 +2,9 @@
 
     var vm = this;
 
+    const apiKeyName = "API Key";
+    const oAuthName = "OAuth";
+
     vm.settingsValidation = {
         isValid: true,
         message: "Invalid configuration. Please review your website's configurations."
@@ -33,12 +36,12 @@
         deselectedItem.disabled = false;
         deselectedItem.checked = false;
 
-        vm.useApi = selectedItem.name === "API Key";
+        vm.useApi = selectedItem.name === apiKeyName;
         if (vm.useApi === true) {
             handleApiConfiguration();
         }
 
-        vm.useOAuth = selectedItem.name === "OAuth";
+        vm.useOAuth = selectedItem.name === oAuthName;
         if (vm.useOAuth === true) {
             handleOAuthConfiguration();
 
@@ -60,9 +63,7 @@
         if (event.data.type === "hubspot:oauth:success") {
             
             umbracoCmsIntegrationsCrmHubspotResource.getAccessToken(event.data.code).then(function (response) {
-                console.log(response);
-
-                vm.isOAuthConnected = true;
+                vm.oauthSetup.isConnected = true;
             });
 
         }
@@ -73,12 +74,22 @@
     function handleApiConfiguration() {
         umbracoCmsIntegrationsCrmHubspotResource.checkApiConfiguration().then(function (response) {
             handleConfigurationValidation(response);
+            if (vm.settingsValidation.isValid === false) {
+                vm.useApi = false;
+                vm.items.find(el => el.name === apiKeyName).checked = false;
+            }
+                
         });
     }
 
     function handleOAuthConfiguration() {
         umbracoCmsIntegrationsCrmHubspotResource.checkOAuthConfiguration().then(function (response) {
             handleConfigurationValidation(response);
+            if (vm.settingsValidation.isValid === false) {
+                vm.useOAuth = false;
+                vm.items.find(el => el.name === oAuthName).checked = false;
+            }
+            
         });
     }
 
@@ -92,11 +103,11 @@
 
     function init() {
         vm.items = [{
-            name: "API Key",
+            name: apiKeyName,
             description: "Use API key based setup.",
             checked: vm.useApi
         }, {
-            name: "OAuth",
+            name: oAuthName,
             description: "Use OAuth setup.",
             checked: vm.useOAuth
         }];
@@ -106,15 +117,14 @@
         umbracoCmsIntegrationsCrmHubspotResource.validateAccessToken().then(function (response) {
 
             vm.oauthSetup = {
-                isConnected: response.isAccessTokenValid,
-                isAccessTokenExpired: response.isAccessTokenExpired,
-                isAccessTokenValid: response.isAccessTokenValid
+                isConnected: response.isValid,
+                isAccessTokenExpired: response.isExpired,
+                isAccessTokenValid: response.isValid
             }
 
             // refresh access token
-            if (vm.oauthSetup.isAccessTokenExpired === true) {
+            if (vm.oauthSetup.isExpired === true) {
                 umbracoCmsIntegrationsCrmHubspotResource.refreshAccessToken().then(function (response) {
-                    console.log(response);
                 });
             }
 

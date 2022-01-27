@@ -24,31 +24,34 @@
 
             if (vm.config !== undefined && vm.config.useApi === false && vm.config.useOAuth === false) {
                 vm.loading = false;
-                notificationsService.warning("Authorization", "No authorization setup has been selected.");
+                notificationsService.warning("Authorization", "No authorization setup has been selected");
                 return;
             } 
 
             if (vm.config.useApi === true) {
                 umbracoCmsIntegrationsCrmHubspotResource.getHubspotFormsList().then(function (data) {
-                    vm.hubspotFormsList = data;
                     vm.loading = false;
 
-                    //errorcheck
-                    console.log(data);
+                    vm.hubspotFormsList = data.forms;
+
+                    if (data.isValid === false || data.isExpired == true) {
+                        notificationsService.error("Hubspot API", "Invalid API key");
+                    }
                 });
             } else if (vm.config.useOAuth === true) {
                 umbracoCmsIntegrationsCrmHubspotResource.validateAccessToken().then(function(response) {
-                    if (response.isAccessTokenExpired === true || response.isAccessTokenValid === true) {
-                        notificationsService.warning("Acccess Token", "Invalid access token");
+                    if (response.isExpired === true || response.isValid === false) {
+                        notificationsService.warning("Hubspot API", "Invalid Access Token");
                         return;
                     }
 
                     umbracoCmsIntegrationsCrmHubspotResource.getHubspotFormsListOAuth().then(function(data) {
-
                         vm.loading = false;
-                        vm.hubspotFormsList = data;
+                        vm.hubspotFormsList = data.forms;
 
-                        console.log(data);
+                        if (data.isValid === false || data.isExpired == true) {
+                            notificationsService.error("Hubspot API", "Invalid Access Token");
+                        }
                     });
                 });
             }

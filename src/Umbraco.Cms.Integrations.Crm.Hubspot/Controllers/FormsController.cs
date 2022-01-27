@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
+using Umbraco.Core.Logging;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
 
@@ -31,9 +32,11 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
 
         private readonly ITokenService _tokenService;
 
-        public static string AccessTokenDbKey = "Umbraco.Cms.Integrations.Hubspot.AccessTokenDbKey";
+        private const string AccessTokenDbKey = "Umbraco.Cms.Integrations.Hubspot.AccessTokenDbKey";
 
-        public static string RefreshTokenDbKey = "Umbraco.Cms.Integrations.Hubspot.RefreshTokenDbKey";
+        private const string RefreshTokenDbKey = "Umbraco.Cms.Integrations.Hubspot.RefreshTokenDbKey";
+
+        private const string HubspotFormsApiEndpoint = "https://api.hubapi.com/forms/v2/forms";
 
         public FormsController(IHubspotService hubspotService, ITokenService tokenService)
         {
@@ -42,49 +45,31 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             _tokenService = tokenService;
         }
 
-        public async Task<List<HubspotFormDto>> GetAll()
+        public async Task<ResponseDto> GetAll()
         {
             var hubspotApiKey = ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.Crm.Hubspot.ApiKey"];
 
-            var response = await ClientFactory().GetAsync("https://api.hubapi.com/forms/v2/forms?hapikey=" + hubspotApiKey);
-            var forms = await response.Content.ReadAsStringAsync();
-            var hubspotForms = HubspotForms.FromJson(forms);
-
-            var formsDto = new List<HubspotFormDto>();
-            foreach (var hubspotForm in hubspotForms)
+            if (string.IsNullOrEmpty(hubspotApiKey))
             {
-                var hubspotFormDto = new HubspotFormDto
-                {
-                    Name = hubspotForm.Name,
-                    PortalId = hubspotForm.PortalId.ToString(),
-                    Id = hubspotForm.Guid,
-                    Fields = string.Join(", ", hubspotForm.FormFieldGroups.SelectMany(x => x.Fields).Select(y => y.Label))
-                };
-                formsDto.Add(hubspotFormDto);
+                Logger.Error(typeof(FormsController), $"{nameof(FormsController)}.{nameof(GetAll)} - API Key is missing");
+                return new ResponseDto { IsValid = false };
             }
 
-            return formsDto;
-        }
+            var response = await ClientFactory().GetAsync($"{HubspotFormsApiEndpoint}?hapikey=" + hubspotApiKey);
 
-        public async Task<List<HubspotFormDto>> GetAllOAuth()
-        {
-            _tokenService.TryGetParameters(AccessTokenDbKey, out string accessToken);
-
-            var requestMessage = new HttpRequestMessage
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri("https://api.hubapi.com/forms/v2/forms")
-            };
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                var result = await response.Content.ReadAsStringAsync();
+                Logger.Error(typeof(FormsController), $"{nameof(FormsController)}.{nameof(GetAll)} - API Key rejected with message: {result}");
+                return new ResponseDto { IsExpired = true };
+            }
 
-            var response = await ClientFactory().SendAsync(requestMessage);
             if (response.IsSuccessStatusCode)
             {
                 var forms = await response.Content.ReadAsStringAsync();
-
                 var hubspotForms = HubspotForms.FromJson(forms);
 
-                var formsDto = new List<HubspotFormDto>();
+                var responseDto = new ResponseDto { IsValid = true };
                 foreach (var hubspotForm in hubspotForms)
                 {
                     var hubspotFormDto = new HubspotFormDto
@@ -94,13 +79,62 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
                         Id = hubspotForm.Guid,
                         Fields = string.Join(", ", hubspotForm.FormFieldGroups.SelectMany(x => x.Fields).Select(y => y.Label))
                     };
-                    formsDto.Add(hubspotFormDto);
+                    responseDto.Forms.Add(hubspotFormDto);
                 }
 
-                return formsDto;
+                return responseDto;
             }
 
-            return new List<HubspotFormDto>();
+            return new ResponseDto();
+        }
+
+        public async Task<ResponseDto> GetAllOAuth()
+        {
+            _tokenService.TryGetParameters(AccessTokenDbKey, out string accessToken);
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                Logger.Error(typeof(FormsController), $"{nameof(FormsController)}.{nameof(GetAllOAuth)} - Access Token is missing.");
+                return new ResponseDto { IsValid = false };
+            }
+
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(HubspotFormsApiEndpoint)
+            };
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await ClientFactory().SendAsync(requestMessage);
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                Logger.Error(typeof(FormsController), $"{nameof(FormsController)}.{nameof(GetAllOAuth)} - Access Token denied with message: {result}");
+                return new ResponseDto { IsExpired = true };
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                var forms = await response.Content.ReadAsStringAsync();
+
+                var hubspotForms = HubspotForms.FromJson(forms);
+
+                var responseDto = new ResponseDto { IsValid = true };
+                foreach (var hubspotForm in hubspotForms)
+                {
+                    var hubspotFormDto = new HubspotFormDto
+                    {
+                        Name = hubspotForm.Name,
+                        PortalId = hubspotForm.PortalId.ToString(),
+                        Id = hubspotForm.Guid,
+                        Fields = string.Join(", ", hubspotForm.FormFieldGroups.SelectMany(x => x.Fields).Select(y => y.Label))
+                    };
+                    responseDto.Forms.Add(hubspotFormDto);
+                }
+
+                return responseDto;
+            }
+
+            return new ResponseDto();
         }
 
         [HttpGet]
@@ -199,24 +233,25 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
         }
 
         [HttpGet]
-        public async Task<OAuthResponseDto> ValidateAccessToken()
+        public async Task<ResponseDto> ValidateAccessToken()
         {
             _tokenService.TryGetParameters(AccessTokenDbKey, out string accessToken);
 
-            if (string.IsNullOrEmpty(accessToken)) return new OAuthResponseDto { IsAccessTokenValid = true };
+            if (string.IsNullOrEmpty(accessToken)) return new ResponseDto { IsValid = false };
 
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri("https://api.hubapi.com/forms/v2/forms")
+                RequestUri = new Uri(HubspotFormsApiEndpoint)
             };
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             var response = await ClientFactory().SendAsync(requestMessage);
 
-            return new OAuthResponseDto
+            return new ResponseDto
             {
-                IsAccessTokenExpired = response.StatusCode == HttpStatusCode.Unauthorized
+                IsValid = response.IsSuccessStatusCode,
+                IsExpired = response.StatusCode == HttpStatusCode.Unauthorized
             };
         }
     }
