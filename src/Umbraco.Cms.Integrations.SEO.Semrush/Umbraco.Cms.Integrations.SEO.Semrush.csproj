@@ -297,6 +297,7 @@
     <None Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrushColumns.json" />
     <None Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrushDataSources.json" />
     <None Include="packages.config" />
+    <None Include="readme.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrush.css" />
