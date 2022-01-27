@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Commerce.CommerceTools", "Umbraco.Cms.Integrations.Commerce.CommerceTools\Umbraco.Cms.Integrations.Commerce.CommerceTools.csproj", "{85A73911-0146-409F-9488-33EA5750A07C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Commerce.CommerceTools.Testsite.V8", "Umbraco.Cms.Integrations.Commerce.CommerceTools.Testsite.V8\Umbraco.Cms.Integrations.Commerce.CommerceTools.Testsite.V8.csproj", "{4C4A15B6-6B1D-4B8C-B070-FF614A22D694}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Testsite.V8", "Umbraco.Cms.Integrations.Testsite.V8\Umbraco.Cms.Integrations.Testsite.V8.csproj", "{4C4A15B6-6B1D-4B8C-B070-FF614A22D694}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commerce", "Commerce", "{82B16D39-675A-4D40-808D-C6DDFDA37C20}"
 EndProject
@@ -14,8 +14,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2801CB6C-78DE-4129-B5C6-D349F47F9B5C}"
 	ProjectSection(SolutionItems) = preProject
 		..\azure-pipeline - Commerce.CommerceTools.yml = ..\azure-pipeline - Commerce.CommerceTools.yml
+		..\azure-pipeline - SEO.SemrushTools.yml = ..\azure-pipeline - SEO.SemrushTools.yml
 		..\README.md = ..\README.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SEO", "SEO", "{5412E123-F4CD-448D-88F8-EC01403365C4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Semrush", "Semrush", "{CA69D494-27A5-4888-B2F9-5886D735CCCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.SEO.Semrush", "Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj", "{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,14 +38,19 @@ Global
 		{4C4A15B6-6B1D-4B8C-B070-FF614A22D694}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C4A15B6-6B1D-4B8C-B070-FF614A22D694}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C4A15B6-6B1D-4B8C-B070-FF614A22D694}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{85A73911-0146-409F-9488-33EA5750A07C} = {374203EC-D774-443A-9AFF-559D2C1D9E76}
-		{4C4A15B6-6B1D-4B8C-B070-FF614A22D694} = {374203EC-D774-443A-9AFF-559D2C1D9E76}
 		{374203EC-D774-443A-9AFF-559D2C1D9E76} = {82B16D39-675A-4D40-808D-C6DDFDA37C20}
+		{CA69D494-27A5-4888-B2F9-5886D735CCCC} = {5412E123-F4CD-448D-88F8-EC01403365C4}
+		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0} = {CA69D494-27A5-4888-B2F9-5886D735CCCC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FB51E08-A3C8-4DFF-B3CB-E99C2ED021D5}
