@@ -6,7 +6,7 @@
   <PropertyGroup>
     <PackageId>Umbraco.Cms.Integrations.SEO.Semrush</PackageId>
     <Title>Umbraco CMS Integrations: SEO - Semrush</Title>
-    <Description>An extension for Umbraco CMS providing keyword research tools powered by Semrush.</Description>
+    <Description>An extension for Umbraco CMS providing keyword research tools powered by Semrush via a content app.</Description>
     <PackageIconUrl></PackageIconUrl>
     <PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
     <RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
