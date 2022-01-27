@@ -7,7 +7,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Configuration
     {
         public static int DefaultPageSize = 10;
 
-        public static string AuthProxyBaseAddress = "https://localhost:44364/";
+        public static string AuthProxyBaseAddress = "https://hubspot-forms-auth.umbraco.com/";
 
         public static string AuthProxyTokenEndpoint = "oauth/v1/token";
 
