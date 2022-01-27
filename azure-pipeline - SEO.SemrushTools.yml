@@ -14,6 +14,14 @@ steps:
 - task: NuGetToolInstaller@1
   displayName: 'Install NuGet'
 
+- task: DotNetCoreCLI@2
+  displayName: 'NuGet Restore'
+  inputs:
+    command: 'restore'
+    feedsToUse: 'select'
+    projects: '$(project)'
+    includeNuGetOrg: true
+
 - task: VSBuild@1
   displayName: 'Build Project'
   inputs:

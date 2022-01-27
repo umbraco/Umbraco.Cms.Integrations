@@ -26,4 +26,8 @@
     </Content>
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Debug'">
+    <Exec Command="mkdir &quot;$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins&quot;&#xD;&#xA;mkdir &quot;$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins\UmbracoCms.Integrations&quot;&#xD;&#xA;mkdir &quot;$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO&quot;&#xD;&#xA;mkdir &quot;$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO\Semrush&quot;&#xD;&#xA;&#xD;&#xA;copy /Y  &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\SEO\Semrush&quot; &quot;$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO\Semrush&quot;" />
+  </Target>
+
 </Project>
