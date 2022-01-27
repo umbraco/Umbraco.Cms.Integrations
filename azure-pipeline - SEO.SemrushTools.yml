@@ -1,5 +1,5 @@
 trigger:
-- feature/SEMRUSH
+- main
 
 pool:
   vmImage: 'windows-latest'
