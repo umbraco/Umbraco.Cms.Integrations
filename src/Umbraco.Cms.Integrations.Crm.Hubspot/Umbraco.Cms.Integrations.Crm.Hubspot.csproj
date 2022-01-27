@@ -33,8 +33,4 @@
     <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\settings.html" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="set UmbracoCmsIntegrationsTestsiteV8Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V8&#xD;&#xA;set HubspotDir=%25UmbracoCmsIntegrationsTestsiteV8Path%25\App_Plugins\UmbracoCms.Integrations\Crm\Hubspot&#xD;&#xA;if not exist %25HubspotDir%25 mkdir -p %25HubspotDir%25&#xD;&#xA;xcopy &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Crm\Hubspot&quot; &quot;%25HubspotDir%25&quot; /e /y" />
-  </Target>
-
 </Project>
