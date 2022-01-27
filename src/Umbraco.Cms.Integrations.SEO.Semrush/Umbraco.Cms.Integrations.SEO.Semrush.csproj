@@ -309,12 +309,13 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mkdir "$(SolutionDir)Umbraco.Cms.Integrations.SEO.Semrush.Testsite.V8\App_Plugins"
-mkdir "$(SolutionDir)Umbraco.Cms.Integrations.SEO.Semrush.Testsite.V8\App_Plugins\UmbracoCms.Integrations"
-mkdir "$(SolutionDir)Umbraco.Cms.Integrations.SEO.Semrush.Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO"
-mkdir "$(SolutionDir)Umbraco.Cms.Integrations.SEO.Semrush.Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO\Semrush"
+    <PostBuildEvent>mkdir "$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins"
+mkdir "$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins\UmbracoCms.Integrations"
+mkdir "$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO"
+mkdir "$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO\Semrush"
 
-copy /Y  "$(ProjectDir)App_Plugins\UmbracoCms.Integrations\SEO\Semrush" "$(SolutionDir)Umbraco.Cms.Integrations.SEO.Semrush.Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO\Semrush"</PostBuildEvent>
+copy /Y  "$(ProjectDir)App_Plugins\UmbracoCms.Integrations\SEO\Semrush" "$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO\Semrush"
+</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets" Condition="Exists('..\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

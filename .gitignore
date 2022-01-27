@@ -315,15 +315,12 @@ $RECYCLE.BIN/
 umbraco
 bin
 node_modules
-src/Umbraco.Cms.Integrations.Commerce.CommerceTools.Testsite.V8/App_Plugins
-src/Umbraco.Cms.Integrations.Commerce.CommerceTools.Testsite.V8/App_Data
-src/Umbraco.Cms.Integrations.Commerce.CommerceTools.Testsite.V8/Media
+src/Umbraco.Cms.Integrations.Testsite.V8/App_Plugins
+src/Umbraco.Cms.Integrations.Testsite.V8/App_Data
+src/Umbraco.Cms.Integrations.Testsite.V8/Media
 
 
-src/Umbraco.Cms.Integrations.Commerce.CommerceTools.Testsite.V9/App_Plugins
-src/Umbraco.Cms.Integrations.Commerce.CommerceTools.Testsite.V9/umbraco
-src/Umbraco.Cms.Integrations.Commerce.CommerceTools.Testsite.V9/wwwroot/media
+src/Umbraco.Cms.Integrations.Testsite.V9/App_Plugins
+src/Umbraco.Cms.Integrations.Testsite.V9/umbraco
+src/Umbraco.Cms.Integrations.Testsite.V9/wwwroot/media
 
-src/Umbraco.Cms.Integrations.SEO.Semrush.Testsite.V8/App_Data/Logs/
-src/Umbraco.Cms.Integrations.SEO.Semrush.Testsite.V8/App_Data/
-src/Umbraco.Cms.Integrations.SEO.Semrush.Testsite.V8/App_Plugins/
