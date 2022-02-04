@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Http;
 using Lucene.Net.Analysis;
 using Newtonsoft.Json;
+using Umbraco.Cms.Integrations.Crm.Hubspot.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
@@ -26,11 +27,15 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
         private readonly static HttpClient s_client = new HttpClient();
 
         // Access to the client within the class is via ClientFactory(), allowing us to mock the responses in tests.
-        internal static Func<HttpClient> ClientFactory = () => s_client;
+        public static Func<HttpClient> ClientFactory = () => s_client;
+
+        private readonly IAppSettings _appSettings;
 
         private readonly IHubspotService _hubspotService;
 
         private readonly ITokenService _tokenService;
+
+        private readonly ILogger _logger;
 
         private const string AccessTokenDbKey = "Umbraco.Cms.Integrations.Hubspot.AccessTokenDbKey";
 
@@ -38,20 +43,25 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
 
         private const string HubspotFormsApiEndpoint = "https://api.hubapi.com/forms/v2/forms";
 
-        public FormsController(IHubspotService hubspotService, ITokenService tokenService)
+        public FormsController(IAppSettings appSettings, IHubspotService hubspotService, ITokenService tokenService, ILogger logger)
         {
+            _appSettings = appSettings;
+
             _hubspotService = hubspotService;
 
             _tokenService = tokenService;
+
+            _logger = logger;
         }
 
         public async Task<ResponseDto> GetAll()
         {
-            var hubspotApiKey = ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.Crm.Hubspot.ApiKey"];
+            var hubspotApiKey = _appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotApiKey];
 
             if (string.IsNullOrEmpty(hubspotApiKey))
             {
-                Logger.Error(typeof(FormsController), $"{nameof(FormsController)}.{nameof(GetAll)} - API Key is missing");
+                _logger.Info<FormsController>(message: "Cannot access Hubspot - API key is missing");
+
                 return new ResponseDto { IsValid = false };
             }
 
@@ -60,7 +70,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 var result = await response.Content.ReadAsStringAsync();
-                Logger.Error(typeof(FormsController), $"{nameof(FormsController)}.{nameof(GetAll)} - API Key rejected with message: {result}");
+                _logger.Error<FormsController>(
+                    $"Failed to fetch forms from Hubspot using API key: {response.ReasonPhrase}");
                 return new ResponseDto { IsExpired = true };
             }
 
@@ -85,6 +96,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
                 return responseDto;
             }
 
+            _logger.Error<FormsController>($"Failed to fetch forms from Hubspot using API key: {response.StatusCode} {response.ReasonPhrase}");
+
             return new ResponseDto();
         }
 
@@ -93,7 +106,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             _tokenService.TryGetParameters(AccessTokenDbKey, out string accessToken);
             if (string.IsNullOrEmpty(accessToken))
             {
-                Logger.Error(typeof(FormsController), $"{nameof(FormsController)}.{nameof(GetAllOAuth)} - Access Token is missing.");
+                _logger.Info<FormsController>("Cannot access Hubspot - Access Token is missing.");
+                
                 return new ResponseDto { IsValid = false };
             }
 
@@ -108,7 +122,10 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 var result = await response.Content.ReadAsStringAsync();
-                Logger.Error(typeof(FormsController), $"{nameof(FormsController)}.{nameof(GetAllOAuth)} - Access Token denied with message: {result}");
+
+                _logger.Error<FormsController>(
+                    $"Failed to fetch forms from Hubspot using OAuth: {response.ReasonPhrase}");
+                
                 return new ResponseDto { IsExpired = true };
             }
 
@@ -134,22 +151,24 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
                 return responseDto;
             }
 
+            _logger.Error<FormsController>($"Failed to fetch forms from Hubspot using OAuth: {response.StatusCode} {response.ReasonPhrase}");
+
             return new ResponseDto();
         }
 
         [HttpGet]
         public bool CheckApiConfiguration()
         {
-            return !string.IsNullOrEmpty(ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.Crm.Hubspot.ApiKey"]);
+            return !string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotApiKey]);
         }
 
         [HttpGet]
         public bool CheckOAuthConfiguration()
         {
-            return !string.IsNullOrEmpty(ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.Crm.Hubspot.OAuthClientId"])
-                && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.Crm.Hubspot.OAuthScopes"])
-                && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.Crm.Hubspot.OAuthRedirectUrl"])
-                && !string.IsNullOrEmpty(ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.OAuthProxyUrl"]);
+            return !string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthClientId])
+                && !string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthScopes])
+                && !string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthRedirectUrl])
+                && !string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsOAuthProxyUrl]);
         }
 
         [HttpGet]
