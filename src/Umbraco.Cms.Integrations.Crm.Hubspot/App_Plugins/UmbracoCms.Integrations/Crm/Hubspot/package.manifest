@@ -1,16 +1,4 @@
 ﻿{
-  //"propertyEditors": [
-  //  {
-  //    "alias": "Umbraco.Cms.Integrations.Crm.Hubspot.FormPicker",
-  //    "name": "Hubspot Form Picker",
-  //    "isParameterEditor": true,
-  //    "group": "Pickers",
-  //    "icon": "icon-handshake",
-  //    "editor": {
-  //      "view": "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/views/formpicker.html"
-  //    }
-  //  }
-  //],
   "javascript": [
     "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/js/formpicker.controller.js",
     "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/js/settings.controller.js",
