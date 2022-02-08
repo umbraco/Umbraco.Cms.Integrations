@@ -1,0 +1,5 @@
+﻿{
+  "javascript": [
+    "~/App_Plugins/UmbracoCms.Integrations/Commerce/Shopify/js/productPicker.controller.js"
+  ]
+}

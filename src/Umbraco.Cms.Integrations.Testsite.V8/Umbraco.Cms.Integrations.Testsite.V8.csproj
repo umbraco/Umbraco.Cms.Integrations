@@ -419,10 +419,17 @@
       <Project>{85a73911-0146-409f-9488-33ea5750a07c}</Project>
       <Name>Umbraco.Cms.Integrations.Commerce.CommerceTools</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj">
+      <Project>{d1fb84db-f1e4-42b6-8118-8c5b8424775b}</Project>
+      <Name>Umbraco.Cms.Integrations.Commerce.Shopify</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj">
       <Project>{b69b18c8-6a17-4eee-874d-da2da55bd3b0}</Project>
       <Name>Umbraco.Cms.Integrations.SEO.Semrush</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

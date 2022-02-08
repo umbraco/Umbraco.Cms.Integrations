@@ -22,7 +22,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SEO", "SEO", "{5412E123-F4C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Semrush", "Semrush", "{CA69D494-27A5-4888-B2F9-5886D735CCCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.SEO.Semrush", "Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj", "{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.SEO.Semrush", "Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj", "{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shopify", "Shopify", "{D4E7EA3B-CDC4-4F87-BD06-951221CEAABD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Commerce.Shopify", "Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj", "{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +46,10 @@ Global
 		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +59,8 @@ Global
 		{374203EC-D774-443A-9AFF-559D2C1D9E76} = {82B16D39-675A-4D40-808D-C6DDFDA37C20}
 		{CA69D494-27A5-4888-B2F9-5886D735CCCC} = {5412E123-F4CD-448D-88F8-EC01403365C4}
 		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0} = {CA69D494-27A5-4888-B2F9-5886D735CCCC}
+		{D4E7EA3B-CDC4-4F87-BD06-951221CEAABD} = {82B16D39-675A-4D40-808D-C6DDFDA37C20}
+		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B} = {D4E7EA3B-CDC4-4F87-BD06-951221CEAABD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FB51E08-A3C8-4DFF-B3CB-E99C2ED021D5}
