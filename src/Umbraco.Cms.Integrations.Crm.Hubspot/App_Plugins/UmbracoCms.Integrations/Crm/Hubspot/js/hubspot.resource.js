@@ -1,19 +1,17 @@
 ﻿angular.module('umbraco.resources').factory('umbracoCmsIntegrationsCrmHubspotResource',
     function ($http, umbRequestHelper) {
+
+        const apiEndpoint = "backoffice/UmbracoCmsIntegrationsCrmHubspot/Forms";
+
         return {
+            checkApiConfiguration: function () {
+                return umbRequestHelper.resourcePromise(
+                    $http.get(`${apiEndpoint}/CheckConfiguration`),
+                    "Failed to get resource");
+            },
             getHubspotFormsList: function (id) {
                 return umbRequestHelper.resourcePromise(
                     $http.get("backoffice/UmbracoCmsIntegrationsCrmHubspot/Forms/GetAll"), "");
-            },
-            checkApiConfiguration: function() {
-                return umbRequestHelper.resourcePromise(
-                    $http.get("backoffice/UmbracoCmsIntegrationsCrmHubspot/Forms/CheckApiConfiguration"),
-                    "Failed to get resource");
-            },
-            checkOAuthConfiguration: function () {
-                return umbRequestHelper.resourcePromise(
-                    $http.get("backoffice/UmbracoCmsIntegrationsCrmHubspot/Forms/CheckOAuthConfiguration"),
-                    "Failed to get resource");
             },
             getAuthorizationUrl: function() {
                 return umbRequestHelper.resourcePromise(
@@ -42,4 +40,4 @@
             }
         };
     }
-); 
+);

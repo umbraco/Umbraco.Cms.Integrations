@@ -157,18 +157,21 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
         }
 
         [HttpGet]
-        public bool CheckApiConfiguration()
+        public HubspotFormPickerSettings CheckConfiguration()
         {
-            return !string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotApiKey]);
-        }
-
-        [HttpGet]
-        public bool CheckOAuthConfiguration()
-        {
-            return !string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthClientId])
-                && !string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthScopes])
-                && !string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthRedirectUrl])
-                && !string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsOAuthProxyUrl]);
+            return
+                !string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotApiKey])
+                    ? new HubspotFormPickerSettings { IsValid = true, Type = ConfigurationType.Api}
+                    : !string.IsNullOrEmpty(
+                           _appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthClientId])
+                       && !string.IsNullOrEmpty(
+                           _appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthScopes])
+                       && !string.IsNullOrEmpty(
+                           _appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthRedirectUrl])
+                       && !string.IsNullOrEmpty(
+                           _appSettings[AppSettingsConstants.UmbracoCmsIntegrationsOAuthProxyUrl])
+                        ? new HubspotFormPickerSettings { IsValid = true, Type = ConfigurationType.OAuth}
+                        : new HubspotFormPickerSettings();
         }
 
         [HttpGet]

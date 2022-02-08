@@ -4,10 +4,15 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Models
 {
     public class HubspotFormPickerSettings
     {
-        [JsonProperty("useApi")]
-        public bool UseApi { get; set; }
+        public HubspotFormPickerSettings()
+        {
+            Type = ConfigurationType.None;
+        }
 
-        [JsonProperty("useOAuth")]
-        public bool UseOAuth { get; set; }
+        [JsonProperty("isValid")]
+        public bool IsValid { get; set; }
+
+        [JsonProperty("type")]
+        public ConfigurationType Type { get; set; }
     }
 }

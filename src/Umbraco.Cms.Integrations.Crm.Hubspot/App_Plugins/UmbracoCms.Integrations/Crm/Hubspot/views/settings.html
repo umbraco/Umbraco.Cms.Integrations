@@ -1,20 +1,14 @@
 ﻿<div ng-controller="Umbraco.Cms.Integrations.Crm.Hubspot.SettingsController as vm">
-    <umb-toggle-group items="vm.items" on-click="vm.toggleAuthType(item)">
-    </umb-toggle-group>
-
-    <umb-box ng-if="vm.useOAuth">
-        <umb-box-header title="OAuth Based Setup">
-            <umb-button action="vm.onConnectClick()"
-                        type="button"
-                        button-style="primary"
-                        state="init"
-                        label="Connect"
-                        disabled="vm.oauthSetup.isConnected || !vm.settingsValidation.isValid">
-            </umb-button>
-        </umb-box-header>
-        <umb-box-content>
-            <p ng-if="!vm.settingsValidation.isValid">{{ vm.settingsValidation.message }}</p>
-            <p><b>Status:</b> {{ vm.oauthSetup.isConnected ? 'Connected' : 'Disconnected' }}</p>
-        </umb-box-content>
-    </umb-box>
+    <div  ng-class="vm.status.isValid ? 'alert alert-success w5' : 'alert alert-warning w5'">
+        {{ vm.status.description }}
+    </div>
+    <div ng-if="vm.status.useOAuth">
+        <umb-button action="vm.onConnectClick()"
+                    type="button"
+                    button-style="primary"
+                    state="init"
+                    label="Connect"
+                    disabled="vm.oauthSetup.isConnected">
+        </umb-button>
+    </div>
 </div>

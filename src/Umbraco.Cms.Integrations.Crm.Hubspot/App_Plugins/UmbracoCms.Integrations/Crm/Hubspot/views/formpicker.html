@@ -11,7 +11,7 @@
                       on-remove="vm.remove()">
     </umb-node-preview>
 
-    <a ng-if="!model.value && !vm.loading"
+    <a ng-if="!model.value && !vm.loading && vm.status.isValid"
        class="umb-node-preview-add"
        href=""
        ng-click="vm.openHubspotFormPickerOverlay()"

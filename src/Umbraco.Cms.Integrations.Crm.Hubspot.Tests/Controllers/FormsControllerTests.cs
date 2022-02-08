@@ -16,6 +16,7 @@ using NUnit.Framework;
 using NUnit.Framework.Internal;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Controllers;
+using Umbraco.Cms.Integrations.Crm.Hubspot.Models;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
 using Umbraco.Core.Composing;
@@ -54,6 +55,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
 
         private Mock<IAppSettings> MockedAppSettingsOAuthSetup;
 
+        private Mock<IAppSettings> MockedAppSettingsNoSetup;
+
         private Mock<ILogger> MockedLogger;
 
         public FormsControllerTests()
@@ -68,28 +71,47 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
 
             MockedAppSettingsOAuthSetup = CreateMockedAppSettings(includeOAuthSettings: true);
 
+            MockedAppSettingsNoSetup = CreateMockedAppSettings();
+
             MockedLogger = new Mock<ILogger>();
         }
 
+        #region CheckConfiguration
+
         [Test]
-        public void CheckApiConfiguration_GetApiKey_ShouldReturnTrue()
+        public void CheckApiConfiguration_WithApiConfig_ShouldReturnValidConfigurationResponseObjectWithType()
         {
             var sut = new FormsController(MockedAppSettingsApiSetup.Object, Mock.Of<IHubspotService>(), Mock.Of<ITokenService>(), Mock.Of<ILogger>());
         
-            var result = sut.CheckApiConfiguration();
+            var result = sut.CheckConfiguration();
 
-            Assert.IsTrue(result);
+            Assert.That(result.IsValid, Is.True);
+            Assert.AreEqual(result.Type, ConfigurationType.Api);
         }
 
         [Test]
-        public void CheckOAuthConfiguration_GetOAuthConfig_ShouldReturnTrue()
+        public void CheckOAuthConfiguration_WithOAuthConfigAndNoApiConfig_ShouldReturnValidConfigurationResponseObjectWithType()
         {
             var sut = new FormsController(MockedAppSettingsOAuthSetup.Object, Mock.Of<IHubspotService>(), Mock.Of<ITokenService>(), Mock.Of<ILogger>());
 
-            var result = sut.CheckOAuthConfiguration();
+            var result = sut.CheckConfiguration();
 
-            Assert.IsTrue(result);
+            Assert.That(result.IsValid, Is.True);
+            Assert.AreEqual(result.Type, ConfigurationType.OAuth);
         }
+
+        [Test]
+        public void CheckConfiguration_WithoutApiOrOAuthConfig_ShouldReturnInvalidConfigurationResponseObjectWithType()
+        {
+            var sut = new FormsController(MockedAppSettingsNoSetup.Object, Mock.Of<IHubspotService>(), Mock.Of<ITokenService>(), Mock.Of<ILogger>());
+
+            var result = sut.CheckConfiguration();
+
+            Assert.That(result.IsValid, Is.False);
+            Assert.AreEqual(result.Type, ConfigurationType.None);
+        }
+
+        #endregion
 
         #region GetAllUsingApiKey
 
