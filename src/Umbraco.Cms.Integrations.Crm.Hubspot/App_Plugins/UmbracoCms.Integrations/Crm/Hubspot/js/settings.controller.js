@@ -4,37 +4,39 @@
 
     const oauthName = "OAuth";
 
+    vm.oauthSetup = {};
     vm.status = {};
 
-    umbracoCmsIntegrationsCrmHubspotResource.checkApiConfiguration().then(function (response) {
+    $scope.$on('formSubmitting', function () {
 
-        vm.status = {
-            isValid: response.isValid === true,
-            type: response.type,
-            description: response.isValid === true ? `${response.type.value} is configured.` : "Invalid configuration",
-            useOAuth: response.isValid === true && response.type.value === oauthName
-        };
+        $scope.model.value.isValid = vm.status.isValid;
+        $scope.model.value.type = vm.status.type;
 
-        if (response.isValid === true) {
-            notificationsService.success("Configuration", `${response.type.value} setup is configured.`);
-        } else {
-            notificationsService.warning("Configuration",
-                "Invalid setup. Please review the API/OAuth settings.");
-        }
     });
 
-    //if (vm.useOAuth) {
-    //    // validate token
-    //    validateOAuthAccessToken();
-    //}
+    umbracoCmsIntegrationsCrmHubspotResource.checkApiConfiguration()
+        .then(function(response) {
 
-    //$scope.$on('formSubmitting', function () {
+            vm.status = {
+                isValid: response.isValid === true,
+                type: response.type,
+                description: response.isValid === true
+                    ? `${response.type.value} is configured.`
+                    : "Invalid configuration",
+                useOAuth: response.isValid === true && response.type.value === oauthName
+            };
 
-    //    $scope.model.value.isValid = vm.status.isValid;
-    //    $scope.model.value.type = vm.status.type;
+            if (vm.status.useOAuth) {
+                validateOAuthSetup();
+            }
 
-    //});
-
+            if (response.isValid === true) {
+                notificationsService.success("Configuration", `${response.type.value} setup is configured.`);
+            } else {
+                notificationsService.warning("Configuration",
+                    "Invalid setup. Please review the API/OAuth settings.");
+            }
+        });
 
     vm.onConnectClick = function () {
 
@@ -48,7 +50,7 @@
     // authorization listener
     window.addEventListener("message", function (event) {
         if (event.data.type === "hubspot:oauth:success") {
-            
+
             umbracoCmsIntegrationsCrmHubspotResource.getAccessToken(event.data.code).then(function (response) {
                 vm.oauthSetup.isConnected = true;
             });
@@ -57,28 +59,7 @@
     }, false);
 
 
-    // custom handlers
-
-    function handleOAuthConfiguration() {
-        umbracoCmsIntegrationsCrmHubspotResource.checkOAuthConfiguration().then(function (response) {
-            handleConfigurationValidation(response);
-            if (vm.settingsValidation.isValid === false) {
-                vm.useOAuth = false;
-                vm.items.find(el => el.name === oAuthName).checked = false;
-            }
-            
-        });
-    }
-
-    function handleConfigurationValidation(result) {
-        if (result === false) {
-            vm.settingsValidation.isValid = false;
-            notificationsService.warning("Settings", vm.settingsValidation.message);
-        } else
-            vm.settingsValidation.isValid = true;
-    }
-
-    function validateOAuthAccessToken() {
+    function validateOAuthSetup() {
         umbracoCmsIntegrationsCrmHubspotResource.validateAccessToken().then(function (response) {
 
             vm.oauthSetup = {

@@ -24,18 +24,49 @@ Add this to an app setting in `Web.config`:
 ```
   <appSettings>
     ...
-    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.DefaultLanguage" value="[your API key]" />
+    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.ApiKey" value="[your API key]" />
     ...
   </appSettings>
 ```
 
 #### OAuth
 
-TBC.
+In order to use HubSpot OAuth authentication, you will need at least one private app registered with your account.
+
+Log into your HubSpot account, go to _Settings > Integrations > Private Apps_ and create a new private app. In the _Scopes_ tab select
+the following two: _oauth_ and _forms_.
+
+Add the following app settings in `Web.config`:
+```
+  <appSettings>
+    ...
+    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.OAuthClientId" value="[your Client ID]" />
+    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.OAuthScopes" value="oauth forms" />
+    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.OAuthRedirectUrl" value="[your website URL]" />
+    <add key="Umbraco.Cms.Integrations.OAuthProxyUrl" value="[Umbraco proxy URL]" /> 
+    ...
+  </appSettings>
+```
+No two set of app settings will work simultaneously.
+
+#### Debug Configuration
+
+While in DEBUG mode use following post build events:
+```
+  set UmbracoCmsIntegrationsTestsiteV8Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V8
+  set HubspotDir=%UmbracoCmsIntegrationsTestsiteV8Path%\App_Plugins\UmbracoCms.Integrations\Crm\Hubspot
+  if not exist %HubspotDir% mkdir -p %HubspotDir%
+  xcopy "$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Crm\Hubspot" "%HubspotDir%" /e /y
+```
 
 ### Backoffice usage
 
-TBC.
+Property Editor will check the settings in `Web.config`, validate the configuration based on the existing
+app settings and prompt the user a notification. 
+
+If OAuth is available, then the _Connect_ button will be enabled, prompting the user, on clicked, 
+with the HubSpot authorization window. The retrieved access token will be saved into the database and 
+used for future requests.
 
 ### Front-end rendering
 

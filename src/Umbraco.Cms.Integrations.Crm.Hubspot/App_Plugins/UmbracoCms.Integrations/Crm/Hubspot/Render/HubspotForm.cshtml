@@ -1,7 +1,7 @@
 ﻿@using System.Configuration
 @inherits Umbraco.Web.Mvc.UmbracoViewPage<Umbraco.Cms.Integrations.Crm.Hubspot.Models.ViewModels.HubspotFormViewModel>
 
-<script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/shell.js"></script>
+<script charset="utf-8" type="text/javascript" src="https://js-eu1.hsforms.net/forms/shell.js"></script>
 <script>
     hbspt.forms.create({
         region: "eu1",
@@ -9,3 +9,4 @@
         formId: "@Model.Id"
     });
 </script>
+
