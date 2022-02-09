@@ -31,17 +31,13 @@ Add this to an app setting in `Web.config`:
 
 #### OAuth
 
-In order to use HubSpot OAuth authentication, you will need at least one private app registered with your account.
-
-Log into your HubSpot account, go to _Settings > Integrations > Private Apps_ and create a new private app. In the _Scopes_ tab select
-the following two: _oauth_ and _forms_.
-
-Add the following app settings in `Web.config`:
+Add the following app settings in `Web.config` making sure the references of the _Umbraco HubSpot Form Picker_ app are present:
 ```
   <appSettings>
     ...
-    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.OAuthClientId" value="[your Client ID]" />
+    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.OAuthClientId" value="8b4db9a8-3b78-48bc-85b0-96a4211a1c83" />
     <add key="Umbraco.Cms.Integrations.Crm.Hubspot.OAuthScopes" value="oauth forms" />
+    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.OAuthAuthorizationBaseUrl" value="https://app-eu1.hubspot.com/oauth/authorize"/>
     <add key="Umbraco.Cms.Integrations.Crm.Hubspot.OAuthRedirectUrl" value="[your website URL]" />
     <add key="Umbraco.Cms.Integrations.OAuthProxyUrl" value="[Umbraco proxy URL]" /> 
     ...
