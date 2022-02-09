@@ -9,6 +9,9 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Configuration
 
         public static string UmbracoCmsIntegrationsCrmHubspotOAuthScopes = "Umbraco.Cms.Integrations.Crm.Hubspot.OAuthScopes";
 
+        public static string UmbracoCmsIntegrationsCrmHubspotOAuthAuthorizationBaseUrl =
+            "Umbraco.Cms.Integrations.Crm.Hubspot.OAuthAuthorizationBaseUrl";
+
         public static string UmbracoCmsIntegrationsCrmHubspotOAuthRedirectUrl = "Umbraco.Cms.Integrations.Crm.Hubspot.OAuthRedirectUrl";
 
         public static string UmbracoCmsIntegrationsOAuthProxyUrl = "Umbraco.Cms.Integrations.OAuthProxyUrl";

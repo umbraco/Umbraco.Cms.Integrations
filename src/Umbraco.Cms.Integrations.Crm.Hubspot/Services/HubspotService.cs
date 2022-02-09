@@ -1,21 +1,31 @@
-﻿using System.Configuration;
+﻿using Umbraco.Cms.Integrations.Crm.Hubspot.Configuration;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Services
 {
     public class HubspotService: IHubspotService
     {
-        private string ClientId => ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.Crm.Hubspot.OAuthClientId"];
+        private readonly IAppSettings _appSettings;
 
-        private string RedirectUrl => ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.Crm.Hubspot.OAuthRedirectUrl"];
+        public HubspotService(IAppSettings appSettings)
+        {
+            _appSettings = appSettings;
+        }
 
-        private string Scopes => ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.Crm.Hubspot.OAuthScopes"];
+        private string ClientId => _appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthClientId];
 
-        private const string AuthorizationUrlFormat =
-            "https://app-eu1.hubspot.com/oauth/authorize?client_id={0}&redirect_uri={1}&scope={2}";
+        private string RedirectUrl =>
+            _appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthRedirectUrl];
+
+        private string AuthorizationBaseUrl =>
+            _appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthAuthorizationBaseUrl];
+
+        private string Scopes => _appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthScopes];
+
+        private const string AuthorizationUrlFormat = "{0}?client_id={1}&redirect_uri={2}&scope={3}";
 
         public string GetAuthorizationUrl()
         {
-            return string.Format(AuthorizationUrlFormat, ClientId, RedirectUrl, Scopes);
+            return string.Format(AuthorizationUrlFormat, AuthorizationBaseUrl, ClientId, RedirectUrl, Scopes);
         }
     }
 }

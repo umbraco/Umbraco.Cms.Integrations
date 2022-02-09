@@ -186,10 +186,9 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             var data = new Dictionary<string, string>
             {
                 {"grant_type", "authorization_code"},
-                {"client_id", ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.Crm.Hubspot.OAuthClientId"]},
+                {"client_id", _appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthClientId] },
                 {
-                    "redirect_uri",
-                    ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.Crm.Hubspot.OAuthRedirectUrl"]
+                    "redirect_uri", _appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthRedirectUrl]
                 },
                 { "code", authRequestDto.Code }
             };
@@ -197,7 +196,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri($"{ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.OAuthProxyUrl"]}"),
+                RequestUri = new Uri($"{_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsOAuthProxyUrl]}"),
                 Content = new FormUrlEncodedContent(data)
             };
             requestMessage.Headers.Add("service_name", "Hubspot");
@@ -226,14 +225,14 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             var data = new Dictionary<string, string>
             {
                 {"grant_type", "refresh_token"},
-                {"client_id", ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.Crm.Hubspot.OAuthClientId"]},
+                {"client_id", _appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotOAuthClientId] },
                 { "refresh_token", refreshToken }
             };
 
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri($"{ConfigurationManager.AppSettings["Umbraco.Cms.Integrations.OAuthProxyUrl"]}"),
+                RequestUri = new Uri($"{_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsOAuthProxyUrl]}"),
                 Content = new FormUrlEncodedContent(data)
             };
             requestMessage.Headers.Add("service_name", "Hubspot");
