@@ -31,18 +31,14 @@ Add this to an app setting in `Web.config`:
 
 #### OAuth
 
-Add the following app settings in `Web.config` making sure the references of the _Umbraco HubSpot Form Picker_ app are present:
+OAuth required parameters are represented by a group of constants in the _FormsController_ with the following values:
 ```
-  <appSettings>
-    ...
-    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.OAuthClientId" value="8b4db9a8-3b78-48bc-85b0-96a4211a1c83" />
-    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.OAuthScopes" value="oauth forms" />
-    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.OAuthAuthorizationBaseUrl" value="https://app-eu1.hubspot.com/oauth/authorize"/>
-    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.OAuthRedirectUrl" value="[your website URL]" />
-    <add key="Umbraco.Cms.Integrations.OAuthProxyUrl" value="[Umbraco proxy URL]" /> 
-    ...
-  </appSettings>
+OAuthClientId
+OAuthScopes
+OAuthProxyBaseUrl
+OAuthProxyEndpoint
 ```
+
 No two set of app settings will work simultaneously.
 
 #### Debug Configuration
@@ -62,7 +58,11 @@ app settings and prompt the user a notification.
 
 If OAuth is available, then the _Connect_ button will be enabled, prompting the user, on clicked, 
 with the HubSpot authorization window. The retrieved access token will be saved into the database and 
-used for future requests.
+used for future requests. _Revoke_ action will remove the access token from the database and the authorization process will need to be repeated.
+
+When a form is selected, the user needs to toggle the region flag notifying whether the data is stored in EU or US. This is very important as
+it triggers the front-end JS script and the form creation depending on the region.
+
 
 ### Front-end rendering
 
