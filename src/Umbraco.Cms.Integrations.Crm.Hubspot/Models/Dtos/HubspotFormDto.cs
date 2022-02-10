@@ -15,5 +15,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Models.Dtos
 
         [JsonProperty("fields")]
         public string Fields { get; set; }
+
+        [JsonProperty("euRegion")]
+        public bool EuRegion { get; set; }
     }
 }

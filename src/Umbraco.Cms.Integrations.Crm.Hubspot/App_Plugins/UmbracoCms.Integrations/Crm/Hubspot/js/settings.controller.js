@@ -3,9 +3,18 @@
     var vm = this;
 
     const oauthName = "OAuth";
+    const configDescription = {
+        API: "An API key is configured and will be used to connect to your HubSpot account.",
+        OAuth:
+            "No API key is configured. To connect to your HubSpot account using OAuth click 'Connect', select your account and agree to the permissions.",
+        None: "No API or OAuth configuration could be found. Please review your settings before continuing.",
+        OAuthConnected:
+            "OAuth is configured and an access token is available to connect to your HubSpot account. To revoke, click 'Revoke'"
+    };
 
     vm.oauthSetup = {};
     vm.status = {};
+    
 
     $scope.$on('formSubmitting', function () {
 
@@ -20,11 +29,11 @@
             vm.status = {
                 isValid: response.isValid === true,
                 type: response.type,
-                description: response.isValid === true
-                    ? `${response.type.value} is configured.`
-                    : "Invalid configuration",
+                description: configDescription[response.type.value],
                 useOAuth: response.isValid === true && response.type.value === oauthName
             };
+
+            console.log("STATUS: ", vm.status);
 
             if (vm.status.useOAuth) {
                 validateOAuthSetup();
@@ -44,6 +53,12 @@
             vm.authWindow = window.open(response,
                 "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
 
+        });
+    }
+
+    vm.onRevokeToken = function() {
+        umbracoCmsIntegrationsCrmHubspotResource.revokeToken().then(function (response) {
+            vm.oauthSetup.isConnected = false;
         });
     }
 

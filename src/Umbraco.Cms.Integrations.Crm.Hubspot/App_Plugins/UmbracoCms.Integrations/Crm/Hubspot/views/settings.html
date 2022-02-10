@@ -1,6 +1,6 @@
 ﻿<div ng-controller="Umbraco.Cms.Integrations.Crm.Hubspot.SettingsController as vm">
-    <div  ng-class="vm.status.isValid ? 'alert alert-success w5' : 'alert alert-warning w5'">
-        {{ vm.status.description }}
+    <div>
+        <p>{{ vm.status.description }}</p>
     </div>
     <div ng-if="vm.status.useOAuth">
         <umb-button action="vm.onConnectClick()"
@@ -9,6 +9,13 @@
                     state="init"
                     label="Connect"
                     disabled="vm.oauthSetup.isConnected">
+        </umb-button>
+        <umb-button action="vm.onRevokeToken()"
+                    type="button"
+                    button-style="danger"
+                    state="init"
+                    label="Revoke"
+                    disabled="!vm.oauthSetup.isConnected">
         </umb-button>
     </div>
 </div>

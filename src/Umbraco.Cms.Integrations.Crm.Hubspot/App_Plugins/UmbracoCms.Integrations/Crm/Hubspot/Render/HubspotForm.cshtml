@@ -1,10 +1,13 @@
-﻿@using System.Configuration
-@inherits Umbraco.Web.Mvc.UmbracoViewPage<Umbraco.Cms.Integrations.Crm.Hubspot.Models.ViewModels.HubspotFormViewModel>
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Umbraco.Cms.Integrations.Crm.Hubspot.Models.ViewModels.HubspotFormViewModel>
 
-<script charset="utf-8" type="text/javascript" src="https://js-eu1.hsforms.net/forms/shell.js"></script>
+@{
+    var hbsptScriptPath = Model.EuRegion ? "//js-eu1.hsforms.net/forms/shell.js" : "//js.hsforms.net/forms/shell.js";
+}
+
+<script charset="utf-8" type="text/javascript" src="@hbsptScriptPath"></script>
 <script>
     hbspt.forms.create({
-        region: "eu1",
+        region: "@Model.EuRegion ? 'eu1' : 'na1'",
         portalId: "@Model.PortalId",
         formId: "@Model.Id"
     });

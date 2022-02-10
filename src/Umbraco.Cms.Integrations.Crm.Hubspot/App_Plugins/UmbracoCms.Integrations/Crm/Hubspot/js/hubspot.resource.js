@@ -11,31 +11,36 @@
             },
             getHubspotFormsList: function (id) {
                 return umbRequestHelper.resourcePromise(
-                    $http.get("backoffice/UmbracoCmsIntegrationsCrmHubspot/Forms/GetAll"), "");
+                    $http.get(`${apiEndpoint}/GetAll`), "");
             },
             getAuthorizationUrl: function() {
                 return umbRequestHelper.resourcePromise(
-                    $http.get("backoffice/UmbracoCmsIntegrationsCrmHubspot/Forms/GetAuthorizationUrl"),
+                    $http.get(`${apiEndpoint}/GetAuthorizationUrl`),
                     "Failed");
             },
             getAccessToken: function(authorizationCode) {
                 return umbRequestHelper.resourcePromise(
-                    $http.post("backoffice/UmbracoCmsIntegrationsCrmHubspot/Forms/GetAccessToken", { code: authorizationCode }),
+                    $http.post(`${apiEndpoint}/GetAccessToken`, { code: authorizationCode }),
                     "Failed");
             },
             refreshAccessToken: function () {
                 return umbRequestHelper.resourcePromise(
-                    $http.post("backoffice/UmbracoCmsIntegrationsCrmHubspot/Forms/RefreshAccessToken"),
+                    $http.post(`${apiEndpoint}/RefreshAccessToken`),
+                    "Failed");
+            },
+            revokeAccessToken: function () {
+                return umbRequestHelper.resourcePromise(
+                    $http.post(`${apiEndpoint}/RevokeAccessToken`),
                     "Failed");
             },
             validateAccessToken: function () {
                 return umbRequestHelper.resourcePromise(
-                    $http.get("backoffice/UmbracoCmsIntegrationsCrmHubspot/Forms/ValidateAccessToken"),
+                    $http.get(`${apiEndpoint}/ValidateAccessToken`),
                     "Failed");
             },
             getHubspotFormsListOAuth: function () {
                 return umbRequestHelper.resourcePromise(
-                    $http.get("backoffice/UmbracoCmsIntegrationsCrmHubspot/Forms/GetAllOAuth"),
+                    $http.get(`${apiEndpoint}/GetAllOAuth`),
                     "Failed");
             }
         };

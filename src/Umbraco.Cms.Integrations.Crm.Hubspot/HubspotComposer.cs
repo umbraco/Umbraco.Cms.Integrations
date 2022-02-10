@@ -11,8 +11,6 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot
         {
             composition.Register<IAppSettings, AppSettingsWrapper>(Lifetime.Singleton);
 
-            composition.Register<IHubspotService, HubspotService>(Lifetime.Singleton);
-
             composition.Register<ITokenService, TokenService>(Lifetime.Singleton);
         }
     }

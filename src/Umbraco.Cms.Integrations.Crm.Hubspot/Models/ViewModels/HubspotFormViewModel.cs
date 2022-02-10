@@ -5,5 +5,7 @@
         public string PortalId { get; set; }
 
         public string Id { get; set; }
+
+        public bool EuRegion { get; set; }
     }
 }

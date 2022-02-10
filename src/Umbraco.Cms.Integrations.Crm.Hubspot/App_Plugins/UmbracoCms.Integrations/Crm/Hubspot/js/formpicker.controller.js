@@ -10,9 +10,23 @@
             vm.searchTerm = "";
             vm.error = "";
             vm.isValid = true;
+            vm.euRegion = false;
+
+            const configDescription = {
+                API: "An API key is configured and will be used to connect to your HubSpot account.",
+                OAuth:
+                    "No API key is configured. To connect to your HubSpot account using OAuth click 'Connect', select your account and agree to the permissions.",
+                None: "No API or OAuth configuration could be found. Please review your settings before continuing.",
+                OAuthConnected:
+                    "OAuth is configured and an access token is available to connect to your HubSpot account. To revoke, click 'Revoke'"
+            };
 
             // check configuration
             checkConfiguration(loadForms);
+
+            vm.toggleRegion = function() {
+                vm.euRegion = !vm.euRegion;
+            }
 
             vm.remove = function () {
                 $scope.model.value = null;
@@ -28,8 +42,12 @@
                     subtitle: "Select a form",
                     view: "/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/views/formpickereditor.html",
                     size: "medium",
-                    pickForm: function (form) {
+                    pickForm: function (form, euRegion) {
+
+                        form.euRegion = euRegion;
+
                         vm.saveForm(form);
+
                         editorService.close();
                     },
                     close: function () {
@@ -46,15 +64,14 @@
                     vm.status = {
                         isValid: response.isValid === true,
                         type: response.type,
-                        description: response.isValid === true ? `${response.type.value} is configured.` : "Invalid configuration",
+                        description: configDescription[response.type.value],
                         useOAuth: response.isValid === true && response.type.value === oauthName
                     };
 
                     if (response.isValid === false) {
                         vm.loading = false;
-                        vm.error = "Invalid configuration.";
-                        notificationsService.warning("Hubspot API",
-                            "Invalid setup. Please review the API/OAuth settings.");
+                        vm.error = configDescription.None;
+                        notificationsService.warning("Hubspot API", configDescription.None);
                     } else {
                         callback();
                     }
