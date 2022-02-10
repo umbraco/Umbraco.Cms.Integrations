@@ -83,7 +83,8 @@
                     // use OAuth
                     umbracoCmsIntegrationsCrmHubspotResource.validateAccessToken().then(function (response) {
                         if (response.isExpired === true || response.isValid === false) {
-                            notificationsService.warning("Hubspot API", "Invalid Access Token");
+                            vm.loading = false;
+                            notificationsService.warning("Hubspot API", "Invalid access token. Please review OAuth settings of the editor.");
                             return;
                         }
 
@@ -92,7 +93,7 @@
                             vm.hubspotFormsList = data.forms;
 
                             if (data.isValid === false || data.isExpired === true) {
-                                notificationsService.error("Hubspot API", "Invalid Access Token");
+                                notificationsService.error("Hubspot API", "Invalid access token. Please review OAuth settings of the editor.");
                             }
                         });
                     });
@@ -103,7 +104,7 @@
 
                         vm.hubspotFormsList = data.forms;
 
-                        if (data.isValid === false || data.isExpired == true) {
+                        if (data.isValid === false || data.isExpired === true) {
                             notificationsService.error("Hubspot API", "Invalid API key");
                         }
                     });

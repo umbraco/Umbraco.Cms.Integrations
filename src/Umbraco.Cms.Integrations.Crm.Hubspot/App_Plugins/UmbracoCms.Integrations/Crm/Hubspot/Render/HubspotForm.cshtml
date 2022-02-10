@@ -5,11 +5,23 @@
 }
 
 <script charset="utf-8" type="text/javascript" src="@hbsptScriptPath"></script>
-<script>
-    hbspt.forms.create({
-        region: "@Model.EuRegion ? 'eu1' : 'na1'",
-        portalId: "@Model.PortalId",
-        formId: "@Model.Id"
-    });
-</script>
+@if (Model.EuRegion)
+{
+    <script>
+        hbspt.forms.create({
+            region: "eu1",
+            portalId: "@Model.PortalId",
+            formId: "@Model.Id"
+        });
+    </script>
+}
+else
+{
+    <script>
+        hbspt.forms.create({
+            portalId: "@Model.PortalId",
+            formId: "@Model.Id"
+        });
+    </script>
+}
 

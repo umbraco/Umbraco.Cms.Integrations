@@ -24,13 +24,15 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Editors
             var jObject = JObject.Parse(source.ToString());
             var jformId = jObject["id"];
             var jportalId = jObject["portalId"];
+            var jeuRegion = jObject["euRegion"];
 
             if (jformId != null && jportalId != null)
             {
                 var hubspotFormViewModel = new HubspotFormViewModel
                 {
                     Id = jformId.Value<string>(),
-                    PortalId = jportalId.Value<string>()
+                    PortalId = jportalId.Value<string>(),
+                    EuRegion = jeuRegion.Value<bool>()
                 };
                 return hubspotFormViewModel;
             }
