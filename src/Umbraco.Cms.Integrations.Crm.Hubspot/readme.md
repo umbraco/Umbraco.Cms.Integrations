@@ -15,6 +15,15 @@ The package supports two modes of authentication:
 - API Key
 - OAuth
 
+To support multi-region HubSpot forms, the following app setting is required in `Web.config`:
+```
+  <appSettings>
+    ...
+    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.Region" value="[region]" />
+    ...
+  </appSettings>
+```
+
 #### API Key
 
 Log into your HubSpot account, go to _Settings > Integrations > API Key_ and create an API key.
