@@ -38,6 +38,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
         private const string OAuthScopes = "oauth forms"; // oauth forms
         private const string OAuthProxyBaseUrl = "https://localhost:44364/"; //"https://hubspot-forms-auth.umbraco.com/"; // for local testing: https://localhost:44364
         private const string OAuthProxyEndpoint = "{0}oauth/v1/token";
+        private const string HubspotServiceName = "HubspotForms";
 
         private const string AccessTokenDbKey = "Umbraco.Cms.Integrations.Hubspot.AccessTokenDbKey";
         private const string RefreshTokenDbKey = "Umbraco.Cms.Integrations.Hubspot.RefreshTokenDbKey";
@@ -197,7 +198,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
                 RequestUri = new Uri(string.Format(OAuthProxyEndpoint, OAuthProxyBaseUrl)),
                 Content = new FormUrlEncodedContent(data)
             };
-            requestMessage.Headers.Add("service_name", "Hubspot");
+            requestMessage.Headers.Add("service_name", HubspotServiceName);
 
             var response = await ClientFactory().SendAsync(requestMessage);
             if (response.IsSuccessStatusCode)
@@ -233,7 +234,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
                 RequestUri = new Uri(string.Format(OAuthProxyEndpoint, OAuthProxyBaseUrl)),
                 Content = new FormUrlEncodedContent(data)
             };
-            requestMessage.Headers.Add("service_name", "Hubspot");
+            requestMessage.Headers.Add("service_name", HubspotServiceName);
 
             var response = await ClientFactory().SendAsync(requestMessage);
             if (response.IsSuccessStatusCode)
