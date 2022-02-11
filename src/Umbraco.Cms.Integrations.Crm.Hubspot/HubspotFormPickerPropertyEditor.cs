@@ -5,7 +5,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot
 {
     [DataEditor(
         alias: "Umbraco.Cms.Integrations.Crm.Hubspot.FormPicker",
-        name: "Hubspot Form Picker",
+        name: "HubSpot Form Picker",
         view: "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/views/formpicker.html",
         Group = "Pickers",
         Icon = "icon-handshake"

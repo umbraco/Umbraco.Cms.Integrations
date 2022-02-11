@@ -67,7 +67,7 @@
                     umbracoCmsIntegrationsCrmHubspotResource.validateAccessToken().then(function (response) {
                         if (response.isExpired === true || response.isValid === false) {
                             vm.loading = false;
-                            notificationsService.warning("HubSpot API", "Invalid access token. Please review OAuth settings of the editor.");
+                            notificationsService.warning("HubSpot API", "Unable to connect to HubSpot. Please review the settings of the form picker property's data type.");
                             return;
                         }
 
@@ -76,7 +76,7 @@
                             vm.hubspotFormsList = data.forms;
 
                             if (data.isValid === false || data.isExpired === true) {
-                                notificationsService.error("HubSpot API", "Invalid access token. Please review OAuth settings of the editor.");
+                                notificationsService.error("HubSpot API", "Unable to retrieve the list of forms from HubSpot. Please review the settings of the form picker property's data type.");
                             }
                         });
                     });

@@ -213,7 +213,15 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
                 return result;
             }
 
-            return "error";
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                var errorResult = await response.Content.ReadAsStringAsync();
+                var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
+
+                return "Error: " + errorDto.Message;
+            }
+
+            return "Error: An unexpected error occurred.";
         }
 
         [HttpPost]

@@ -15,15 +15,6 @@ The package supports two modes of authentication:
 - API Key
 - OAuth
 
-To support multi-region HubSpot forms, the following app setting is required in `Web.config`:
-```
-  <appSettings>
-    ...
-    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.Region" value="[region]" />
-    ...
-  </appSettings>
-```
-
 #### API Key
 
 Log into your HubSpot account, go to _Settings > Integrations > API Key_ and create an API key.
@@ -38,40 +29,39 @@ Add this to an app setting in `Web.config`:
   </appSettings>
 ```
 
+The key will be added to all requests made to the HubSpot API and used to authenticate access.
+
 #### OAuth
 
-OAuth required parameters are represented by a group of constants in the _FormsController_ with the following values:
+If you prefer not to use an API key, an authentication flow using OAuth is also available.
+
+To use this, simply ensure you don't have an API key in your configurataion file.
+
+### Additional Configuration
+
+To support multi-region HubSpot forms, the following app setting is required in `Web.config`:
 ```
-OAuthClientId
-OAuthScopes
-OAuthProxyBaseUrl
-OAuthProxyEndpoint
+  <appSettings>
+    ...
+    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.Region" value="[region]" />
+    ...
+  </appSettings>
 ```
 
-No two set of app settings will work simultaneously.
-
-#### Debug Configuration
-
-While in DEBUG mode use following post build events:
-```
-  set UmbracoCmsIntegrationsTestsiteV8Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V8
-  set HubspotDir=%UmbracoCmsIntegrationsTestsiteV8Path%\App_Plugins\UmbracoCms.Integrations\Crm\Hubspot
-  if not exist %HubspotDir% mkdir -p %HubspotDir%
-  xcopy "$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Crm\Hubspot" "%HubspotDir%" /e /y
-```
+For example, in Europe, a setting of `eu1` should be used.
 
 ### Backoffice usage
 
-Property Editor will check the settings in `Web.config`, validate the configuration based on the existing
-app settings and prompt the user a notification. 
+To use the form picker, a new data type should be created based on the HubSpot Form Picker property editor.
 
-If OAuth is available, then the _Connect_ button will be enabled, prompting the user, on clicked, 
-with the HubSpot authorization window. The retrieved access token will be saved into the database and 
-used for future requests. _Revoke_ action will remove the access token from the database and the authorization process will need to be repeated.
+The settings in `Web.config` will be checked and a message presented indicating whether authenticiation is in place.
 
-When a form is selected, the user needs to toggle the region flag notifying whether the data is stored in EU or US. This is very important as
-it triggers the front-end JS script and the form creation depending on the region.
+If OAuth is being used for authentication is available, then the _Connect_ button will be enabled, prompting the user when clicked, 
+with the HubSpot authorization window.
 
+The retrieved access token will be saved into the database and used for future requests.
+
+_Revoke_ action will remove the access token from the database and the authorization process will need to be repeated.
 
 ### Front-end rendering
 
@@ -88,3 +78,14 @@ And render the form using (assuming a property based on the created data type, w
 ```
 @Html.RenderHubspotForm(Model.HubspotForm)
 ```
+
+### Developer Notes
+
+To copy the front-end assets to the test site While in DEBUG mode, use following post build events:
+```
+  set UmbracoCmsIntegrationsTestsiteV8Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V8
+  set HubspotDir=%UmbracoCmsIntegrationsTestsiteV8Path%\App_Plugins\UmbracoCms.Integrations\Crm\Hubspot
+  if not exist %HubspotDir% mkdir -p %HubspotDir%
+  xcopy "$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Crm\Hubspot" "%HubspotDir%" /e /y
+```
+

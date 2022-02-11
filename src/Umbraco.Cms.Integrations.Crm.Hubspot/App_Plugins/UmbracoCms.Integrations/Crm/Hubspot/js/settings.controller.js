@@ -46,6 +46,7 @@
     vm.onRevokeToken = function() {
         umbracoCmsIntegrationsCrmHubspotResource.revokeAccessToken().then(function (response) {
             vm.oauthSetup.isConnected = false;
+            notificationsService.success("HubSpot Configuration", "OAuth connection revoked.");
         });
     }
 
@@ -54,9 +55,13 @@
         if (event.data.type === "hubspot:oauth:success") {
 
             umbracoCmsIntegrationsCrmHubspotResource.getAccessToken(event.data.code).then(function (response) {
-                vm.oauthSetup.isConnected = true;
-                vm.status.description = umbracoCmsIntegrationsCrmHubspotService.configDescription.OAuthConnected;
-                notificationsService.success("HubSpot Configuration", "OAuth connected.");
+                if (response.startsWith("Error:")) {
+                    notificationsService.error("HubSpot Configuration", response);
+                } else {
+                    vm.oauthSetup.isConnected = true;
+                    vm.status.description = umbracoCmsIntegrationsCrmHubspotService.configDescription.OAuthConnected;
+                    notificationsService.success("HubSpot Configuration", "OAuth connected.");
+                }
             });
 
         }

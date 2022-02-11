@@ -347,6 +347,7 @@
     <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\css\styles.css" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\formpicker.controller.js" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\hubspot.resource.js" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\hubspot.service.js" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\settings.controller.js" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\formpicker.html" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\formpickereditor.html" />
