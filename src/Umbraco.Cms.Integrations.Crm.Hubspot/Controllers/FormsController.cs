@@ -160,6 +160,9 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
         [HttpGet]
         public HubspotFormPickerSettings CheckConfiguration()
         {
+            if (string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotRegion]))
+                return new HubspotFormPickerSettings();
+
             return
                 !string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotApiKey])
                     ? new HubspotFormPickerSettings { IsValid = true, Type = ConfigurationType.Api}

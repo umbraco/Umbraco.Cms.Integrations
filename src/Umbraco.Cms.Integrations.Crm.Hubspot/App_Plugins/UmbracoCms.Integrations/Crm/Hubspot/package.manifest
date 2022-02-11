@@ -2,7 +2,8 @@
   "javascript": [
     "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/js/formpicker.controller.js",
     "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/js/settings.controller.js",
-    "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/js/hubspot.resource.js"
+    "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/js/hubspot.resource.js",
+    "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/js/hubspot.service.js"
   ],
   "css": [
     "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/css/styles.css"

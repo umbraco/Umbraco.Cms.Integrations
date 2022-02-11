@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\hubspot.service.js" />
     <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\settings.controller.js" />
     <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\Render\HubspotForm.cshtml" />
     <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\formpickereditor.html" />

@@ -1,20 +1,11 @@
-﻿function settingsController($scope, notificationsService, umbracoCmsIntegrationsCrmHubspotResource) {
+﻿function settingsController($scope, notificationsService, umbracoCmsIntegrationsCrmHubspotService, umbracoCmsIntegrationsCrmHubspotResource) {
 
     var vm = this;
 
     const oauthName = "OAuth";
-    const configDescription = {
-        API: "An API key is configured and will be used to connect to your HubSpot account.",
-        OAuth:
-            "No API key is configured. To connect to your HubSpot account using OAuth click 'Connect', select your account and agree to the permissions.",
-        None: "No API or OAuth configuration could be found. Please review your settings before continuing.",
-        OAuthConnected:
-            "OAuth is configured and an access token is available to connect to your HubSpot account. To revoke, click 'Revoke'"
-    };
 
     vm.oauthSetup = {};
     vm.status = {};
-    
 
     $scope.$on('formSubmitting', function () {
 
@@ -29,7 +20,7 @@
             vm.status = {
                 isValid: response.isValid === true,
                 type: response.type,
-                description: configDescription[response.type.value],
+                description: umbracoCmsIntegrationsCrmHubspotService.configDescription[response.type.value],
                 useOAuth: response.isValid === true && response.type.value === oauthName
             };
 
@@ -37,10 +28,8 @@
                 validateOAuthSetup();
             }
 
-            if (response.isValid === true) {
-                notificationsService.success("Configuration", `${response.type.value} setup is configured.`);
-            } else {
-                notificationsService.warning("Configuration",
+            if (response.isValid !== true) {
+                notificationsService.warning("HubSpot Configuration",
                     "Invalid setup. Please review the API/OAuth settings.");
             }
         });
@@ -66,6 +55,8 @@
 
             umbracoCmsIntegrationsCrmHubspotResource.getAccessToken(event.data.code).then(function (response) {
                 vm.oauthSetup.isConnected = true;
+                vm.status.description = umbracoCmsIntegrationsCrmHubspotService.configDescription.OAuthConnected;
+                notificationsService.success("HubSpot Configuration", "OAuth connected.");
             });
 
         }
@@ -81,8 +72,12 @@
                 isAccessTokenValid: response.isValid
             }
 
+            if (vm.oauthSetup.isConnected === true && vm.oauthSetup.isAccessTokenValid === true) {
+                vm.status.description = umbracoCmsIntegrationsCrmHubspotService.configDescription.OAuthConnected;
+            }
+
             // refresh access token
-            if (vm.oauthSetup.isExpired === true) {
+            if (vm.oauthSetup.isAccessTokenExpired === true) {
                 umbracoCmsIntegrationsCrmHubspotResource.refreshAccessToken().then(function (response) {
                 });
             }
