@@ -33,8 +33,6 @@
                 useOAuth: response.isValid === true && response.type.value === oauthName
             };
 
-            console.log("STATUS: ", vm.status);
-
             if (vm.status.useOAuth) {
                 validateOAuthSetup();
             }
@@ -57,7 +55,7 @@
     }
 
     vm.onRevokeToken = function() {
-        umbracoCmsIntegrationsCrmHubspotResource.revokeToken().then(function (response) {
+        umbracoCmsIntegrationsCrmHubspotResource.revokeAccessToken().then(function (response) {
             vm.oauthSetup.isConnected = false;
         });
     }
