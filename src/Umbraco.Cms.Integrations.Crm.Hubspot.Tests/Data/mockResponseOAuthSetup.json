@@ -1,0 +1,141 @@
+[
+  {
+    "portalId": 25505644,
+    "guid": "8d40c8e4-24b8-4c6a-9b7a-8246e9394f5b",
+    "name": "New form (January 26, 2022 12:30:32 PM)",
+    "action": "",
+    "method": "POST",
+    "cssClass": "hs-form stacked",
+    "redirect": "",
+    "submitText": "Submit",
+    "followUpId": "",
+    "notifyRecipients": "28159561",
+    "leadNurturingCampaignId": "",
+    "formFieldGroups": [
+      {
+        "fields": [
+          {
+            "name": "email",
+            "label": "Email",
+            "type": "string",
+            "fieldType": "text",
+            "description": "",
+            "groupName": "contactinformation",
+            "displayOrder": -1,
+            "required": true,
+            "selectedOptions": [],
+            "options": [],
+            "validation": {
+              "name": "",
+              "message": "",
+              "data": "",
+              "useDefaultBlockList": false,
+              "blockedEmailAddresses": []
+            },
+            "enabled": true,
+            "hidden": false,
+            "defaultValue": "",
+            "isSmartField": false,
+            "unselectedLabel": "",
+            "placeholder": "",
+            "dependentFieldFilters": [],
+            "labelHidden": false,
+            "propertyObjectType": "CONTACT",
+            "metaData": [],
+            "objectTypeId": "0-1"
+          }
+        ],
+        "default": true,
+        "isSmartGroup": false,
+        "richText": {
+          "content": "",
+          "type": "TEXT"
+        },
+        "isPageBreak": false
+      },
+      {
+        "fields": [
+          {
+            "name": "firstname",
+            "label": "First name",
+            "type": "string",
+            "fieldType": "text",
+            "description": "",
+            "groupName": "contactinformation",
+            "displayOrder": -1,
+            "required": false,
+            "selectedOptions": [],
+            "options": [],
+            "validation": {
+              "name": "",
+              "message": "",
+              "data": "",
+              "useDefaultBlockList": false,
+              "blockedEmailAddresses": []
+            },
+            "enabled": true,
+            "hidden": false,
+            "defaultValue": "",
+            "isSmartField": false,
+            "unselectedLabel": "",
+            "placeholder": "",
+            "dependentFieldFilters": [],
+            "labelHidden": false,
+            "propertyObjectType": "CONTACT",
+            "metaData": [],
+            "objectTypeId": "0-1"
+          }
+        ],
+        "default": true,
+        "isSmartGroup": false,
+        "richText": {
+          "content": "",
+          "type": "TEXT"
+        },
+        "isPageBreak": false
+      }
+    ],
+    "createdAt": 1643193033715,
+    "updatedAt": 1643193044960,
+    "performableHtml": "",
+    "migratedFrom": "",
+    "ignoreCurrentValues": false,
+    "metaData": [
+      {
+        "name": "lang",
+        "value": "en"
+      },
+      {
+        "name": "embedType",
+        "value": "REGULAR"
+      }
+    ],
+    "deletable": true,
+    "inlineMessage": "Thanks for submitting the form.",
+    "tmsId": "",
+    "captchaEnabled": false,
+    "campaignGuid": "",
+    "cloneable": true,
+    "editable": true,
+    "formType": "HUBSPOT",
+    "deletedAt": 0,
+    "themeName": "canvas",
+    "parentId": 0,
+    "style": "{\"fontFamily\":\"arial, helvetica, sans-serif\",\"backgroundWidth\":\"100%\",\"labelTextColor\":\"#33475b\",\"linkColor\":\"#0000EE\",\"clickedLinkColor\":\"#551A8B\",\"labelTextSize\":\"13px\",\"helpTextColor\":\"#7C98B6\",\"helpTextSize\":\"11px\",\"legalConsentTextColor\":\"#33475b\",\"legalConsentTextSize\":\"14px\",\"thankYouTextColor\":\"#33475b\",\"thankYouTextSize\":\"16px\",\"submitColor\":\"#ff7a59\",\"submitAlignment\":\"left\",\"submitFontColor\":\"#ffffff\",\"submitSize\":\"12px\",\"paginationProgressColor\":\"#598aff\",\"paginationProgressTextColor\":\"#33475b\",\"paginationProgressShow\":true,\"paginationProgressTransition\":\"fade\",\"paginationProgressTheme\":\"default\",\"paginationContentUseScroll\":false,\"paginationContentScrollHeight\":\"100%\"}",
+    "isPublished": true,
+    "publishAt": 0,
+    "unpublishAt": 0,
+    "publishedAt": 0,
+    "kickbackEmailWorkflowId": 0,
+    "kickbackEmailsJson": "",
+    "customUid": "",
+    "createMarketableContact": true,
+    "editVersion": 0,
+    "thankYouMessageJson": "",
+    "themeColor": "",
+    "alwaysCreateNewCompany": false,
+    "internalUpdatedAt": 1643193044960,
+    "businessUnitId": 0,
+    "portableKey": "fba1af3b-82d5-40f0-bead-8826f14b3ab1"
+  }
+]

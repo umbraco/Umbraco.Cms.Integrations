@@ -1,0 +1,100 @@
+[
+  {
+    "portalId": 25480247,
+    "guid": "adce7c38-f600-4d37-aba2-40c0e9a105b2",
+    "name": "New form (January 18, 2022 11:50:20 AM)",
+    "action": "",
+    "method": "POST",
+    "cssClass": "hs-form stacked",
+    "redirect": "",
+    "submitText": "Submit",
+    "followUpId": "",
+    "notifyRecipients": "28159561",
+    "leadNurturingCampaignId": "",
+    "formFieldGroups": [
+      {
+        "fields": [
+          {
+            "name": "email",
+            "label": "Email",
+            "type": "string",
+            "fieldType": "text",
+            "description": "",
+            "groupName": "contactinformation",
+            "displayOrder": -1,
+            "required": true,
+            "selectedOptions": [],
+            "options": [],
+            "validation": {
+              "name": "",
+              "message": "",
+              "data": "",
+              "useDefaultBlockList": false,
+              "blockedEmailAddresses": []
+            },
+            "enabled": true,
+            "hidden": false,
+            "defaultValue": "",
+            "isSmartField": false,
+            "unselectedLabel": "",
+            "placeholder": "",
+            "dependentFieldFilters": [],
+            "labelHidden": false,
+            "propertyObjectType": "CONTACT",
+            "metaData": [],
+            "objectTypeId": "0-1"
+          }
+        ],
+        "default": true,
+        "isSmartGroup": false,
+        "richText": {
+          "content": "",
+          "type": "TEXT"
+        },
+        "isPageBreak": false
+      }
+    ],
+    "createdAt": 1642499421756,
+    "updatedAt": 1642499434619,
+    "performableHtml": "",
+    "migratedFrom": "",
+    "ignoreCurrentValues": false,
+    "metaData": [
+      {
+        "name": "lang",
+        "value": "en"
+      },
+      {
+        "name": "embedType",
+        "value": "REGULAR"
+      }
+    ],
+    "deletable": true,
+    "inlineMessage": "Thanks for submitting the form.",
+    "tmsId": "",
+    "captchaEnabled": false,
+    "campaignGuid": "",
+    "cloneable": true,
+    "editable": true,
+    "formType": "HUBSPOT",
+    "deletedAt": 0,
+    "themeName": "canvas",
+    "parentId": 0,
+    "style": "{\"fontFamily\":\"arial, helvetica, sans-serif\",\"backgroundWidth\":\"100%\",\"labelTextColor\":\"#33475b\",\"linkColor\":\"#0000EE\",\"clickedLinkColor\":\"#551A8B\",\"labelTextSize\":\"13px\",\"helpTextColor\":\"#7C98B6\",\"helpTextSize\":\"11px\",\"legalConsentTextColor\":\"#33475b\",\"legalConsentTextSize\":\"14px\",\"thankYouTextColor\":\"#33475b\",\"thankYouTextSize\":\"16px\",\"submitColor\":\"#ff7a59\",\"submitAlignment\":\"left\",\"submitFontColor\":\"#ffffff\",\"submitSize\":\"12px\",\"paginationProgressColor\":\"#598aff\",\"paginationProgressTextColor\":\"#33475b\",\"paginationProgressShow\":true,\"paginationProgressTransition\":\"fade\",\"paginationProgressTheme\":\"default\",\"paginationContentUseScroll\":false,\"paginationContentScrollHeight\":\"100%\"}",
+    "isPublished": true,
+    "publishAt": 0,
+    "unpublishAt": 0,
+    "publishedAt": 0,
+    "kickbackEmailWorkflowId": 0,
+    "kickbackEmailsJson": "",
+    "customUid": "",
+    "createMarketableContact": true,
+    "editVersion": 0,
+    "thankYouMessageJson": "",
+    "themeColor": "",
+    "alwaysCreateNewCompany": false,
+    "internalUpdatedAt": 1642499434619,
+    "businessUnitId": 0,
+    "portableKey": "2272ec40-9dfd-4642-9560-9721e271f914"
+  }
+]
