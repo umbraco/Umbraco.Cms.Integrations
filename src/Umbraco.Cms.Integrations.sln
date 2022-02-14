@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
@@ -14,9 +13,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2801CB6C-78DE-4129-B5C6-D349F47F9B5C}"
 	ProjectSection(SolutionItems) = preProject
 		..\azure-pipeline - Commerce.CommerceTools.yml = ..\azure-pipeline - Commerce.CommerceTools.yml
+		..\azure-pipeline - Crm.Hubspot.yml = ..\azure-pipeline - Crm.Hubspot.yml
 		..\azure-pipeline - SEO.SemrushTools.yml = ..\azure-pipeline - SEO.SemrushTools.yml
 		..\README.md = ..\README.md
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Crm", "Crm", "{4BDA951C-9C9D-4231-96CB-B1D9B75AF63B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hubspot", "Hubspot", "{F471F232-94E4-4D29-B75A-B1C61CB92584}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.Hubspot", "Umbraco.Cms.Integrations.Crm.Hubspot\Umbraco.Cms.Integrations.Crm.Hubspot.csproj", "{BB272CE8-C6D3-4529-81F5-EBEBCAB11219}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SEO", "SEO", "{5412E123-F4CD-448D-88F8-EC01403365C4}"
 EndProject
@@ -27,6 +33,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shopify", "Shopify", "{D4E7EA3B-CDC4-4F87-BD06-951221CEAABD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Commerce.Shopify", "Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj", "{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.Hubspot.Tests", "Umbraco.Cms.Integrations.Crm.Hubspot.Tests\Umbraco.Cms.Integrations.Crm.Hubspot.Tests.csproj", "{1C5F18D0-A32F-481B-AF03-D862CFB02F5F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{EBF16D40-2F6A-42CA-88CF-E314567D8163}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Shared", "Umbraco.Cms.Integrations.Shared\Umbraco.Cms.Integrations.Shared.csproj", "{E380C97F-7A0D-4819-8145-A67CE4143E31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +54,10 @@ Global
 		{4C4A15B6-6B1D-4B8C-B070-FF614A22D694}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C4A15B6-6B1D-4B8C-B070-FF614A22D694}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C4A15B6-6B1D-4B8C-B070-FF614A22D694}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB272CE8-C6D3-4529-81F5-EBEBCAB11219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB272CE8-C6D3-4529-81F5-EBEBCAB11219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB272CE8-C6D3-4529-81F5-EBEBCAB11219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB272CE8-C6D3-4529-81F5-EBEBCAB11219}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -50,6 +66,14 @@ Global
 		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C5F18D0-A32F-481B-AF03-D862CFB02F5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C5F18D0-A32F-481B-AF03-D862CFB02F5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C5F18D0-A32F-481B-AF03-D862CFB02F5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C5F18D0-A32F-481B-AF03-D862CFB02F5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E380C97F-7A0D-4819-8145-A67CE4143E31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E380C97F-7A0D-4819-8145-A67CE4143E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E380C97F-7A0D-4819-8145-A67CE4143E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E380C97F-7A0D-4819-8145-A67CE4143E31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,10 +81,14 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{85A73911-0146-409F-9488-33EA5750A07C} = {374203EC-D774-443A-9AFF-559D2C1D9E76}
 		{374203EC-D774-443A-9AFF-559D2C1D9E76} = {82B16D39-675A-4D40-808D-C6DDFDA37C20}
+		{F471F232-94E4-4D29-B75A-B1C61CB92584} = {4BDA951C-9C9D-4231-96CB-B1D9B75AF63B}
+		{BB272CE8-C6D3-4529-81F5-EBEBCAB11219} = {F471F232-94E4-4D29-B75A-B1C61CB92584}
 		{CA69D494-27A5-4888-B2F9-5886D735CCCC} = {5412E123-F4CD-448D-88F8-EC01403365C4}
 		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0} = {CA69D494-27A5-4888-B2F9-5886D735CCCC}
 		{D4E7EA3B-CDC4-4F87-BD06-951221CEAABD} = {82B16D39-675A-4D40-808D-C6DDFDA37C20}
 		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B} = {D4E7EA3B-CDC4-4F87-BD06-951221CEAABD}
+		{1C5F18D0-A32F-481B-AF03-D862CFB02F5F} = {F471F232-94E4-4D29-B75A-B1C61CB92584}
+		{E380C97F-7A0D-4819-8145-A67CE4143E31} = {EBF16D40-2F6A-42CA-88CF-E314567D8163}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FB51E08-A3C8-4DFF-B3CB-E99C2ED021D5}

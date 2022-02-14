@@ -1,4 +1,10 @@
-﻿function ProductPickerController($scope) {
+﻿function ProductPickerController($scope, umbracoCmsIntegrationsCommerceShopifyResource) {
+
+    var vm = this;
+
+    umbracoCmsIntegrationsCommerceShopifyResource.getProductsList().then(function(response) {
+        console.log(response);
+    });
 
 }
 

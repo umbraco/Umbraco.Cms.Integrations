@@ -1,5 +1,5 @@
 trigger:
-- feature/add-hubspot-integration
+- main
 
 pool:
   vmImage: 'windows-latest'

@@ -344,6 +344,14 @@
     <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\PropertyEditors\OrderByPicker.html" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\PropertyEditors\OrderByPickerController.js" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\Resources\CommerceToolsResource.js" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\css\styles.css" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\formpicker.controller.js" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\hubspot.resource.js" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\hubspot.service.js" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\settings.controller.js" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\formpicker.html" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\formpickereditor.html" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\settings.html" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrush.controller.js" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrush.css" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrush.html" />
@@ -396,6 +404,8 @@
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\package.manifest" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrushColumns.json" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrushDataSources.json" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\package.manifest" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\Render\HubspotForm.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Partials\Grid\Editors\Textstring.cshtml" />
@@ -407,6 +417,8 @@
     <Content Include="Views\Partials\Grid\Bootstrap3.cshtml" />
     <Content Include="Views\Partials\Grid\Bootstrap3-Fluid.cshtml" />
     <Content Include="Views\Partials\BlockList\Default.cshtml" />
+    <Content Include="Views\Hubspot.cshtml" />
+    <Content Include="Views\home.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -419,18 +431,16 @@
       <Project>{85a73911-0146-409f-9488-33ea5750a07c}</Project>
       <Name>Umbraco.Cms.Integrations.Commerce.CommerceTools</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj">
-      <Project>{d1fb84db-f1e4-42b6-8118-8c5b8424775b}</Project>
-      <Name>Umbraco.Cms.Integrations.Commerce.Shopify</Name>
+    <ProjectReference Include="..\Umbraco.Cms.Integrations.Crm.Hubspot\Umbraco.Cms.Integrations.Crm.Hubspot.csproj">
+      <Project>{bb272ce8-c6d3-4529-81f5-ebebcab11219}</Project>
+      <Name>Umbraco.Cms.Integrations.Crm.Hubspot</Name>
     </ProjectReference>
     <ProjectReference Include="..\Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj">
       <Project>{b69b18c8-6a17-4eee-874d-da2da55bd3b0}</Project>
       <Name>Umbraco.Cms.Integrations.SEO.Semrush</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
