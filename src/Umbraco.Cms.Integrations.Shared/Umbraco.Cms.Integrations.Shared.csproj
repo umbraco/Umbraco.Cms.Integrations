@@ -240,9 +240,15 @@
     <Compile Include="Configuration\IAppSettings.cs" />
     <Compile Include="Controllers\BaseAuthorizedApiController.cs" />
     <Compile Include="Dependencies.cs" />
+    <Compile Include="Models\ConfigurationType.cs" />
+    <Compile Include="Models\Dtos\ErrorDto.cs" />
+    <Compile Include="Models\Dtos\OAuthRequestDto.cs" />
     <Compile Include="Models\Dtos\ResponseDto.cs" />
+    <Compile Include="Models\EditorSettings.cs" />
     <Compile Include="Resolvers\JsonPropertyRenameContractResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ITokenService.cs" />
+    <Compile Include="Services\TokenService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

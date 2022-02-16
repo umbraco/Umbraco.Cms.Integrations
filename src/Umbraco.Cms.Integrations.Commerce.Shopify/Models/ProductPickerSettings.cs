@@ -6,5 +6,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models
     {
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        [JsonProperty("message")]
+        public string Message { get; set; }
     }
 }

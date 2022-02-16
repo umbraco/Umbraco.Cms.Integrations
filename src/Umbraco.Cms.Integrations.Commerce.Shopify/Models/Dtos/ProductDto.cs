@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+
 using Newtonsoft.Json;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
@@ -11,5 +8,19 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
     {
         [JsonProperty("title")]
         public string Title { get; set; }
+
+        [JsonProperty("body_html")]
+        public string Body { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("variants")]
+        public IEnumerable<ProductVariantDto> Variants { get; set; }
+
+        [JsonProperty("image")]
+        public ProductImageDto Image { get; set; }
     }
+
+
 }

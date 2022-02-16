@@ -7,7 +7,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify
     {
         [ConfigurationField(
             key: "productPickerSettings", 
-            name: "Product Picker Settings", 
+            name: "Settings", 
             view: "~/App_Plugins/UmbracoCms.Integrations/Commerce/Shopify/views/productPickerSettings.html")]
         public ProductPickerSettings ProductPickerSettings { get; set; }
     }
