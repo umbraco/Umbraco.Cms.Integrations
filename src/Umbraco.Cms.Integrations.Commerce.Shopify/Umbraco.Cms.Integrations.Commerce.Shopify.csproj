@@ -264,6 +264,7 @@
     <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\productPickerSettings.controller.js" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\shopify.resource.js" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPicker.html" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPickerOverlay.html" />
     <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPickerSettings.html" />
   </ItemGroup>
   <ItemGroup>

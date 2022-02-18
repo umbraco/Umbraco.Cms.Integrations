@@ -6,6 +6,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
 {
     public class ProductDto
     {
+        [JsonProperty("id")]
+        public long Id { get; set; }
+
         [JsonProperty("title")]
         public string Title { get; set; }
 

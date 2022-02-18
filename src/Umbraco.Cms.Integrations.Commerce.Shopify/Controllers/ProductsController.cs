@@ -48,18 +48,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Controllers
         [HttpGet]
         public EditorSettings CheckConfiguration()
         {
-            if (string.IsNullOrEmpty(AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyShop])
-                || string.IsNullOrEmpty(AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyApiVersion]))
-                return new EditorSettings();
-
-            return
-                !string.IsNullOrEmpty(AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyAccessToken])
-                    ? new EditorSettings { IsValid = true, Type = ConfigurationType.Api }
-                    : !string.IsNullOrEmpty(OAuthClientId)
-                      && !string.IsNullOrEmpty(OAuthProxyBaseUrl)
-                      && !string.IsNullOrEmpty(OAuthProxyEndpoint)
-                        ? new EditorSettings { IsValid = true, Type = ConfigurationType.OAuth }
-                        : new EditorSettings();
+            return GetConfiguration();
         }
 
         [HttpGet]
@@ -115,7 +104,13 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Controllers
 
         public async Task<ResponseDto<ProductsListDto>> GetList()
         {
-            var accessToken = AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyAccessToken];
+            string accessToken;
+            if(GetConfiguration().Type == ConfigurationType.OAuth)
+                TokenService.TryGetParameters(AccessTokenDbKey, out accessToken);
+            else
+            {
+                accessToken = AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyAccessToken];
+            }
 
             if (string.IsNullOrEmpty(accessToken))
             {
@@ -143,8 +138,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-               
-
                 var result = await response.Content.ReadAsStringAsync();
                 return new ResponseDto<ProductsListDto>
                 {
@@ -156,23 +149,20 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Controllers
             return new ResponseDto<ProductsListDto>();
         }
 
-        public async Task<ResponseDto<ProductsListDto>> GetListOAuth()
+        private EditorSettings GetConfiguration()
         {
-            TokenService.TryGetParameters(AccessTokenDbKey, out string accessToken);
-            if (string.IsNullOrEmpty(accessToken))
-            {
-                ApiLogger.Info<ProductsController>("Cannot access Shopify - Access Token is missing.");
+            if (string.IsNullOrEmpty(AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyShop])
+                || string.IsNullOrEmpty(AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyApiVersion]))
+                return new EditorSettings();
 
-                return new ResponseDto<ProductsListDto>();
-            }
-
-            var requestMessage = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri("")
-            };
-
-            return new ResponseDto<ProductsListDto>();
+            return
+                !string.IsNullOrEmpty(AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyAccessToken])
+                    ? new EditorSettings { IsValid = true, Type = ConfigurationType.Api }
+                    : !string.IsNullOrEmpty(OAuthClientId)
+                      && !string.IsNullOrEmpty(OAuthProxyBaseUrl)
+                      && !string.IsNullOrEmpty(OAuthProxyEndpoint)
+                        ? new EditorSettings { IsValid = true, Type = ConfigurationType.OAuth }
+                        : new EditorSettings();
         }
     }
 }
