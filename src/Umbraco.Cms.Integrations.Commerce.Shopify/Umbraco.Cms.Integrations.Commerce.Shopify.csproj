@@ -254,7 +254,6 @@
     <Compile Include="Editors\ShopifyProductPickerConfiguration.cs" />
     <Compile Include="Editors\ShopifyProductPickerConfigurationEditor.cs" />
     <Compile Include="Editors\ShopifyProductPickerPropertyEditor.cs" />
-    <Compile Include="Services\IShopifyService.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\ShopifyService.cs" />
     <Compile Include="ShopifyComposer.cs" />
