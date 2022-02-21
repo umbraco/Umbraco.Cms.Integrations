@@ -1,7 +1,7 @@
 ﻿using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
 using Umbraco.Core.PropertyEditors;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 {
     public class ShopifyProductPickerConfiguration
     {

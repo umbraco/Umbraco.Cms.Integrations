@@ -1,7 +1,7 @@
 ﻿using Umbraco.Core.Logging;
 using Umbraco.Core.PropertyEditors;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 {
     [DataEditor(
         alias: "Umbraco.Cms.Integrations.Commerce.Shopify.ProductPicker",

@@ -247,6 +247,8 @@
     <Compile Include="Models\EditorSettings.cs" />
     <Compile Include="Resolvers\JsonPropertyRenameContractResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\BaseService.cs" />
+    <Compile Include="Services\IApiService.cs" />
     <Compile Include="Services\ITokenService.cs" />
     <Compile Include="Services\TokenService.cs" />
   </ItemGroup>

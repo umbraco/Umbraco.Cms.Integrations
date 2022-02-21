@@ -5,7 +5,7 @@ using Umbraco.Core.Composing;
 
 namespace Umbraco.Cms.Integrations.Shared
 {
-    public class Dependencies: IUserComposer
+    public class Dependencies: IComposer
     {
         public void Compose(Composition composition)
         {
