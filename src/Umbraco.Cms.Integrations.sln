@@ -30,7 +30,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Semrush", "Semrush", "{CA69
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.SEO.Semrush", "Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj", "{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Crm.Hubspot.Tests", "Umbraco.Cms.Integrations.Crm.Hubspot.Tests\Umbraco.Cms.Integrations.Crm.Hubspot.Tests.csproj", "{1C5F18D0-A32F-481B-AF03-D862CFB02F5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.Hubspot.Tests", "Umbraco.Cms.Integrations.Crm.Hubspot.Tests\Umbraco.Cms.Integrations.Crm.Hubspot.Tests.csproj", "{1C5F18D0-A32F-481B-AF03-D862CFB02F5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

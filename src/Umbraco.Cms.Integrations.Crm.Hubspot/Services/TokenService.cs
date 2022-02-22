@@ -1,7 +1,10 @@
-﻿using Newtonsoft.Json;
-
+﻿#if NETCOREAPP
+using Umbraco.Cms.Core.Services;
+#else
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models.Dtos;
 using Umbraco.Core.Services;
+#endif
+
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Services
 {
