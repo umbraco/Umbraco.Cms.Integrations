@@ -291,9 +291,7 @@
     <Error Condition="!Exists('..\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>set UmbracoCmsIntegrationsTestsiteV8Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V8
-set ShopifyDir=%25UmbracoCmsIntegrationsTestsiteV8Path%25\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify
-if not exist %25ShopifyDir%25 mkdir -p %25ShopifyDir%25
-xcopy "$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Commerce\Shopify" "%25ShopifyDir%25" /e /y</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
