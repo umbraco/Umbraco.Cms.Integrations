@@ -20,7 +20,7 @@
     <contributors>
       <contributor>Adrian Cojocariu</contributor>
     </contributors>
-    <readme><![CDATA[An extension for Umbraco CMS providing products picker for Shopify.]]></readme>
+    <readme><![CDATA[An extension for Umbraco CMS providing a products picker and rendering component for Shopify.]]></readme>
   </info>
   <files>
     <folder path="App_Plugins/UmbracoCms.Integrations/Commerce/Shopify" orgPath="App_Plugins/UmbracoCms.Integrations/Commerce/Shopify" />

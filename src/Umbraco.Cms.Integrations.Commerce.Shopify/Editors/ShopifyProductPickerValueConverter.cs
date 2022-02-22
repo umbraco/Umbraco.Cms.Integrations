@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc.Html;
+
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.ViewModels;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
-using Umbraco.Cms.Integrations.Shared.Models.Dtos;
 using Umbraco.Cms.Integrations.Shared.Services;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
