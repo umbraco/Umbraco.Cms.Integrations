@@ -10,9 +10,15 @@
     // step 1. check configuration
     checkConfiguration(function() {
         // step 2. get products
+        getProducts();
+    });
+
+    function getProducts() {
         vm.loading = true;
+
         umbracoCmsIntegrationsCommerceShopifyResource.getProductsList().then(function (response) {
             if (response.isValid) {
+
                 vm.productsList = response.result.products;
 
                 if ($scope.model.value != undefined && $scope.model.value.length > 0) {
@@ -21,8 +27,9 @@
             }
             vm.loading = false;
         });
-    });
+    }
 
+    // products table events
     vm.selectProduct = function (item) {
         if ($scope.model.selectedProducts.filter(function (i) { return i.id === item.id }).length > 0) {
             $scope.model.selectedProducts = $scope.model.selectedProducts.filter(function (i) { return i.id !== item.id; });
@@ -42,7 +49,7 @@
             description: "Select product(s)",
             selectedProducts: vm.selectedProducts,
             view: "/App_Plugins/UmbracoCms.Integrations/Commerce/Shopify/views/productPickerOverlay.html",
-            size: "medium",
+            size: "large",
             submit: function (selectedProducts) {
                 vm.submit(selectedProducts);
 

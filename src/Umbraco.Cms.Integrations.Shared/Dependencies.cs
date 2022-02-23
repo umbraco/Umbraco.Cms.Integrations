@@ -12,6 +12,8 @@ namespace Umbraco.Cms.Integrations.Shared
             composition.Register<IAppSettings, AppSettingsWrapper>(Lifetime.Singleton);
 
             composition.Register<ITokenService, TokenService>(Lifetime.Singleton);
+
+            composition.Register<ICacheHelper, CacheHelper>(Lifetime.Singleton);
         }
     }
 }

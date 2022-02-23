@@ -8,5 +8,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
     {
         [JsonProperty("products")]
         public IEnumerable<ProductDto> Products { get; set; }
+
+        [JsonProperty("totalPages")]
+        public int TotalPages { get; set; }
     }
 }

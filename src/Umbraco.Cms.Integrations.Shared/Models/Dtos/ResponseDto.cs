@@ -10,6 +10,9 @@ namespace Umbraco.Cms.Integrations.Shared.Models.Dtos
         [JsonProperty("isValid")]
         public bool IsValid { get; set; }
 
+        [JsonProperty("isExpired")]
+        public bool IsExpired { get; set; }
+
         [JsonProperty("result")] 
         public T Result { get; set; }
 

@@ -13,6 +13,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
         [JsonProperty("position")]
         public int Position { get; set; }
 
+        [JsonProperty("barcode")]
+        public string Barcode { get; set; }
+
         [JsonProperty("inventory_quantity")]
         public int InventoryQuantity { get; set; }
     }

@@ -13,6 +13,10 @@ namespace Umbraco.Cms.Integrations.Shared.Services
 
         Task<string> GetAccessToken(OAuthRequestDto request);
 
+        Task<ResponseDto<T>> ValidateAccessToken();
+
+        void RevokeAccessToken();
+
         Task<ResponseDto<T>> GetResults();
     }
 }

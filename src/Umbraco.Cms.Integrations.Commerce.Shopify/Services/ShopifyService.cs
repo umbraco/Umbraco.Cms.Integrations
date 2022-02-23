@@ -95,11 +95,45 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 
             return "Error: An unexpected error occurred.";
         }
-     
+
+        public async Task<ResponseDto<ProductsListDto>> ValidateAccessToken()
+        {
+            TokenService.TryGetParameters(SettingsService.AccessTokenDbKey, out string accessToken);
+
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                UmbCoreLogger.Info<ShopifyService>(message: "Cannot access Shopify - Access Token is missing.");
+
+                return new ResponseDto<ProductsListDto>();
+            }
+
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(string.Format(SettingsService.ProductsApiEndpoint,
+                    AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyShop],
+                    AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyApiVersion]))
+            };
+            requestMessage.Headers.Add("X-Shopify-Access-Token", accessToken);
+
+            var response = await ClientFactory().SendAsync(requestMessage);
+
+            return new ResponseDto<ProductsListDto>
+            {
+                IsValid = response.IsSuccessStatusCode,
+                IsExpired = response.StatusCode == HttpStatusCode.Unauthorized
+            };
+        }
+
+        public void RevokeAccessToken()
+        {
+            TokenService.RemoveParameters(Constants.UmbracoCmsIntegrationsCommerceShopifyAccessToken);
+        }
+
         public async Task<ResponseDto<ProductsListDto>> GetResults()
         {
             string accessToken;
-            if (GetApiConfiguration().Type == ConfigurationType.OAuth)
+            if (GetApiConfiguration().Type.Value == ConfigurationType.OAuth.Value)
                 TokenService.TryGetParameters(SettingsService.AccessTokenDbKey, out accessToken);
             else
             {

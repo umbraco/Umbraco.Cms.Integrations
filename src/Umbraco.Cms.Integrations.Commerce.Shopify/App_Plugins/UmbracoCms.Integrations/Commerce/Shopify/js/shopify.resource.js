@@ -19,6 +19,16 @@
                         $http.post(`${apiEndpoint}/GetAccessToken`, { code: authorizationCode }),
                         "Failed");
                 },
+                revokeAccessToken: function () {
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(`${apiEndpoint}/RevokeAccessToken`),
+                        "Failed");
+                },
+                validateAccessToken: function () {
+                    return umbRequestHelper.resourcePromise(
+                        $http.get(`${apiEndpoint}/ValidateAccessToken`),
+                        "Failed");
+                },
                 getProductsList: function() {
                     return umbRequestHelper.resourcePromise(
                         $http.get(`${apiEndpoint}/GetList`), "Failed to get resource");

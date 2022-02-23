@@ -24,11 +24,9 @@
                 useOAuth: response.isValid === true && response.type.value === oauthName
             };
 
-            console.log("STATUS: ", vm.status);
-
-            //if (vm.status.useOAuth) {
-            //    validateOAuthSetup();
-            //}
+            if (vm.status.useOAuth) {
+                validateOAuthSetup();
+            }
 
             if (response.isValid !== true) {
                 notificationsService.warning("Shopify Configuration",
@@ -46,10 +44,10 @@
     }
 
     vm.onRevokeToken = function () {
-        //umbracoCmsIntegrationsCommerceShopifyResource.revokeAccessToken().then(function (response) {
-        //    vm.oauthSetup.isConnected = false;
-        //    notificationsService.success("HubSpot Configuration", "OAuth connection revoked.");
-        //});
+        umbracoCmsIntegrationsCommerceShopifyResource.revokeAccessToken().then(function (response) {
+            vm.oauthSetup.isConnected = false;
+            notificationsService.success("Shopify Configuration", "OAuth connection revoked.");
+        });
     }
 
     // authorization listener
@@ -69,27 +67,26 @@
     }, false);
 
 
-    //function validateOAuthSetup() {
-    //    umbracoCmsIntegrationsCrmHubspotResource.validateAccessToken().then(function (response) {
+    function validateOAuthSetup() {
+        umbracoCmsIntegrationsCommerceShopifyResource.validateAccessToken().then(function (response) {
 
-    //        vm.oauthSetup = {
-    //            isConnected: response.isValid,
-    //            isAccessTokenExpired: response.isExpired,
-    //            isAccessTokenValid: response.isValid
-    //        }
+            vm.oauthSetup = {
+                isConnected: response.isValid,
+                isAccessTokenExpired: response.isExpired,
+                isAccessTokenValid: response.isValid
+            }
 
-    //        if (vm.oauthSetup.isConnected === true && vm.oauthSetup.isAccessTokenValid === true) {
-    //            vm.status.description = umbracoCmsIntegrationsCrmHubspotService.configDescription.OAuthConnected;
-    //        }
+            if (vm.oauthSetup.isConnected === true && vm.oauthSetup.isAccessTokenValid === true) {
+                vm.status.description = umbracoCmsIntegrationsCommerceShopifyService.configDescription.OAuthConnected;
+            }
 
-    //        // refresh access token
-    //        if (vm.oauthSetup.isAccessTokenExpired === true) {
-    //            umbracoCmsIntegrationsCrmHubspotResource.refreshAccessToken().then(function (response) {
-    //            });
-    //        }
+            // refresh access token
+            if (vm.oauthSetup.isAccessTokenExpired === true) {
+                umbracoCmsIntegrationsCommerceShopifyService.refreshAccessToken().then(function (response) {});
+            }
 
-    //    });
-    //}
+        });
+    }
 }
 
 angular.module("umbraco")

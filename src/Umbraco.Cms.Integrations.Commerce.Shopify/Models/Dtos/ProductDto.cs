@@ -15,8 +15,14 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
         [JsonProperty("body_html")]
         public string Body { get; set; }
 
+        [JsonProperty("vendor")]
+        public string Vendor { get; set; }
+
         [JsonProperty("status")]
         public string Status { get; set; }
+
+        [JsonProperty("tags")]
+        public string Tags { get; set; }
 
         [JsonProperty("variants")]
         public IEnumerable<ProductVariantDto> Variants { get; set; }
