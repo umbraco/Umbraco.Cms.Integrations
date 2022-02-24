@@ -1,31 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web;
-using Microsoft.AspNet.SignalR.Hubs;
-using Moq;
+﻿using Moq;
 using Moq.Protected;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+using System;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Controllers;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models;
-using Umbraco.Cms.Integrations.Crm.Hubspot.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
 using Umbraco.Core.Composing;
-using Umbraco.Core.Configuration;
-using Umbraco.Core.Configuration.UmbracoSettings;
-using Umbraco.Core.Logging;
-using Umbraco.Web;
-using Umbraco.Web.Routing;
-using Umbraco.Web.Security;
 using ILogger = Umbraco.Core.Logging.ILogger;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
@@ -37,18 +24,6 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
             ""status"": ""error"",
             ""message"": ""This hapikey doesn't exist."",
             ""correlationId"": ""73f4a25b-7b0a-4537-a490-e5c226619d59""
-        }";
-
-        private readonly string ExpiredOAuthToken = @"{
-            ""status"": ""error"",
-            ""message"": ""This oauth-token is expired! expiresAt: 1643194402611, now: 1643972072320"",
-            ""correlationId"": ""1ae46a55-f5b9-4f68-811a-695a12aaa4f5"",
-            ""category"": ""EXPIRED_AUTHENTICATION"",
-            ""errors"": [
-                {
-                    ""message"": ""The OAuth token used to make this call expired 9 day(s) ago.""
-                }
-            ]
         }";
 
         private HubspotSettings MockedAppSettingsApiSetup;
@@ -81,8 +56,10 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         [Test]
         public void CheckApiConfiguration_WithApiConfig_ShouldReturnValidConfigurationResponseObjectWithType()
         {
-            var sut = new FormsController(Mock.Of<ITokenService>(), Mock.Of<ILogger>());
-            sut.Options = MockedAppSettingsApiSetup;
+            var sut = new FormsController(Mock.Of<ITokenService>(), Mock.Of<ILogger>())
+            {
+                Options = MockedAppSettingsApiSetup
+            };
 
             var result = sut.CheckConfiguration();
 
@@ -93,8 +70,10 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         [Test]
         public void CheckOAuthConfiguration_WithOAuthConfigAndNoApiConfig_ShouldReturnValidConfigurationResponseObjectWithType()
         {
-            var sut = new FormsController(Mock.Of<ITokenService>(), Mock.Of<ILogger>());
-            sut.Options = MockedAppSettingsOAuthSetup;
+            var sut = new FormsController(Mock.Of<ITokenService>(), Mock.Of<ILogger>())
+            {
+                Options = MockedAppSettingsOAuthSetup
+            };
 
             var result = sut.CheckConfiguration();
 
@@ -109,8 +88,10 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         [Test]
         public async Task GetAll_WithoutApiKey_ShouldReturnInvalidResponseObjectWithLoggedInfo()
         {
-            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object);
-            sut.Options = MockedAppSettingsNoSetup;
+            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object)
+            {
+                Options = MockedAppSettingsNoSetup
+            };
 
             var result = await sut.GetAll();
 
