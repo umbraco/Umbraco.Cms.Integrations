@@ -7,8 +7,15 @@
     vm.loading = false;
     vm.selectedProducts = [];
 
+    vm.config = {
+        validationLimit: {
+            min: $scope.model.config.validationLimit.min ?? 0,
+            max: $scope.model.config.validationLimit.max
+        }
+    }
+
     // step 1. check configuration
-    checkConfiguration(function() {
+    checkConfiguration(function () {
         // step 2. get products
         getProducts();
     });
@@ -31,11 +38,19 @@
 
     // products table events
     vm.selectProduct = function (item) {
-        if ($scope.model.selectedProducts.filter(function (i) { return i.id === item.id }).length > 0) {
-            $scope.model.selectedProducts = $scope.model.selectedProducts.filter(function (i) { return i.id !== item.id; });
-        }
-        else {
-            $scope.model.selectedProducts.push(item);
+
+        var isProductSelected =
+            $scope.model.selectedProducts.filter(function(i) { return i.id === item.id }).length > 0;
+
+        // check if products count is in the validation limit interval
+        var isProductsCountValid = validateProductsCount(isProductSelected);
+        if (isProductsCountValid) {
+            if (isProductSelected) {
+                $scope.model.selectedProducts =
+                    $scope.model.selectedProducts.filter(function(i) { return i.id !== item.id; });
+            } else {
+                $scope.model.selectedProducts.push(item);
+            }
         }
     }
 
@@ -48,6 +63,7 @@
             title: "Shopify products",
             description: "Select product(s)",
             selectedProducts: vm.selectedProducts,
+            config: vm.config,
             view: "/App_Plugins/UmbracoCms.Integrations/Commerce/Shopify/views/productPickerOverlay.html",
             size: "large",
             submit: function (selectedProducts) {
@@ -65,7 +81,7 @@
         editorService.open(options);
     }
 
-    vm.submit = function(products) {
+    vm.submit = function (products) {
         $scope.model.value = products.map(function (item) { return item.id }).join(',');
     }
 
@@ -112,6 +128,23 @@
                 alias: el.id
             });
         });
+    }
+
+    function validateProductsCount(isRemoved) {
+
+        var updatedCount = isRemoved
+            ? $scope.model.selectedProducts.length - 1
+            : $scope.model.selectedProducts.length + 1;
+
+        if (vm.config.validationLimit.min != null && vm.config.validationLimit.max != null) {
+            return vm.config.validationLimit.min <= updatedCount && vm.config.validationLimit.max >= updatedCount;
+        }
+
+        if (vm.config.validationLimit.min != null)
+            return vm.config.validationLimit.min <= updatedCount;
+
+        if (vm.config.validationLimit.max != null)
+            return vm.config.validationLimit.max >= updatedCount;
     }
 }
 

@@ -46,8 +46,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 
             var ids = (long[]) inter;
 
-            var t = Task.Run(async () => await _apiService.GetResults());
-            var result = t.Result;
+            var result = _apiService.GetResults().GetAwaiter().GetResult();
 
             var products = from p in result.Result.Products
                 where ids.Contains(p.Id)

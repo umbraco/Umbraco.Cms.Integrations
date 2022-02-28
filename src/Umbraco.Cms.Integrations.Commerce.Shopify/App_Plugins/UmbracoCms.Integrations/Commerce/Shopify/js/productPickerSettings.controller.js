@@ -7,13 +7,6 @@
     vm.oauthSetup = {};
     vm.status = {};
 
-    $scope.$on('formSubmitting', function () {
-
-        $scope.model.value.isValid = vm.status.isValid;
-        $scope.model.value.type = vm.status.type;
-
-    });
-
     umbracoCmsIntegrationsCommerceShopifyResource.checkConfiguration()
         .then(function (response) {
 

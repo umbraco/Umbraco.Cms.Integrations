@@ -76,6 +76,39 @@
                                      position="center">
                         <localize key="content_listViewNoItems">There are no products in the list.</localize>
                     </umb-empty-state>
+
+                    <!-- Min Max help messages-->
+                    <div class="umb-contentpicker__min-max-help" ng-if="(model.config.validationLimit.max > 1 || model.config.validationLimit.min > 0)">
+                        <!-- Both min and max items -->
+                        <span ng-if="model.config.validationLimit.min && model.config.validationLimit.max && model.config.validationLimit.min !== model.config.validationLimit.max">
+                            <span ng-if="model.selectedProducts.length < model.config.validationLimit.max">Add between {{model.config.validationLimit.min}} and {{model.config.validationLimit.max}} items</span>
+                            <span ng-if="model.selectedProducts.length > model.config.validationLimit.max">
+                                <localize key="validation_maxCount">You can only have</localize> {{model.config.validationLimit.max}} <localize key="validation_itemsSelected"> items selected</localize>
+                            </span>
+                        </span>
+
+                        <!-- Equal min and max -->
+                        <span ng-if="model.config.validationLimit.min && model.config.validationLimit.max && model.config.validationLimit.min === model.config.validationLimit.max">
+                            <span ng-if="model.selectedProducts.length < model.config.validationLimit.max">Add {{model.config.validationLimit.min - renderModel.length}} item(s)</span>
+                            <span ng-if="model.selectedProducts.length > model.config.validationLimit.max">
+                                <localize key="validation_maxCount">You can only have</localize> {{model.config.validationLimit.max}} <localize key="validation_itemsSelected"> items selected</localize>
+                            </span>
+                        </span>
+
+                        <!-- Only max -->
+                        <span ng-if="!model.config.validationLimit.min && model.config.validationLimit.max">
+                            <span ng-if="model.selectedProducts.length < model.config.validationLimit.max">Add up to {{model.config.validationLimit.max}} items</span>
+                            <span ng-if="model.selectedProducts.length > model.config.validationLimit.max">
+                                <localize key="validation_maxCount">You can only have</localize> {{model.config.validationLimit.max}} <localize key="validation_itemsSelected">items selected</localize>
+                            </span>
+                        </span>
+
+                        <!-- Only min -->
+                        <span ng-if="model.config.validationLimit.min && !model.config.validationLimit.max && renderModel.length < model.config.validationLimit.min">
+                            Add at least {{model.config.validationLimit.min}} item(s)
+                        </span>
+
+                    </div>
                 </umb-box-content>
             </umb-box>
         </umb-editor-container>

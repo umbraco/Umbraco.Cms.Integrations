@@ -8,7 +8,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
         name: "Shopify Product Picker",
         view: "~/App_Plugins/UmbracoCms.Integrations/Commerce/Shopify/views/productPicker.html",
         Group = "Pickers",
-        Icon = "icon-shopify")]
+        Icon = "icon-shopping-basket-alt")]
     public class ShopifyProductPickerPropertyEditor: DataEditor
     {
         public ShopifyProductPickerPropertyEditor(ILogger logger) : base(logger)
