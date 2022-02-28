@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Umbraco.Cms.Integrations.Commerce.Shopify</PackageId>
+    <Title>Umbraco CMS Integrations: Commerce - Shopify</Title>
+    <Description>An extension for Umbraco CMS providing a products picker and rendering component for Shopify.</Description>
+    <PackageIconUrl></PackageIconUrl>
+    <PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+    <Version>1.0.0</Version>
+    <Authors>Umbraco HQ</Authors>
+    <Company>Umbraco</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="UmbracoCms.Web" version="8.5.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\**\*.*">
+      <Pack>true</Pack>
+      <PackagePath>content\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Umbraco.Cms.Integrations.Shared\Umbraco.Cms.Integrations.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
