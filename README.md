@@ -8,7 +8,7 @@ This repository houses open-source extensions, created for Umbraco CMS, that int
 
 [CommerceTools](./src/Umbraco.Cms.Integrations.Commerce.CommerceTools/) - a product and category picker that can be added as a property editor for content, with a value converter providing a strongly typed model for rendering.
 
-[Shopify](./src/Umbraco.Cms.Integrations.Commerce.Shopify/) - a product picker that can be added as a property editor for content, with a value converter providing a strongly typed model for rendering.
+[Shopify](./src/Umbraco.Cms.Integrations.Commerce.Shopify/) - a products picker that can be added as a property editor for content, with a value converter providing a strongly typed model for rendering.
 
 ### SEO
 
