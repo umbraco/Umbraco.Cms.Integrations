@@ -20,14 +20,25 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.0-rc001" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.0-rc001" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\**\*.*">
 			<Pack>true</Pack>
-			<PackagePath>content\App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+			<PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+		</Content>
+		<None Include="build\**\*.*">
+			<Pack>True</Pack>
+			<PackagePath>buildTransitive</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\**\*.*">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</Content>
 	</ItemGroup>
 

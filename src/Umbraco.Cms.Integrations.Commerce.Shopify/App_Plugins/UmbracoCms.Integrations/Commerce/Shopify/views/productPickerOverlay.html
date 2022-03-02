@@ -1,0 +1,133 @@
+﻿<div ng-controller="Umbraco.Cms.Integrations.Commerce.Shopify.ProductPickerController as vm">
+    <umb-editor-view>
+        <umb-editor-container>
+            <umb-box>
+                <umb-box-header title="{{ model.title }}" description="{{ model.description }}"></umb-box-header>
+                <umb-box-content>
+                    <umb-load-indicator ng-show="vm.loading"></umb-load-indicator>
+                    <div class="umb-table" ng-if="!vm.loading">
+                        <div class="umb-table-head">
+                            <div class="umb-table-row">
+                                <div class="umb-table-cell"></div>
+                                <div class="umb-table-cell umb-table__name">
+                                    <button type="button"
+                                            class="umb-table-head__link sortable"
+                                            ng-click="vm.sort('Title')">
+                                        <localize key="general_name">Name</localize>
+                                        <i class="umb-table-head__icon icon" aria-hidden="true"
+                                           ng-class="{'icon-navigation-up': vm.isSortDirection('Title', 'asc'), 'icon-navigation-down': vm.isSortDirection('Title', 'desc')}"></i>
+                                    </button>
+                                </div>
+                                <div class="umb-table-cell">
+                                    <span>Vendor</span>
+                                </div>
+                                <div class="umb-table-cell">
+                                    <span>Status</span>
+                                </div>
+                                <div class="umb-table-cell">
+                                    <span>Tags</span>
+                                </div>
+                                <div class="umb-table-cell">
+                                    <span>SKU</span>
+                                </div>
+                                <div class="umb-table-cell">
+                                    <span>Barcode</span>
+                                </div>
+                                <div class="umb-table-cell">
+                                    <span>Price</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="umb-table-body">
+                            <div class="umb-table-row -selectable umb-outline"
+                                 ng-repeat="product in vm.productsList"
+                                 ng-class="{'-selected':vm.isSelected(product, model.selectedProducts)}"
+                                 ng-click="vm.selectProduct(product, $index, $event)">
+                                <div class="umb-table-cell">
+                                    <img ng-src="{{ product.image.src }}" alt="{{ product.title }}" />
+                                </div>
+                                <div class="umb-table-cell umb-table__name">
+                                    {{ product.title }}
+                                </div>
+                                <div class="umb-table-cell">
+                                    <span>{{ product.vendor }}</span>
+                                </div>
+                                <div class="umb-table-cell">
+                                    <span>{{ product.status }}</span>
+                                </div>
+                                <div class="umb-table-cell">
+                                    <span>{{ product.tags }}</span>
+                                </div>
+                                <div class="umb-table-cell">
+                                    <span>{{ product.variants[0].sku }}</span>
+                                </div>
+                                <div class="umb-table-cell">
+                                    <span>{{ product.variants[0].barcode }}</span>
+                                </div>
+                                <div class="umb-table-cell">
+                                    <span>{{ product.variants[0].price }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- If list is empty, then display -->
+                    <umb-empty-state ng-if="!vm.productsList"
+                                     position="center">
+                        <localize key="content_listViewNoItems">There are no products in the list.</localize>
+                    </umb-empty-state>
+
+                    <!-- Min Max help messages-->
+                    <div class="umb-contentpicker__min-max-help" ng-if="(model.config.validationLimit.max > 1 || model.config.validationLimit.min > 0)">
+                        <!-- Both min and max items -->
+                        <span ng-if="model.config.validationLimit.min && model.config.validationLimit.max && model.config.validationLimit.min !== model.config.validationLimit.max">
+                            <span ng-if="model.selectedProducts.length < model.config.validationLimit.max">Add between {{model.config.validationLimit.min}} and {{model.config.validationLimit.max}} items</span>
+                            <span ng-if="model.selectedProducts.length > model.config.validationLimit.max">
+                                <localize key="validation_maxCount">You can only have</localize> {{model.config.validationLimit.max}} <localize key="validation_itemsSelected"> items selected</localize>
+                            </span>
+                        </span>
+
+                        <!-- Equal min and max -->
+                        <span ng-if="model.config.validationLimit.min && model.config.validationLimit.max && model.config.validationLimit.min === model.config.validationLimit.max">
+                            <span ng-if="model.selectedProducts.length < model.config.validationLimit.max">Add {{model.config.validationLimit.min - renderModel.length}} item(s)</span>
+                            <span ng-if="model.selectedProducts.length > model.config.validationLimit.max">
+                                <localize key="validation_maxCount">You can only have</localize> {{model.config.validationLimit.max}} <localize key="validation_itemsSelected"> items selected</localize>
+                            </span>
+                        </span>
+
+                        <!-- Only max -->
+                        <span ng-if="!model.config.validationLimit.min && model.config.validationLimit.max">
+                            <span ng-if="model.selectedProducts.length < model.config.validationLimit.max">Add up to {{model.config.validationLimit.max}} items</span>
+                            <span ng-if="model.selectedProducts.length > model.config.validationLimit.max">
+                                <localize key="validation_maxCount">You can only have</localize> {{model.config.validationLimit.max}} <localize key="validation_itemsSelected">items selected</localize>
+                            </span>
+                        </span>
+
+                        <!-- Only min -->
+                        <span ng-if="model.config.validationLimit.min && !model.config.validationLimit.max && renderModel.length < model.config.validationLimit.min">
+                            Add at least {{model.config.validationLimit.min}} item(s)
+                        </span>
+
+                    </div>
+                </umb-box-content>
+            </umb-box>
+        </umb-editor-container>
+        <umb-editor-footer>
+            <umb-editor-footer-content-right>
+                <umb-button type="button"
+                            button-style="success"
+                            label-key="general_submit"
+                            shortcut="ctrl+s"
+                            action="model.submit(model.selectedProducts)">
+                </umb-button>
+                <umb-button type="button"
+                            button-style="link"
+                            label-key="general_close"
+                            shortcut="esc"
+                            action="model.close()">
+                </umb-button>
+            </umb-editor-footer-content-right>
+        </umb-editor-footer>
+    </umb-editor-view>
+
+</div>

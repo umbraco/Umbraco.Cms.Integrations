@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Configuration;
+
 #if NETCOREAPP
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +14,7 @@ using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
 #else
 using System.Web.Http;
+using System.Configuration;
 
 using Umbraco.Core.Logging;
 using Umbraco.Web.Mvc;
@@ -27,7 +28,6 @@ using Umbraco.Cms.Integrations.Crm.Hubspot.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
-
 
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
@@ -210,9 +210,6 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
         [HttpGet]
         public HubspotFormPickerSettings CheckConfiguration()
         {
-            if(string.IsNullOrEmpty(Options.Region))
-                return new HubspotFormPickerSettings();
-
             return
                 !string.IsNullOrEmpty(Options.ApiKey)
                     ? new HubspotFormPickerSettings { IsValid = true, Type = ConfigurationType.Api}
