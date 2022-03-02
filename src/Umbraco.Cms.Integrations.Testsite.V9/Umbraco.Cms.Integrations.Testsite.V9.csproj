@@ -1,0 +1,89 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <DefaultItemExcludes>$(DefaultItemExcludes);App_Plugins/**;</DefaultItemExcludes>
+        <DefaultItemExcludes>$(DefaultItemExcludes);umbraco/**;</DefaultItemExcludes>
+        <DefaultItemExcludes>$(DefaultItemExcludes);wwwroot/media/**;</DefaultItemExcludes>
+    </PropertyGroup>
+
+    <!-- Force windows to use ICU. Otherwise Windows 10 2019H1+ will do it, but older windows 10 and most if not all winodws servers will run NLS -->
+    <ItemGroup>
+        <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="68.2.0.6" />
+        <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="68.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Umbraco.Cms" Version="9.0.1" />
+    </ItemGroup>
+
+
+
+    <ItemGroup>
+        <Content Include="App_Plugins/**" CopyToOutputDirectory="Always" />
+        <Content Include="umbraco/**" CopyToOutputDirectory="Always" />
+        <Content Remove="umbraco/Data/**" />
+        <Content Remove="umbraco/Logs/**" />
+        <Content Remove="umbraco/mediacache/**" />
+        <Content Remove="umbraco/models/**" />
+        <Compile Include="umbraco/models/**" Exclude="**/*.flag" />
+    </ItemGroup>
+
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj" />
+    </ItemGroup>
+
+
+
+    <ItemGroup>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\backoffice\icons\icon-shopify.svg">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\productPicker.controller.js">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\productPickerSettings.controller.js">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\shopify.resource.js">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\shopify.service.js">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\package.manifest">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPicker.html">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPickerOverlay.html">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPickerSettings.html">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
+    </PropertyGroup>
+
+    <!-- Set this to true if ModelsBuilder mode is not InMemoryAuto-->
+    <PropertyGroup>
+        <RazorCompileOnBuild>false</RazorCompileOnBuild>
+        <RazorCompileOnPublish>false</RazorCompileOnPublish>
+    </PropertyGroup>
+
+</Project>

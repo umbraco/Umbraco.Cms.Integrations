@@ -5,14 +5,22 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
-
+using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
-using Umbraco.Cms.Integrations.Shared.Configuration;
 using Umbraco.Cms.Integrations.Shared.Models;
 using Umbraco.Cms.Integrations.Shared.Models.Dtos;
 using Umbraco.Cms.Integrations.Shared.Resolvers;
 using Umbraco.Cms.Integrations.Shared.Services;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Resources;
+
+#if NETCOREAPP
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+#else
+using System.Configuration;
 using Umbraco.Core.Logging;
+#endif
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
@@ -20,7 +28,10 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
     {
         private readonly JsonSerializerSettings _serializerSettings;
 
-        public ShopifyService(ILogger logger, IAppSettings appSettings, ITokenService tokenService): base(logger, appSettings, tokenService)
+        private ShopifySettings Options;
+
+#if NETCOREAPP
+        public ShopifyService(ILogger<ShopifyService> logger, IOptions<ShopifySettings> options, ITokenService tokenService) : base(logger, tokenService)
         {
             var resolver = new JsonPropertyRenameContractResolver();
             resolver.RenameProperty(typeof(ResponseDto<ProductsListDto>), "Result", "products");
@@ -29,16 +40,32 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             {
                 ContractResolver = resolver
             };
+
+            Options = options.Value;
         }
+#else
+        public ShopifyService(ILogger logger, ITokenService tokenService): base(logger, tokenService)
+        {
+            var resolver = new JsonPropertyRenameContractResolver();
+            resolver.RenameProperty(typeof(ResponseDto<ProductsListDto>), "Result", "products");
+
+            _serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = resolver
+            };
+
+            Options = new ShopifySettings(ConfigurationManager.AppSettings);
+        }
+#endif
 
         public EditorSettings GetApiConfiguration()
         {
-            if (string.IsNullOrEmpty(AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyShop])
-                || string.IsNullOrEmpty(AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyApiVersion]))
+            if (string.IsNullOrEmpty(Options.Shop)
+                || string.IsNullOrEmpty(Options.ApiVersion))
                 return new EditorSettings();
 
             return
-                !string.IsNullOrEmpty(AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyAccessToken])
+                !string.IsNullOrEmpty(Options.AccessToken)
                     ? new EditorSettings { IsValid = true, Type = ConfigurationType.Api }
                     : !string.IsNullOrEmpty(SettingsService.OAuthClientId)
                       && !string.IsNullOrEmpty(OAuthProxyBaseUrl)
@@ -51,7 +78,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
         {
             return
                 string.Format(SettingsService.AuthorizationUrl,
-                    AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyShop], SettingsService.OAuthClientId, SettingsService.ShopifyOAuthProxyUrl);
+                    Options.Shop, SettingsService.OAuthClientId, SettingsService.ShopifyOAuthProxyUrl);
         }
 
         public async Task<string> GetAccessToken(OAuthRequestDto request)
@@ -70,8 +97,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
                 Content = new FormUrlEncodedContent(data)
             };
             requestMessage.Headers.Add("service_name", SettingsService.ServiceName);
-            requestMessage.Headers.Add(SettingsService.ServiceAddressReplace,
-                AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyShop]);
+            requestMessage.Headers.Add(SettingsService.ServiceAddressReplace, Options.Shop);
 
             var response = await ClientFactory().SendAsync(requestMessage);
             if (response.IsSuccessStatusCode)
@@ -102,7 +128,11 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 
             if (string.IsNullOrEmpty(accessToken))
             {
-                UmbCoreLogger.Info<ShopifyService>(message: "Cannot access Shopify - Access Token is missing.");
+#if NETCOREAPP
+                UmbCoreLogger.LogInformation(LoggingResources.AccessTokenMissing);
+#else
+                UmbCoreLogger.Info<ShopifyService>(message: LoggingResources.AccessTokenMissing);
+#endif
 
                 return new ResponseDto<ProductsListDto>();
             }
@@ -111,8 +141,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(string.Format(SettingsService.ProductsApiEndpoint,
-                    AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyShop],
-                    AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyApiVersion]))
+                    Options.Shop,
+                    Options.ApiVersion))
             };
             requestMessage.Headers.Add("X-Shopify-Access-Token", accessToken);
 
@@ -137,12 +167,16 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
                 TokenService.TryGetParameters(SettingsService.AccessTokenDbKey, out accessToken);
             else
             {
-                accessToken = AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyAccessToken];
+                accessToken = Options.AccessToken;
             }
 
             if (string.IsNullOrEmpty(accessToken))
             {
-                UmbCoreLogger.Info<ShopifyService>(message: "Cannot access Shopify - Access Token is missing.");
+#if NETCOREAPP
+                UmbCoreLogger.LogInformation(LoggingResources.AccessTokenMissing);
+#else
+                UmbCoreLogger.Info<ShopifyService>(message: LoggingResources.AccessTokenMissing);
+#endif
 
                 return new ResponseDto<ProductsListDto>();
             }
@@ -151,15 +185,19 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(string.Format(SettingsService.ProductsApiEndpoint,
-                    AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyShop],
-                    AppSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyApiVersion]))
+                    Options.Shop,
+                    Options.ApiVersion))
             };
             requestMessage.Headers.Add("X-Shopify-Access-Token", accessToken);
 
             var response = await ClientFactory().SendAsync(requestMessage);
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                UmbCoreLogger.Error<ShopifyService>($"Failed to fetch products from Shopify store using access token: {response.ReasonPhrase}");
+#if NETCOREAPP
+                UmbCoreLogger.LogError(string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
+#else
+                UmbCoreLogger.Error<ShopifyService>(string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
+#endif
 
                 return new ResponseDto<ProductsListDto> { Message = response.ReasonPhrase };
             }

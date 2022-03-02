@@ -1,6 +1,11 @@
 ﻿using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
 using Umbraco.Cms.Integrations.Shared.Models;
+
+#if NETCOREAPP
+using Umbraco.Cms.Core.PropertyEditors;
+#else
 using Umbraco.Core.PropertyEditors;
+#endif
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 {

@@ -1,4 +1,8 @@
-﻿using Umbraco.Core.Services;
+﻿#if NETCOREAPP
+using Umbraco.Cms.Core.Services;
+#else
+using Umbraco.Core.Services;
+#endif
 
 namespace Umbraco.Cms.Integrations.Shared.Services
 {
