@@ -1,19 +1,32 @@
-﻿using Umbraco.Cms.Integrations.Shared.Configuration;
-using Umbraco.Cms.Integrations.Shared.Services;
-using Umbraco.Core;
+﻿using Umbraco.Cms.Integrations.Shared.Services;
+
+#if NETCOREAPP
+using Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Core.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+#else
 using Umbraco.Core.Composing;
+using Umbraco.Core;
+#endif
 
 namespace Umbraco.Cms.Integrations.Shared
 {
-    public class Dependencies: IComposer
+    public class Dependencies : IComposer
     {
-        public void Compose(Composition composition)
+#if NETCOREAPP
+        public void Compose(IUmbracoBuilder builder)
         {
-            composition.Register<IAppSettings, AppSettingsWrapper>(Lifetime.Singleton);
+            builder.Services.AddSingleton<ITokenService, TokenService>();
 
+            builder.Services.AddSingleton<ICacheHelper, CacheHelper>();
+        }
+#else
+ public void Compose(Composition composition)
+        {
             composition.Register<ITokenService, TokenService>(Lifetime.Singleton);
 
             composition.Register<ICacheHelper, CacheHelper>(Lifetime.Singleton);
         }
+#endif
     }
 }

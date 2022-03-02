@@ -1,5 +1,10 @@
-﻿using Umbraco.Core.Logging;
+﻿#if NETCOREAPP
+using Umbraco.Cms.Core.IO;
+using Umbraco.Cms.Core.PropertyEditors;
+#else
+using Umbraco.Core.Logging;
 using Umbraco.Core.PropertyEditors;
+#endif
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 {
@@ -11,6 +16,19 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
         Icon = "icon-shopping-basket-alt")]
     public class ShopifyProductPickerPropertyEditor: DataEditor
     {
+#if NETCOREAPP
+        private IIOHelper _ioHelper;
+
+        public ShopifyProductPickerPropertyEditor(IDataValueEditorFactory dataValueEditorFactory, IIOHelper ioHelper) : base(dataValueEditorFactory)
+        {
+            _ioHelper = ioHelper;
+        }
+
+        protected override IConfigurationEditor CreateConfigurationEditor()
+        {
+            return new ShopifyProductPickerConfigurationEditor(_ioHelper);
+        }
+#else
         public ShopifyProductPickerPropertyEditor(ILogger logger) : base(logger)
         {
         }
@@ -19,5 +37,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
         {
             return new ShopifyProductPickerConfigurationEditor();
         }
+#endif
     }
 }

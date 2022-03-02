@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Umbraco.Cms.Integrations.Commerce.CommerceTools.Testsite9
+namespace Umbraco.Cms.Integrations.Testsite.V9
 {
     public class Program
     {

@@ -1,33 +1,55 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net472;net50</TargetFrameworks>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <PackageId>Umbraco.Cms.Integrations.Commerce.Shopify</PackageId>
-    <Title>Umbraco CMS Integrations: Commerce - Shopify</Title>
-    <Description>An extension for Umbraco CMS providing a products picker and rendering component for Shopify.</Description>
-    <PackageIconUrl></PackageIconUrl>
-    <PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-    <Version>1.0.0</Version>
-    <Authors>Umbraco HQ</Authors>
-    <Company>Umbraco</Company>
-  </PropertyGroup>
+	<PropertyGroup>
+		<PackageId>Umbraco.Cms.Integrations.Commerce.Shopify</PackageId>
+		<Title>Umbraco CMS Integrations: Commerce - Shopify</Title>
+		<Description>An extension for Umbraco CMS providing a products picker and rendering component for Shopify.</Description>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+		<Version>1.0.0</Version>
+		<Authors>Umbraco HQ</Authors>
+		<Company>Umbraco</Company>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="UmbracoCms.Web" version="8.5.4" />
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+		<PackageReference Include="UmbracoCms.Web" version="8.5.4" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\**\*.*">
-      <Pack>true</Pack>
-      <PackagePath>content\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
-    </Content>
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Umbraco.Cms.Integrations.Shared\Umbraco.Cms.Integrations.Shared.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\**\*.*">
+			<Pack>true</Pack>
+			<PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\**\*.*">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Umbraco.Cms.Integrations.Shared\Umbraco.Cms.Integrations.Shared.csproj" />
+	</ItemGroup>
+
+	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
+		<ItemGroup>
+			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
+		</ItemGroup>
+	</Target>
 
 </Project>

@@ -1,13 +1,21 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Http;
-using Newtonsoft.Json;
+﻿using System.Threading.Tasks;
+
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
 using Umbraco.Cms.Integrations.Shared.Models;
-using Umbraco.Web.Mvc;
 using Umbraco.Cms.Integrations.Shared.Models.Dtos;
 using Umbraco.Cms.Integrations.Shared.Services;
+
+
+#if NETCOREAPP
+using Microsoft.AspNetCore.Mvc;
+
+using Umbraco.Cms.Web.BackOffice.Controllers;
+using Umbraco.Cms.Web.Common.Attributes;
+#else
+using System.Web.Http;
+using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
+#endif
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Controllers
 {
@@ -16,13 +24,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Controllers
     {
         private readonly IApiService<ProductsListDto> _apiService;
 
-        private readonly ICacheHelper _cacheHelper;
-
-        public ProductsController(IApiService<ProductsListDto> apiService, ICacheHelper cacheHelper)
+        public ProductsController(IApiService<ProductsListDto> apiService)
         {
             _apiService = apiService;
-
-            _cacheHelper = cacheHelper;
         }
 
         [HttpGet]

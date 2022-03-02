@@ -33,13 +33,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.SE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shopify", "Shopify", "{D4E7EA3B-CDC4-4F87-BD06-951221CEAABD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Commerce.Shopify", "Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj", "{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Commerce.Shopify", "Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj", "{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.Hubspot.Tests", "Umbraco.Cms.Integrations.Crm.Hubspot.Tests\Umbraco.Cms.Integrations.Crm.Hubspot.Tests.csproj", "{1C5F18D0-A32F-481B-AF03-D862CFB02F5F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{EBF16D40-2F6A-42CA-88CF-E314567D8163}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Shared", "Umbraco.Cms.Integrations.Shared\Umbraco.Cms.Integrations.Shared.csproj", "{E380C97F-7A0D-4819-8145-A67CE4143E31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Shared", "Umbraco.Cms.Integrations.Shared\Umbraco.Cms.Integrations.Shared.csproj", "{E380C97F-7A0D-4819-8145-A67CE4143E31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Testsite.V9", "Umbraco.Cms.Integrations.Testsite.V9\Umbraco.Cms.Integrations.Testsite.V9.csproj", "{178A53E1-6D56-4446-AB45-87E84ED92326}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{E380C97F-7A0D-4819-8145-A67CE4143E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E380C97F-7A0D-4819-8145-A67CE4143E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E380C97F-7A0D-4819-8145-A67CE4143E31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{178A53E1-6D56-4446-AB45-87E84ED92326}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{178A53E1-6D56-4446-AB45-87E84ED92326}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{178A53E1-6D56-4446-AB45-87E84ED92326}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{178A53E1-6D56-4446-AB45-87E84ED92326}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
