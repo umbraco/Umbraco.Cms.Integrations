@@ -5,17 +5,30 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+
+#if NETCOREAPP
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Web.BackOffice.Controllers;
+using Umbraco.Cms.Web.Common.Attributes;
+#else
 using System.Web.Http;
+using System.Configuration;
+
+using Umbraco.Core.Logging;
+using Umbraco.Web.Mvc;
+using Umbraco.Web.WebApi;
+#endif
 
 using Newtonsoft.Json;
 
+using Umbraco.Cms.Integrations.Crm.Hubspot.Resources;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
-using Umbraco.Core.Logging;
-using Umbraco.Web.Mvc;
-using Umbraco.Web.WebApi;
+
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
 {
@@ -28,11 +41,16 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
         // Access to the client within the class is via ClientFactory(), allowing us to mock the responses in tests.
         public static Func<HttpClient> ClientFactory = () => s_client;
 
-        private readonly IAppSettings _appSettings;
+        // public property to support unit tests
+        public HubspotSettings Options;
 
         private readonly ITokenService _tokenService;
 
+#if NETCOREAPP
+        private readonly ILogger<FormsController> _logger;
+#else
         private readonly ILogger _logger;
+#endif
 
         public const string OAuthClientId = "8b4db9a8-3b78-48bc-85b0-96a4211a1c83";
         private const string OAuthScopes = "oauth forms"; // oauth forms
@@ -47,22 +65,37 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             "https://app-eu1.hubspot.com/oauth/authorize?client_id={0}&redirect_uri={1}&scope={2}";
         private const string HubspotFormsApiEndpoint = "https://api.hubapi.com/forms/v2/forms";
 
-        public FormsController(IAppSettings appSettings, ITokenService tokenService, ILogger logger)
+#if NETCOREAPP
+        public FormsController(IOptions<HubspotSettings> options, ITokenService tokenService, ILogger<FormsController> logger)
         {
-            _appSettings = appSettings;
+            Options = options.Value;
 
             _tokenService = tokenService;
 
             _logger = logger;
         }
+#else
+        public FormsController(ITokenService tokenService, ILogger logger)
+        {
+            Options = new HubspotSettings(ConfigurationManager.AppSettings);
+
+            _tokenService = tokenService;
+
+            _logger = logger;
+        }
+#endif
 
         public async Task<ResponseDto> GetAll()
         {
-            var hubspotApiKey = _appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotApiKey];
+            var hubspotApiKey = Options.ApiKey;
 
             if (string.IsNullOrEmpty(hubspotApiKey))
             {
-                _logger.Info<FormsController>(message: "Cannot access Hubspot - API key is missing");
+#if NETCOREAPP
+                _logger.LogInformation(message: LoggingResources.ApiKeyMissing);
+#else
+                _logger.Info<FormsController>(message: LoggingResources.ApiKeyMissing);
+#endif
 
                 return new ResponseDto { IsValid = false };
             }
@@ -71,9 +104,12 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
 
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                var result = await response.Content.ReadAsStringAsync();
-                _logger.Error<FormsController>(
-                    $"Failed to fetch forms from Hubspot using API key: {response.ReasonPhrase}");
+#if NETCOREAPP
+                _logger.LogError(string.Format(LoggingResources.ApiFetchFormsFailed, response.ReasonPhrase));
+#else
+                _logger.Error<FormsController>(string.Format(LoggingResources.ApiFetchFormsFailed, response.ReasonPhrase));
+#endif
+                
                 return new ResponseDto { IsExpired = true };
             }
 
@@ -98,7 +134,11 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
                 return responseDto;
             }
 
-            _logger.Error<FormsController>($"Failed to fetch forms from Hubspot using API key: {response.StatusCode} {response.ReasonPhrase}");
+#if NETCOREAPP
+            _logger.LogError(string.Format(LoggingResources.ApiFetchFormsFailed, response.StatusCode + " " + response.ReasonPhrase));
+#else
+            _logger.Error<FormsController>(string.Format(LoggingResources.ApiFetchFormsFailed, response.StatusCode + " " + response.ReasonPhrase));
+#endif
 
             return new ResponseDto();
         }
@@ -108,8 +148,12 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             _tokenService.TryGetParameters(AccessTokenDbKey, out string accessToken);
             if (string.IsNullOrEmpty(accessToken))
             {
-                _logger.Info<FormsController>("Cannot access Hubspot - Access Token is missing.");
-                
+#if NETCOREAPP
+                _logger.LogInformation(LoggingResources.AccessTokenMissing);
+#else
+                _logger.Info<FormsController>(LoggingResources.AccessTokenMissing);
+#endif
+
                 return new ResponseDto { IsValid = false };
             }
 
@@ -123,11 +167,12 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             var response = await ClientFactory().SendAsync(requestMessage);
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                var result = await response.Content.ReadAsStringAsync();
+#if NETCOREAPP
+                _logger.LogError(string.Format(LoggingResources.OAuthFetchFormsFailed, response.ReasonPhrase));
+#else
+                _logger.Error<FormsController>(string.Format(LoggingResources.OAuthFetchFormsFailed, response.ReasonPhrase));
+#endif     
 
-                _logger.Error<FormsController>(
-                    $"Failed to fetch forms from Hubspot using OAuth: {response.ReasonPhrase}");
-                
                 return new ResponseDto { IsExpired = true };
             }
 
@@ -153,7 +198,11 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
                 return responseDto;
             }
 
-            _logger.Error<FormsController>($"Failed to fetch forms from Hubspot using OAuth: {response.StatusCode} {response.ReasonPhrase}");
+#if NETCOREAPP
+            _logger.LogError(string.Format(LoggingResources.OAuthFetchFormsFailed, response.StatusCode + " " + response.ReasonPhrase));
+#else
+                _logger.Error<FormsController>(string.Format(LoggingResources.OAuthFetchFormsFailed, response.StatusCode + " " + response.ReasonPhrase));
+#endif   
 
             return new ResponseDto();
         }
@@ -161,11 +210,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
         [HttpGet]
         public HubspotFormPickerSettings CheckConfiguration()
         {
-            if (string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotRegion]))
-                return new HubspotFormPickerSettings();
-
             return
-                !string.IsNullOrEmpty(_appSettings[AppSettingsConstants.UmbracoCmsIntegrationsCrmHubspotApiKey])
+                !string.IsNullOrEmpty(Options.ApiKey)
                     ? new HubspotFormPickerSettings { IsValid = true, Type = ConfigurationType.Api}
                     : !string.IsNullOrEmpty(OAuthClientId)
                        && !string.IsNullOrEmpty(OAuthScopes)

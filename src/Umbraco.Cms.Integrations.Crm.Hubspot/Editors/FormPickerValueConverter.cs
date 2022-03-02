@@ -1,8 +1,16 @@
 ﻿using Newtonsoft.Json.Linq;
+
 using System;
+
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models.ViewModels;
+
+#if NETCOREAPP
+using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Core.Models.PublishedContent;
+#else
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
+#endif
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Editors
 {

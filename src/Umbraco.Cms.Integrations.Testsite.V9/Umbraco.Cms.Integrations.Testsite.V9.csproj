@@ -33,6 +33,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj" />
+      <ProjectReference Include="..\Umbraco.Cms.Integrations.Crm.Hubspot\Umbraco.Cms.Integrations.Crm.Hubspot.csproj" />
     </ItemGroup>
 
 
@@ -72,6 +73,46 @@
       </Content>
       <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPickerSettings.html">
         <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\css\styles.css">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\formpicker.controller.js">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\hubspot.resource.js">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\hubspot.service.js">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\settings.controller.js">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\package.manifest">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\Render\HubspotForm.cshtml">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\formpicker.html">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\formpickereditor.html">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+        <Pack>true</Pack>
+      </Content>
+      <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\settings.html">
+        <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
         <Pack>true</Pack>
       </Content>
     </ItemGroup>

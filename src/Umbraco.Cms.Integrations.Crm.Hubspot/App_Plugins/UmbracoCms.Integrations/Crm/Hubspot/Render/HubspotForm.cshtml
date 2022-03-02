@@ -8,10 +8,24 @@
 }
 
 <script charset="utf-8" type="text/javascript" src="@hbsptScriptPath"></script>
-<script>
+@if (string.IsNullOrEmpty(region))
+{
+    <script>
+        hbspt.forms.create({
+            portalId: "@Model.PortalId",
+            formId: "@Model.Id"
+        });
+    </script>
+
+}
+else
+{
+    <script>
         hbspt.forms.create({
             region: "@region",
             portalId: "@Model.PortalId",
             formId: "@Model.Id"
         });
-</script>
+    </script>
+
+}

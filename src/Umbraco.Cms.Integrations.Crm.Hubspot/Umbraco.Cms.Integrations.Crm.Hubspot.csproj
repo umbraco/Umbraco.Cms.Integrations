@@ -1,29 +1,51 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net472;net50</TargetFrameworks>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <PackageId>Umbraco.Cms.Integrations.Crm.Hubspot</PackageId>
-    <Title>Umbraco CMS Integrations: CRM - Hubspot</Title>
-    <Description>An extension for Umbraco CMS providing a form picker and rendering component for Hubspot.</Description>
-    <PackageIconUrl></PackageIconUrl>
-    <PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-    <Version>1.0.0-alpha001</Version>
-    <Authors>Umbraco HQ</Authors>
-    <Company>Umbraco</Company>
-  </PropertyGroup>
+	<PropertyGroup>
+		<PackageId>Umbraco.Cms.Integrations.Crm.Hubspot</PackageId>
+		<Title>Umbraco CMS Integrations: CRM - Hubspot</Title>
+		<Description>An extension for Umbraco CMS providing a form picker and rendering component for Hubspot.</Description>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+		<Version>1.0.0-alpha001</Version>
+		<Authors>Umbraco HQ</Authors>
+		<Company>Umbraco</Company>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="UmbracoCms.Web" version="8.4.0" />
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+		<PackageReference Include="UmbracoCms.Web" version="8.4.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\**\*.*">
-      <Pack>true</Pack>
-      <PackagePath>content\App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
-    </Content>
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\**\*.*">
+			<Pack>true</Pack>
+			<PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+		</Content>
+		<None Include="build\**\*.*">
+			<Pack>True</Pack>
+			<PackagePath>buildTransitive</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\**\*.*">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
+		<ItemGroup>
+			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
+		</ItemGroup>
+	</Target>
 
 </Project>
