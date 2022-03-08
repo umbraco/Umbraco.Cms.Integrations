@@ -12,7 +12,7 @@
                     </div>
                     <div class="hsOverlayGroup">
                         <ul class="hsFormsList">
-                            <li ng-repeat="form in vm.hubspotFormsList | orderBy:'name' | filter:vm.searchTerm" ng-click="model.pickForm(form, vm.euRegion)" class="ng-scope" role="button" tabindex="0">
+                            <li ng-repeat="form in vm.hubspotFormsList | orderBy:'name' | filter:vm.searchTerm" ng-click="model.pickForm(form)" class="ng-scope" role="button" tabindex="0">
                                 <a href="" ng-attr-title="form.name">
                                     <i class="icon-umb-contour"></i>
                                     <span class="formLine">{{form.name}}</span>

@@ -16,9 +16,9 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Helpers
     public static class HubspotHtmlExtensions
     {
 #if NETCOREAPP
-        public static IHtmlContent RenderHubspotForm(this HtmlHelper htmlHelper, HubspotFormViewModel hubspotFormViewModel)
+        public static IHtmlContent RenderHubspotForm(this IHtmlHelper<dynamic> htmlHelper, HubspotFormViewModel hubspotFormViewModel)
         {
-            return htmlHelper.Partial("~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/Render/HubspotForm.cshtml", hubspotFormViewModel ?? new HubspotFormViewModel());
+            return htmlHelper.Partial("~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/Render/HubspotFormV9.cshtml", hubspotFormViewModel ?? new HubspotFormViewModel());
         }
 #else
         public static IHtmlString RenderHubspotForm(this HtmlHelper htmlHelper, HubspotFormViewModel hubspotFormViewModel)

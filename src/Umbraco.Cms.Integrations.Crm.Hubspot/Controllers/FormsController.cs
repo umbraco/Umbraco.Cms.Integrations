@@ -126,8 +126,10 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
                         Name = hubspotForm.Name,
                         PortalId = hubspotForm.PortalId.ToString(),
                         Id = hubspotForm.Guid,
+                        Region = Options.Region,
                         Fields = string.Join(", ", hubspotForm.FormFieldGroups.SelectMany(x => x.Fields).Select(y => y.Label))
                     };
+
                     responseDto.Forms.Add(hubspotFormDto);
                 }
 
@@ -190,6 +192,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
                         Name = hubspotForm.Name,
                         PortalId = hubspotForm.PortalId.ToString(),
                         Id = hubspotForm.Guid,
+                        Region = Options.Region,
                         Fields = string.Join(", ", hubspotForm.FormFieldGroups.SelectMany(x => x.Fields).Select(y => y.Label))
                     };
                     responseDto.Forms.Add(hubspotFormDto);
