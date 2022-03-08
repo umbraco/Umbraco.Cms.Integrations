@@ -4,7 +4,9 @@ This integration provides a form picker and rendering component for forms manage
 
 ## Prerequisites
 
-Requires minimum version of Umbraco CMS: 8.5.4.
+Required minimum versions of Umbraco CMS: 
+- 8.5.4 for version 8
+- 9.0.1 for version 9
 
 ## How To Use
 
