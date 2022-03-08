@@ -22,6 +22,7 @@
 	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
 		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" version="9.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -40,6 +41,10 @@
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\Render\HubspotFormV9.cshtml" />
 	</ItemGroup>
 
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
