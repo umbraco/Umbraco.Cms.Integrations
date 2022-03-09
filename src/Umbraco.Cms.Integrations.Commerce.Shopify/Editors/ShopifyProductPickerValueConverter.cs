@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.ViewModels;
-using Umbraco.Cms.Integrations.Shared.Services;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
 
 #if NETCOREAPP
 using Umbraco.Cms.Core.PropertyEditors;
@@ -18,9 +17,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 {
     public class ShopifyProductPickerValueConverter : PropertyValueConverterBase
     {
-        private readonly IApiService<ProductsListDto> _apiService;
+        private readonly IShopifyService _apiService;
 
-        public ShopifyProductPickerValueConverter(IApiService<ProductsListDto> apiService)
+        public ShopifyProductPickerValueConverter(IShopifyService apiService)
         {
             _apiService = apiService;
         }

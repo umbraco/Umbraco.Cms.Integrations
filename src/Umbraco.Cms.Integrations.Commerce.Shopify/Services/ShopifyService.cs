@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
-using Umbraco.Cms.Integrations.Shared.Models;
-using Umbraco.Cms.Integrations.Shared.Models.Dtos;
-using Umbraco.Cms.Integrations.Shared.Resolvers;
-using Umbraco.Cms.Integrations.Shared.Services;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Resolvers;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Resources;
 
 #if NETCOREAPP
@@ -24,14 +22,28 @@ using Umbraco.Core.Logging;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
-    public class ShopifyService: BaseService, IApiService<ProductsListDto>
+    public class ShopifyService: IShopifyService
     {
         private readonly JsonSerializerSettings _serializerSettings;
 
         private ShopifySettings Options;
 
 #if NETCOREAPP
-        public ShopifyService(ILogger<ShopifyService> logger, IOptions<ShopifySettings> options, ITokenService tokenService) : base(logger, tokenService)
+        private readonly ILogger<ShopifyService> _umbCoreLogger;
+#else
+        private readonly ILogger _umbCoreLogger;
+#endif
+
+        private readonly ITokenService _tokenService;
+
+        // Using a static HttpClient (see: https://www.aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/).
+        private static readonly HttpClient Client = new HttpClient();
+
+        // Access to the client within the class is via ClientFactory(), allowing us to mock the responses in tests.
+        public static Func<HttpClient> ClientFactory = () => Client;
+
+#if NETCOREAPP
+        public ShopifyService(ILogger<ShopifyService> logger, IOptions<ShopifySettings> options, ITokenService tokenService)
         {
             var resolver = new JsonPropertyRenameContractResolver();
             resolver.RenameProperty(typeof(ResponseDto<ProductsListDto>), "Result", "products");
@@ -42,9 +54,13 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             };
 
             Options = options.Value;
+
+            _umbCoreLogger = logger;
+
+            _tokenService = tokenService;
         }
 #else
-        public ShopifyService(ILogger logger, ITokenService tokenService): base(logger, tokenService)
+        public ShopifyService(ILogger logger, ITokenService tokenService)
         {
             var resolver = new JsonPropertyRenameContractResolver();
             resolver.RenameProperty(typeof(ResponseDto<ProductsListDto>), "Result", "products");
@@ -55,6 +71,10 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             };
 
             Options = new ShopifySettings(ConfigurationManager.AppSettings);
+
+            _umbCoreLogger = logger;
+
+            _tokenService = tokenService;
         }
 #endif
 
@@ -68,8 +88,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
                 !string.IsNullOrEmpty(Options.AccessToken)
                     ? new EditorSettings { IsValid = true, Type = ConfigurationType.Api }
                     : !string.IsNullOrEmpty(SettingsService.OAuthClientId)
-                      && !string.IsNullOrEmpty(OAuthProxyBaseUrl)
-                      && !string.IsNullOrEmpty(OAuthProxyEndpoint)
+                      && !string.IsNullOrEmpty(SettingsService.OAuthProxyBaseUrl)
+                      && !string.IsNullOrEmpty(SettingsService.OAuthProxyEndpoint)
                         ? new EditorSettings { IsValid = true, Type = ConfigurationType.OAuth }
                         : new EditorSettings();
         }
@@ -86,14 +106,14 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             var data = new Dictionary<string, string>
             {
                 { "client_id", SettingsService.OAuthClientId },
-                { "redirect_uri", string.Format(SettingsService.ShopifyOAuthProxyUrl, OAuthProxyBaseUrl) },
+                { "redirect_uri", string.Format(SettingsService.ShopifyOAuthProxyUrl, SettingsService.OAuthProxyBaseUrl) },
                 { "code", request.Code }
             };
 
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri(string.Format(OAuthProxyEndpoint, OAuthProxyBaseUrl)),
+                RequestUri = new Uri(string.Format(SettingsService.OAuthProxyEndpoint, SettingsService.OAuthProxyBaseUrl)),
                 Content = new FormUrlEncodedContent(data)
             };
             requestMessage.Headers.Add("service_name", SettingsService.ServiceName);
@@ -106,7 +126,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 
                 var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
 
-                TokenService.SaveParameters(SettingsService.AccessTokenDbKey, tokenDto.AccessToken);
+                _tokenService.SaveParameters(SettingsService.AccessTokenDbKey, tokenDto.AccessToken);
 
                 return result;
             }
@@ -124,14 +144,14 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 
         public async Task<ResponseDto<ProductsListDto>> ValidateAccessToken()
         {
-            TokenService.TryGetParameters(SettingsService.AccessTokenDbKey, out string accessToken);
+            _tokenService.TryGetParameters(SettingsService.AccessTokenDbKey, out string accessToken);
 
             if (string.IsNullOrEmpty(accessToken))
             {
 #if NETCOREAPP
-                UmbCoreLogger.LogInformation(LoggingResources.AccessTokenMissing);
+                _umbCoreLogger.LogInformation(LoggingResources.AccessTokenMissing);
 #else
-                UmbCoreLogger.Info<ShopifyService>(message: LoggingResources.AccessTokenMissing);
+                _umbCoreLogger.Info<ShopifyService>(message: LoggingResources.AccessTokenMissing);
 #endif
 
                 return new ResponseDto<ProductsListDto>();
@@ -157,14 +177,14 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 
         public void RevokeAccessToken()
         {
-            TokenService.RemoveParameters(Constants.UmbracoCmsIntegrationsCommerceShopifyAccessToken);
+            _tokenService.RemoveParameters(Constants.UmbracoCmsIntegrationsCommerceShopifyAccessToken);
         }
 
         public async Task<ResponseDto<ProductsListDto>> GetResults()
         {
             string accessToken;
             if (GetApiConfiguration().Type.Value == ConfigurationType.OAuth.Value)
-                TokenService.TryGetParameters(SettingsService.AccessTokenDbKey, out accessToken);
+                _tokenService.TryGetParameters(SettingsService.AccessTokenDbKey, out accessToken);
             else
             {
                 accessToken = Options.AccessToken;
@@ -173,9 +193,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             if (string.IsNullOrEmpty(accessToken))
             {
 #if NETCOREAPP
-                UmbCoreLogger.LogInformation(LoggingResources.AccessTokenMissing);
+                _umbCoreLogger.LogInformation(LoggingResources.AccessTokenMissing);
 #else
-                UmbCoreLogger.Info<ShopifyService>(message: LoggingResources.AccessTokenMissing);
+                _umbCoreLogger.Info<ShopifyService>(message: LoggingResources.AccessTokenMissing);
 #endif
 
                 return new ResponseDto<ProductsListDto>();
@@ -194,9 +214,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
 #if NETCOREAPP
-                UmbCoreLogger.LogError(string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
+                _umbCoreLogger.LogError(string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
 #else
-                UmbCoreLogger.Error<ShopifyService>(string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
+                _umbCoreLogger.Error<ShopifyService>(string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
 #endif
 
                 return new ResponseDto<ProductsListDto> { Message = response.ReasonPhrase };

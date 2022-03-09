@@ -3,8 +3,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
     public class SettingsService
     {
-        public static string OAuthProxyBaseUrl = "https://localhost:44364/";
-        
+        public static string OAuthProxyBaseUrl = "https://hubspot-forms-auth.umbraco.com/";  // for local testing: "https://localhost:44364/";
+
         public static string OAuthProxyEndpoint = "{0}oauth/v1/token";
 
         public static string ShopifyOAuthProxyUrl = $"{OAuthProxyBaseUrl}oauth/shopify";

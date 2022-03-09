@@ -42,10 +42,6 @@
 		</None>
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\Umbraco.Cms.Integrations.Shared\Umbraco.Cms.Integrations.Shared.csproj" />
-	</ItemGroup>
-
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
 		<ItemGroup>
 			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
