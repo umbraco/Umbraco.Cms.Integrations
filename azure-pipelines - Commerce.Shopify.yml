@@ -1,5 +1,5 @@
 trigger:
-- feature/shopify-integration
+- main
 
 pool:
   vmImage: 'windows-latest'
