@@ -1,9 +1,7 @@
 ﻿using System.Threading.Tasks;
-
+using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
-using Umbraco.Cms.Integrations.Shared.Models;
-using Umbraco.Cms.Integrations.Shared.Models.Dtos;
-using Umbraco.Cms.Integrations.Shared.Services;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
 
 
 #if NETCOREAPP
@@ -22,9 +20,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Controllers
     [PluginController("UmbracoCmsIntegrationsCommerceShopify")]
     public class ProductsController : UmbracoAuthorizedApiController
     {
-        private readonly IApiService<ProductsListDto> _apiService;
+        private readonly IShopifyService _apiService;
 
-        public ProductsController(IApiService<ProductsListDto> apiService)
+        public ProductsController(IShopifyService apiService)
         {
             _apiService = apiService;
         }

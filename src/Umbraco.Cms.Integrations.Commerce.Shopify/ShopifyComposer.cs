@@ -1,7 +1,4 @@
-﻿
-using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
-using Umbraco.Cms.Integrations.Shared.Services;
+﻿using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
 
 #if NETCOREAPP
 using Microsoft.Extensions.DependencyInjection;
@@ -25,12 +22,20 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify
             var options = builder.Services.AddOptions<ShopifySettings>()
                 .Bind(builder.Config.GetSection(Constants.Configuration.Settings));
 
-            builder.Services.AddSingleton<IApiService<ProductsListDto>, ShopifyService>();
+            builder.Services.AddSingleton<ITokenService, TokenService>();
+
+            builder.Services.AddSingleton<ICacheHelper, CacheHelper>();
+
+            builder.Services.AddSingleton<IShopifyService, ShopifyService>();
         }
 #else
-public void Compose(Composition composition)
+        public void Compose(Composition composition)
         {
-            composition.Register<IApiService<ProductsListDto>, ShopifyService>(Lifetime.Singleton);
+            composition.Register<ITokenService, TokenService>(Lifetime.Singleton);
+
+            composition.Register<ICacheHelper, CacheHelper>(Lifetime.Singleton);
+
+            composition.Register<IShopifyService, ShopifyService>(Lifetime.Singleton);
         }
 #endif
     }
