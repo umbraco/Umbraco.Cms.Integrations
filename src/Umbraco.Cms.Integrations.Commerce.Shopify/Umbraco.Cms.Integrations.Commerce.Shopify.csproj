@@ -43,10 +43,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\Umbraco.Cms.Integrations.Shared\Umbraco.Cms.Integrations.Shared.csproj" />
 	</ItemGroup>
 
