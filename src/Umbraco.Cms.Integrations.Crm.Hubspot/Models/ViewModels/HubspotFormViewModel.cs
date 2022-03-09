@@ -9,6 +9,6 @@
         public string Region { get; set; }
 
         public string ScriptPath =>
-            $"//js{(string.IsNullOrEmpty(Region) ? string.Empty : Region.ToLowerInvariant())}.hsforms.net/forms/shell.js";
+            $"//js{(string.IsNullOrEmpty(Region) ? string.Empty : "-" + Region.ToLowerInvariant())}.hsforms.net/forms/shell.js";
     }
 }
