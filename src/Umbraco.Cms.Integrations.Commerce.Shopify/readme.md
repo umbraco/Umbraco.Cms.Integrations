@@ -5,7 +5,10 @@ for products within a simple [Shopify](https://www.shopify.com/) store or throug
 
 ## Prerequisites
 
-Requires minimum version of Umbraco CMS: 8.5.4.
+Required minimum versions of Umbraco CMS:
+
+- 8.5.4 for version 8
+- 9.0.1 for version 9
 
 ## How To Use
 
