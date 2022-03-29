@@ -1,0 +1,60 @@
+﻿<div ng-controller="Umbraco.Cms.Integrations.Automation.Zapier.ZapConfigController as vm"> 
+    <umb-box>
+        <umb-box-header title="Configuration"></umb-box-header>
+        <umb-content>
+            <div class="mt2 ml2">
+                <input id="inWebHookUrl" type="text" ng-model="vm.webHookUrl" class="w-20 mb0" placeholder="WebHook URL"/>
+                <select id="selContentTypes" ng-model="vm.selectedContentType" class="mb0">
+                    <option value="">Please select a content type</option>
+                    <option ng-repeat="item in vm.contentTypes" value="{{ item.alias }}">{{ item.name }}</option>
+                </select>
+                <umb-button action="vm.onAdd()"
+                            type="button"
+                            button-style="primary"
+                            label="Add">
+                </umb-button>
+            </div>
+            <div class="mt2">
+                <div class="umb-table" ng-if="vm.contentConfigs">
+                    <!-- Listviews head section -->
+                    <div class="umb-table-head">
+                        <div class="umb-table-row">
+                            <div class="umb-table-cell">
+                            </div>
+                            <div class="umb-table-cell">
+                                <a class="umb-table-head__link" href="#" prevent-default>
+                                    <span>Content Type Alias</span>
+                                </a>
+                            </div>
+                            <div class="umb-table-cell">
+                                <a class="umb-table-head__link" href="#" prevent-default>
+                                    <span>WebHook URL</span>
+                                </a>
+                            </div>
+                            <div class="umb-table-cell"></div>
+                        </div>
+                    </div>
+
+                    <!-- Listview body section -->
+                    <div class="umb-table-body">
+                        <div class="umb-table-row"
+                             ng-repeat="row in vm.contentConfigs track by $index">
+                            <div class="umb-table-cell"></div>
+                            <div class="umb-table-cell">
+                                <span ng-bind="row.contentTypeAlias"></span>
+                            </div>
+                            <div class="umb-table-cell">
+                                <span ng-bind="row.webHookUrl"></span>
+                            </div>
+                            <div class="umb-table-cell">
+                                <div class="umb-forms-mapping-remove -no-margin-right">
+                                    <a href="javascript:void(0)" ng-click="vm.onDelete(row.id)"><i class="icon-trash"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </umb-content>
+    </umb-box>
+</div>
