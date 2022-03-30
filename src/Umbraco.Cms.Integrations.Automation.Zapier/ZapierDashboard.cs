@@ -5,7 +5,7 @@ using Umbraco.Core.Dashboards;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier
 {
-    [Weight(-10)]
+    [Weight(30)]
     public class ZapierDashboard : IDashboard
     {
         public string Alias => "zapierDashboard";

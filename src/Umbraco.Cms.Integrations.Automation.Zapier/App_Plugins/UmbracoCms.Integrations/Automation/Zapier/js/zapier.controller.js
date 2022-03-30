@@ -10,13 +10,12 @@
     getContentConfigs();
 
     vm.onAdd = function () {
-
-        const isValid =
-            umbracoCmsIntegrationsAutomationZapierValidationService.isValidConfig(vm.webHookUrl,
+        const validationResult =
+            umbracoCmsIntegrationsAutomationZapierValidationService.validateConfiguration(vm.webHookUrl,
                 vm.selectedContentType);
 
-        if (!isValid) {
-            notificationsService.warning("Zapier Content Config", "Zapier configuration is invalid");
+        if (validationResult.length > 0) {
+            notificationsService.warning("Zapier Content Config", validationResult);
             return;
         }
         
@@ -54,6 +53,8 @@
         vm.webHookUrl = "";
         vm.selectedContentType = "";
     }
+
+    
 }
 
 angular.module("umbraco")

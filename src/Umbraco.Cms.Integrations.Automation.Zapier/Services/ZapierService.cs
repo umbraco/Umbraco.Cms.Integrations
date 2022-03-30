@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 {
@@ -12,9 +13,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
         // Access to the client within the class is via ClientFactory(), allowing us to mock the responses in tests.
         public static Func<HttpClient> ClientFactory = () => s_client;
 
-        public string TriggerAsync(string requestUri, Dictionary<string, string> content)
+        public async Task<string> TriggerAsync(string requestUri, Dictionary<string, string> content)
         {
-            var result = ClientFactory().PostAsync(requestUri, new FormUrlEncodedContent(content)).GetAwaiter().GetResult();
+            var result = await ClientFactory().PostAsync(requestUri, new FormUrlEncodedContent(content));
 
             return result.IsSuccessStatusCode ? string.Empty : result.ReasonPhrase;
         }

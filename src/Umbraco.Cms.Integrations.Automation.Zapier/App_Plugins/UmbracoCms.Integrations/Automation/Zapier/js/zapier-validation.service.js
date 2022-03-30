@@ -1,8 +1,15 @@
 ﻿function zapierValidationService() {
-    return {
-        isValidConfig: (webHookUrl, contentTypeAlias) => {
 
-            if (webHookUrl === undefined || webHookUrl.length === 0) return false;
+    const resources = {
+        WebHookEmpty: "WebHook Url is required.",
+        WebHookUrlInvalid: "WebHook Url format is invalid.",
+        ContentTypeEmpty: "Content type is required."
+    };
+
+    return {
+        validateConfiguration: (webHookUrl, contentTypeAlias) => {
+
+            if (webHookUrl === undefined || webHookUrl.length === 0) return resources.WebHookEmpty;
 
             let url;
 
@@ -10,14 +17,14 @@
                 url = new URL(webHookUrl);
             }
             catch (_) {
-                return false;
+                return resources.WebHookUrlInvalid;
             }
 
-            if (!(url.protocol === "http:" || url.protocol === "https:")) return false;
+            if (!(url.protocol === "http:" || url.protocol === "https:")) return resources.WebHookUrlInvalid;
 
-            if (contentTypeAlias === undefined || contentTypeAlias.length === 0) return false;
+            if (contentTypeAlias === undefined || contentTypeAlias.length === 0) return resources.ContentTypeEmpty;
 
-            return true;
+            return "";
         }
     }
 }

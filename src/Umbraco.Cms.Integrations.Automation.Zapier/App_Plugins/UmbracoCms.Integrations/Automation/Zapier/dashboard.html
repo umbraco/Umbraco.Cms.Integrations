@@ -1,9 +1,9 @@
-﻿<div ng-controller="Umbraco.Cms.Integrations.Automation.Zapier.ZapConfigController as vm"> 
+﻿<div ng-controller="Umbraco.Cms.Integrations.Automation.Zapier.ZapConfigController as vm">
     <umb-box>
         <umb-box-header title="Configuration"></umb-box-header>
         <umb-content>
             <div class="mt2 ml2">
-                <input id="inWebHookUrl" type="text" ng-model="vm.webHookUrl" class="w-20 mb0" placeholder="WebHook URL"/>
+                <input id="inWebHookUrl" type="text" ng-model="vm.webHookUrl" class="w-20 mb0" placeholder="WebHook URL" />
                 <select id="selContentTypes" ng-model="vm.selectedContentType" class="mb0">
                     <option value="">Please select a content type</option>
                     <option ng-repeat="item in vm.contentTypes" value="{{ item.alias }}">{{ item.name }}</option>
@@ -31,7 +31,7 @@
                                     <span>WebHook URL</span>
                                 </a>
                             </div>
-                            <div class="umb-table-cell"></div>
+                            <div class="mr7"></div>
                         </div>
                     </div>
 
@@ -46,10 +46,15 @@
                             <div class="umb-table-cell">
                                 <span ng-bind="row.webHookUrl"></span>
                             </div>
-                            <div class="umb-table-cell">
-                                <div class="umb-forms-mapping-remove -no-margin-right">
-                                    <a href="javascript:void(0)" ng-click="vm.onDelete(row.id)"><i class="icon-trash"></i></a>
-                                </div>
+                            <div class="mr7" style="position: relative;">
+                                <a href="javascript:void(0)" ng-click="row.showDeletePrompt = true">
+                                    <i class="icon-trash"></i>
+                                </a>
+                                <umb-confirm-action ng-if="row.showDeletePrompt"
+                                                    direction="left"
+                                                    on-confirm="vm.onDelete(row.id)"
+                                                    on-cancel="row.showDeletePrompt = false">
+                                </umb-confirm-action>
                             </div>
                         </div>
                     </div>

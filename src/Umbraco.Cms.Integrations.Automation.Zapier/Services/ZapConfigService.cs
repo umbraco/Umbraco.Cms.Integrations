@@ -71,9 +71,12 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
             {
                 using (var scope = _scopeProvider.CreateScope())
                 {
-                    var entity = scope.Database.Query<ZapContentConfigTable.ZapContentConfig>().First(p => p.Id == id);
-
-                    scope.Database.Delete(entity);
+                    var entity = scope.Database.Query<ZapContentConfigTable.ZapContentConfig>().FirstOrDefault(p => p.Id == id);
+                    if (entity != null)
+                    {
+                        scope.Database.Delete(entity);
+                    }
+                    
                     scope.Complete();
                 }
 

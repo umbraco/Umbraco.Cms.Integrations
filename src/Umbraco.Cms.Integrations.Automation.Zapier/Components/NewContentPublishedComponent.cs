@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-
+using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
@@ -50,7 +50,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
             foreach (var node in e.PublishedEntities)
             {
                 var zapContentConfig = _zapConfigService.GetByAlias(node.ContentType.Alias);
-                if (zapContentConfig == null) return;
+                if (zapContentConfig == null) continue;
 
                 var content = new Dictionary<string, string>
                 {
@@ -58,7 +58,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
                     { Constants.Content.PublishDate, DateTime.UtcNow.ToString() }
                 };
 
-                var result = _zapierService.TriggerAsync(zapContentConfig.WebHookUrl, content);
+                var t = Task.Run(async () => await _zapierService.TriggerAsync(zapContentConfig.WebHookUrl, content));
+
+                var result = t.Result;
 
                 if(!string.IsNullOrEmpty(result))
                     _logger.Error<NewContentPublishedComponent>(result);
