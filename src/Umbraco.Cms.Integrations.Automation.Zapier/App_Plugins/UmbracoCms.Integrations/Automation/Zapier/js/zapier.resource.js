@@ -17,6 +17,10 @@
                 return umbRequestHelper.resourcePromise(
                     $http.get(`${apiEndpoint}/GetAll`), "Failed to get resource");
             },
+            triggerWebHook: function(webHookUrl, contentTypeName) {
+                return umbRequestHelper.resourcePromise(
+                    $http.post(`${apiEndpoint}/TriggerAsync`, { contentTypeName: contentTypeName, webHookUrl: webHookUrl }), "Failed to get resource");
+            },
             deleteConfig: function(id) {
                 return umbRequestHelper.resourcePromise(
                     $http.delete(`${apiEndpoint}/Delete?id=${id}`), "Failed to get resource");

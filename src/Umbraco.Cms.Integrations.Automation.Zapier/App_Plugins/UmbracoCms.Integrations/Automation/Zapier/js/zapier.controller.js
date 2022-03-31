@@ -2,6 +2,7 @@
 
     var vm = this;
 
+    vm.loading = false;
     vm.contentTypes = [];
     vm.contentConfigs = [];
 
@@ -19,13 +20,33 @@
             return;
         }
         
-        umbracoCmsIntegrationsAutomationZapierResource.addConfig(vm.webHookUrl, vm.selectedContentType).then(function (r) {
+        umbracoCmsIntegrationsAutomationZapierResource.addConfig(vm.webHookUrl, vm.selectedContentType).then(function (response) {
+
+            if (response.length > 0) {
+                notificationsService.warning("Zapier Content Config", response);
+                return;
+            }
 
             getContentTypes();
 
             getContentConfigs();
 
             reset();
+        });
+    }
+
+    vm.onTrigger = function (contentTypeName, webHookUrl) {
+
+        vm.loading = true;
+
+        umbracoCmsIntegrationsAutomationZapierResource.triggerWebHook(webHookUrl, contentTypeName).then(function(response) {
+
+            vm.loading = false;
+
+            if (response.length > 0)
+                notificationsService.warning("WebHook Trigger", response);
+            else
+                notificationsService.success("WebHook Trigger", "WebHook triggered successfully. Please check your Zap trigger for the newly submitted request.");
         });
     }
 

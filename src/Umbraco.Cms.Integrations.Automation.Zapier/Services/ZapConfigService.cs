@@ -92,13 +92,13 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
             }
         }
 
-        public ContentConfigDto GetByAlias(string contentAlias)
+        public ContentConfigDto GetByName(string contentName)
         {
             using (var scope = _scopeProvider.CreateScope())
             {
                 var entity =
-                    scope.Database.FirstOrDefault<ZapContentConfigTable.ZapContentConfig>("where ContentTypeAlias = @0",
-                        contentAlias);
+                    scope.Database.FirstOrDefault<ZapContentConfigTable.ZapContentConfig>("where ContentTypeName = @0",
+                        contentName);
 
                 return entity != null ? new ContentConfigDto(entity.WebHookUrl) : null;
             }

@@ -1,10 +1,38 @@
 ﻿<div ng-controller="Umbraco.Cms.Integrations.Automation.Zapier.ZapConfigController as vm">
     <umb-box>
-        <umb-box-header title="Configuration"></umb-box-header>
-        <umb-content>
-            <div class="mt2 ml2">
-                <input id="inWebHookUrl" type="text" ng-model="vm.webHookUrl" class="w-20 mb0" placeholder="WebHook URL" />
-                <select id="selContentTypes" ng-model="vm.selectedContentType" class="mb0">
+        <umb-box-header title="Content Properties"></umb-box-header>
+        <umb-box-content>
+            <div>
+                <p>
+                    <a href="https://zapier.com/">Zapier</a> is an online platform that helps you automate workflows by connecting your apps and services you use.
+                    This allows you to automate tasks without having to build this integration yourself.
+                    When an event happens in one app, Zapier can tell another app to perform (or do) a particular action - no code necessary.
+                </p>
+                <p>
+                    Automation is simply setting something up to run automatically. Automation is all around you, even if you don't realize it. 
+                    Take your smartphone, for example. You receive alerts whenever you receive a text message, a voice mail, or an email.
+                </p>
+                <p>
+                    The heart of any automation boils down to this simple command: <b>WHEN</b> <span>this happens</span> <b>THEN</b> <span>do that</span>.
+                </p>
+                <p>
+                    A Zap is an automated workflow that tells your apps to follow this simple command: "When this happens, do that."
+                    Every Zap has a trigger and one or more actions. A trigger is an event that starts a Zap, and an action is what your Zap does for you.
+                </p>
+                <p>
+                    When a Zap runs, each action it completes counts as one task.
+                    Zap triggers use webhooks to intercept the client's request and to execute the actions. Webhooks are automated messages sent from apps when something happens.
+                    Read Zapier Webhooks guide <a href="https://zapier.com/blog/what-are-webhooks/">here</a>.
+                </p>
+                <p>
+                    Using the filters below, you can map content items with Zap triggers Webhooks, and you will be able to: <br/>
+                    &nbsp; - Enable Zap trigger invoke when a specific content is published <br/>
+                    &nbsp; - Trigger a sample request using the Webhook URL and then reviewing the request data while creating the Zap trigger
+                </p>
+            </div>
+            <div class="mt3">
+                <input id="inWebHookUrl" type="text" ng-model="vm.webHookUrl" class="w-20 mb0" placeholder="WebHook URL" no-dirty-check />
+                <select id="selContentTypes" ng-model="vm.selectedContentType" class="mb0" no-dirty-check>
                     <option value="">Please select a content type</option>
                     <option ng-repeat="item in vm.contentTypes" value="{{ item.name }}">{{ item.name }}</option>
                 </select>
@@ -14,7 +42,15 @@
                             label="Add">
                 </umb-button>
             </div>
+        </umb-box-content>
+    </umb-box>
+    <umb-box>
+        <umb-box-header title="Results"></umb-box-header>
+        <umb-content>
             <div class="mt2">
+
+                <umb-load-indicator ng-show="vm.loading"></umb-load-indicator>
+
                 <div class="umb-table" ng-if="vm.contentConfigs">
                     <!-- Listviews head section -->
                     <div class="umb-table-head">
@@ -47,6 +83,9 @@
                                 <span ng-bind="row.webHookUrl"></span>
                             </div>
                             <div class="mr7" style="position: relative;">
+                                <a href="javascript:void(0)" ng-click="vm.onTrigger(row.contentTypeName, row.webHookUrl)" title="trigger webHook">
+                                    <i class="icon-play"></i>
+                                </a>
                                 <a href="javascript:void(0)" ng-click="row.showDeletePrompt = true">
                                     <i class="icon-trash"></i>
                                 </a>

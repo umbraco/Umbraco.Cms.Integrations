@@ -49,12 +49,12 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
         {
             foreach (var node in e.PublishedEntities)
             {
-                var zapContentConfig = _zapConfigService.GetByAlias(node.ContentType.Alias);
+                var zapContentConfig = _zapConfigService.GetByName(node.ContentType.Name);
                 if (zapContentConfig == null) continue;
 
                 var content = new Dictionary<string, string>
                 {
-                    { Constants.Content.Name, node.ContentType.Name },
+                    { Constants.Content.Name, node.Name },
                     { Constants.Content.PublishDate, DateTime.UtcNow.ToString() }
                 };
 

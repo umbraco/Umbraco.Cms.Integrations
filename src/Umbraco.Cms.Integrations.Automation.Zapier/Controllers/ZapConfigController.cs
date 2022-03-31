@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -45,13 +44,14 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Add([FromBody] ContentConfigDto dto)
+        public string Add([FromBody] ContentConfigDto dto)
         {
-            var result = _zapConfigService.Add(dto);
-            if (!string.IsNullOrEmpty(result)) return result;
+            var getByNameResult = _zapConfigService.GetByName(dto.ContentTypeName);
+            if (getByNameResult != null) return "A record for this content type already exists.";
 
-            return await _zapierService.TriggerAsync(dto.WebHookUrl,
-                new Dictionary<string, string> { { Constants.Content.Name, dto.ContentTypeName } });
+            var result = _zapConfigService.Add(dto);
+            
+            return result;
         } 
 
         [HttpGet]
@@ -59,5 +59,12 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
         [HttpDelete]
         public string Delete(int id) => _zapConfigService.Delete(id);
+
+        [HttpPost]
+        public async Task<string> TriggerAsync([FromBody] ContentConfigDto dto)
+        {
+            return await _zapierService.TriggerAsync(dto.WebHookUrl,
+                new Dictionary<string, string> { { Constants.Content.Name, dto.ContentTypeName } });
+        }
     }
 }
