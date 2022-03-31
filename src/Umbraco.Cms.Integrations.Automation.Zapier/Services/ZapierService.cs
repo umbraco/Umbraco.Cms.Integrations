@@ -15,9 +15,20 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 
         public async Task<string> TriggerAsync(string requestUri, Dictionary<string, string> content)
         {
-            var result = await ClientFactory().PostAsync(requestUri, new FormUrlEncodedContent(content));
+            try
+            {
+                var result = await ClientFactory().PostAsync(requestUri, new FormUrlEncodedContent(content));
 
-            return result.IsSuccessStatusCode ? string.Empty : result.ReasonPhrase;
+                return result.IsSuccessStatusCode ? string.Empty : result.ReasonPhrase;
+            }
+            catch (HttpRequestException)
+            {
+                return "Could not access the requested URL: " + requestUri;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

@@ -45,19 +45,13 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
         }
 
         [HttpPost]
-        public string Add([FromBody] ContentConfigDto dto)
+        public async Task<string> Add([FromBody] ContentConfigDto dto)
         {
             var result = _zapConfigService.Add(dto);
             if (!string.IsNullOrEmpty(result)) return result;
 
-            var t = Task.Run(async () => await _zapierService.TriggerAsync(dto.WebHookUrl,
-                new Dictionary<string, string> {{Constants.Content.Name, dto.ContentTypeName}}));
-
-            result = t.Result;
-
-            if (!string.IsNullOrEmpty(result)) return result;
-
-            return result;
+            return await _zapierService.TriggerAsync(dto.WebHookUrl,
+                new Dictionary<string, string> { { Constants.Content.Name, dto.ContentTypeName } });
         } 
 
         [HttpGet]
