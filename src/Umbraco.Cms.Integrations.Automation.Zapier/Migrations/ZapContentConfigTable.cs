@@ -35,8 +35,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
             [Column("Id")]
             public int Id { get; set; }
 
-            [Column("ContentTypeAlias")]
-            public string ContentTypeAlias { get; set; }
+            [Column("ContentTypeName")]
+            public string ContentTypeName { get; set; }
 
             [Column("WebHookUrl")] 
             public string WebHookUrl { get; set; }

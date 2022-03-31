@@ -9,9 +9,9 @@
                     $http.get(`${apiEndpoint}/GetContentTypes`),
                     "Failed to get resource");
             },
-            addConfig: function (webHookUrl, contentTypeAlias) {
+            addConfig: function (webHookUrl, contentTypeName) {
                 return umbRequestHelper.resourcePromise(
-                    $http.post(`${apiEndpoint}/Add`, { contentTypeAlias: contentTypeAlias, webHookUrl: webHookUrl }), "Failed to get resource");
+                    $http.post(`${apiEndpoint}/Add`, { contentTypeName: contentTypeName, webHookUrl: webHookUrl }), "Failed to get resource");
             },
             getAllConfigs: function () {
                 return umbRequestHelper.resourcePromise(

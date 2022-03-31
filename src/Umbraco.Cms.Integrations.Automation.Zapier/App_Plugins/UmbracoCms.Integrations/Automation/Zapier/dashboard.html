@@ -6,7 +6,7 @@
                 <input id="inWebHookUrl" type="text" ng-model="vm.webHookUrl" class="w-20 mb0" placeholder="WebHook URL" />
                 <select id="selContentTypes" ng-model="vm.selectedContentType" class="mb0">
                     <option value="">Please select a content type</option>
-                    <option ng-repeat="item in vm.contentTypes" value="{{ item.alias }}">{{ item.name }}</option>
+                    <option ng-repeat="item in vm.contentTypes" value="{{ item.name }}">{{ item.name }}</option>
                 </select>
                 <umb-button action="vm.onAdd()"
                             type="button"
@@ -23,7 +23,7 @@
                             </div>
                             <div class="umb-table-cell">
                                 <a class="umb-table-head__link" href="#" prevent-default>
-                                    <span>Content Type Alias</span>
+                                    <span>Content Type Name</span>
                                 </a>
                             </div>
                             <div class="umb-table-cell">
@@ -41,7 +41,7 @@
                              ng-repeat="row in vm.contentConfigs track by $index">
                             <div class="umb-table-cell"></div>
                             <div class="umb-table-cell">
-                                <span ng-bind="row.contentTypeAlias"></span>
+                                <span ng-bind="row.contentTypeName"></span>
                             </div>
                             <div class="umb-table-cell">
                                 <span ng-bind="row.webHookUrl"></span>

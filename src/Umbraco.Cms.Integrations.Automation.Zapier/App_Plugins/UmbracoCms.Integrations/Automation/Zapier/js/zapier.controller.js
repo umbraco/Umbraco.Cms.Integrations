@@ -21,7 +21,7 @@
         
         umbracoCmsIntegrationsAutomationZapierResource.addConfig(vm.webHookUrl, vm.selectedContentType).then(function (r) {
 
-            getContentTypes(vm.selectedContentType);
+            getContentTypes();
 
             getContentConfigs();
 

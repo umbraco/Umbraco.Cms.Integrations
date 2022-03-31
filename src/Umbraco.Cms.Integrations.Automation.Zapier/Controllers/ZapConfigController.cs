@@ -33,14 +33,13 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
             var contentTypes = contentTypeService.GetAll();
 
-            var configEntities = _zapConfigService.GetAll().Select(p => p.ContentTypeAlias);
+            var configEntities = _zapConfigService.GetAll().Select(p => p.ContentTypeName);
 
             return contentTypes
-                .Where(p => !configEntities.Contains(p.Alias))
+                .Where(p => !configEntities.Contains(p.Name))
                 .OrderBy(p => p.Name)
                 .Select(p => new ContentTypeDto
                     {
-                        Alias = p.Alias,
                         Name = p.Name
                     });
         }
@@ -52,7 +51,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             if (!string.IsNullOrEmpty(result)) return result;
 
             var t = Task.Run(async () => await _zapierService.TriggerAsync(dto.WebHookUrl,
-                new Dictionary<string, string> {{Constants.Content.Name, dto.ContentTypeAlias}}));
+                new Dictionary<string, string> {{Constants.Content.Name, dto.ContentTypeName}}));
 
             result = t.Result;
 

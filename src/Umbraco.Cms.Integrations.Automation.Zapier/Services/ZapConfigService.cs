@@ -31,7 +31,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
                 return data.Select(p => new ContentConfigDto
                 {
                     Id = p.Id,
-                    ContentTypeAlias = p.ContentTypeAlias,
+                    ContentTypeName = p.ContentTypeName,
                     WebHookUrl = p.WebHookUrl
                 });
             }
@@ -45,7 +45,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
                 {
                     var zapContentConfig = new ZapContentConfigTable.ZapContentConfig
                     {
-                        ContentTypeAlias = contentConfigDto.ContentTypeAlias,
+                        ContentTypeName = contentConfigDto.ContentTypeName,
                         WebHookUrl = contentConfigDto.WebHookUrl
                     };
 
