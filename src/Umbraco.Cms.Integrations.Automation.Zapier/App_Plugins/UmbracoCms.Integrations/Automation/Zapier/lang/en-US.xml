@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <language>
 	<area alias="dashboardTabs">
-		<key alias="zapierDashboard">Zapier Settings</key>
+		<key alias="zapierDashboard">Zapier Integrations</key>
 	</area>
 </language>
