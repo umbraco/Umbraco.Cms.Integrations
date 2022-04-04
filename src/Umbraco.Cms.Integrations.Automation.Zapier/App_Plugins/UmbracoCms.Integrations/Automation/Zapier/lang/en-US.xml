@@ -2,5 +2,7 @@
 <language>
 	<area alias="dashboardTabs">
 		<key alias="zapierDashboard">Zapier Integrations</key>
+		<key alias="promptDeleteTitle">Delete Registered Webhook</key>
+		<key alias="promptDeleteContent">Are you sure?</key>
 	</area>
 </language>

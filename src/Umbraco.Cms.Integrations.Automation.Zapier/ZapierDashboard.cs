@@ -1,7 +1,12 @@
 ﻿using System;
 
+#if NETCOREAPP
+using Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Core.Dashboards;
+#else
 using Umbraco.Core.Composing;
 using Umbraco.Core.Dashboards;
+#endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier
 {

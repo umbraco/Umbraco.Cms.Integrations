@@ -4,8 +4,15 @@ using System.Linq;
 
 using Umbraco.Cms.Integrations.Automation.Zapier.Migrations;
 using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
+
+#if NETCOREAPP
+using Microsoft.Extensions.Logging;
+
+using Umbraco.Cms.Core.Scoping;
+#else
 using Umbraco.Core.Logging;
 using Umbraco.Core.Scoping;
+#endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 {
@@ -13,14 +20,27 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
     {
         private readonly IScopeProvider _scopeProvider;
 
-        private readonly ILogger _logger;
+#if NETCOREAPP
+        private readonly ILogger<ZapConfigService> _logger;
 
-        public ZapConfigService(IScopeProvider scopeProvider, ILogger logger)
+        public ZapConfigService(IScopeProvider scopeProvider, ILogger<ZapConfigService> logger)
         {
             _scopeProvider = scopeProvider;
 
             _logger = logger;
         }
+#else
+        private readonly ILogger _logger;
+
+         public ZapConfigService(IScopeProvider scopeProvider, ILogger logger)
+        {
+            _scopeProvider = scopeProvider;
+
+            _logger = logger;
+        }
+#endif
+
+
 
         public IEnumerable<ContentConfigDto> GetAll()
         {
@@ -59,7 +79,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
             {
                 var message = $"An error has occurred while adding a Zap config: {e.Message}";
 
+#if NETCOREAPP
+                _logger.LogError(message);
+#else
                 _logger.Error<ZapConfigService>(message);
+#endif
 
                 return message;
             }
@@ -86,7 +110,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
             {
                 var message = $"An error has occurred while deleting a Zap config: {e.Message}";
 
+#if NETCOREAPP
+                _logger.LogError(message);
+#else
                 _logger.Error<ZapConfigService>(message);
+#endif
 
                 return message;
             }
@@ -100,7 +128,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
                     scope.Database.FirstOrDefault<ZapContentConfigTable.ZapContentConfig>("where ContentTypeName = @0",
                         contentName);
 
-                return entity != null ? new ContentConfigDto(entity.WebHookUrl) : null;
+                return entity != null ? new ContentConfigDto { WebHookUrl = entity.WebHookUrl } : null;
             }
         }
     }

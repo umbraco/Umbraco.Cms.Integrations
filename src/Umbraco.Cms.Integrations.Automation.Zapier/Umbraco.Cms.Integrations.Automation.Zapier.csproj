@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472;net50</TargetFrameworks>
     <Authors>Umbraco HQ</Authors>
     <Company>Umbraco</Company>
 	  <Title>Umbraco CMS Integrations: Automation - Zapier</Title>
@@ -12,9 +12,39 @@
     <ApplicationManifest>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\package.manifest</ApplicationManifest>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <PackageReference Include="UmbracoCms.Web" Version="8.5.4" />
   </ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" version="9.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\**\*.*">
+			<Pack>true</Pack>
+			<PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
+		</Content>
+		<None Include="build\**\*.*">
+			<Pack>True</Pack>
+			<PackagePath>buildTransitive</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\**\*.*">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
+		<ItemGroup>
+			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
+		</ItemGroup>
+	</Target>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="set UmbracoCmsIntegrationsTestsiteV8Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V8&#xD;&#xA;set ZapierDir=%25UmbracoCmsIntegrationsTestsiteV8Path%25\App_Plugins\UmbracoCms.Integrations\Automation\Zapier&#xD;&#xA;if not exist %25ZapierDir%25 mkdir -p %25ZapierDir%25&#xD;&#xA;xcopy &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Automation\Zapier&quot; &quot;%25ZapierDir%25&quot; /e /y" />
