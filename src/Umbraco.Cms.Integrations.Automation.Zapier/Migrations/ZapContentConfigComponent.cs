@@ -39,12 +39,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 
         public void Initialize()
         {
-            var migrationPlan = new MigrationPlan(Constants.MigrationPlanName);
-
-            migrationPlan.From(string.Empty)
-                .To<ZapContentConfigTable>(Constants.TargetStateName);
-
-            var upgrader = new Upgrader(migrationPlan);
+            var upgrader = new Upgrader(new ZapierMigrationPlan());
             upgrader.Execute(_scopeProvider, _migrationBuilder, _keyValueService, _logger);
         }
 
