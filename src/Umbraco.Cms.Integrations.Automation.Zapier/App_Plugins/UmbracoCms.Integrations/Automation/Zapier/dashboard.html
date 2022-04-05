@@ -81,21 +81,16 @@
                                 <span ng-bind="row.webHookUrl"></span>
                             </div>
                             <div class="umb-table-cell">
-                                <umb-button action="vm.onTrigger(row.contentTypeName, row.webHookUrl)"
+                                <umb-button action="vm.onTrigger(row.webHookUrl, row.contentTypeName)"
                                             label="Trigger Webhook"
                                             type="button"
                                             button-style="info">
                                 </umb-button>
-                                <umb-button action="row.showDeletePrompt = true"
+                                <umb-button action="vm.onDelete(row.id)"
                                             label="Delete"
                                             type="button"
                                             button-style="danger">
                                 </umb-button>
-                                <umb-confirm-action ng-if="row.showDeletePrompt"
-                                                    direction="right"
-                                                    on-confirm="vm.onDelete(row.id)"
-                                                    on-cancel="row.showDeletePrompt = false">
-                                </umb-confirm-action>
                             </div>
                         </div>
                     </div>

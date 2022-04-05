@@ -4,13 +4,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos
 {
     public class ContentConfigDto
     {
-        public ContentConfigDto() { }
-
-        public ContentConfigDto(string webHookUrl)
-        {
-            WebHookUrl = webHookUrl;
-        }
-
         [JsonProperty("id")]
         public int Id { get; set; }
 

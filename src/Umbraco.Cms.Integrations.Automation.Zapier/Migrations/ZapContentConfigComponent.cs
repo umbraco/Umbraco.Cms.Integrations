@@ -1,4 +1,4 @@
-﻿using Umbraco.Cms.Integrations.Automation.Zapier.Migrations;
+﻿#if NETFRAMEWORK
 using Umbraco.Core;
 using Umbraco.Core.Composing;
 using Umbraco.Core.Logging;
@@ -7,9 +7,9 @@ using Umbraco.Core.Migrations.Upgrade;
 using Umbraco.Core.Scoping;
 using Umbraco.Core.Services;
 
-namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
-{
 
+namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
+{
     [RuntimeLevel(MinLevel = RuntimeLevel.Run)]
     public class ZapContentConfigComposer : ComponentComposer<ZapContentConfigComponent>
     {
@@ -39,12 +39,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
 
         public void Initialize()
         {
-            var migrationPlan = new MigrationPlan("ZapContentConfig");
-
-            migrationPlan.From(string.Empty)
-                .To<ZapContentConfigTable>("zapiercontentconfigurations-db");
-
-            var upgrader = new Upgrader(migrationPlan);
+            var upgrader = new Upgrader(new ZapierMigrationPlan());
             upgrader.Execute(_scopeProvider, _migrationBuilder, _keyValueService, _logger);
         }
 
@@ -53,3 +48,4 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
         }
     }
 }
+#endif

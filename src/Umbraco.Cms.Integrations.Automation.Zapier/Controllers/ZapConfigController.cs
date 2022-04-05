@@ -1,25 +1,39 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Http;
 
 using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
+
+#if NETCOREAPP
+using Microsoft.AspNetCore.Mvc;
+
+using Umbraco.Cms.Web.BackOffice.Controllers;
+using Umbraco.Cms.Web.Common.Attributes;
+using Umbraco.Cms.Core.Services;
+#else
+using System.Web.Http;
+
 using Umbraco.Core.Services;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
+#endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 {
     [PluginController("UmbracoCmsIntegrationsAutomationZapier")]
     public class ZapConfigController : UmbracoAuthorizedApiController
     {
+        private readonly IContentTypeService _contentTypeService;
+
         private readonly ZapConfigService _zapConfigService;
 
         private readonly ZapierService _zapierService;
 
-        public ZapConfigController(ZapConfigService zapConfigService, ZapierService zapierService)
+        public ZapConfigController(IContentTypeService contentTypeService, ZapConfigService zapConfigService, ZapierService zapierService)
         {
+            _contentTypeService = contentTypeService;
+
             _zapConfigService = zapConfigService;
 
             _zapierService = zapierService;
@@ -28,9 +42,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
         [HttpGet]
         public IEnumerable<ContentTypeDto> GetContentTypes()
         {
-            IContentTypeService contentTypeService = Services.ContentTypeService;
-
-            var contentTypes = contentTypeService.GetAll();
+            var contentTypes = _contentTypeService.GetAll();
 
             var configEntities = _zapConfigService.GetAll().Select(p => p.ContentTypeName);
 
@@ -61,7 +73,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
         public string Delete(int id) => _zapConfigService.Delete(id);
 
         [HttpPost]
-        public async Task<string> TriggerAsync([FromBody] ContentConfigDto dto)
+        public async Task<string> TriggerWebHook([FromBody] ContentConfigDto dto)
         {
             return await _zapierService.TriggerAsync(dto.WebHookUrl,
                 new Dictionary<string, string> { { Constants.Content.Name, dto.ContentTypeName } });

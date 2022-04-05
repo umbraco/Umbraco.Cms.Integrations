@@ -1,4 +1,4 @@
-﻿function zapierController($scope, notificationsService, umbracoCmsIntegrationsAutomationZapierResource, umbracoCmsIntegrationsAutomationZapierValidationService) {
+﻿function zapierController(notificationsService, overlayService, localizationService, umbracoCmsIntegrationsAutomationZapierValidationService, umbracoCmsIntegrationsAutomationZapierResource) {
 
     var vm = this;
 
@@ -19,7 +19,7 @@
             notificationsService.warning("Zapier Content Config", validationResult);
             return;
         }
-        
+
         umbracoCmsIntegrationsAutomationZapierResource.addConfig(vm.webHookUrl, vm.selectedContentType).then(function (response) {
 
             if (response.length > 0) {
@@ -35,11 +35,11 @@
         });
     }
 
-    vm.onTrigger = function (contentTypeName, webHookUrl) {
+    vm.onTrigger = function (webHookUrl, contentTypeName) {
 
         vm.loading = true;
 
-        umbracoCmsIntegrationsAutomationZapierResource.triggerWebHook(webHookUrl, contentTypeName).then(function(response) {
+        umbracoCmsIntegrationsAutomationZapierResource.triggerWebHook(webHookUrl, contentTypeName).then(function (response) {
 
             vm.loading = false;
 
@@ -50,12 +50,33 @@
         });
     }
 
-    vm.onDelete = function(id) {
-        umbracoCmsIntegrationsAutomationZapierResource.deleteConfig(id).then(function () {
-            getContentTypes();
+    vm.onDelete = function (id) {
 
-            getContentConfigs();
-        });
+        localizationService.localizeMany(["zapierDashboard_promptDeleteTitle", "zapierDashboard_promptDeleteContent", "general_yes", "general_no"])
+            .then(function (labels) {
+                var overlay = {
+                    view: "confirm",
+                    title: labels[0],
+                    content: labels[1],
+                    closeButtonLabel: labels[3],
+                    submitButtonLabel: labels[2],
+                    submitButtonStyle: "danger",
+                    close: function () {
+                        overlayService.close();
+                    },
+                    submit: function () {
+
+                        umbracoCmsIntegrationsAutomationZapierResource.deleteConfig(id).then(function () {
+                            getContentTypes();
+
+                            getContentConfigs();
+                        });
+
+                        overlayService.close();
+                    }
+                };
+                overlayService.open(overlay);
+            });
     }
 
     function getContentTypes() {
@@ -75,7 +96,7 @@
         vm.selectedContentType = "";
     }
 
-    
+
 }
 
 angular.module("umbraco")

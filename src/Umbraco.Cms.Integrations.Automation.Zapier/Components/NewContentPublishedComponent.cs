@@ -1,13 +1,13 @@
-﻿using System;
+﻿#if NETFRAMEWORK
+using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
+
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
 using Umbraco.Core.Events;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 using Umbraco.Core.Services.Implement;
 
@@ -68,3 +68,4 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
         }
     }
 }
+#endif
