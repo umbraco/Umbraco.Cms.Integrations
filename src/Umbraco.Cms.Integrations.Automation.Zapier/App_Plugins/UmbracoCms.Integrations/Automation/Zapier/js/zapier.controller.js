@@ -52,7 +52,7 @@
 
     vm.onDelete = function (id) {
 
-        localizationService.localizeMany(["dashboardTabs_promptDeleteTitle", "dashboardTabs_promptDeleteContent", "general_yes", "general_no"])
+        localizationService.localizeMany(["zapierDashboard_promptDeleteTitle", "zapierDashboard_promptDeleteContent", "general_yes", "general_no"])
             .then(function (labels) {
                 var overlay = {
                     view: "confirm",

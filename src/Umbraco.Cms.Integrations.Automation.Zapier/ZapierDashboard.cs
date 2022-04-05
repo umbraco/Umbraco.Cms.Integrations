@@ -13,7 +13,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
     [Weight(30)]
     public class ZapierDashboard : IDashboard
     {
-        public string Alias => "zapierDashboard";
+        public string Alias => "title";
 
         public string View => "/App_Plugins/UmbracoCms.Integrations/Automation/Zapier/dashboard.html";
 

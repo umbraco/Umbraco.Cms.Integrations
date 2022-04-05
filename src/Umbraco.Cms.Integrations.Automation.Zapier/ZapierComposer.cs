@@ -7,6 +7,8 @@ using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Integrations.Automation.Zapier.Components;
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
+using Umbraco.Cms.Integrations.Automation.Zapier.Migrations;
+
 #else
 using Umbraco.Core;
 using Umbraco.Core.Composing;
@@ -24,7 +26,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
                 .Bind(builder.Config.GetSection(Constants.Configuration.Settings));
 
             builder
-                .AddNotificationHandler<UmbracoApplicationStartingNotification, ZapContentConfigMigration>();
+                .AddNotificationHandler<UmbracoApplicationStartingNotification, UmbracoAppStartingHandler>();
 
             builder.Services.AddSingleton<ZapConfigService>();
 

@@ -26,24 +26,16 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 
 #if NETCOREAPP
         protected override void Migrate()
-        {
-            Logger.LogDebug(MigrationLoggingMessage);
-
-            if (TableExists(Constants.ZapContentConfigTable) == false)
-            {
-                Create.Table<ZapContentConfig>().Do();
-            }
-            else
-            {
-                
-                Logger.LogDebug(DbTableExistsMessage);
-            }
-        }
 #else
         public override void Migrate()
+#endif
         {
-
+#if NETCOREAPP
+            Logger.LogDebug(MigrationLoggingMessage);
+            
+#else
             Logger.Debug<ZapContentConfigTable>(MigrationLoggingMessage);
+#endif
 
             if (TableExists(Constants.ZapContentConfigTable) == false)
             {
@@ -51,10 +43,13 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
             }
             else
             {
+#if NETCOREAPP
+                Logger.LogDebug(DbTableExistsMessage);
+#else
                 Logger.Debug<ZapContentConfigTable>(DbTableExistsMessage);
+#endif
             }
         }
-#endif
 
 
 
