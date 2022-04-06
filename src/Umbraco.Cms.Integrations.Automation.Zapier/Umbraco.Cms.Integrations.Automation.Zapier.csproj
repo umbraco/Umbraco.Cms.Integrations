@@ -46,8 +46,4 @@
 		</ItemGroup>
 	</Target>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="set UmbracoCmsIntegrationsTestsiteV8Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V8&#xD;&#xA;set ZapierDir=%25UmbracoCmsIntegrationsTestsiteV8Path%25\App_Plugins\UmbracoCms.Integrations\Automation\Zapier&#xD;&#xA;if not exist %25ZapierDir%25 mkdir -p %25ZapierDir%25&#xD;&#xA;xcopy &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Automation\Zapier&quot; &quot;%25ZapierDir%25&quot; /e /y" />
-  </Target>
-
 </Project>
