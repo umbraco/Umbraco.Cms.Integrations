@@ -21,7 +21,7 @@ Requires minimum versions of Umbraco:
 For this integration, the authentication is managed on Zapier's side by using the Umbraco marketplace app. 
 
 The Umbraco app manages two types of events:
-* New form submission - triggers when a form is submitted
+* New Form Submission - triggers when a form is submitted
 * New Content Published - triggers when a new content has been published.
 
 The trigger event to be used by this integration is _New Content Published_.
