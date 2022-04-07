@@ -18,11 +18,17 @@ Requires minimum versions of Umbraco:
 
 ### Authentication
 
-For this integration, the authentication is managed on Zapier's side. 
+For this integration, the authentication is managed on Zapier's side by using the Umbraco marketplace app. 
 
-When creating a Zap trigger, you will be prompted to enter a username, password and the URL for your Umbraco website.
+The Umbraco app manages two types of events:
+* New form submission - triggers when a form is submitted
+* New Content Published - triggers when a new content has been published.
 
-Then the Umbraco application existing in the Zapier marketplace will validate the credentials entered and return a message in case the validation fails.
+The trigger event to be used by this integration is _New Content Published_.
+
+When creating the Zap trigger, you will be prompted to enter a username, password and the URL for your Umbraco website.
+
+Then the Umbraco application will validate the credentials entered and return a message in case the validation fails.
 
 If you want to extend the security layer, you can also specify a user group that the user trying to connect needs to be a part of, by adding the following 
 setting in `Web.config`:
