@@ -47,7 +47,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Automation", "Automation", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zapier", "Zapier", "{88BAB7E5-51EE-4D34-941A-71A8946C0E5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Automation.Zapier", "Umbraco.Cms.Integrations.Automation.Zapier\Umbraco.Cms.Integrations.Automation.Zapier.csproj", "{4AFE0FD6-95A8-4C57-864E-0FC4EF34FA17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Automation.Zapier", "Umbraco.Cms.Integrations.Automation.Zapier\Umbraco.Cms.Integrations.Automation.Zapier.csproj", "{4AFE0FD6-95A8-4C57-864E-0FC4EF34FA17}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GoogleSearchConsole", "GoogleSearchConsole", "{4B3C1538-84B4-4963-A8B9-DF7656900E15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool", "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool\Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.csproj", "{B7F4963E-81F6-4829-AF7F-59E4FFF57266}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +95,10 @@ Global
 		{4AFE0FD6-95A8-4C57-864E-0FC4EF34FA17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AFE0FD6-95A8-4C57-864E-0FC4EF34FA17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AFE0FD6-95A8-4C57-864E-0FC4EF34FA17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7F4963E-81F6-4829-AF7F-59E4FFF57266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7F4963E-81F6-4829-AF7F-59E4FFF57266}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7F4963E-81F6-4829-AF7F-59E4FFF57266}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7F4963E-81F6-4829-AF7F-59E4FFF57266}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,6 +116,8 @@ Global
 		{E380C97F-7A0D-4819-8145-A67CE4143E31} = {EBF16D40-2F6A-42CA-88CF-E314567D8163}
 		{88BAB7E5-51EE-4D34-941A-71A8946C0E5B} = {6030B626-FA48-4D48-9953-24CEAA358D5E}
 		{4AFE0FD6-95A8-4C57-864E-0FC4EF34FA17} = {88BAB7E5-51EE-4D34-941A-71A8946C0E5B}
+		{4B3C1538-84B4-4963-A8B9-DF7656900E15} = {5412E123-F4CD-448D-88F8-EC01403365C4}
+		{B7F4963E-81F6-4829-AF7F-59E4FFF57266} = {4B3C1538-84B4-4963-A8B9-DF7656900E15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FB51E08-A3C8-4DFF-B3CB-E99C2ED021D5}
