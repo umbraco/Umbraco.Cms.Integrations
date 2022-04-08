@@ -12,32 +12,7 @@ Required minimum versions of Umbraco CMS:
 
 ### Authentication
 
-The package supports two modes of authentication:
-
-- API Key
-- OAuth
-
-#### API Key
-
-Log into your HubSpot account, go to _Settings > Integrations > API Key_ and create an API key.
-
-Add this to an app setting in `Web.config`:
-
-```
-  <appSettings>
-    ...
-    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.ApiKey" value="[your API key]" />
-    ...
-  </appSettings>
-```
-
-The key will be added to all requests made to the HubSpot API and used to authenticate access.
-
-#### OAuth
-
-If you prefer not to use an API key, an authentication flow using OAuth is also available.
-
-To use this, simply ensure you don't have an API key in your configurataion file.
+The package uses the OAuth protocol for authentication.
 
 ### Additional Configuration
 
