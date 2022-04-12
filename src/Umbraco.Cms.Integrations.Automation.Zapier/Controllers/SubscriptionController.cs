@@ -43,11 +43,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
         }
 
         [HttpPost]
-#if NETCOREAPP
         public bool UpdatePreferences([FromBody] SubscriptionDto dto)
-#else
-        public bool UpdatePreferences([FromBody] SubscriptionDto dto)
-#endif
         {
             string username = string.Empty;
             string password = string.Empty;
@@ -77,18 +73,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
             var result = _zapConfigService.UpdatePreferences(dto.HookUrl, dto.Enable);
 
-            if (!string.IsNullOrEmpty(result))
-#if NETCOREAPP
-                return false;
-#else
-                return false;
-#endif
+            if (!string.IsNullOrEmpty(result)) return false;
 
-#if NETCOREAPP
             return true;
-#else
-            return true;
-#endif
         }
     }
 }
