@@ -13,6 +13,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos
         [JsonProperty("webHookUrl")]
         public string WebHookUrl { get; set; }
 
+        [JsonProperty("isEnabled")]
+        public bool IsEnabled { get; set; }
+
         [JsonProperty("showDeletePrompt")]
         public bool ShowDeletePrompt { get; set; }
     }

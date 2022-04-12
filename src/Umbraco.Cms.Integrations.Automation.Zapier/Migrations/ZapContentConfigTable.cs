@@ -67,6 +67,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 
             [Column("WebHookUrl")] 
             public string WebHookUrl { get; set; }
+
+            [Column("IsEnabled")]
+            public bool IsEnabled { get; set; }
         }
     }
 }

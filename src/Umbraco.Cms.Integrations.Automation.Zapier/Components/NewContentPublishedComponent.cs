@@ -50,10 +50,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
             foreach (var node in e.PublishedEntities)
             {
                 var zapContentConfig = _zapConfigService.GetByName(node.ContentType.Name);
-                if (zapContentConfig == null) continue;
+                if (zapContentConfig == null || !zapContentConfig.IsEnabled) continue;
 
                 var content = new Dictionary<string, string>
                 {
+                    { Constants.Content.Id, node.Id.ToString() },
                     { Constants.Content.Name, node.Name },
                     { Constants.Content.PublishDate, DateTime.UtcNow.ToString() }
                 };

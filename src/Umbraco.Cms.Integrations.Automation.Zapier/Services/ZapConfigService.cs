@@ -66,7 +66,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
                     var zapContentConfig = new ZapContentConfigTable.ZapContentConfig
                     {
                         ContentTypeName = contentConfigDto.ContentTypeName,
-                        WebHookUrl = contentConfigDto.WebHookUrl
+                        WebHookUrl = contentConfigDto.WebHookUrl,
+                        IsEnabled = true
                     };
 
                     scope.Database.Insert(zapContentConfig);
@@ -109,6 +110,39 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
             catch (Exception e)
             {
                 var message = $"An error has occurred while deleting a Zap config: {e.Message}";
+
+#if NETCOREAPP
+                _logger.LogError(message);
+#else
+                _logger.Error<ZapConfigService>(message);
+#endif
+
+                return message;
+            }
+        }
+
+        public string UpdatePreferences(string hookUrl, bool enabled)
+        {
+            try
+            {
+                using (var scope = _scopeProvider.CreateScope())
+                {
+                    var entity = scope.Database
+                        .Query<ZapContentConfigTable.ZapContentConfig>().FirstOrDefault(p => p.WebHookUrl == hookUrl);
+                    if (entity != null)
+                    {
+                        entity.IsEnabled = enabled;
+                        scope.Database.Update(entity);
+                    }
+
+                    scope.Complete();
+                }
+
+                return string.Empty;
+            }
+            catch (Exception e)
+            {
+                var message = $"An error has occurred while updating a hook: {e.Message}";
 
 #if NETCOREAPP
                 _logger.LogError(message);
