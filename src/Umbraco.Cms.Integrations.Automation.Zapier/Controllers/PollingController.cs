@@ -44,10 +44,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             _userValidationService = userValidationService;
         }
 
-        public List<Dictionary<string, string>> GetPublishedContent()
+        public List<Dictionary<string, string>> GetContent()
         {
-            var publishedContent = new List<Dictionary<string, string>>();
-
             string username = string.Empty;
             string password = string.Empty;
 
@@ -72,32 +70,18 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             var isAuthorized = _userValidationService.Validate(username, password, Options.UserGroup).GetAwaiter().GetResult();
             if (!isAuthorized) return null;
 
-            var rootNodes = _contentService.GetRootContent().Where(p => p.Published)
-                .OrderByDescending(p => p.PublishDate);
+            var root = _contentService.GetRootContent().Where(p => p.Published)
+                .OrderByDescending(p => p.PublishDate).FirstOrDefault();
 
-            foreach (var publishedContentRoot in rootNodes)
+            return new List<Dictionary<string, string>>
             {
-                publishedContent.Add(new Dictionary<string, string>
+                new Dictionary<string, string>
                 {
-                    { Constants.Content.Id, publishedContentRoot.Id.ToString() },
-                    { Constants.Content.Name, publishedContentRoot.Name },
-                    { Constants.Content.PublishDate, publishedContentRoot.PublishDate.Value.ToString() }
-                });
-
-                var ancestors = _contentService.GetAncestors(publishedContentRoot);
-                foreach (var ancestor in ancestors)
-                {
-                    publishedContent.Add(new Dictionary<string, string>
-                    {
-                        { Constants.Content.Id, ancestor.Id.ToString() },
-                        { Constants.Content.Name, ancestor.Name },
-                        { Constants.Content.PublishDate, ancestor.PublishDate.Value.ToString() }
-                    });
-
+                    {Constants.Content.Id, root?.Id.ToString()},
+                    {Constants.Content.Name, root?.Name},
+                    {Constants.Content.PublishDate, root?.PublishDate.ToString()}
                 }
-            }
-
-            return publishedContent;
+            };
         }
 
     }

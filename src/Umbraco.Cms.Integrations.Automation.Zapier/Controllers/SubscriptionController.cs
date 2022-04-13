@@ -73,9 +73,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
             var result = _zapConfigService.UpdatePreferences(dto.HookUrl, dto.Enable);
 
-            if (!string.IsNullOrEmpty(result)) return false;
-
-            return true;
+            return string.IsNullOrEmpty(result);
         }
     }
 }

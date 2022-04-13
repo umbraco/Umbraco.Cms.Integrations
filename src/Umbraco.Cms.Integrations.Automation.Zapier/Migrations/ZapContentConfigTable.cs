@@ -63,9 +63,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
             public int Id { get; set; }
 
             [Column("ContentTypeName")]
+            [Index(IndexTypes.NonClustered, Name = "IX_ZapContentConfig_ContentTypeName")]
             public string ContentTypeName { get; set; }
 
             [Column("WebHookUrl")] 
+            [Index(IndexTypes.NonClustered, Name = "IX_ZapContentConfig_WebHookUrl")]
             public string WebHookUrl { get; set; }
 
             [Column("IsEnabled")]
