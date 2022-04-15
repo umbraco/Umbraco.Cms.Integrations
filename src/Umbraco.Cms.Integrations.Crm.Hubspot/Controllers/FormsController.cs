@@ -52,8 +52,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
         private readonly ILogger _logger;
 #endif
 
-        public const string OAuthClientId = "8b4db9a8-3b78-48bc-85b0-96a4211a1c83";
-        private const string OAuthScopes = "oauth forms"; // oauth forms
+        public const string OAuthClientId = "1a04f5bf-e99e-48e1-9d62-6c25bf2bdefe";
+        private const string OAuthScopes = "oauth forms crm.objects.contacts.read crm.objects.contacts.write";
         private const string OAuthProxyBaseUrl = "https://hubspot-forms-auth.umbraco.com/"; // for local testing: https://localhost:44364
         private const string OAuthProxyEndpoint = "{0}oauth/v1/token";
         private const string HubspotServiceName = "HubspotForms";
