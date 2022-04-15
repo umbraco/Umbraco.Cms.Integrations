@@ -1,53 +1,54 @@
 ﻿function semrushResource($http, umbRequestHelper) {
 
+    const apiEndpoint = "backoffice/UmbracoCmsIntegrationsSemrush/Semrush";
+
     return {
         ping: function () {
             return umbRequestHelper.resourcePromise(
-                $http.get(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "Test")), "Fail");
+                $http.get(`${apiEndpoint}/Ping`), "Fail");
         },
         getAuthorizationUrl: function() {
             return umbRequestHelper.resourcePromise(
-                $http.get(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "GetAuthorizationUrl")), "Fail");
+                $http.get(`${apiEndpoint}/GetAuthorizationUrl`), "Fail");
         },
-        validateToken: function () {
+        validateToken: function() {
             return umbRequestHelper.resourcePromise(
-                $http.post(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "ValidateToken")), "Fail");
+                $http.post(`${apiEndpoint}/ValidateToken`), "Fail");
         },
         getTokenDetails: function() {
             return umbRequestHelper.resourcePromise(
-                $http.get(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "GetTokenDetails")), "Fail");
+                $http.get(`${apiEndpoint}/GetTokenDetails`), "Fail");
         },
         revokeToken: function () {
             return umbRequestHelper.resourcePromise(
-                $http.post(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "RevokeToken")), "Fail");
+                $http.post(`${apiEndpoint}/RevokeToken`), "Fail");
         },
         getAccessToken: function (authorizationCode) {
             return umbRequestHelper.resourcePromise(
-                $http.post(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "GetAccessToken"), { code: authorizationCode }), "Fail");
+                $http.post(`${apiEndpoint}/GetAccessToken`, { code: authorizationCode }), "Fail");
         },
         refreshAccessToken: function () {
             return umbRequestHelper.resourcePromise(
-                $http.post(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "RefreshAccessToken")), "Fail");
+                $http.post(`${apiEndpoint}/RefreshAccessToken`), "Fail");
         },
         getRelatedPhrases: function (selectedPhrase, pageNumber, dataSource, method) {
-            var url = umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "GetRelatedPhrases");
+            var url = `${apiEndpoint}/GetRelatedPhrases`;
             return umbRequestHelper.resourcePromise(
                 $http.get(url + "?phrase=" + selectedPhrase + "&pageNumber=" + pageNumber + "&dataSource=" + dataSource + "&method=" + method), "Fail");
         },
         importDataSources: function () {
             return umbRequestHelper.resourcePromise(
-                $http.get(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "ImportDataSources")), "Fail");
+                $http.get(`${apiEndpoint}/ImportDataSources`), "Fail");
         },
         getDataSources: function () {
             return umbRequestHelper.resourcePromise(
-                $http.get(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "GetDataSources")), "Fail");
+                $http.get(`${apiEndpoint}/GetDataSources`), "Fail");
         },
         getColumns: function () {
             return umbRequestHelper.resourcePromise(
-                $http.get(umbRequestHelper.getApiUrl("umbracoCmsIntegrationsSemrushBaseUrl", "GetColumns")), "Fail");
+                $http.get(`${apiEndpoint}/GetColumns`), "Fail");
         }
     };
-
 }
 
 angular.module("umbraco.resources")
