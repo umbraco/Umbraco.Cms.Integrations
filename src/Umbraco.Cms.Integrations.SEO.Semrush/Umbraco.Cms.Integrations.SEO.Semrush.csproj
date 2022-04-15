@@ -1,33 +1,56 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net472;net50</TargetFrameworks>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <PackageId>Umbraco.Cms.Integrations.SEO.Semrush</PackageId>
-    <Title>Umbraco CMS Integrations: SEO - Semrush</Title>
-    <Description>An extension for Umbraco CMS providing keyword research tools powered by Semrush via a content app.</Description>
-    <PackageIconUrl></PackageIconUrl>
-    <PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-    <Version>1.0.0</Version>
-    <Authors>Umbraco HQ</Authors>
-    <Company>Umbraco</Company>
-  </PropertyGroup>
+	<PropertyGroup>
+		<PackageId>Umbraco.Cms.Integrations.SEO.Semrush</PackageId>
+		<Title>Umbraco CMS Integrations: SEO - Semrush</Title>
+		<Description>An extension for Umbraco CMS providing keyword research tools powered by Semrush via a content app.</Description>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+		<Version>1.0.0</Version>
+		<Authors>Umbraco HQ</Authors>
+		<Company>Umbraco</Company>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="UmbracoCms.Web" version="8.5.4" />
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+		<PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
+		<PackageReference Include="UmbracoCms.Web" version="8.5.4" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\**\*.*">
-      <Pack>true</Pack>
-      <PackagePath>content\App_Plugins\UmbracoCms.Integrations\SEO\Semrush\</PackagePath>
-    </Content>
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
+	</ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Debug'">
-    <Exec Command="mkdir &quot;$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins&quot;&#xD;&#xA;mkdir &quot;$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins\UmbracoCms.Integrations&quot;&#xD;&#xA;mkdir &quot;$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO&quot;&#xD;&#xA;mkdir &quot;$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO\Semrush&quot;&#xD;&#xA;&#xD;&#xA;copy /Y  &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\SEO\Semrush&quot; &quot;$(SolutionDir)Umbraco.Cms.Integrations.Testsite.V8\App_Plugins\UmbracoCms.Integrations\SEO\Semrush&quot;" />
-  </Target>
+	<ItemGroup>
+		<Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\**\*.*">
+			<Pack>true</Pack>
+			<PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\Semrush\</PackagePath>
+		</Content>
+		<None Include="build\**\*.*">
+			<Pack>True</Pack>
+			<PackagePath>buildTransitive</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\**\*.*">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="SemrushComponent.cs" />
+	</ItemGroup>
+
+	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
+		<ItemGroup>
+			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
+		</ItemGroup>
+	</Target>
 
 </Project>

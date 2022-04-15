@@ -1,7 +1,12 @@
 ﻿using Newtonsoft.Json;
 
 using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
+
+#if NETCOREAPP
+using Umbraco.Cms.Core.Services;
+#else
 using Umbraco.Core.Services;
+#endif
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
 {
