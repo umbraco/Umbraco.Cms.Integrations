@@ -18,25 +18,29 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Ser
 
         public string TokenDbKey = "Umbraco.Cms.Integrations.GoogleSearchConsole.URLInspectionToolTokenDbKey";
 
+        public string RefreshTokenDbKey =
+            "Umbraco.Cms.Integrations.GoogleSearchConsole.URLInspectionToolRefreshTokenDbKey";
+
         private const string ClientId = "849175818654-0jtc4c8baoo58d3ruhbkghao425ejrvf.apps.googleusercontent.com";
 
         public string[] Scopes = new[]
         {
-            "https://www.googleapis.com/auth/userinfo.email",
-            "https://www.googleapis.com/auth/userinfo.profile",
             "https://www.googleapis.com/auth/webmasters",
             "https://www.googleapis.com/auth/webmasters.readonly"
         };
 
         public string SearchConsoleAuthorizationEndpoint =
-            "https://accounts.google.com/o/oauth2/auth?response_type=code" +
-            "&redirect_uri={0}&scope={1}&client_id={2}";
+            "https://accounts.google.com/o/oauth2/auth?redirect_uri={0}&prompt=consent&response_type=code&client_id={1}&scope={2}&access_type=offline";
 
         public override string GetClientId() => ClientId;
 
         public override string GetAuthorizationUrl() =>
-            string.Format(SearchConsoleAuthorizationEndpoint, $"{AuthProxyBaseAddress}{AuthProxyServiceAuthEndpoint}", string.Join(" ", Scopes), ClientId);
+            string.Format(SearchConsoleAuthorizationEndpoint, $"{AuthProxyBaseAddress}{AuthProxyServiceAuthEndpoint}", ClientId, string.Join(" ", Scopes));
+
+        public override string GetRedirectUrl() => $"{AuthProxyBaseAddress}{AuthProxyServiceAuthEndpoint}";
 
         public override string GetAuthProxyTokenEndpoint() => $"{AuthProxyBaseAddress}{AuthProxyTokenEndpoint}";
+
+        public string GetSearchConsoleInpectionUrl() => "https://searchconsole.googleapis.com/v1/urlInspection/index:inspect";
     }
 }

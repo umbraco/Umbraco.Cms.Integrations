@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 using Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Models.Dtos;
 
@@ -19,13 +20,15 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Ser
             _kvService = kvService;
         }
 
-        public bool TryGetParameters(string key, out TokenDto tokenDto)
+        public bool TryGetParameters(string key, out string token)
         {
-            tokenDto = new TokenDto();
+            if (string.IsNullOrEmpty(_kvService.GetValue(key)))
+            {
+                token = String.Empty;
+                return false;
+            }
 
-            if (string.IsNullOrEmpty(_kvService.GetValue(key))) return false;
-
-            tokenDto = JsonConvert.DeserializeObject<TokenDto>(_kvService.GetValue(key));
+            token = _kvService.GetValue(key);
 
             return true;
         }

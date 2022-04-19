@@ -13,7 +13,9 @@ using Umbraco.Web.WebApi;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Models.Dtos;
 using Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Services;
 
@@ -41,17 +43,22 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Con
         }
 
         [HttpGet]
-        public string GetAuthorizationUrl() => _googleService.GetAuthorizationUrl();
+        public OAuthConfigDto GetOAuthConfiguration() => new OAuthConfigDto
+        {
+            IsConnected = _tokenService.TryGetParameters(_googleService.TokenDbKey, out _) &&
+                          _tokenService.TryGetParameters(_googleService.RefreshTokenDbKey, out _),
+            AuthorizationUrl = _googleService.GetAuthorizationUrl()
+        };
 
         [HttpPost]
         public async Task<string> GetAccessToken([FromBody] AuthorizationRequestDto authorizationRequestDto)
         {
             var requestData = new Dictionary<string, string>
             {
-                {"code", authorizationRequestDto.Code},
-                {"client_id", _googleService.GetClientId()},
-                {"redirect_uri", "oauth/google"},
-                {"grant_type", "authorization_code"}
+                {"code", authorizationRequestDto.Code },
+                {"client_id", _googleService.GetClientId() },
+                {"redirect_uri", _googleService.GetRedirectUrl() },
+                {"grant_type", "authorization_code" }
             };
 
             var requestMessage = new HttpRequestMessage
@@ -67,7 +74,46 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Con
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                _tokenService.SaveParameters(_googleService.TokenDbKey, result);
+                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
+
+                _tokenService.SaveParameters(_googleService.TokenDbKey, tokenDto.AccessToken);
+                _tokenService.SaveParameters(_googleService.RefreshTokenDbKey, tokenDto.RefreshToken);
+
+                return result;
+            }
+
+            return "error";
+        }
+
+        [HttpPost]
+        public async Task<string> RefreshAccessToken()
+        {
+            _tokenService.TryGetParameters(_googleService.RefreshTokenDbKey, out string refreshToken);
+
+            var requestData = new Dictionary<string, string>
+            {
+                {"client_id", _googleService.GetClientId()},
+                {"refresh_token", refreshToken},
+                {"grant_type", "refresh_token"}
+            };
+
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(_googleService.GetAuthProxyTokenEndpoint()),
+                Content = new FormUrlEncodedContent(requestData),
+            };
+            requestMessage.Headers.Add(_googleService.ServiceHeaderKey.Key, _googleService.ServiceHeaderKey.Value);
+
+            var response = await ClientFactory().SendAsync(requestMessage);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+
+                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
+
+                _tokenService.SaveParameters(_googleService.TokenDbKey, tokenDto.AccessToken);
+                _tokenService.SaveParameters(_googleService.RefreshTokenDbKey, tokenDto.RefreshToken);
 
                 return result;
             }
@@ -79,6 +125,27 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Con
         public void RevokeToken()
         {
             _tokenService.RemoveParameters(_googleService.TokenDbKey);
+            _tokenService.RemoveParameters(_googleService.RefreshTokenDbKey);
+        }
+
+        [HttpPost]
+        public async Task<ResponseDto> Inspect([FromBody] UrlInspectionDto dto)
+        {
+            _tokenService.TryGetParameters(_googleService.TokenDbKey, out string accessToken);
+
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(_googleService.GetSearchConsoleInpectionUrl()),
+                Content = new StringContent(JsonConvert.SerializeObject(dto))
+            };
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await ClientFactory().SendAsync(requestMessage);
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<ResponseDto>(content);
         }
     }
 }

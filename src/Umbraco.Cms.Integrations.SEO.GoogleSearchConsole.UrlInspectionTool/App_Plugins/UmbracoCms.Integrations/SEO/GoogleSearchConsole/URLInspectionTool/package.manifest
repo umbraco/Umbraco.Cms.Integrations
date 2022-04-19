@@ -3,5 +3,7 @@
     "~/App_Plugins/UmbracoCms.Integrations/SEO/GoogleSearchConsole/URLInspectionTool/js/url-inspection-tool.resource.js",
     "~/App_Plugins/UmbracoCms.Integrations/SEO/GoogleSearchConsole/URLInspectionTool/js/url-inspection-tool.controller.js"
   ],
-  "css": []
+  "css": [
+    "~/App_Plugins/UmbracoCms.Integrations/SEO/GoogleSearchConsole/URLInspectionTool/css/urlInspection.css"
+  ]
 }

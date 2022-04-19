@@ -4,7 +4,7 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Ser
 {
     public interface ITokenService
     {
-        bool TryGetParameters(string key, out TokenDto tokenDto);
+        bool TryGetParameters(string key, out string token);
 
         void SaveParameters(string key, string serializedParams);
 

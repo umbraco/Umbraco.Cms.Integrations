@@ -48,6 +48,7 @@
 	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\js\url-inspection-tool.resource.js" />
 	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\lang\en-US.xml" />
 	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\package.manifest" />
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\urlInspection.css" />
 	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\urlInspection.html" />
 	</ItemGroup>
 

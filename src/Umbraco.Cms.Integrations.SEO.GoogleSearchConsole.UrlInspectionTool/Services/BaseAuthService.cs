@@ -7,6 +7,8 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Ser
 
         public abstract string GetAuthorizationUrl();
 
+        public abstract string GetRedirectUrl();
+
         public abstract string GetAuthProxyTokenEndpoint();
     }
 }
