@@ -3,6 +3,7 @@
 using System.Linq;
 
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
+using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 
 #if NETCOREAPP
@@ -44,7 +45,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             _userValidationService = userValidationService;
         }
 
-        public List<Dictionary<string, string>> GetContent()
+        public IEnumerable<PublishedContentDto> GetSampleContent()
         {
             string username = string.Empty;
             string password = string.Empty;
@@ -70,18 +71,15 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             var isAuthorized = _userValidationService.Validate(username, password, Options.UserGroup).GetAwaiter().GetResult();
             if (!isAuthorized) return null;
 
-            var root = _contentService.GetRootContent().Where(p => p.Published)
-                .OrderByDescending(p => p.PublishDate).FirstOrDefault();
+            var rootNodes = _contentService.GetRootContent().Where(p => p.Published)
+                .OrderByDescending(p => p.PublishDate);
 
-            return new List<Dictionary<string, string>>
+            return rootNodes.Select(p => new PublishedContentDto
             {
-                new Dictionary<string, string>
-                {
-                    {Constants.Content.Id, root?.Id.ToString()},
-                    {Constants.Content.Name, root?.Name},
-                    {Constants.Content.PublishDate, root?.PublishDate.ToString()}
-                }
-            };
+                Id = p.Id,
+                Name = p.Name,
+                PublishDate = p.PublishDate.Value.ToString()
+            });
         }
 
     }

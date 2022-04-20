@@ -132,9 +132,43 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
                     if (entity != null)
                     {
                         entity.IsEnabled = enabled;
+
                         scope.Database.Update(entity);
                     }
 
+                    scope.Complete();
+                }
+
+                return string.Empty;
+            }
+            catch (Exception e)
+            {
+                var message = $"An error has occurred while updating a hook: {e.Message}";
+
+#if NETCOREAPP
+                _logger.LogError(message);
+#else
+                _logger.Error<ZapConfigService>(message);
+#endif
+
+                return message;
+            }
+        }
+
+        public string Subscribe(string hookUrl, string contentType)
+        {
+            try
+            {
+                using (var scope = _scopeProvider.CreateScope())
+                {
+                    var zapContentConfig = new ZapContentConfigTable.ZapContentConfig
+                    {
+                        ContentTypeName = contentType,
+                        WebHookUrl = hookUrl,
+                        IsEnabled = true
+                    };
+
+                    scope.Database.Insert(zapContentConfig);
                     scope.Complete();
                 }
 
