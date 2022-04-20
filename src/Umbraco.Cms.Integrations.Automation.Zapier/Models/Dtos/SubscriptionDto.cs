@@ -7,7 +7,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos
         [JsonProperty("hookUrl")]
         public string HookUrl { get; set; }
 
-        [JsonProperty("content_type")]
+        [JsonProperty("contentType")]
         public string ContentType { get; set; }
     }
 }
