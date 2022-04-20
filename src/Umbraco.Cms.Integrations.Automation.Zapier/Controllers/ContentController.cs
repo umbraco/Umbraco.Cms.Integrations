@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using System.Linq;
 
@@ -24,14 +25,14 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
     {
         private readonly ZapierSettings Options;
 
-        private IContentService _contentService;
+        private IContentTypeService _contentTypeService;
 
         private readonly IUserValidationService _userValidationService;
 
 #if NETCOREAPP
-        public ContentController(IOptions<ZapierSettings> options, IContentService contentService, IUserValidationService userValidationService)
+        public ContentController(IOptions<ZapierSettings> options, IContentTypeService contentTypeService, IUserValidationService userValidationService)
 #else
-        public ContentController(IContentService contentService, IUserValidationService userValidationService)
+        public ContentController(IContentTypeService contentTypeService, IUserValidationService userValidationService)
 #endif
         {
 #if NETCOREAPP
@@ -40,44 +41,45 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             Options = new ZapierSettings(ConfigurationManager.AppSettings);
 #endif
 
-            _contentService = contentService;
+            _contentTypeService = contentTypeService;
 
             _userValidationService = userValidationService;
         }
 
-        public List<ContentTypeDto> Get()
+        public IEnumerable<ContentTypeDto> GetContentTypes()
         {
-//            string username = string.Empty;
-//            string password = string.Empty;
+            string username = string.Empty;
+            string password = string.Empty;
 
-//#if NETCOREAPP
-//            if (Request.Headers.TryGetValue(Constants.ZapierAppConfiguration.UsernameHeaderKey,
-//                    out var usernameValues))
-//                username = usernameValues.First();
-//            if (Request.Headers.TryGetValue(Constants.ZapierAppConfiguration.PasswordHeaderKey,
-//                    out var passwordValues))
-//                password = passwordValues.First();
-//#else
-//            if (Request.Headers.TryGetValues(Constants.ZapierAppConfiguration.UsernameHeaderKey,
-//                    out var usernameValues))
-//                username = usernameValues.First();
-//            if (Request.Headers.TryGetValues(Constants.ZapierAppConfiguration.PasswordHeaderKey,
-//                    out var passwordValues))
-//                password = passwordValues.First();
-//#endif
+#if NETCOREAPP
+            if (Request.Headers.TryGetValue(Constants.ZapierAppConfiguration.UsernameHeaderKey,
+                    out var usernameValues))
+                username = usernameValues.First();
+            if (Request.Headers.TryGetValue(Constants.ZapierAppConfiguration.PasswordHeaderKey,
+                    out var passwordValues))
+                password = passwordValues.First();
+#else
+            if (Request.Headers.TryGetValues(Constants.ZapierAppConfiguration.UsernameHeaderKey,
+                    out var usernameValues))
+                username = usernameValues.First();
+            if (Request.Headers.TryGetValues(Constants.ZapierAppConfiguration.PasswordHeaderKey,
+                    out var passwordValues))
+                password = passwordValues.First();
+#endif
 
-//            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return null;
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return Enumerable.Empty<ContentTypeDto>();
 
-//            var isAuthorized = _userValidationService.Validate(username, password, Options.UserGroup).GetAwaiter().GetResult();
-//            if (!isAuthorized) return null;
+            var isAuthorized = _userValidationService.Validate(username, password, Options.UserGroup).GetAwaiter().GetResult();
+            if (!isAuthorized) return Enumerable.Empty<ContentTypeDto>();
 
-            var root = _contentService.GetRootContent().Where(p => p.Published)
-                .OrderByDescending(p => p.PublishDate).FirstOrDefault();
+            var contentTypes = _contentTypeService.GetAll();
 
-            return new List<ContentTypeDto>
+            return contentTypes.Select(p => new ContentTypeDto
             {
-                new ContentTypeDto { Id = root.Id, Name = root.Name} 
-            };
+                Id = p.Id,
+                Alias = p.Alias,
+                Name = p.Name
+            });
         }
 
     }
