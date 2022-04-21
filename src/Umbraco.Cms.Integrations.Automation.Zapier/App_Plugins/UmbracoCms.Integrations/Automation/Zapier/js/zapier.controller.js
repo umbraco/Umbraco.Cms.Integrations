@@ -18,4 +18,4 @@
 }
 
 angular.module("umbraco")
-    .controller("Umbraco.Cms.Integrations.Automation.Zapier.ZapConfigController", zapierController);
+    .controller("Umbraco.Cms.Integrations.Automation.Zapier.ZapierConfigController", zapierController);

@@ -1,8 +1,6 @@
 ﻿{
   "javascript": [
-    "~/App_Plugins/UmbracoCms.Integrations/Automation/Zapier/js/zapier.controller.js",
-    "~/App_Plugins/UmbracoCms.Integrations/Automation/Zapier/js/zapier.resource.js",
-		"~/App_Plugins/UmbracoCms.Integrations/Automation/Zapier/js/zapier-validation.service.js"
+    "~/App_Plugins/UmbracoCms.Integrations/Automation/Zapier/js/zapier.controller.js"
   ],
   "css": [
 		"~/App_Plugins/UmbracoCms.Integrations/Automation/Zapier/css/zapier.css"
