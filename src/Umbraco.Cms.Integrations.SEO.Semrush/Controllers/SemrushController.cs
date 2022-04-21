@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,16 +8,29 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http;
+
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
 using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
 using Umbraco.Cms.Integrations.SEO.Semrush.Services;
+
+#if NETCOREAPP
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+
+using Umbraco.Cms.Web.Common.Attributes;
+using Umbraco.Cms.Web.BackOffice.Controllers;
+#else
+using System.Web;
+using System.Web.Http;
+
+using Umbraco.Web.WebApi;
 using Umbraco.Web.Mvc;
+#endif
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
 {
     [PluginController("UmbracoCmsIntegrationsSemrush")]
-    public class SemrushController : BaseController
+    public class SemrushController : UmbracoAuthorizedApiController
     {
         // Using a static HttpClient (see: https://www.aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/).
         private readonly static HttpClient s_client = new HttpClient();
@@ -26,9 +40,28 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
 
         private static readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
-        public SemrushController(ISemrushTokenService semrushTokenService, ICacheHelper cacheHelper, TokenBuilder tokenBuilder)
-        : base(semrushTokenService, cacheHelper, tokenBuilder)
+        private readonly ISemrushTokenService _semrushTokenService;
+
+        private readonly ICacheHelper _cacheHelper;
+
+        private readonly TokenBuilder _tokenBuilder;
+
+#if NETCOREAPP
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public SemrushController(IWebHostEnvironment webHostEnvironment, ISemrushTokenService semrushTokenService, ICacheHelper cacheHelper, TokenBuilder tokenBuilder)
         {
+            _webHostEnvironment = webHostEnvironment;
+#else
+        public SemrushController(ISemrushTokenService semrushTokenService, ICacheHelper cacheHelper, TokenBuilder tokenBuilder)
+        {
+
+#endif
+            _semrushTokenService = semrushTokenService;
+
+            _cacheHelper = cacheHelper;
+
+            _tokenBuilder = tokenBuilder;
         }
 
         [HttpGet]
@@ -41,21 +74,21 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
         [HttpGet]
         public TokenDto GetTokenDetails()
         {
-            return SemrushTokenService.TryGetParameters(SemrushSettings.TokenDbKey, out TokenDto tokenDto) ? tokenDto : new TokenDto();
+            return _semrushTokenService.TryGetParameters(SemrushSettings.TokenDbKey, out TokenDto tokenDto) ? tokenDto : new TokenDto();
         }
 
         [HttpPost]
         public void RevokeToken()
         {
-            SemrushTokenService.RemoveParameters(SemrushSettings.TokenDbKey);
+            _semrushTokenService.RemoveParameters(SemrushSettings.TokenDbKey);
 
-            CacheHelper.ClearCachedItems();
+            _cacheHelper.ClearCachedItems();
         }
 
         [HttpPost]
         public async Task<string> GetAccessToken([FromBody] AuthorizationRequestDto request)
         {
-            var requestData = TokenBuilder.ForAccessToken(request.Code).Build();
+            var requestData = _tokenBuilder.ForAccessToken(request.Code).Build();
 
             var requestMessage = new HttpRequestMessage
             {
@@ -70,7 +103,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                SemrushTokenService.SaveParameters(SemrushSettings.TokenDbKey, result);
+                _semrushTokenService.SaveParameters(SemrushSettings.TokenDbKey, result);
 
                 return result;
             }
@@ -81,7 +114,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
         [HttpPost]
         public async Task<AuthorizationResponseDto> ValidateToken()
         {
-            SemrushTokenService.TryGetParameters(SemrushSettings.TokenDbKey, out TokenDto token);
+            _semrushTokenService.TryGetParameters(SemrushSettings.TokenDbKey, out TokenDto token);
 
             if (!token.IsAccessTokenAvailable) return new AuthorizationResponseDto { IsExpired = true };
 
@@ -94,16 +127,16 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
                 IsFreeAccount = response.Headers.TryGetValues(SemrushSettings.AllowLimitOffsetHeaderName,
                     out IEnumerable<string> values)
                     ? values.First().Equals("0")
-                    : (bool?) null
+                    : (bool?)null
             };
         }
 
         [HttpPost]
         public async Task<string> RefreshAccessToken()
         {
-            SemrushTokenService.TryGetParameters(SemrushSettings.TokenDbKey, out TokenDto token);
+            _semrushTokenService.TryGetParameters(SemrushSettings.TokenDbKey, out TokenDto token);
 
-            var requestData = TokenBuilder.ForRefreshToken(token.RefreshToken).Build();
+            var requestData = _tokenBuilder.ForRefreshToken(token.RefreshToken).Build();
 
             var requestMessage = new HttpRequestMessage
             {
@@ -118,7 +151,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                SemrushTokenService.SaveParameters(SemrushSettings.TokenDbKey, result);
+                _semrushTokenService.SaveParameters(SemrushSettings.TokenDbKey, result);
 
                 return result;
             }
@@ -131,7 +164,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
         {
             string cacheKey = $"{dataSource}-{method}-{phrase}";
 
-            if (CacheHelper.TryGetCachedItem<RelatedPhrasesDto>(cacheKey, out var relatedPhrasesDto) && relatedPhrasesDto.Data != null)
+            if (_cacheHelper.TryGetCachedItem<RelatedPhrasesDto>(cacheKey, out var relatedPhrasesDto) && relatedPhrasesDto.Data != null)
             {
                 relatedPhrasesDto.TotalPages = relatedPhrasesDto.Data.Rows.Count / SemrushSettings.DefaultPageSize;
                 relatedPhrasesDto.Data.Rows = relatedPhrasesDto.Data.Rows
@@ -142,7 +175,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
                 return relatedPhrasesDto;
             }
 
-            SemrushTokenService.TryGetParameters(SemrushSettings.TokenDbKey, out TokenDto token);
+            _semrushTokenService.TryGetParameters(SemrushSettings.TokenDbKey, out TokenDto token);
 
             var response = await ClientFactory()
                 .GetAsync(string.Format(SemrushSettings.SemrushKeywordsEndpoint, method, token.AccessToken, phrase, dataSource));
@@ -155,7 +188,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
 
                 if (!relatedPhrasesDeserialized.IsSuccessful) return relatedPhrasesDeserialized;
 
-                CacheHelper.AddCachedItem(cacheKey, responseContent);
+                _cacheHelper.AddCachedItem(cacheKey, responseContent);
 
                 relatedPhrasesDeserialized.TotalPages = relatedPhrasesDeserialized.Data.Rows.Count / SemrushSettings.DefaultPageSize;
                 relatedPhrasesDeserialized.Data.Rows = relatedPhrasesDeserialized.Data.Rows
@@ -172,19 +205,26 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
         [HttpGet]
         public DataSourceDto GetDataSources()
         {
+#if NETCOREAPP
+            string semrushDataSourcesPath = $"{_webHostEnvironment.ContentRootPath}/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/semrushDataSources.json";
+#else
+            string semrushDataSourcesPath = HttpContext.Current.Server.MapPath(
+            "/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/semrushDataSources.json");
+#endif
+
             _lock.EnterReadLock();
 
             try
             {
-                if (!File.Exists(SemrushDataSourcesPath))
+                if (!System.IO.File.Exists(semrushDataSourcesPath))
                 {
-                    var fs = File.Create(SemrushDataSourcesPath);
+                    var fs = System.IO.File.Create(semrushDataSourcesPath);
                     fs.Close();
 
                     return new DataSourceDto();
                 }
 
-                var content = File.ReadAllText(SemrushDataSourcesPath);
+                var content = System.IO.File.ReadAllText(semrushDataSourcesPath);
                 var dataSourceDto = new DataSourceDto
                 {
                     Items = JsonConvert.DeserializeObject<List<DataSourceItemDto>>(content).Select(p =>
@@ -212,19 +252,26 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
         [HttpGet]
         public IEnumerable<ColumnDto> GetColumns()
         {
+#if NETCOREAPP
+            string semrushColumnsPath = $"{_webHostEnvironment.ContentRootPath}/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/semrushColumns.json";
+#else
+            string semrushColumnsPath = HttpContext.Current.Server.MapPath(
+            "/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/semrushColumns.json");
+#endif
+
             _lock.EnterReadLock();
 
             try
             {
-                if (!File.Exists(SemrushColumnsPath))
+                if (!System.IO.File.Exists(semrushColumnsPath))
                 {
-                    var fs = File.Create(SemrushColumnsPath);
+                    var fs = System.IO.File.Create(semrushColumnsPath);
                     fs.Close();
 
                     return Enumerable.Empty<ColumnDto>();
                 }
 
-                var content = File.ReadAllText(SemrushColumnsPath);
+                var content = System.IO.File.ReadAllText(semrushColumnsPath);
                 return JsonConvert.DeserializeObject<IEnumerable<ColumnDto>>(content).Select(p =>
                     new ColumnDto
                     {

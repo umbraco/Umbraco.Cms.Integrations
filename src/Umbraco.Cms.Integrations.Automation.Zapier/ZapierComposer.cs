@@ -31,6 +31,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
             builder.Services.AddSingleton<ZapConfigService>();
 
             builder.Services.AddSingleton<ZapierService>();
+
+            builder.Services.AddScoped<IUserValidationService, UserValidationService>();
         }
 #else
         public void Compose(Composition composition)
@@ -38,6 +40,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
             composition.Register<ZapConfigService>(Lifetime.Singleton);
 
             composition.Register<ZapierService>(Lifetime.Singleton);
+
+            composition.Register<IUserValidationService, UserValidationService>(Lifetime.Scope);
         }
 #endif
 
