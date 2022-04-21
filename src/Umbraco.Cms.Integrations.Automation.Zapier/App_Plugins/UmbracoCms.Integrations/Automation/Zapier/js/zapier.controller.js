@@ -1,4 +1,4 @@
-﻿function zapierController(notificationsService, overlayService, localizationService, umbracoCmsIntegrationsAutomationZapierValidationService, umbracoCmsIntegrationsAutomationZapierResource) {
+﻿function zapierController(umbracoCmsIntegrationsAutomationZapierResource) {
 
     var vm = this;
 
