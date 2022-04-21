@@ -64,8 +64,4 @@
 		</ItemGroup>
 	</Target>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <Exec Command="set UmbracoCmsIntegrationsTestsiteV8Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V8&#xD;&#xA;  set GoogleSearchConsoleDir=%25UmbracoCmsIntegrationsTestsiteV8Path%25\App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool&#xD;&#xA;  if not exist %25GoogleSearchConsoleDir%25 mkdir -p %25GoogleSearchConsoleDir%25&#xD;&#xA;  xcopy &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool&quot; &quot;%25GoogleSearchConsoleDir%25&quot; /e /y" />
-	</Target>
-
 </Project>
