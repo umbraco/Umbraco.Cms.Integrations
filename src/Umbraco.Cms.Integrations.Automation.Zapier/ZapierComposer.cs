@@ -28,7 +28,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
             builder
                 .AddNotificationHandler<UmbracoApplicationStartingNotification, UmbracoAppStartingHandler>();
 
-            builder.Services.AddSingleton<ZapConfigService>();
+            builder.Services.AddSingleton<ZapierSubscriptionHookService>();
 
             builder.Services.AddSingleton<ZapierService>();
 
@@ -37,7 +37,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 #else
         public void Compose(Composition composition)
         {
-            composition.Register<ZapConfigService>(Lifetime.Singleton);
+            composition.Register<ZapierSubscriptionHookService>(Lifetime.Singleton);
 
             composition.Register<ZapierService>(Lifetime.Singleton);
 

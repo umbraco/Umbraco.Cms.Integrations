@@ -22,50 +22,39 @@
                     You can initiate your automation when a content item of a particular document type is published in Umbraco.
                 </p>
                 <p>
-                    Using the filters below, map content items with Zap triggered webhooks.  This will:
+                    The integration uses Zapier subscription hook triggers, allowing Zapier to set up and remove hook subscriptions through Subscribe/Unsubscribe API requests.
                 </p>
-                <ul>
-                    <li>Enable Zap invocations when content of the specified document type is published.</li>
-                    <li>Trigger a sample request using the webhook URL to review when creating the Zap trigger.</li>
-                </ul>
-            </div>
-            <div class="mt3">
-                <input id="inWebHookUrl" type="text" ng-model="vm.webHookUrl" class="w-20 mb0" placeholder="WebHook URL" no-dirty-check />
-                <select id="selContentTypes" ng-model="vm.selectedContentType" class="mb0" no-dirty-check>
-                    <option value="">Please select a content type</option>
-                    <option ng-repeat="item in vm.contentTypes" value="{{ item.name }}">{{ item.name }}</option>
-                </select>
-                <umb-button action="vm.onAdd()"
-                            type="button"
-                            button-style="primary"
-                            label="Add">
-                </umb-button>
             </div>
         </umb-box-content>
     </umb-box>
     <umb-box>
-        <umb-box-header title="Registered Webhooks"></umb-box-header>
+        <umb-box-header title="Registered Subscription Hooks"></umb-box-header>
         <umb-content>
             <div class="mt2">
 
+                <!-- If list is empty, then display -->
+                <umb-empty-state ng-if="vm.contentConfigs.length == 0"
+                                 position="center" class="mb-3">
+                    There are no subscription hooks.
+                </umb-empty-state>
+
                 <umb-load-indicator ng-show="vm.loading"></umb-load-indicator>
 
-                <div class="umb-table" ng-if="vm.contentConfigs">
+                <div class="umb-table" ng-if="vm.contentConfigs.length > 0">
                     <!-- Listviews head section -->
                     <div class="umb-table-head">
                         <div class="umb-table-row">
                             <div class="umb-table-cell"></div>
                             <div class="umb-table-cell umb-table__name">
                                 <a class="umb-table-head__link" href="#" prevent-default>
-                                    <span>Content Type Name</span>
+                                    <span>Content Type Alias</span>
                                 </a>
                             </div>
                             <div class="umb-table-cell">
                                 <a class="umb-table-head__link" href="#" prevent-default>
-                                    <span>WebHook URL</span>
+                                    <span>Hook URL</span>
                                 </a>
                             </div>
-                            <div class="umb-table-cell"></div>
                         </div>
                     </div>
 
@@ -75,22 +64,10 @@
                              ng-repeat="row in vm.contentConfigs track by $index">
                             <div class="umb-table-cell"></div>
                             <div class="umb-table-cell umb-table__name">
-                                <span ng-bind="row.contentTypeName"></span>
+                                <span ng-bind="row.contentTypeAlias"></span>
                             </div>
                             <div class="umb-table-cell">
-                                <span ng-bind="row.webHookUrl"></span>
-                            </div>
-                            <div class="umb-table-cell">
-                                <umb-button action="vm.onTrigger(row.webHookUrl, row.contentTypeName)"
-                                            label="Trigger Webhook"
-                                            type="button"
-                                            button-style="info">
-                                </umb-button>
-                                <umb-button action="vm.onDelete(row.id)"
-                                            label="Delete"
-                                            type="button"
-                                            button-style="danger">
-                                </umb-button>
+                                <span ng-bind="row.hookUrl"></span>
                             </div>
                         </div>
                     </div>

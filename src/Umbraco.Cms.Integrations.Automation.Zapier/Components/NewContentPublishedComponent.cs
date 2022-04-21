@@ -20,15 +20,15 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
 
     public class NewContentPublishedComponent : IComponent
     {
-        private readonly ZapConfigService _zapConfigService;
+        private readonly ZapierSubscriptionHookService _zapierSubscriptionHookService;
 
         private readonly ZapierService _zapierService;
 
         private readonly ILogger _logger;
 
-        public NewContentPublishedComponent(ZapConfigService zapConfigService, ZapierService zapierService, ILogger logger)
+        public NewContentPublishedComponent(ZapierSubscriptionHookService zapierSubscriptionHookService, ZapierService zapierService, ILogger logger)
         {
-            _zapConfigService = zapConfigService;
+            _zapierSubscriptionHookService = zapierSubscriptionHookService;
 
             _zapierService = zapierService;
 
@@ -49,22 +49,23 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
         {
             foreach (var node in e.PublishedEntities)
             {
-                var zapContentConfig = _zapConfigService.GetByName(node.ContentType.Name);
-                if (zapContentConfig == null || !zapContentConfig.IsEnabled) continue;
-
-                var content = new Dictionary<string, string>
+                if (_zapierSubscriptionHookService.TryGetByAlias(node.ContentType.Alias, out var zapContentConfig))
                 {
-                    { Constants.Content.Id, node.Id.ToString() },
-                    { Constants.Content.Name, node.Name },
-                    { Constants.Content.PublishDate, DateTime.UtcNow.ToString() }
-                };
+                    var content = new Dictionary<string, string>
+                    {
+                        {Constants.Content.Id, node.Id.ToString()},
+                        {Constants.Content.Name, node.Name},
+                        {Constants.Content.PublishDate, DateTime.UtcNow.ToString()}
+                    };
 
-                var t = Task.Run(async () => await _zapierService.TriggerAsync(zapContentConfig.WebHookUrl, content));
+                    var t = Task.Run(
+                        async () => await _zapierService.TriggerAsync(zapContentConfig.HookUrl, content));
 
-                var result = t.Result;
+                    var result = t.Result;
 
-                if(!string.IsNullOrEmpty(result))
-                    _logger.Error<NewContentPublishedComponent>(result);
+                    if (!string.IsNullOrEmpty(result))
+                        _logger.Error<NewContentPublishedComponent>(result);
+                }
             }
         }
     }

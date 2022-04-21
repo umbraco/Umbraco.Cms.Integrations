@@ -13,14 +13,14 @@ using Umbraco.Core.Logging;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 {
-    public class ZapContentConfigTable : MigrationBase
+    public class ZapierSubscriptionHookTable : MigrationBase
     {
         public string MigrationLoggingMessage = $"Running migration {Constants.MigrationPlanName}";
 
         public string DbTableExistsMessage =
-            $"The database table {Constants.ZapContentConfigTable} already exists, skipping";
+            $"The database table {Constants.ZapierSubscriptionHookTable} already exists, skipping";
 
-        public ZapContentConfigTable(IMigrationContext context) : base(context)
+        public ZapierSubscriptionHookTable(IMigrationContext context) : base(context)
         {
         }
 
@@ -34,44 +34,41 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
             Logger.LogDebug(MigrationLoggingMessage);
             
 #else
-            Logger.Debug<ZapContentConfigTable>(MigrationLoggingMessage);
+            Logger.Debug<ZapierSubscriptionHookTable>(MigrationLoggingMessage);
 #endif
 
-            if (TableExists(Constants.ZapContentConfigTable) == false)
+            if (TableExists(Constants.ZapierSubscriptionHookTable) == false)
             {
-                Create.Table<ZapContentConfig>().Do();
+                Create.Table<ZapierSubscriptionHook>().Do();
             }
             else
             {
 #if NETCOREAPP
                 Logger.LogDebug(DbTableExistsMessage);
 #else
-                Logger.Debug<ZapContentConfigTable>(DbTableExistsMessage);
+                Logger.Debug<ZapierSubscriptionHookTable>(DbTableExistsMessage);
 #endif
             }
         }
 
 
 
-        [TableName(Constants.ZapContentConfigTable)]
+        [TableName(Constants.ZapierSubscriptionHookTable)]
         [PrimaryKey("Id", AutoIncrement = true)]
         [ExplicitColumns]
-        public class ZapContentConfig
+        public class ZapierSubscriptionHook
         {
             [PrimaryKeyColumn(AutoIncrement = true, IdentitySeed = 1)]
             [Column("Id")]
             public int Id { get; set; }
 
-            [Column("ContentTypeName")]
-            [Index(IndexTypes.UniqueNonClustered, Name = "IX_ZapContentConfig_ContentTypeName")]
-            public string ContentTypeName { get; set; }
+            [Column("ContentTypeAlias")]
+            [Index(IndexTypes.UniqueNonClustered, Name = "IX_ZapierSubscriptionHook_ContentTypeAlias")]
+            public string ContentTypeAlias { get; set; }
 
-            [Column("WebHookUrl")] 
-            [Index(IndexTypes.UniqueNonClustered, Name = "IX_ZapContentConfig_WebHookUrl")]
-            public string WebHookUrl { get; set; }
-
-            [Column("IsEnabled")]
-            public bool IsEnabled { get; set; }
+            [Column("HookUrl")] 
+            [Index(IndexTypes.UniqueNonClustered, Name = "IX_ZapierSubscriptionHook_HookUrl")]
+            public string HookUrl { get; set; }
         }
     }
 }

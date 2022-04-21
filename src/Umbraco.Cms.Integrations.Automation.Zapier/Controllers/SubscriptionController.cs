@@ -21,14 +21,14 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
     {
         private readonly ZapierSettings Options;
 
-        private readonly ZapConfigService _zapConfigService;
+        private readonly ZapierSubscriptionHookService _zapierSubscriptionHookService;
 
         private readonly IUserValidationService _userValidationService;
 
 #if NETCOREAPP
-        public SubscriptionController(IOptions<ZapierSettings> options, ZapConfigService zapConfigService, IUserValidationService userValidationService)
+        public SubscriptionController(IOptions<ZapierSettings> options, ZapierSubscriptionHookService zapierSubscriptionHookService, IUserValidationService userValidationService)
 #else
-        public SubscriptionController(ZapConfigService zapConfigService, IUserValidationService userValidationService)
+        public SubscriptionController(ZapierSubscriptionHookService zapierSubscriptionHookService, IUserValidationService userValidationService)
 #endif
         {
 #if NETCOREAPP
@@ -37,7 +37,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             Options = new ZapierSettings(ConfigurationManager.AppSettings);
 #endif
 
-            _zapConfigService = zapConfigService;
+            _zapierSubscriptionHookService = zapierSubscriptionHookService;
 
             _userValidationService = userValidationService;
         }
@@ -71,7 +71,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
             if (dto == null) return false;
 
-            var result = _zapConfigService.Subscribe(dto.HookUrl, dto.ContentType);
+            var result = dto.SubscribeHook
+                ? _zapierSubscriptionHookService.Add(dto.ContentType, dto.HookUrl)
+                : _zapierSubscriptionHookService.Delete(dto.ContentType, dto.HookUrl);
 
             return string.IsNullOrEmpty(result);
         }

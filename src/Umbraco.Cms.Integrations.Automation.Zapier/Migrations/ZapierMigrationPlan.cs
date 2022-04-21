@@ -11,7 +11,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
         public ZapierMigrationPlan() : base(Constants.MigrationPlanName)
         {
             From(string.Empty)
-                .To<ZapContentConfigTable>(Constants.TargetStateName);
+                .To<ZapierSubscriptionHookTable>(Constants.TargetStateName);
         }
     }
 }

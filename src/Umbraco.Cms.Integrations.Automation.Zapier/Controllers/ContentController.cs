@@ -25,14 +25,16 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
     {
         private readonly ZapierSettings Options;
 
-        private IContentTypeService _contentTypeService;
+        private readonly IContentTypeService _contentTypeService;
 
         private readonly IUserValidationService _userValidationService;
 
+        private readonly ZapierSubscriptionHookService _zapierSubscriptionHookService;
+
 #if NETCOREAPP
-        public ContentController(IOptions<ZapierSettings> options, IContentTypeService contentTypeService, IUserValidationService userValidationService)
+        public ContentController(IOptions<ZapierSettings> options, IContentTypeService contentTypeService, IUserValidationService userValidationService, ZapierSubscriptionHookService zapierSubscriptionHookService)
 #else
-        public ContentController(IContentTypeService contentTypeService, IUserValidationService userValidationService)
+        public ContentController(IContentTypeService contentTypeService, IUserValidationService userValidationService, ZapierSubscriptionHookService zapierSubscriptionHookService)
 #endif
         {
 #if NETCOREAPP
@@ -44,6 +46,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             _contentTypeService = contentTypeService;
 
             _userValidationService = userValidationService;
+
+            _zapierSubscriptionHookService = zapierSubscriptionHookService;
         }
 
         public IEnumerable<ContentTypeDto> GetContentTypes()
@@ -74,12 +78,14 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
             var contentTypes = _contentTypeService.GetAll();
 
-            return contentTypes.Select(p => new ContentTypeDto
-            {
-                Id = p.Id,
-                Alias = p.Alias,
-                Name = p.Name
-            });
+            return contentTypes
+                .Where(p => !_zapierSubscriptionHookService.TryGetByAlias(p.Alias, out var contentConfig))
+                .Select(q => new ContentTypeDto
+                {
+                    Id = q.Id,
+                    Alias = q.Alias,
+                    Name = q.Name
+                });
         }
 
     }
