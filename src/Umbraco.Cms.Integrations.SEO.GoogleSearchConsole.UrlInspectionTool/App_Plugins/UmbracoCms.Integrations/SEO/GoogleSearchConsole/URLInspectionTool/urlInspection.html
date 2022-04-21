@@ -41,17 +41,16 @@
                     <div class="flex justify-start">
                         <div class="w25r">
                             <h5>Inspection URL</h5>
-                            <input type="text" class="w-100" ng-model="vm.urlInspection.inspectionUrl" no-dirty-check ng-disabled="!vm.urlInspection.enabled"/>
+                            <input type="text" class="w-100" ng-if="!vm.inspectionObj.multipleUrls" ng-model="vm.inspectionObj.inspectionUrl" 
+                                   no-dirty-check ng-disabled="!vm.inspectionObj.enabled" />
+                            <select ng-if="vm.inspectionObj.multipleUrls" ng-model="vm.inspectionObj.inspectionUrl" ng-change="vm.onChangeInspectionUrl()"
+                                    no-dirty-check class="w-100">
+                                <option ng-repeat="url in vm.inspectionObj.urls" value="{{ url.text }}">{{ url.text }}</option>
+                            </select>
                         </div>
                         <div class="ml3 w25r">
                             <h5>Site URL</h5>
-                            <input type="text" class="w-100" ng-model="vm.urlInspection.siteUrl" no-dirty-check ng-disabled="!vm.urlInspection.enabled"/>
-                        </div>
-                        <div class="ml3">
-                            <h5>Language Code</h5>
-                            <select ng-model="vm.urlInspection.languageCode" ng-change="vm.onChangeLanguageCode()">
-                                <option ng-repeat="item in vm.currentCultures" value="{{ item }}">{{ item }}</option>
-                            </select>
+                            <input type="text" class="w-100" ng-model="vm.inspectionObj.siteUrl" no-dirty-check ng-disabled="!vm.inspectionObj.enabled"/>
                         </div>
                     </div>
                 </div>

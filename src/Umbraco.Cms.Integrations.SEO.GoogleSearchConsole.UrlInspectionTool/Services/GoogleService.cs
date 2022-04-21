@@ -8,7 +8,7 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Ser
         /// local testing: https://localhost:44364/
         /// deployed version: https://hubspot-forms-auth.umbraco.com/
         /// </summary>
-        private const string AuthProxyBaseAddress = "https://localhost:44364/";
+        private const string AuthProxyBaseAddress = "https://hubspot-forms-auth.umbraco.com/";
 
         public const string AuthProxyServiceAuthEndpoint = "oauth/google";
 

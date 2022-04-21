@@ -113,7 +113,6 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Con
                 var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
 
                 _tokenService.SaveParameters(_googleService.TokenDbKey, tokenDto.AccessToken);
-                _tokenService.SaveParameters(_googleService.RefreshTokenDbKey, tokenDto.RefreshToken);
 
                 return result;
             }

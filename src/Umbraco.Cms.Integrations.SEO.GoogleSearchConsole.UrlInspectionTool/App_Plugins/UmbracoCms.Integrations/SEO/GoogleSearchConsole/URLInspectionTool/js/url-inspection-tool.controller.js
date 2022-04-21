@@ -6,15 +6,13 @@
     vm.oauthConfiguration = {};
     vm.inspectionResult = {};
 
-    // get available cultures for current node
-    vm.currentCultures = editorState.current.urls.map(p => p.culture);
-
     // build default url inspection object
-    vm.siteUrl = location.href.slice(0, location.href.indexOf("umbraco") - 1);
-    vm.urlInspection = {
-        inspectionUrl: `${vm.siteUrl}${editorState.current.urls.find(p => p.culture === vm.currentCultures[0]).text}`,
-        siteUrl: vm.siteUrl,
-        languageCode: vm.currentCultures[0],
+    vm.inspectionObj = {
+        urls: editorState.current.urls,
+        inspectionUrl: editorState.current.urls[0].text,
+        siteUrl: window.location.origin,
+        languageCode: editorState.current.urls[0].culture,
+        multipleUrls: editorState.current.urls.length > 1,
         enabled: false
     };
 
@@ -37,7 +35,7 @@
 
         vm.loading = true;
 
-        umbracoCmsIntegrationsGoogleSearchConsoleUrlInspectionToolResource.inspect(vm.urlInspection.inspectionUrl, vm.urlInspection.siteUrl, vm.urlInspection.languageCode)
+        umbracoCmsIntegrationsGoogleSearchConsoleUrlInspectionToolResource.inspect(vm.inspectionObj.inspectionUrl, vm.inspectionObj.siteUrl, vm.inspectionObj.languageCode)
             .then(function (response) {
 
                 vm.loading = false;
@@ -51,14 +49,7 @@
                         vm.isConnected = false;
 
                         // refresh access token
-                        notificationsService.warning("Google Search Console Authorization", "Refreshing access token.");
-
-                        umbracoCmsIntegrationsGoogleSearchConsoleUrlInspectionToolResource.refreshAccessToken().then(
-                            function(response) {
-                                if (response.length !== "error") {
-                                    vm.isConnected = true;
-                                }
-                            });
+                        refreshAccessToken();
                     }
                 } else {
                     vm.showResults = true;
@@ -68,12 +59,13 @@
     }
 
     vm.onEdit = function() {
-        vm.urlInspection.enabled = true;
+        vm.inspectionObj.multipleUrls = false;
+        vm.inspectionObj.enabled = true;
     }
 
-    vm.onChangeLanguageCode = function() {
-        vm.urlInspection.inspectionUrl =
-            `${vm.siteUrl}${editorState.current.urls.find(p => p.culture === vm.urlInspection.languageCode).text}`;
+    vm.onChangeInspectionUrl = function() {
+        vm.inspectionObj.languageCode =
+            editorState.current.urls.find(p => p.text === vm.inspectionObj.inspectionUrl).culture;
     }
 
     // authorization listener
@@ -102,6 +94,23 @@
         }
 
     }, false);
+
+    function refreshAccessToken() {
+        notificationsService.warning("Google Search Console Authorization", "Refreshing access token.");
+
+        umbracoCmsIntegrationsGoogleSearchConsoleUrlInspectionToolResource.refreshAccessToken().then(
+            function (response) {
+                if (response.length !== "error") {
+
+                    notificationsService.success("Google Search Console Authorization",
+                        "Refresh access token - completed.");
+
+                    vm.isConnected = true;
+                } else
+                    notificationsService.error("Google Search Console Authorization",
+                        "An error has occurred.");
+            });
+    }
 
     function revokeToken() {
         umbracoCmsIntegrationsGoogleSearchConsoleUrlInspectionToolResource.revokeToken().then(function () {
