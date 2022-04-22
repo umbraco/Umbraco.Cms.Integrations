@@ -1,0 +1,124 @@
+﻿<div ng-controller="UmbracoCms.Integrations.GoogleSearchConsole.UrlInspectionToolController as vm">
+    <umb-load-indicator ng-if="vm.loading"></umb-load-indicator>
+    <umb-box>
+        <umb-box-header title-key="urlInspectionTool_title">
+            <umb-button action="vm.onConnectClick()"
+                        type="button"
+                        button-style="primary"
+                        state="init"
+                        label="Connect"
+                        disabled="vm.oauthConfiguration.isConnected">
+            </umb-button>
+            <umb-button action="vm.onRevokeToken()"
+                        type="button"
+                        button-style="danger"
+                        state="init"
+                        label="Revoke"
+                        disabled="!vm.oauthConfiguration.isConnected">
+            </umb-button>
+        </umb-box-header>
+        <umb-box-content>
+            <div>
+                <h5>About Google Search Console - URL Inspection API</h5>
+                <p>
+                    The Search Console APIs are a way to access data outside of Search Console, through external applications and products.
+                </p>
+                <p>
+                    You can request the data Search Console has about the indexed version of the current node, and the API will return the indexed information.
+                </p>
+                <p>
+                    The request parameters include the URL you'd like to inspect and the URL of the property as defined in Search Console.
+                </p>
+                <p>
+                    The response includes analysis results containing information from Search Console, including index status, AMP, rich results and mobile usability.
+                </p>
+                <p>
+                    Usage limits - the quote is enforced per Search Console website property: 2000 queries per day / 600 queries per minute.
+                </p>
+            </div>
+            <div class="flex justify-start">
+                <div class="flx-b2">
+                    <div class="flex justify-start">
+                        <div class="w25r">
+                            <h5>Inspection URL</h5>
+                            <input type="text" class="w-100" ng-if="!vm.inspectionObj.multipleUrls" ng-model="vm.inspectionObj.inspectionUrl" 
+                                   no-dirty-check ng-disabled="!vm.inspectionObj.enabled" />
+                            <select ng-if="vm.inspectionObj.multipleUrls" ng-model="vm.inspectionObj.inspectionUrl" ng-change="vm.onChangeInspectionUrl()"
+                                    no-dirty-check class="w-100">
+                                <option ng-repeat="url in vm.inspectionObj.urls" value="{{ url }}">{{ url }}</option>
+                            </select>
+                        </div>
+                        <div class="ml3 w25r">
+                            <h5>Site URL</h5>
+                            <input type="text" class="w-100" ng-model="vm.inspectionObj.siteUrl" no-dirty-check ng-disabled="!vm.inspectionObj.enabled"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-start">
+                <div class="flx-b2">
+                    <div class="flex justify-start">
+                        <div>
+                            <umb-button action="vm.onInspect()"
+                                        type="button"
+                                        button-style="primary"
+                                        state="init"
+                                        label="Inspect"
+                                        disabled="!vm.oauthConfiguration.isConnected">
+                            </umb-button>
+                        </div>
+                        <div>
+                            <umb-button action="vm.onEdit()"
+                                        type="button"
+                                        button-style="warning"
+                                        state="init"
+                                        label="Edit"
+                                        disabled="!vm.oauthConfiguration.isConnected">
+                            </umb-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt4" ng-if="vm.showResults">
+                <umb-box>
+                    <umb-box-header title="Inspection Result Link" description="Link to Search Console URL inspection."></umb-box-header>
+                    <umb-box-content>
+                        <a href="{{ vm.inspectionResult.inspectionResultLink }}">{{ vm.inspectionResult.inspectionResultLink }}</a>
+                    </umb-box-content>
+                </umb-box>
+                <umb-box ng-if="vm.inspectionResult.indexStatusResult">
+                    <umb-box-header title="Index Status Result" description="Result of the index status analysis."></umb-box-header>
+                    <umb-box-content>
+                        <p ng-repeat="(key, value) in vm.inspectionResult.indexStatusResult">
+                            <b>{{key}}</b> {{ value }}
+                        </p>
+                    </umb-box-content>
+                </umb-box>
+                <umb-box ng-if="vm.inspectionResult.ampResult">
+                    <umb-box-header title="AMP Result" description="Result of the AMP analysis. Absent if the page is not an AMP page."></umb-box-header>
+                    <umb-box-content>
+                        <p ng-repeat="(key, value) in vm.inspectionResult.ampResult">
+                            <b>{{key}}</b> {{ value }}
+                        </p>
+                    </umb-box-content>
+                </umb-box>
+                <umb-box ng-if="vm.inspectionResult.mobileUsabilityResult">
+                    <umb-box-header title="Mobile Usability Result" description="Result of the Mobile usability analysis."></umb-box-header>
+                    <umb-box-content>
+                        <p ng-repeat="(key, value) in vm.inspectionResult.mobileUsabilityResult">
+                            <b>{{key}}</b> {{ value }}
+                        </p>
+                    </umb-box-content>
+                </umb-box>
+                <umb-box ng-if="vm.inspectionResult.richResultsResult">
+                    <umb-box-header title="Rich Results Result" description="Result of the Rich Results analysis. Absent if there are no rich results found."></umb-box-header>
+                    <umb-box-content>
+                        <p ng-repeat="(key, value) in vm.inspectionResult.richResultsResult">
+                            <b>{{key}}</b> {{ value }}
+                        </p>
+                    </umb-box-content>
+                </umb-box>
+            </div>
+        </umb-box-content>
+    </umb-box>
+</div>

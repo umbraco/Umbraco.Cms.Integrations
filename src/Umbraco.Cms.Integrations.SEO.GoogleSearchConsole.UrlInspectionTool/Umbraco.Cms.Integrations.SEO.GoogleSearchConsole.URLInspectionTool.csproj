@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net472;net50</TargetFrameworks>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool</PackageId>
+		<Title>Umbraco CMS Integrations: SEO - Google Search Console URL Inspection Tool</Title>
+		<Description>An extension for Umbraco CMS providing programmatic access to URL-level data for properties managed in Search Console and the indexed version of a URL.</Description>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+		<Version>0.1.0</Version>
+		<Authors>Umbraco HQ</Authors>
+		<Company>Umbraco</Company>
+		<ApplicationManifest>App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\package.manifest</ApplicationManifest>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+		<PackageReference Include="UmbracoCms.Web" version="8.4.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\**\*.*">
+			<Pack>true</Pack>
+			<PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\</PackagePath>
+		</Content>
+		<None Include="build\**\*.*">
+			<Pack>True</Pack>
+			<PackagePath>buildTransitive</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\**\*.*">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\js\url-inspection-tool.controller.js" />
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\js\url-inspection-tool.resource.js" />
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\lang\en-US.xml" />
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\package.manifest" />
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\urlInspection.css" />
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\urlInspection.html" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\lang\en-US.xml">
+	    <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\</PackagePath>
+	  </Content>
+	</ItemGroup>
+
+	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
+		<ItemGroup>
+			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
+		</ItemGroup>
+	</Target>
+
+</Project>
