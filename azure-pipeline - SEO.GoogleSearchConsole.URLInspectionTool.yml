@@ -1,5 +1,5 @@
 trigger:
-- feature/google-search-console
+- main
 
 pool:
   vmImage: 'windows-latest'
