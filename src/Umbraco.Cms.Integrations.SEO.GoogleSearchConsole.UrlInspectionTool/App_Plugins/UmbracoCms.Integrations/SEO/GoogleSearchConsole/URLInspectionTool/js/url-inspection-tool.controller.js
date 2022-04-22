@@ -17,23 +17,27 @@
     };
 
     // get oauth configuration
-    umbracoCmsIntegrationsGoogleSearchConsoleUrlInspectionToolResource.getOAuthConfiguration().then(function(response) {
+    umbracoCmsIntegrationsGoogleSearchConsoleUrlInspectionToolResource.getOAuthConfiguration().then(function (response) {
         vm.oauthConfiguration = response;
     });
 
-    vm.onConnectClick = function() {
+    vm.onConnectClick = function () {
         vm.authorizationWindow = window.open(vm.oauthConfiguration.authorizationUrl,
             "GoogleSearchConsole_Authorize",
             "width=900,height=700,modal=yes,alwaysRaised=yes");
     }
 
-    vm.onRevokeToken = function() {
+    vm.onRevokeToken = function () {
         revokeToken();
     }
 
     vm.onInspect = function () {
 
         vm.loading = true;
+
+        // check if url is relative
+        if (isRelativeUrl(vm.inspectionObj.inspectionUrl))
+            vm.inspectionObj.inspectionUrl = `${vm.inspectionObj.siteUrl}${vm.inspectionObj.inspectionUrl}`;
 
         umbracoCmsIntegrationsGoogleSearchConsoleUrlInspectionToolResource.inspect(vm.inspectionObj.inspectionUrl, vm.inspectionObj.siteUrl, vm.inspectionObj.languageCode)
             .then(function (response) {
@@ -58,12 +62,12 @@
             });
     }
 
-    vm.onEdit = function() {
+    vm.onEdit = function () {
         vm.inspectionObj.multipleUrls = false;
         vm.inspectionObj.enabled = true;
     }
 
-    vm.onChangeInspectionUrl = function() {
+    vm.onChangeInspectionUrl = function () {
         vm.inspectionObj.languageCode =
             editorState.current.urls.find(p => p.text === vm.inspectionObj.inspectionUrl).culture;
     }
@@ -117,6 +121,11 @@
             vm.oauthConfiguration.isConnected = false;
             vm.showResults = false;
         });
+    }
+
+    function isRelativeUrl(url) {
+        var regExp = new RegExp('^(?:[a-z]+:)?//', 'i');
+        return !regExp.test(url);
     }
 }
 
