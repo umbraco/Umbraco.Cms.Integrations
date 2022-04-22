@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
+using Umbraco.Cms.Integrations.Automation.Zapier.Helpers;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
@@ -30,24 +31,19 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
 
         public void Handle(ContentPublishedNotification notification)
         {
+            var triggerHelper = new TriggerHelper(_zapierService);
+
             foreach (var node in notification.PublishedEntities)
             {
-                if (_zapierSubscriptionHookService.TryGetByAlias(node.ContentType.Alias, out var zapContentConfig))
+                if (_zapierSubscriptionHookService.TryGetByAlias(node.ContentType.Alias, out var zapContentConfigList))
                 {
-                    var content = new Dictionary<string, string>
+                    foreach (var zapContentConfig in zapContentConfigList)
                     {
-                        {Constants.Content.Id, node.Id.ToString()},
-                        {Constants.Content.Name, node.Name},
-                        {Constants.Content.PublishDate, DateTime.UtcNow.ToString()}
-                    };
+                        var result = triggerHelper.Execute(zapContentConfig.HookUrl, node.Id.ToString(), node.Name);
 
-                    var t = Task.Run(
-                        async () => await _zapierService.TriggerAsync(zapContentConfig.HookUrl, content));
-
-                    var result = t.Result;
-
-                    if (!string.IsNullOrEmpty(result))
-                        _logger.LogError(result);
+                        if (!string.IsNullOrEmpty(result))
+                            _logger.LogError(result);
+                    }
                 }
             }
         }

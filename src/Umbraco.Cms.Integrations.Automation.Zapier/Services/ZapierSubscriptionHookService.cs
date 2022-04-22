@@ -121,19 +121,21 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
             }
         }
 
-        public bool TryGetByAlias(string contentTypeAlias, out ContentConfigDto dto)
+        public bool TryGetByAlias(string contentTypeAlias, out IEnumerable<ContentConfigDto> dto)
         {
             using (var scope = _scopeProvider.CreateScope())
             {
-                var entity =
+                var entities =
                     scope.Database
-                        .FirstOrDefault<ZapierSubscriptionHookTable.ZapierSubscriptionHook>("where ContentTypeAlias = @0", contentTypeAlias);
+                        .Query<ZapierSubscriptionHookTable.ZapierSubscriptionHook>()
+                        .Where(p => p.ContentTypeAlias == contentTypeAlias)
+                        .ToList();
 
-                dto = entity != null
-                    ? new ContentConfigDto {HookUrl = entity.HookUrl}
+                dto = entities.Any()
+                    ? entities.Select(p => new ContentConfigDto { HookUrl = p.HookUrl })
                     : null;
 
-                return entity != null;
+                return entities.Any();
             }
         }
     }

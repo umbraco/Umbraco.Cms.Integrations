@@ -79,7 +79,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             var contentTypes = _contentTypeService.GetAll();
 
             return contentTypes
-                .Where(p => !_zapierSubscriptionHookService.TryGetByAlias(p.Alias, out var contentConfig))
                 .Select(q => new ContentTypeDto
                 {
                     Id = q.Id,
