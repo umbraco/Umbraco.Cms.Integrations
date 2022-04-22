@@ -7,9 +7,10 @@
     vm.inspectionResult = {};
 
     // build default url inspection object
+    var nodeUrls = getUrls();
     vm.inspectionObj = {
-        urls: editorState.current.urls,
-        inspectionUrl: editorState.current.urls[0].text,
+        urls: nodeUrls,
+        inspectionUrl: nodeUrls[0],
         siteUrl: window.location.origin,
         languageCode: editorState.current.urls[0].culture,
         multipleUrls: editorState.current.urls.length > 1,
@@ -126,6 +127,22 @@
     function isRelativeUrl(url) {
         var regExp = new RegExp('^(?:[a-z]+:)?//', 'i');
         return !regExp.test(url);
+    }
+
+    function getUrls() {
+        var arr = [];
+
+        for (var i = 0; i < editorState.current.urls.length; i++) {
+            var url = isRelativeUrl(editorState.current.urls[i].text)
+                ? `${window.location.origin}${editorState.current.urls[i].text}`
+                : editorState.current.urls[i].text;
+
+            if (arr.indexOf(url) === -1) {
+                arr.push(url);
+            }
+        }
+
+        return arr;
     }
 }
 

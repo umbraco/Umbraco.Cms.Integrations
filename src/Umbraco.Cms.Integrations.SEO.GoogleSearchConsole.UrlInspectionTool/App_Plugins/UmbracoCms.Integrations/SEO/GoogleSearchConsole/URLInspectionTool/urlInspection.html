@@ -45,7 +45,7 @@
                                    no-dirty-check ng-disabled="!vm.inspectionObj.enabled" />
                             <select ng-if="vm.inspectionObj.multipleUrls" ng-model="vm.inspectionObj.inspectionUrl" ng-change="vm.onChangeInspectionUrl()"
                                     no-dirty-check class="w-100">
-                                <option ng-repeat="url in vm.inspectionObj.urls" value="{{ url.text }}">{{ url.text }}</option>
+                                <option ng-repeat="url in vm.inspectionObj.urls" value="{{ url }}">{{ url }}</option>
                             </select>
                         </div>
                         <div class="ml3 w25r">
