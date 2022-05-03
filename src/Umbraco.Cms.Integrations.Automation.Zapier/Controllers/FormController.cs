@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
@@ -11,30 +9,26 @@ using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 using Microsoft.Extensions.Options;
 
 using Umbraco.Cms.Web.Common.Controllers;
-using Umbraco.Cms.Core.Services;
 #else
 using System.Configuration;
 
 using Umbraco.Web.WebApi;
-using Umbraco.Core.Services;
 #endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 {
-    public class PollingController : UmbracoApiController
+    public class FormController : UmbracoApiController
     {
         private readonly ZapierSettings Options;
 
-        private IContentService _contentService;
-
-        private ZapierFormService _zapierFormService;
-
         private readonly IUserValidationService _userValidationService;
 
+        private readonly ZapierFormService _zapierFormService;
+
 #if NETCOREAPP
-        public PollingController(IOptions<ZapierSettings> options, IContentService contentService, ZapierFormService zapierFormService, IUserValidationService userValidationService)
+        public FormController(IOptions<ZapierSettings> options, IUserValidationService userValidationService, ZapierFormService zapierFormService)
 #else
-        public PollingController(IContentService contentService, ZapierFormService zapierFormService, IUserValidationService userValidationService)
+        public FormController(ZapierFormService zapierFormService, IUserValidationService userValidationService)
 #endif
         {
 #if NETCOREAPP
@@ -43,14 +37,12 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             Options = new ZapierSettings(ConfigurationManager.AppSettings);
 #endif
 
-            _contentService = contentService;
-
             _zapierFormService = zapierFormService;
 
             _userValidationService = userValidationService;
         }
 
-        public IEnumerable<PublishedContentDto> GetSampleContent()
+        public IEnumerable<FormDto> GetForms()
         {
             string username = string.Empty;
             string password = string.Empty;
@@ -71,26 +63,13 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
                 password = passwordValues.First();
 #endif
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return null;
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return Enumerable.Empty<FormDto>();
 
-            var isAuthorized = _userValidationService.Validate(username, password, Options.UserGroup).GetAwaiter()
-                .GetResult();
-            if (!isAuthorized) return null;
+            var isAuthorized = _userValidationService.Validate(username, password, Options.UserGroup).GetAwaiter().GetResult();
+            if (!isAuthorized) return Enumerable.Empty<FormDto>();
 
-            var rootNodes = _contentService.GetRootContent().Where(p => p.Published)
-                .OrderByDescending(p => p.PublishDate);
-
-            return rootNodes.Select(p => new PublishedContentDto
-            {
-                Id = p.Id,
-                Name = p.Name,
-                PublishDate = p.PublishDate.Value.ToString()
-            });
-        }
-
-        public IEnumerable<FormDto> GetSampleForm()
-        {
             return _zapierFormService.GetAll();
         }
+
     }
 }

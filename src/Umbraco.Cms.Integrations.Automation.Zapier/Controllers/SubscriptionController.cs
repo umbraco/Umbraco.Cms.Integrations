@@ -77,5 +77,37 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
             return string.IsNullOrEmpty(result);
         }
+
+        [HttpPost]
+        public bool UpdateFormPreferences([FromBody] FormSubscriptionDto dto)
+        {
+            string username = string.Empty;
+            string password = string.Empty;
+
+#if NETCOREAPP
+            if (Request.Headers.TryGetValue(Constants.ZapierAppConfiguration.UsernameHeaderKey, 
+                    out var usernameValues))
+                username = usernameValues.First();
+            if (Request.Headers.TryGetValue(Constants.ZapierAppConfiguration.PasswordHeaderKey, 
+                    out var passwordValues))
+                password = passwordValues.First();
+#else
+            if (Request.Headers.TryGetValues(Constants.ZapierAppConfiguration.UsernameHeaderKey,
+                    out var usernameValues))
+                username = usernameValues.First();
+            if (Request.Headers.TryGetValues(Constants.ZapierAppConfiguration.PasswordHeaderKey,
+                    out var passwordValues))
+                password = passwordValues.First();
+#endif
+
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return false;
+
+            var isAuthorized = _userValidationService.Validate(username, password, Options.UserGroup).GetAwaiter().GetResult();
+            if (!isAuthorized) return false;
+
+            if (dto == null) return false;
+
+            return true;
+        }
     }
 }
