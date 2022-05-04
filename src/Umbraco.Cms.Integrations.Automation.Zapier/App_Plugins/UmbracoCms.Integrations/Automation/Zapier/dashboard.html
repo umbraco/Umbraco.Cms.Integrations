@@ -1,4 +1,5 @@
 ﻿<div ng-controller="Umbraco.Cms.Integrations.Automation.Zapier.ZapierConfigController as vm">
+    <umb-load-indicator ng-show="vm.loading"></umb-load-indicator>
     <umb-box>
         <umb-box-header title="Content Properties"></umb-box-header>
         <umb-box-content>
@@ -29,17 +30,11 @@
     </umb-box>
     <umb-box>
         <umb-box-header title="Registered Subscription Hooks"></umb-box-header>
-        <umb-content>
+        <umb-box-content>
+            <div>
+                <p ng-if="vm.contentConfigs.length == 0">There are no subscription hooks.</p>
+            </div>
             <div class="mt2">
-
-                <!-- If list is empty, then display -->
-                <umb-empty-state ng-if="vm.contentConfigs.length == 0"
-                                 position="center" class="mb-3">
-                    There are no subscription hooks.
-                </umb-empty-state>
-
-                <umb-load-indicator ng-show="vm.loading"></umb-load-indicator>
-
                 <div class="umb-table" ng-if="vm.contentConfigs.length > 0">
                     <!-- Listviews head section -->
                     <div class="umb-table-head">
@@ -73,6 +68,48 @@
                     </div>
                 </div>
             </div>
-        </umb-content>
+        </umb-box-content>
+    </umb-box>
+    <umb-box ng-if="vm.formsExtensionInstalled">
+        <umb-box-header title="Registered Form Subscription Hooks"></umb-box-header>
+        <umb-box-content>
+            <div>
+                <p ng-if="vm.formConfigs.length == 0">There are no form subscription hooks.</p>
+            </div>
+            <div class="mt2">
+                <div class="umb-table" ng-if="vm.formConfigs.length > 0">
+                    <!-- Listviews head section -->
+                    <div class="umb-table-head">
+                        <div class="umb-table-row">
+                            <div class="umb-table-cell"></div>
+                            <div class="umb-table-cell umb-table__name">
+                                <a class="umb-table-head__link" href="#" prevent-default>
+                                    <span>Form Name</span>
+                                </a>
+                            </div>
+                            <div class="umb-table-cell">
+                                <a class="umb-table-head__link" href="#" prevent-default>
+                                    <span>Hook URL</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Listview body section -->
+                    <div class="umb-table-body">
+                        <div class="umb-table-row"
+                             ng-repeat="row in vm.formConfigs track by $index">
+                            <div class="umb-table-cell"></div>
+                            <div class="umb-table-cell umb-table__name">
+                                <span ng-bind="row.formName"></span>
+                            </div>
+                            <div class="umb-table-cell">
+                                <span ng-bind="row.hookUrl"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </umb-box-content>
     </umb-box>
 </div>

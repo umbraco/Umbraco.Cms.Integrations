@@ -45,7 +45,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
         {
             if (!TryResolveFormService(out var formService)) return Enumerable.Empty<FormDto>();
 
-            var getAllFormsMethod = FormHelper.GetMethodForTypeByName(FormServiceType, "Get", new object[] {});
+            var getAllFormsMethod = FormsHelper.GetMethodForTypeByName(FormServiceType, "Get", new object[] {});
 
             var forms = (IEnumerable<object>) getAllFormsMethod.Invoke(formService, null);
 
@@ -70,7 +70,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 
             try
             {
-                var getAllFormsMethod = FormHelper.GetMethodForTypeByName(FormStorageType, "GetAll", new object[] { });
+                var getAllFormsMethod = FormsHelper.GetMethodForTypeByName(FormStorageType, "GetAll", new object[] { });
 
                 var forms = (IEnumerable<object>)getAllFormsMethod.Invoke(formStorage, null);
 

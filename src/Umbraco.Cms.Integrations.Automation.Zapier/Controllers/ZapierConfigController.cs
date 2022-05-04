@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Umbraco.Cms.Integrations.Automation.Zapier.Helpers;
 using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 
@@ -25,31 +25,31 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
     {
         private readonly ZapierSubscriptionHookService _zapierSubscriptionHookService;
 
+        private readonly ZapierFormSubscriptionHookService _zapierFormSubscriptionHookService;
+
         private readonly ZapierService _zapierService;
 
-        public ZapierConfigController(ZapierSubscriptionHookService zapierSubscriptionHookService, ZapierService zapierService)
+        public ZapierConfigController(
+            ZapierSubscriptionHookService zapierSubscriptionHookService, 
+            ZapierFormSubscriptionHookService zapierFormSubscriptionHookService,
+            ZapierService zapierService)
         {
             _zapierSubscriptionHookService = zapierSubscriptionHookService;
+
+            _zapierFormSubscriptionHookService = zapierFormSubscriptionHookService;
 
             _zapierService = zapierService;
         }
 
-        [HttpPost]
-        public string Add([FromBody] ContentConfigDto dto)
-        {
-            var getByAliasResult = _zapierSubscriptionHookService.TryGetByAlias(dto.ContentTypeAlias, out _);
-            if (getByAliasResult) return "A record for this content type already exists.";
-
-            var result = _zapierSubscriptionHookService.Add(dto.ContentTypeAlias, dto.HookUrl);
-            
-            return result;
-        } 
-
         [HttpGet]
         public IEnumerable<ContentConfigDto> GetAll() => _zapierSubscriptionHookService.GetAll();
 
-        [HttpDelete]
-        public string Delete(string contentTypeAlias, string hookUrl) => _zapierSubscriptionHookService.Delete(contentTypeAlias, hookUrl);
+        [HttpGet]
+        public bool IsFormsExtensionInstalled() => FormsHelper.IsFormsExtensionInstalled;
+
+        [HttpGet]
+        public IEnumerable<FormConfigDto> GetAllForms() => _zapierFormSubscriptionHookService.GetAll();
+
 
         [HttpPost]
         public async Task<string> TriggerWebHook([FromBody] ContentConfigDto dto)

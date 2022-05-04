@@ -107,7 +107,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
             if (dto == null) return false;
 
-            return true;
+            var result = dto.SubscribeHook
+                ? _zapierSubscriptionHookService.Add(dto.FormName, dto.HookUrl)
+                : _zapierSubscriptionHookService.Delete(dto.FormName, dto.HookUrl);
+
+            return string.IsNullOrEmpty(result);
         }
     }
 }

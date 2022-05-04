@@ -16,14 +16,14 @@ using Umbraco.Core.Scoping;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 {
-    public class ZapierSubscriptionHookService
+    public class ZapierFormSubscriptionHookService
     {
         private readonly IScopeProvider _scopeProvider;
 
 #if NETCOREAPP
         private readonly ILogger<ZapierSubscriptionHookService> _logger;
 
-        public ZapierSubscriptionHookService(IScopeProvider scopeProvider, ILogger<ZapierSubscriptionHookService> logger)
+        public ZapierFormSubscriptionHookService(IScopeProvider scopeProvider, ILogger<ZapierSubscriptionHookService> logger)
         {
             _scopeProvider = scopeProvider;
 
@@ -32,7 +32,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 #else
         private readonly ILogger _logger;
 
-         public ZapierSubscriptionHookService(IScopeProvider scopeProvider, ILogger logger)
+         public ZapierFormSubscriptionHookService(IScopeProvider scopeProvider, ILogger logger)
         {
             _scopeProvider = scopeProvider;
 
@@ -40,32 +40,30 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
         }
 #endif
 
-
-
-        public IEnumerable<ContentConfigDto> GetAll()
+        public IEnumerable<FormConfigDto> GetAll()
         {
             using (var scope = _scopeProvider.CreateScope())
             {
-                var data = scope.Database.Query<ZapierMigration.ZapierSubscriptionHookTable>().ToList();
+                var data = scope.Database.Query<ZapierMigration.ZapierFormSubscriptionHookTable>().ToList();
 
-                return data.Select(p => new ContentConfigDto
+                return data.Select(p => new FormConfigDto
                 {
                     Id = p.Id,
-                    ContentTypeAlias = p.ContentTypeAlias,
+                    FormName = p.FormName,
                     HookUrl = p.HookUrl
                 });
             }
         }
 
-        public string Add(string contentTypeAlias, string hookUrl)
+        public string Add(string formName, string hookUrl)
         {
             try
             {
                 using (var scope = _scopeProvider.CreateScope())
                 {
-                    var zapContentConfig = new ZapierMigration.ZapierSubscriptionHookTable
+                    var zapContentConfig = new ZapierMigration.ZapierFormSubscriptionHookTable()
                     {
-                        ContentTypeAlias = contentTypeAlias,
+                        FormName = formName,
                         HookUrl = hookUrl,
                     };
 
@@ -82,21 +80,21 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 #if NETCOREAPP
                 _logger.LogError(message);
 #else
-                _logger.Error<ZapierSubscriptionHookService>(message);
+                _logger.Error<ZapierFormSubscriptionHookService>(message);
 #endif
 
                 return message;
             }
         }
 
-        public string Delete(string contentTypeAlias, string hookUrl)
+        public string Delete(string formName, string hookUrl)
         {
             try
             {
                 using (var scope = _scopeProvider.CreateScope())
                 {
-                    var entity = scope.Database.Query<ZapierMigration.ZapierSubscriptionHookTable>()
-                        .FirstOrDefault(p => p.ContentTypeAlias == contentTypeAlias && p.HookUrl == hookUrl);
+                    var entity = scope.Database.Query<ZapierMigration.ZapierFormSubscriptionHookTable>()
+                        .FirstOrDefault(p => p.FormName == formName && p.HookUrl == hookUrl);
                     if (entity != null)
                     {
                         scope.Database.Delete(entity);
@@ -114,25 +112,25 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 #if NETCOREAPP
                 _logger.LogError(message);
 #else
-                _logger.Error<ZapierSubscriptionHookService>(message);
+                _logger.Error<ZapierFormSubscriptionHookService>(message);
 #endif
 
                 return message;
             }
         }
 
-        public bool TryGetByAlias(string contentTypeAlias, out IEnumerable<ContentConfigDto> dto)
+        public bool TryGetByName(string formName, out IEnumerable<FormConfigDto> dto)
         {
             using (var scope = _scopeProvider.CreateScope())
             {
                 var entities =
                     scope.Database
-                        .Query<ZapierMigration.ZapierSubscriptionHookTable>()
-                        .Where(p => p.ContentTypeAlias == contentTypeAlias)
+                        .Query<ZapierMigration.ZapierFormSubscriptionHookTable>()
+                        .Where(p => p.FormName == formName)
                         .ToList();
 
                 dto = entities.Any()
-                    ? entities.Select(p => new ContentConfigDto { HookUrl = p.HookUrl })
+                    ? entities.Select(p => new FormConfigDto { HookUrl = p.HookUrl })
                     : null;
 
                 return entities.Any();

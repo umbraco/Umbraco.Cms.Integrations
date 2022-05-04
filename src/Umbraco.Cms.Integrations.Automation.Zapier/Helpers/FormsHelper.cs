@@ -5,8 +5,10 @@ using System.Reflection;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Helpers
 {
-    public class FormHelper
+    public class FormsHelper
     {
+        public static bool IsFormsExtensionInstalled => Type.GetType("Umbraco.Forms.Core.Services.IFormService, Umbraco.Forms.Core") != null;
+
         public static IEnumerable<MethodInfo> GetMethodsForType(Type type)
         {
             foreach (var method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly))

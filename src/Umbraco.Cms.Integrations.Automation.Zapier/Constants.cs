@@ -5,7 +5,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
     {
         public const string ZapierSubscriptionHookTable = "zapierSubscriptionHook";
 
-        public const string MigrationPlanName = "ZapierSubscriptionHook";
+        public const string ZapierFormSubscriptionHookTable = "zapierFormSubscriptionHook";
+
+        public const string MigrationPlanName = "ZapierMigrationPlan";
 
         public const string TargetStateName = "zapiersubscriptionhook-db";
 
@@ -30,7 +32,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
             public const string Name = "Name";
 
             public const string PublishDate = "PublishDate";
-
         }
     }
 }

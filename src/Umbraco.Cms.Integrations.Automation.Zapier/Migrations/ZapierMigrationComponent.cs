@@ -7,16 +7,15 @@ using Umbraco.Core.Migrations.Upgrade;
 using Umbraco.Core.Scoping;
 using Umbraco.Core.Services;
 
-
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 {
     [RuntimeLevel(MinLevel = RuntimeLevel.Run)]
-    public class ZapContentConfigComposer : ComponentComposer<ZapContentConfigComponent>
+    public class ZapierMigrationComposer : ComponentComposer<ZapierMigrationComponent>
     {
 
     }
 
-    public class ZapContentConfigComponent : IComponent
+    public class ZapierMigrationComponent : IComponent
     {
         private IScopeProvider _scopeProvider;
 
@@ -26,7 +25,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 
         private ILogger _logger;
 
-        public ZapContentConfigComponent(IScopeProvider scopeProvider, IMigrationBuilder migrationBuilder, IKeyValueService keyValueService, ILogger logger)
+        public ZapierMigrationComponent(IScopeProvider scopeProvider, IMigrationBuilder migrationBuilder, IKeyValueService keyValueService, ILogger logger)
         {
             _scopeProvider = scopeProvider;
 
