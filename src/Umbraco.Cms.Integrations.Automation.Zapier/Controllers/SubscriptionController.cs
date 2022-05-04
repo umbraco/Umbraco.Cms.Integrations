@@ -23,12 +23,20 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
         private readonly ZapierSubscriptionHookService _zapierSubscriptionHookService;
 
+        private readonly ZapierFormSubscriptionHookService _zapierFormSubscriptionHookService;
+
         private readonly IUserValidationService _userValidationService;
 
 #if NETCOREAPP
-        public SubscriptionController(IOptions<ZapierSettings> options, ZapierSubscriptionHookService zapierSubscriptionHookService, IUserValidationService userValidationService)
+        public SubscriptionController(IOptions<ZapierSettings> options, 
+            ZapierSubscriptionHookService zapierSubscriptionHookService, 
+            ZapierFormSubscriptionHookService zapierFormSubscriptionHookService,
+            IUserValidationService userValidationService)
 #else
-        public SubscriptionController(ZapierSubscriptionHookService zapierSubscriptionHookService, IUserValidationService userValidationService)
+        public SubscriptionController(
+            ZapierSubscriptionHookService zapierSubscriptionHookService, 
+            ZapierFormSubscriptionHookService zapierFormSubscriptionHookService,
+            IUserValidationService userValidationService)
 #endif
         {
 #if NETCOREAPP
@@ -38,6 +46,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 #endif
 
             _zapierSubscriptionHookService = zapierSubscriptionHookService;
+
+            _zapierFormSubscriptionHookService = zapierFormSubscriptionHookService;
 
             _userValidationService = userValidationService;
         }
@@ -108,8 +118,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             if (dto == null) return false;
 
             var result = dto.SubscribeHook
-                ? _zapierSubscriptionHookService.Add(dto.FormName, dto.HookUrl)
-                : _zapierSubscriptionHookService.Delete(dto.FormName, dto.HookUrl);
+                ? _zapierFormSubscriptionHookService.Add(dto.FormName, dto.HookUrl)
+                : _zapierFormSubscriptionHookService.Delete(dto.FormName, dto.HookUrl);
 
             return string.IsNullOrEmpty(result);
         }
