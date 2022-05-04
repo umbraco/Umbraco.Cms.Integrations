@@ -82,7 +82,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
             return rootNodes.Select(p => new PublishedContentDto
             {
-                Id = p.Id,
+                Id = p.Id.ToString(),
                 Name = p.Name,
                 PublishDate = p.PublishDate.Value.ToString()
             });
