@@ -27,11 +27,22 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
         public static class Content
         {
-            public const string Id = "Id";
+            public const string Id = "id";
 
-            public const string Name = "Name";
+            public const string Name = "name";
 
-            public const string PublishDate = "PublishDate";
+            public const string PublishDate = "publishDate";
+        }
+
+        public static class Form
+        {
+            public const string Id = "formId";
+
+            public const string Name = "formName";
+
+            public const string SubmissionDate = "submissionDate";
+
+            public const string PageUrl = "pageUrl";
         }
     }
 }

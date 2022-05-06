@@ -1,8 +1,4 @@
 ﻿#if NETCOREAPP
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 using Microsoft.Extensions.Logging;
 
 using Umbraco.Cms.Core.Events;
