@@ -21,7 +21,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Helpers
             {
                 {Constants.Content.Id, contentId},
                 {Constants.Content.Name, contentName},
-                {Constants.Content.PublishDate, DateTime.UtcNow.ToString()}
+                {Constants.Content.PublishDate, DateTime.UtcNow.ToString("s")}
             };
 
             var t = Task.Run(
@@ -36,7 +36,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Helpers
             {
                 {Constants.Form.Id, formId},
                 {Constants.Form.Name, formName},
-                {Constants.Form.SubmissionDate, DateTime.UtcNow.ToString()},
+                {Constants.Form.SubmissionDate, DateTime.UtcNow.ToString("s")},
                 {Constants.Form.PageUrl, pageUrl}
             };
 
