@@ -4,7 +4,9 @@ This integration provides a keywords search tool powered by [Semrush](https://ww
 
 ## Prerequisites
 
-Requires minimum versions of Umbraco CMS: 8.5.0
+Requires minimum versions of Umbraco CMS: 
+- CMS V8: 8.5.4
+- CMS V9: 9.0.1
 
 An account with Semrush.
 
