@@ -40,8 +40,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
         }
 #endif
 
-
-
         public IEnumerable<ContentConfigDto> GetAll()
         {
             using (var scope = _scopeProvider.CreateScope())

@@ -1,6 +1,7 @@
 ﻿#if NETFRAMEWORK
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.Automation.Zapier.Helpers;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
@@ -53,9 +54,21 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
             {
                 if (_zapierSubscriptionHookService.TryGetByAlias(node.ContentType.Alias, out var zapContentConfigList))
                 {
+                    var content = new Dictionary<string, string>
+                    {
+                        {Constants.Content.Id, node.Id.ToString() },
+                        {Constants.Content.Name, node.Name },
+                        {Constants.Content.PublishDate, DateTime.UtcNow.ToString("s") }
+                    };
+
+                    foreach (var nodeProperty in node.Properties)
+                    {
+                        content.Add(nodeProperty.Alias, nodeProperty.Id == 0 || nodeProperty.Values.Count == 0 ? string.Empty : nodeProperty.GetValue().ToString());
+                    }
+
                     foreach (var zapContentConfig in zapContentConfigList)
                     {
-                        var result = triggerHelper.Execute(zapContentConfig.HookUrl, node.Id.ToString(), node.Name);
+                        var result = triggerHelper.Execute(zapContentConfig.HookUrl, content);
 
                         if (!string.IsNullOrEmpty(result))
                             _logger.Error<NewContentPublishedComponent>(result);

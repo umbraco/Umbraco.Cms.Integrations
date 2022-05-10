@@ -33,16 +33,5 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
             public const string PublishDate = "publishDate";
         }
-
-        public static class Form
-        {
-            public const string Id = "formId";
-
-            public const string Name = "formName";
-
-            public const string SubmissionDate = "submissionDate";
-
-            public const string PageUrl = "pageUrl";
-        }
     }
 }

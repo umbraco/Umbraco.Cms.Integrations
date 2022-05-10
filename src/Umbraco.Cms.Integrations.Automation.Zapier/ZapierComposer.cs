@@ -30,11 +30,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
             builder.Services.AddSingleton<ZapierSubscriptionHookService>();
 
-            builder.Services.AddSingleton<ZapierFormSubscriptionHookService>();
-
             builder.Services.AddSingleton<ZapierService>();
-
-            builder.Services.AddSingleton<ZapierFormService>();
 
             builder.Services.AddScoped<IUserValidationService, UserValidationService>();
         }
@@ -43,11 +39,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
         {
             composition.Register<ZapierSubscriptionHookService>(Lifetime.Singleton);
 
-            composition.Register<ZapierFormSubscriptionHookService>(Lifetime.Singleton);
-
             composition.Register<ZapierService>(Lifetime.Singleton);
-
-            composition.Register<ZapierFormService>(Lifetime.Singleton);
 
             composition.Register<IUserValidationService, UserValidationService>(Lifetime.Scope);
         }
