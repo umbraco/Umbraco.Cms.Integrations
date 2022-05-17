@@ -1,8 +1,7 @@
 ﻿#if NETFRAMEWORK
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Umbraco.Cms.Integrations.Automation.Zapier.Helpers;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 using Umbraco.Core;
