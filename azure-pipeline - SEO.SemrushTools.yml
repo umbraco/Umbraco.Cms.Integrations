@@ -1,5 +1,5 @@
 trigger:
-- main
+- feature/semrush-build
 
 pool:
   vmImage: 'windows-latest'
