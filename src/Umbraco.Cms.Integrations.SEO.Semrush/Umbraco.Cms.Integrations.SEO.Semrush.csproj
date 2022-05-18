@@ -26,7 +26,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\**\*.*">
+		<Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\*.*">
 			<Pack>true</Pack>
 			<PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\Semrush\</PackagePath>
 		</Content>
