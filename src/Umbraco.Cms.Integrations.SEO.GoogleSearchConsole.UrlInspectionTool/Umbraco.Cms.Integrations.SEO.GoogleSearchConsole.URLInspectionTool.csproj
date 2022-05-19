@@ -43,21 +43,6 @@
 		</Content>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\js\url-inspection-tool.controller.js" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\js\url-inspection-tool.resource.js" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\lang\en-US.xml" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\package.manifest" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\urlInspection.css" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\urlInspection.html" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Update="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\lang\en-US.xml">
-	    <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\</PackagePath>
-	  </Content>
-	</ItemGroup>
-
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
 		<ItemGroup>
 			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
