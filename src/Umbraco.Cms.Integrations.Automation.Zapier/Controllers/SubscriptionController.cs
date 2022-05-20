@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Net;
+﻿using System.Linq;
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
 using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
@@ -17,6 +15,9 @@ using Umbraco.Web.WebApi;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 {
+    /// <summary>
+    /// Subscription API handling the ON/OFF trigger events in Zapier.
+    /// </summary>
     public class SubscriptionController : UmbracoApiController
     {
         private readonly ZapierSettings Options;

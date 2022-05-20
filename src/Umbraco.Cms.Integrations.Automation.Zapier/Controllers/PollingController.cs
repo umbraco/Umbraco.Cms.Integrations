@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
+
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
+using Umbraco.Cms.Integrations.Automation.Zapier.Extensions;
 using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 
@@ -12,20 +13,21 @@ using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Web.Common.Controllers;
 using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Extensions;
 #else
 using System.Configuration;
 
 using Umbraco.Web;
 using Umbraco.Web.WebApi;
 using Umbraco.Core.Services;
-using Umbraco.Core.Models.PublishedContent;
-
 #endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 {
+    /// <summary>
+    /// When a Zapier user creates a "New Content Published" triggered, he is authenticated, then selects a content type, the API provides an output json with the
+    /// structure of a content node matching the selected content type.
+    /// For version 1.0.0 of the Umbraco Zapier App, the GetSampleContent will be used.
+    /// </summary>
     public class PollingController : UmbracoApiController
     {
         private IUmbracoContextFactory _umbracoContextFactory;
@@ -34,14 +36,12 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
         private readonly ZapierSettings Options;
 
-        private ZapierFormService _zapierFormService;
-
         private readonly IUserValidationService _userValidationService;
 
 #if NETCOREAPP
-        public PollingController(IOptions<ZapierSettings> options, IUmbracoContextFactory umbracoContextFactory, IContentService contentService, ZapierFormService zapierFormService, IUserValidationService userValidationService)
+        public PollingController(IOptions<ZapierSettings> options, IUmbracoContextFactory umbracoContextFactory, IContentService contentService, IUserValidationService userValidationService)
 #else
-        public PollingController(IUmbracoContextFactory umbracoContextFactory, IContentService contentService, ZapierFormService zapierFormService, IUserValidationService userValidationService)
+        public PollingController(IUmbracoContextFactory umbracoContextFactory, IContentService contentService, IUserValidationService userValidationService)
 #endif
         {
 #if NETCOREAPP
@@ -54,11 +54,10 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
             _contentService = contentService;
 
-            _zapierFormService = zapierFormService;
-
             _userValidationService = userValidationService;
         }
 
+        [Obsolete("Used only for Umbraco Zapier app v1.0.0. For updated versions use GetContentByType")]
         public IEnumerable<PublishedContentDto> GetSampleContent()
         {
             string username = string.Empty;
@@ -97,7 +96,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             });
         }
 
-        public List<Dictionary<string, string>> GetContentByAlias(string contentTypeAlias)
+        public List<Dictionary<string, string>> GetContentByType(string alias)
         {
             var list = new List<Dictionary<string, string>>();
 
@@ -105,35 +104,17 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             {
                 var cache = cref.UmbracoContext.Content;
                 
-                var nodes = cache.GetByXPath($"//{contentTypeAlias}")
+                var node = cache.GetByXPath($"//{alias}")
                     .Where(p => p.IsPublished())
-                    .OrderByDescending(p => p.UpdateDate);
+                    .OrderByDescending(p => p.UpdateDate)
+                    .FirstOrDefault();
 
-                foreach (var node in nodes)
-                {
-                    var content = new Dictionary<string, string>
-                    {
-                        {Constants.Content.Id, node.Id.ToString() },
-                        {Constants.Content.Name, node.Name },
-                        {Constants.Content.PublishDate, node.UpdateDate.ToString("s") }
-                    };
+                if (node == null) return list;
 
-                    foreach (var prop in node.Properties)
-                    {
-                        content.Add(prop.Alias, prop.GetValue().ToString());
-                    }
-                    
-
-                    list.Add(content);
-                }
+                list.Add(node.ToContentDictionary());
 
                 return list;
             }
-        }
-
-        public IEnumerable<FormDto> GetSampleForm()
-        {
-            return _zapierFormService.GetAll();
         }
     }
 }

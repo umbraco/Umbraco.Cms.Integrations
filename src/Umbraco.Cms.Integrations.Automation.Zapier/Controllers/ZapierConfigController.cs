@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+
 using Umbraco.Cms.Integrations.Automation.Zapier.Helpers;
 using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
@@ -45,7 +45,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
         public IEnumerable<ContentConfigDto> GetAll() => _zapierSubscriptionHookService.GetAll();
 
         [HttpGet]
-        public bool IsFormsExtensionInstalled() => FormsHelper.IsFormsExtensionInstalled;
+        public bool IsFormsExtensionInstalled() => ReflectionHelper.IsFormsExtensionInstalled;
 
         [HttpGet]
         public IEnumerable<FormConfigDto> GetAllForms() => _zapierFormSubscriptionHookService.GetAll();

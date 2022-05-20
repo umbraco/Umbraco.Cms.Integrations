@@ -1,7 +1,4 @@
 ﻿#if NETFRAMEWORK
-using System;
-using System.Collections.Generic;
-
 using Umbraco.Cms.Integrations.Automation.Zapier.Helpers;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 using Umbraco.Core;
@@ -10,6 +7,7 @@ using Umbraco.Core.Events;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Services;
 using Umbraco.Core.Services.Implement;
+using Umbraco.Cms.Integrations.Automation.Zapier.Extensions;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
 {
@@ -51,19 +49,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
 
             foreach (var node in e.PublishedEntities)
             {
+                var x = node.ToContentDictionary();
+
                 if (_zapierSubscriptionHookService.TryGetByAlias(node.ContentType.Alias, out var zapContentConfigList))
                 {
-                    var content = new Dictionary<string, string>
-                    {
-                        {Constants.Content.Id, node.Id.ToString() },
-                        {Constants.Content.Name, node.Name },
-                        {Constants.Content.PublishDate, DateTime.UtcNow.ToString("s") }
-                    };
-
-                    foreach (var nodeProperty in node.Properties)
-                    {
-                        content.Add(nodeProperty.Alias, nodeProperty.Id == 0 || nodeProperty.Values.Count == 0 ? string.Empty : nodeProperty.GetValue().ToString());
-                    }
+                    var content = node.ToContentDictionary();
 
                     foreach (var zapContentConfig in zapContentConfigList)
                     {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using System.Linq;
 
@@ -21,6 +20,9 @@ using Umbraco.Core.Services;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 {
+    /// <summary>
+    /// When a Zapier user creates a new "New Content Published" trigger, the API is used to provide him with the list of content types for handling "Published" event.
+    /// </summary>
     public class ContentController : UmbracoApiController
     {
         private readonly ZapierSettings Options;
@@ -29,12 +31,10 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
         private readonly IUserValidationService _userValidationService;
 
-        private readonly ZapierSubscriptionHookService _zapierSubscriptionHookService;
-
 #if NETCOREAPP
-        public ContentController(IOptions<ZapierSettings> options, IContentTypeService contentTypeService, IUserValidationService userValidationService, ZapierSubscriptionHookService zapierSubscriptionHookService)
+        public ContentController(IOptions<ZapierSettings> options, IContentTypeService contentTypeService, IUserValidationService userValidationService)
 #else
-        public ContentController(IContentTypeService contentTypeService, IUserValidationService userValidationService, ZapierSubscriptionHookService zapierSubscriptionHookService)
+        public ContentController(IContentTypeService contentTypeService, IUserValidationService userValidationService)
 #endif
         {
 #if NETCOREAPP
@@ -46,8 +46,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             _contentTypeService = contentTypeService;
 
             _userValidationService = userValidationService;
-
-            _zapierSubscriptionHookService = zapierSubscriptionHookService;
         }
 
         public IEnumerable<ContentTypeDto> GetContentTypes()

@@ -16,6 +16,9 @@ using Umbraco.Core.Scoping;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 {
+    /// <summary>
+    /// Subscription service handling database operations for Forms.
+    /// </summary>
     public class ZapierFormSubscriptionHookService
     {
         private readonly IScopeProvider _scopeProvider;
@@ -116,24 +119,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 #endif
 
                 return message;
-            }
-        }
-
-        public bool TryGetByName(string formName, out IEnumerable<FormConfigDto> dto)
-        {
-            using (var scope = _scopeProvider.CreateScope())
-            {
-                var entities =
-                    scope.Database
-                        .Query<ZapierMigration.ZapierFormSubscriptionHookTable>()
-                        .Where(p => p.FormName == formName)
-                        .ToList();
-
-                dto = entities.Any()
-                    ? entities.Select(p => new FormConfigDto { HookUrl = p.HookUrl })
-                    : null;
-
-                return entities.Any();
             }
         }
     }

@@ -19,8 +19,11 @@
                 <p>
                     Zap triggers use webhooks to execute the actions. Webhooks are automated messages sent from apps when something happens.
                 </p>
-                <p>
+                <p ng-if="!vm.formsExtensionInstalled">
                     You can initiate your automation when a content item of a particular document type is published in Umbraco.
+                </p>
+                <p ng-if="vm.formsExtensionInstalled">
+                    You can initiate your automation when a content item of a particular document type is published or a form is submitted in Umbraco.
                 </p>
                 <p>
                     The integration uses Zapier subscription hook triggers, allowing Zapier to set up and remove hook subscriptions when Zaps are created or removed on the platform.

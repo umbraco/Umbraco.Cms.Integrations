@@ -2,10 +2,10 @@
 
 #if NETCOREAPP
 using Microsoft.Extensions.DependencyInjection;
+
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Notifications;
-using Umbraco.Cms.Integrations.Automation.Zapier.Components;
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
 using Umbraco.Cms.Integrations.Automation.Zapier.Migrations;
 
@@ -32,9 +32,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
             builder.Services.AddSingleton<ZapierFormSubscriptionHookService>();
 
-            builder.Services.AddSingleton<ZapierService>();
-
-            builder.Services.AddSingleton<ZapierFormService>();
+            builder.Services.AddScoped<ZapierService>();
 
             builder.Services.AddScoped<IUserValidationService, UserValidationService>();
         }
@@ -46,8 +44,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
             composition.Register<ZapierFormSubscriptionHookService>(Lifetime.Singleton);
 
             composition.Register<ZapierService>(Lifetime.Singleton);
-
-            composition.Register<ZapierFormService>(Lifetime.Singleton);
 
             composition.Register<IUserValidationService, UserValidationService>(Lifetime.Scope);
         }

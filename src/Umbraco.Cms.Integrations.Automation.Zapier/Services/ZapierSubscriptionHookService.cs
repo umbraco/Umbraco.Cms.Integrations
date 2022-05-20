@@ -16,6 +16,9 @@ using Umbraco.Core.Scoping;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 {
+    /// <summary>
+    /// Subscription service handling database operations for content nodes.
+    /// </summary>
     public class ZapierSubscriptionHookService
     {
         private readonly IScopeProvider _scopeProvider;

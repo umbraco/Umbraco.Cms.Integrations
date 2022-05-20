@@ -19,6 +19,9 @@ using Umbraco.Web.WebApi;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 {
+    /// <summary>
+    /// When a Zapier user creates triggers using the Umbraco app from the Zapier App Directory, he needs to provide valid credentials for a backoffice account.
+    /// </summary>
     public class AuthController : UmbracoApiController
     {
         private readonly ZapierSettings Options;
@@ -31,7 +34,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
         public AuthController(IBackOfficeUserManager backOfficeUserManager, IUserValidationService userValidationService, IOptions<ZapierSettings> options)
         {
             _backOfficeUserManager = backOfficeUserManager;
-
+            
             _userValidationService = userValidationService;
 
             Options = options.Value;

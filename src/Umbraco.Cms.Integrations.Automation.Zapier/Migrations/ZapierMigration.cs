@@ -54,7 +54,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 #endif
             }
 
-            if (FormsHelper.IsFormsExtensionInstalled)
+            if (ReflectionHelper.IsFormsExtensionInstalled)
             {
                 if (TableExists(Constants.ZapierFormSubscriptionHookTable) == false)
                 {
