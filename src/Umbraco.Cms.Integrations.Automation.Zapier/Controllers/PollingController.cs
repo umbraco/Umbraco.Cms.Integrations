@@ -46,8 +46,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
         {
             if (!IsUserValid()) return null;
 
-            var rootNodes = _contentService.GetRootContent().Where(p => p.Published)
-            .OrderByDescending(p => p.PublishDate);
+            var rootNodes = _contentService.GetRootContent()
+                .Where(p => p.Published)
+                .OrderByDescending(p => p.PublishDate);
 
             return rootNodes.Select(p => new PublishedContentDto
             {
@@ -62,6 +63,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             if (!IsUserValid()) return null;
 
             var contentType = _contentTypeService.Get(alias);
+            if (contentType == null) return new List<Dictionary<string, string>>();
 
             return new List<Dictionary<string, string>> { contentType.ToContentTypeDictionary() };
         }
