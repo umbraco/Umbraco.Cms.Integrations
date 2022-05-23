@@ -4,7 +4,6 @@ using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
 using Umbraco.Cms.Integrations.Automation.Zapier.Models;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 
-
 #if NETCOREAPP
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -20,7 +19,7 @@ using Umbraco.Web.WebApi;
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 {
     /// <summary>
-    /// When a Zapier user creates triggers using the Umbraco app from the Zapier App Directory, he needs to provide valid credentials for a backoffice account.
+    /// When a Zapier user creates triggers using the Umbraco app from the Zapier App Directory, they need to provide valid credentials for a backoffice account.
     /// </summary>
     public class AuthController : UmbracoApiController
     {

@@ -49,8 +49,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
 
             foreach (var node in e.PublishedEntities)
             {
-                var x = node.ToContentDictionary();
-
                 if (_zapierSubscriptionHookService.TryGetByAlias(node.ContentType.Alias, out var zapContentConfigList))
                 {
                     var content = node.ToContentDictionary();

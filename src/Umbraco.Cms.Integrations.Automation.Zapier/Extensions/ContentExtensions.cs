@@ -1,29 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 #if NETCOREAPP
 using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Models.PublishedContent;
 #else
 using Umbraco.Core.Models;
-using Umbraco.Core.Models.PublishedContent;
 #endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
 {
     public static class ContentExtensions
     {
-        public static Dictionary<string, string> ToContentDictionary(this IPublishedContent publishedContent)
+        public static Dictionary<string, string> ToContentTypeDictionary(this IContentType contentType)
         {
             var contentDict = new Dictionary<string, string>
             {
-                {Constants.Content.Id, publishedContent.Id.ToString() },
-                {Constants.Content.Name, publishedContent.Name },
-                {Constants.Content.PublishDate, publishedContent.UpdateDate.ToString("s") }
+                {Constants.Content.Id, "1" },
+                {Constants.Content.Name, contentType.Name },
+                {Constants.Content.PublishDate, DateTime.UtcNow.ToString("s") }
             };
 
-            foreach (var prop in publishedContent.Properties)
+            foreach (var propertyType in contentType.PropertyTypes)
             {
-                contentDict.Add(prop.Alias, string.Empty);
+                contentDict.Add(propertyType.Alias, string.Empty);
             }
 
             return contentDict;
