@@ -2,10 +2,10 @@
 
 #if NETCOREAPP
 using Microsoft.Extensions.DependencyInjection;
+
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Notifications;
-using Umbraco.Cms.Integrations.Automation.Zapier.Components;
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
 using Umbraco.Cms.Integrations.Automation.Zapier.Migrations;
 
@@ -28,16 +28,20 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
             builder
                 .AddNotificationHandler<UmbracoApplicationStartingNotification, UmbracoAppStartingHandler>();
 
-            builder.Services.AddSingleton<ZapConfigService>();
+            builder.Services.AddSingleton<ZapierSubscriptionHookService>();
 
-            builder.Services.AddSingleton<ZapierService>();
+            builder.Services.AddSingleton<ZapierFormSubscriptionHookService>();
+
+            builder.Services.AddScoped<ZapierService>();
 
             builder.Services.AddScoped<IUserValidationService, UserValidationService>();
         }
 #else
         public void Compose(Composition composition)
         {
-            composition.Register<ZapConfigService>(Lifetime.Singleton);
+            composition.Register<ZapierSubscriptionHookService>(Lifetime.Singleton);
+
+            composition.Register<ZapierFormSubscriptionHookService>(Lifetime.Singleton);
 
             composition.Register<ZapierService>(Lifetime.Singleton);
 

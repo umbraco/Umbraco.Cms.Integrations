@@ -1,29 +1,21 @@
 ﻿angular.module('umbraco.resources').factory('umbracoCmsIntegrationsAutomationZapierResource',
     function ($http, umbRequestHelper) {
 
-        const apiEndpoint = "backoffice/UmbracoCmsIntegrationsAutomationZapier/ZapConfig";
+        const apiEndpoint = "backoffice/UmbracoCmsIntegrationsAutomationZapier/ZapierConfig";
 
         return {
-            getContentTypes: function () {
+            getAllContentConfigs: function() {
                 return umbRequestHelper.resourcePromise(
-                    $http.get(`${apiEndpoint}/GetContentTypes`),
+                    $http.get(`${apiEndpoint}/GetAll`),
                     "Failed to get resource");
             },
-            addConfig: function (webHookUrl, contentTypeName) {
+            checkFormsExtension: function() {
                 return umbRequestHelper.resourcePromise(
-                    $http.post(`${apiEndpoint}/Add`, { contentTypeName: contentTypeName, webHookUrl: webHookUrl }), "Failed to get resource");
+                    $http.get(`${apiEndpoint}/IsFormsExtensionInstalled`), "Failed to get resource");
             },
-            getAllConfigs: function () {
+            getAllFormConfigs: function() {
                 return umbRequestHelper.resourcePromise(
-                    $http.get(`${apiEndpoint}/GetAll`), "Failed to get resource");
-            },
-            triggerWebHook: function (webHookUrl, contentTypeName) {
-                return umbRequestHelper.resourcePromise(
-                    $http.post(`${apiEndpoint}/TriggerWebHook`, { contentTypeName: contentTypeName, webHookUrl: webHookUrl }), "Failed to get resource");
-            },
-            deleteConfig: function (id) {
-                return umbRequestHelper.resourcePromise(
-                    $http.delete(`${apiEndpoint}/Delete?id=${id}`), "Failed to get resource");
+                    $http.get(`${apiEndpoint}/GetAllForms`), "Failed to get resource");
             }
         };
     }

@@ -6,7 +6,6 @@ using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
 #else
 using Umbraco.Core.Services;
-using Umbraco.Web;
 #endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Services

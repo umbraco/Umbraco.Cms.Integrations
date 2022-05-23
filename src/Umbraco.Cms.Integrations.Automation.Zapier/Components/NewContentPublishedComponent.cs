@@ -1,8 +1,5 @@
 ﻿#if NETFRAMEWORK
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
+using Umbraco.Cms.Integrations.Automation.Zapier.Helpers;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
@@ -10,6 +7,7 @@ using Umbraco.Core.Events;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Services;
 using Umbraco.Core.Services.Implement;
+using Umbraco.Cms.Integrations.Automation.Zapier.Extensions;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
 {
@@ -20,15 +18,15 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
 
     public class NewContentPublishedComponent : IComponent
     {
-        private readonly ZapConfigService _zapConfigService;
+        private readonly ZapierSubscriptionHookService _zapierSubscriptionHookService;
 
         private readonly ZapierService _zapierService;
 
         private readonly ILogger _logger;
 
-        public NewContentPublishedComponent(ZapConfigService zapConfigService, ZapierService zapierService, ILogger logger)
+        public NewContentPublishedComponent(ZapierSubscriptionHookService zapierSubscriptionHookService, ZapierService zapierService, ILogger logger)
         {
-            _zapConfigService = zapConfigService;
+            _zapierSubscriptionHookService = zapierSubscriptionHookService;
 
             _zapierService = zapierService;
 
@@ -47,24 +45,22 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
 
         private void ContentServiceOnPublished(IContentService sender, ContentPublishedEventArgs e)
         {
+            var triggerHelper = new TriggerHelper(_zapierService);
+
             foreach (var node in e.PublishedEntities)
             {
-                var zapContentConfig = _zapConfigService.GetByName(node.ContentType.Name);
-                if (zapContentConfig == null || !zapContentConfig.IsEnabled) continue;
-
-                var content = new Dictionary<string, string>
+                if (_zapierSubscriptionHookService.TryGetByAlias(node.ContentType.Alias, out var zapContentConfigList))
                 {
-                    { Constants.Content.Id, node.Id.ToString() },
-                    { Constants.Content.Name, node.Name },
-                    { Constants.Content.PublishDate, DateTime.UtcNow.ToString() }
-                };
+                    var content = node.ToContentDictionary();
 
-                var t = Task.Run(async () => await _zapierService.TriggerAsync(zapContentConfig.WebHookUrl, content));
+                    foreach (var zapContentConfig in zapContentConfigList)
+                    {
+                        var result = triggerHelper.Execute(zapContentConfig.HookUrl, content);
 
-                var result = t.Result;
-
-                if(!string.IsNullOrEmpty(result))
-                    _logger.Error<NewContentPublishedComponent>(result);
+                        if (!string.IsNullOrEmpty(result))
+                            _logger.Error<NewContentPublishedComponent>(result);
+                    }
+                }
             }
         }
     }

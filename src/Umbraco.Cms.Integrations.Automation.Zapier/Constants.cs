@@ -3,11 +3,13 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 {
     public class Constants
     {
-        public const string ZapContentConfigTable = "zapContentConfig";
+        public const string ZapierSubscriptionHookTable = "zapierSubscriptionHook";
 
-        public const string MigrationPlanName = "ZapContentConfig";
+        public const string ZapierFormSubscriptionHookTable = "zapierFormSubscriptionHook";
 
-        public const string TargetStateName = "zapiercontentconfigurations-db";
+        public const string MigrationPlanName = "ZapierMigrationPlan";
+
+        public const string TargetStateName = "zapiersubscriptionhook-db";
 
         public const string UmbracoCmsIntegrationsAutomationZapierUserGroup = "Umbraco.Cms.Integrations.Automation.Zapier.UserGroup";
 
@@ -25,12 +27,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
         public static class Content
         {
-            public const string Id = "Id";
+            public const string Id = "id";
 
-            public const string Name = "Name";
+            public const string Name = "name";
 
-            public const string PublishDate = "PublishDate";
-
+            public const string PublishDate = "publishDate";
         }
     }
 }

@@ -1,88 +1,73 @@
-﻿using System.Collections.Generic;
-
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
-using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
+using Umbraco.Cms.Integrations.Automation.Zapier.Extensions;
+using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 
 #if NETCOREAPP
 using Microsoft.Extensions.Options;
 
-using Umbraco.Cms.Web.Common.Controllers;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
 #else
-using System.Configuration;
-
-using Umbraco.Web.WebApi;
 using Umbraco.Core.Services;
 #endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 {
-    public class PollingController : UmbracoApiController
+    /// <summary>
+    /// When a Zapier user creates a "New Content Published" triggered, they are authenticated, then select a content type, the API provides an output json with the
+    /// structure of a content node matching the selected content type.
+    /// For version 1.0.0 of the Umbraco Zapier App, the GetSampleContent will be used.
+    /// </summary>
+    public class PollingController : ZapierAuthorizedApiController
     {
-        private readonly ZapierSettings Options;
-
         private IContentService _contentService;
 
-        private readonly IUserValidationService _userValidationService;
+        private IContentTypeService _contentTypeService;
 
 #if NETCOREAPP
-        public PollingController(IOptions<ZapierSettings> options, IContentService contentService, IUserValidationService userValidationService)
+        public PollingController(IOptions<ZapierSettings> options, IContentService contentService, IContentTypeService contentTypeService, IUserValidationService userValidationService)
+            : base(options, userValidationService)
 #else
-        public PollingController(IContentService contentService, IUserValidationService userValidationService)
+        public PollingController(IContentService contentService, IContentTypeService contentTypeService, IUserValidationService userValidationService)
+            : base(userValidationService)
 #endif
         {
-#if NETCOREAPP
-            Options = options.Value;
-#else
-            Options = new ZapierSettings(ConfigurationManager.AppSettings);
-#endif
-
             _contentService = contentService;
 
-            _userValidationService = userValidationService;
+            _contentTypeService = contentTypeService;
         }
 
-        public List<Dictionary<string, string>> GetContent()
+        [Obsolete("Used only for Umbraco Zapier app v1.0.0. For updated versions use GetContentByType")]
+        public IEnumerable<PublishedContentDto> GetSampleContent()
         {
-            string username = string.Empty;
-            string password = string.Empty;
+            if (!IsUserValid()) return null;
 
-#if NETCOREAPP
-            if (Request.Headers.TryGetValue(Constants.ZapierAppConfiguration.UsernameHeaderKey,
-                    out var usernameValues))
-                username = usernameValues.First();
-            if (Request.Headers.TryGetValue(Constants.ZapierAppConfiguration.PasswordHeaderKey,
-                    out var passwordValues))
-                password = passwordValues.First();
-#else
-            if (Request.Headers.TryGetValues(Constants.ZapierAppConfiguration.UsernameHeaderKey,
-                    out var usernameValues))
-                username = usernameValues.First();
-            if (Request.Headers.TryGetValues(Constants.ZapierAppConfiguration.PasswordHeaderKey,
-                    out var passwordValues))
-                password = passwordValues.First();
-#endif
+            var rootNodes = _contentService.GetRootContent()
+                .Where(p => p.Published)
+                .OrderByDescending(p => p.PublishDate);
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return null;
-
-            var isAuthorized = _userValidationService.Validate(username, password, Options.UserGroup).GetAwaiter().GetResult();
-            if (!isAuthorized) return null;
-
-            var root = _contentService.GetRootContent().Where(p => p.Published)
-                .OrderByDescending(p => p.PublishDate).FirstOrDefault();
-
-            return new List<Dictionary<string, string>>
+            return rootNodes.Select(p => new PublishedContentDto
             {
-                new Dictionary<string, string>
-                {
-                    {Constants.Content.Id, root?.Id.ToString()},
-                    {Constants.Content.Name, root?.Name},
-                    {Constants.Content.PublishDate, root?.PublishDate.ToString()}
-                }
-            };
+                Id = p.Id.ToString(),
+                Name = p.Name,
+                PublishDate = p.PublishDate.Value.ToString()
+            });
         }
 
+        public List<Dictionary<string, string>> GetContentByType(string alias)
+        {
+            if (!IsUserValid()) return null;
+
+            var contentType = _contentTypeService.Get(alias);
+            if (contentType == null) return new List<Dictionary<string, string>>();
+
+            return new List<Dictionary<string, string>> { contentType.ToContentTypeDictionary() };
+        }
+
+        
     }
 }

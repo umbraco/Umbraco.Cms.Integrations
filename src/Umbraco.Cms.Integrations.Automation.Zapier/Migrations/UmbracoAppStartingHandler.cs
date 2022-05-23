@@ -5,8 +5,8 @@ using Umbraco.Cms.Core.Migrations;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Infrastructure.Migrations;
 using Umbraco.Cms.Infrastructure.Migrations.Upgrade;
+using Umbraco.Cms.Integrations.Automation.Zapier.Helpers;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 {
