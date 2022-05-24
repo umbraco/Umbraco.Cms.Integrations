@@ -62,7 +62,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 
             /// <summary>
             /// Column stores two types of references:
-            /// 1. content type for content triggers
+            /// 1. content type alias for content triggers
             /// 2. form ID for form triggers
             /// </summary>
             [Column("EntityId")]
