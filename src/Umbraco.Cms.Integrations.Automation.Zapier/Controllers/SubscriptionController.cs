@@ -40,8 +40,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             if (!IsUserValid() || dto == null) return false;
 
             var result = dto.SubscribeHook
-                ? _zapierSubscriptionHookService.Add(dto.EntityId, dto.HookUrl)
-                : _zapierSubscriptionHookService.Delete(dto.EntityId, dto.HookUrl);
+                ? _zapierSubscriptionHookService.Add(dto.EntityId, dto.Type, dto.HookUrl)
+                : _zapierSubscriptionHookService.Delete(dto.EntityId, dto.Type, dto.HookUrl);
 
             return string.IsNullOrEmpty(result);
         }

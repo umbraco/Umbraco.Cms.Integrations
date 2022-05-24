@@ -35,17 +35,22 @@
         <umb-box-header title="Registered Subscription Hooks"></umb-box-header>
         <umb-box-content>
             <div>
-                <p ng-if="vm.contentSubscriptionHooks.length == 0">There are no subscription hooks.</p>
+                <p ng-if="vm.subscriptionHooks.length == 0">There are no subscription hooks.</p>
             </div>
             <div class="mt2">
-                <div class="umb-table" ng-if="vm.contentSubscriptionHooks.length > 0">
+                <div class="umb-table" ng-if="vm.subscriptionHooks.length > 0">
                     <!-- Listviews head section -->
                     <div class="umb-table-head">
                         <div class="umb-table-row">
                             <div class="umb-table-cell"></div>
                             <div class="umb-table-cell umb-table__name">
                                 <a class="umb-table-head__link" href="#" prevent-default>
-                                    <span>Name</span>
+                                    <span>Identifier</span>
+                                </a>
+                            </div>
+                            <div class="umb-table-cell">
+                                <a class="umb-table-head__link" href="#" prevent-default>
+                                    <span>Entity Type</span>
                                 </a>
                             </div>
                             <div class="umb-table-cell">
@@ -59,52 +64,13 @@
                     <!-- Listview body section -->
                     <div class="umb-table-body">
                         <div class="umb-table-row"
-                             ng-repeat="row in vm.contentSubscriptionHooks track by $index">
+                             ng-repeat="row in vm.subscriptionHooks track by $index">
                             <div class="umb-table-cell"></div>
                             <div class="umb-table-cell umb-table__name">
                                 <span ng-bind="row.entityId"></span>
                             </div>
                             <div class="umb-table-cell">
-                                <span ng-bind="row.hookUrl"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </umb-box-content>
-    </umb-box>
-    <umb-box ng-if="vm.formsExtensionInstalled">
-        <umb-box-header title="Registered Form Subscription Hooks"></umb-box-header>
-        <umb-box-content>
-            <div>
-                <p ng-if="vm.formSubscriptionHooks.length == 0">There are no form subscription hooks.</p>
-            </div>
-            <div class="mt2">
-                <div class="umb-table" ng-if="vm.formSubscriptionHooks.length > 0">
-                    <!-- Listviews head section -->
-                    <div class="umb-table-head">
-                        <div class="umb-table-row">
-                            <div class="umb-table-cell"></div>
-                            <div class="umb-table-cell umb-table__name">
-                                <a class="umb-table-head__link" href="#" prevent-default>
-                                    <span>Form Id</span>
-                                </a>
-                            </div>
-                            <div class="umb-table-cell">
-                                <a class="umb-table-head__link" href="#" prevent-default>
-                                    <span>Hook URL</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Listview body section -->
-                    <div class="umb-table-body">
-                        <div class="umb-table-row"
-                             ng-repeat="row in vm.formSubscriptionHooks track by $index">
-                            <div class="umb-table-cell"></div>
-                            <div class="umb-table-cell umb-table__name">
-                                <span ng-bind="row.entityId"></span>
+                                <span ng-bind="row.typeName"></span>
                             </div>
                             <div class="umb-table-cell">
                                 <span ng-bind="row.hookUrl"></span>

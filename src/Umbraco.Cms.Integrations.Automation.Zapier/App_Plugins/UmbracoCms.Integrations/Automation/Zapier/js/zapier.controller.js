@@ -5,8 +5,7 @@
     vm.loading = false;
     vm.formsExtensionInstalled = false;
 
-    vm.contentSubscriptionHooks = [];
-    vm.formSubscriptionHooks = [];
+    vm.subscriptionHooks = [];
 
     // check if forms is installed
     umbracoCmsIntegrationsAutomationZapierResource.checkFormsExtension().then(function (response) {
@@ -17,8 +16,7 @@
     vm.loading = true;
     umbracoCmsIntegrationsAutomationZapierResource.getAll().then(function (response) {
 
-        vm.contentSubscriptionHooks = response.filter(p => p.isFormSubscription === false);
-        vm.formSubscriptionHooks = response.filter(p => p.isFormSubscription === true);
+        vm.subscriptionHooks = response;
 
         vm.loading = false;
     });

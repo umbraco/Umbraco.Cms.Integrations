@@ -12,13 +12,16 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos
         [JsonProperty("entityId")]
         public string EntityId { get; set; }
 
+        [JsonProperty("type")]
+        public int Type { get; set; }
+
+        [JsonProperty("typeName")] 
+        public string TypeName => Enum.Parse(typeof(EntityDto.Type), Type.ToString()).ToString();
+
         [JsonProperty("hookUrl")]
         public string HookUrl { get; set; }
 
         [JsonProperty("subscribeHook")]
         public bool SubscribeHook { get; set; }
-
-        [JsonProperty("isFormSubscription")]
-        public bool IsFormSubscription => Guid.TryParse(EntityId, out _);
     }
 }

@@ -69,6 +69,10 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
             [Index(IndexTypes.UniqueNonClustered, Name = "IX_ZapierSubscriptionHook_EntityId")]
             public string EntityId { get; set; }
 
+            [Column("Type")]
+            [Index(IndexTypes.UniqueNonClustered, Name = "IX_ZapierSubscriptionHook_Type", ForColumns = "EntityId,Type")]
+            public int Type { get; set; }
+
             [Column("HookUrl")]
             [Index(IndexTypes.UniqueNonClustered, Name = "IX_ZapierSubscriptionHook_HookUrl")]
             public string HookUrl { get; set; }

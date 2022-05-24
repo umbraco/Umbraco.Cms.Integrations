@@ -53,12 +53,13 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
                 {
                     Id = p.Id,
                     EntityId = p.EntityId,
+                    Type = p.Type,
                     HookUrl = p.HookUrl
                 });
             }
         }
 
-        public string Add(string entityId, string hookUrl)
+        public string Add(string entityId, int type, string hookUrl)
         {
             try
             {
@@ -67,6 +68,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
                     var zapContentConfig = new ZapierMigration.ZapierSubscriptionHookTable
                     {
                         EntityId = entityId,
+                        Type = type,
                         HookUrl = hookUrl,
                     };
 
@@ -90,14 +92,14 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
             }
         }
 
-        public string Delete(string entityId, string hookUrl)
+        public string Delete(string entityId, int type, string hookUrl)
         {
             try
             {
                 using (var scope = _scopeProvider.CreateScope())
                 {
                     var entity = scope.Database.Query<ZapierMigration.ZapierSubscriptionHookTable>()
-                        .FirstOrDefault(p => p.EntityId == entityId && p.HookUrl == hookUrl);
+                        .FirstOrDefault(p => p.EntityId == entityId && p.Type == type && p.HookUrl == hookUrl);
                     if (entity != null)
                     {
                         scope.Database.Delete(entity);
