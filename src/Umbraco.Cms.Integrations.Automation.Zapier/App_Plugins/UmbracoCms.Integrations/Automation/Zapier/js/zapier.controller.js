@@ -4,34 +4,24 @@
 
     vm.loading = false;
     vm.formsExtensionInstalled = false;
-    vm.contentConfigs = [];
-    vm.formConfigs = [];
 
-    getContentConfigs();
+    vm.contentSubscriptionHooks = [];
+    vm.formSubscriptionHooks = [];
 
+    // check if forms is installed
     umbracoCmsIntegrationsAutomationZapierResource.checkFormsExtension().then(function (response) {
         vm.formsExtensionInstalled = response;
-
-        if (response) {
-            getFormConfigs();
-        }
     });
 
-    function getContentConfigs() {
-        vm.loading = true;
-        umbracoCmsIntegrationsAutomationZapierResource.getAllContentConfigs().then(function (response) {
-            vm.contentConfigs = response;
-            vm.loading = false;
-        });
-    }
+    // load subscription hooks
+    vm.loading = true;
+    umbracoCmsIntegrationsAutomationZapierResource.getAll().then(function (response) {
 
-    function getFormConfigs() {
-        vm.loading = true;
-        umbracoCmsIntegrationsAutomationZapierResource.getAllFormConfigs().then(function (response) {
-            vm.formConfigs = response;
-            vm.loading = false;
-        });
-    }
+        vm.contentSubscriptionHooks = response.filter(p => p.isFormSubscription === false);
+        vm.formSubscriptionHooks = response.filter(p => p.isFormSubscription === true);
+
+        vm.loading = false;
+    });
 
 }
 

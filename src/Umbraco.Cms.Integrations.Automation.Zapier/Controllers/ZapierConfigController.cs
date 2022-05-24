@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 
 using Umbraco.Cms.Integrations.Automation.Zapier.Helpers;
 using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
@@ -24,37 +23,16 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
     {
         private readonly ZapierSubscriptionHookService _zapierSubscriptionHookService;
 
-        private readonly ZapierFormSubscriptionHookService _zapierFormSubscriptionHookService;
-
-        private readonly ZapierService _zapierService;
-
         public ZapierConfigController(
-            ZapierSubscriptionHookService zapierSubscriptionHookService, 
-            ZapierFormSubscriptionHookService zapierFormSubscriptionHookService,
-            ZapierService zapierService)
+            ZapierSubscriptionHookService zapierSubscriptionHookService)
         {
             _zapierSubscriptionHookService = zapierSubscriptionHookService;
-
-            _zapierFormSubscriptionHookService = zapierFormSubscriptionHookService;
-
-            _zapierService = zapierService;
         }
 
         [HttpGet]
-        public IEnumerable<ContentConfigDto> GetAll() => _zapierSubscriptionHookService.GetAll();
+        public IEnumerable<SubscriptionDto> GetAll() => _zapierSubscriptionHookService.GetAll();
 
         [HttpGet]
         public bool IsFormsExtensionInstalled() => ReflectionHelper.IsFormsExtensionInstalled;
-
-        [HttpGet]
-        public IEnumerable<FormConfigDto> GetAllForms() => _zapierFormSubscriptionHookService.GetAll();
-
-
-        [HttpPost]
-        public async Task<string> TriggerWebHook([FromBody] ContentConfigDto dto)
-        {
-            return await _zapierService.TriggerAsync(dto.HookUrl,
-                new Dictionary<string, string> { { Constants.Content.Name, dto.ContentTypeAlias } });
-        }
     }
 }

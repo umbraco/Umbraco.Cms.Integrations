@@ -5,8 +5,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
     {
         public const string ZapierSubscriptionHookTable = "zapierSubscriptionHook";
 
-        public const string ZapierFormSubscriptionHookTable = "zapierFormSubscriptionHook";
-
         public const string MigrationPlanName = "ZapierMigrationPlan";
 
         public const string TargetStateName = "zapiersubscriptionhook-db";

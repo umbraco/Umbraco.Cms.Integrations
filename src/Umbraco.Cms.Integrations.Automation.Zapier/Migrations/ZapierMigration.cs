@@ -1,5 +1,4 @@
 ﻿using NPoco;
-using Umbraco.Cms.Integrations.Automation.Zapier.Helpers;
 
 #if NETCOREAPP
 using Microsoft.Extensions.Logging;
@@ -20,9 +19,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 
         public string ContentDbTableExistsMessage =
             $"The database table {Constants.ZapierSubscriptionHookTable} already exists, skipping";
-
-        public string FormDbTableExistsMessage =
-            $"The database table {Constants.ZapierFormSubscriptionHookTable} already exists, skipping";
 
         public ZapierMigration(IMigrationContext context) : base(context)
         {
@@ -53,22 +49,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
                 Logger.Debug<ZapierMigration>(ContentDbTableExistsMessage);
 #endif
             }
-
-            if (ReflectionHelper.IsFormsExtensionInstalled)
-            {
-                if (TableExists(Constants.ZapierFormSubscriptionHookTable) == false)
-                {
-                    Create.Table<ZapierFormSubscriptionHookTable>().Do();
-                }
-                else
-                {
-#if NETCOREAPP
-                Logger.LogDebug(FormDbTableExistsMessage);
-#else
-                    Logger.Debug<ZapierMigration>(FormDbTableExistsMessage);
-#endif
-                }
-            }
         }
 
         [TableName(Constants.ZapierSubscriptionHookTable)]
@@ -80,30 +60,17 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
             [Column("Id")]
             public int Id { get; set; }
 
-            [Column("ContentTypeAlias")]
-            [Index(IndexTypes.UniqueNonClustered, Name = "IX_ZapierSubscriptionHook_ContentTypeAlias")]
-            public string ContentTypeAlias { get; set; }
+            /// <summary>
+            /// Column stores two types of references:
+            /// 1. content type for content triggers
+            /// 2. form ID for form triggers
+            /// </summary>
+            [Column("EntityId")]
+            [Index(IndexTypes.UniqueNonClustered, Name = "IX_ZapierSubscriptionHook_EntityId")]
+            public string EntityId { get; set; }
 
             [Column("HookUrl")]
             [Index(IndexTypes.UniqueNonClustered, Name = "IX_ZapierSubscriptionHook_HookUrl")]
-            public string HookUrl { get; set; }
-        }
-
-        [TableName(Constants.ZapierFormSubscriptionHookTable)]
-        [PrimaryKey("Id", AutoIncrement = true)]
-        [ExplicitColumns]
-        public class ZapierFormSubscriptionHookTable
-        {
-            [PrimaryKeyColumn(AutoIncrement = true, IdentitySeed = 1)]
-            [Column("Id")]
-            public int Id { get; set; }
-
-            [Column("FormName")]
-            [Index(IndexTypes.UniqueNonClustered, Name = "IX_ZapierFormSubscriptionHook_FormName")]
-            public string FormName { get; set; }
-
-            [Column("HookUrl")]
-            [Index(IndexTypes.UniqueNonClustered, Name = "IX_ZapierFormSubscriptionHook_HookUrl")]
             public string HookUrl { get; set; }
         }
     }
