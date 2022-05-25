@@ -15,9 +15,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
         {
             var contentDict = new Dictionary<string, string>
             {
-                {Constants.Content.Id, "1" },
-                {Constants.Content.Name, contentType.Name },
-                {Constants.Content.PublishDate, DateTime.UtcNow.ToString("s") }
+                {Constants.ContentProperties.Id, "1" },
+                {Constants.ContentProperties.Name, contentType.Name },
+                {Constants.ContentProperties.PublishDate, DateTime.UtcNow.ToString("s") }
             };
 
             foreach (var propertyType in contentType.PropertyTypes)
@@ -32,9 +32,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
         {
             var contentDict = new Dictionary<string, string>
             {
-                {Constants.Content.Id, contentNode.Id.ToString() },
-                {Constants.Content.Name, contentNode.Name },
-                {Constants.Content.PublishDate, contentNode.UpdateDate.ToString("s") }
+                {Constants.ContentProperties.Id, contentNode.Id.ToString() },
+                {Constants.ContentProperties.Name, contentNode.Name },
+                {Constants.ContentProperties.PublishDate, contentNode.UpdateDate.ToString("s") }
             };
 
             foreach (var prop in contentNode.Properties)

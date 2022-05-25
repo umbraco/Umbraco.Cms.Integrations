@@ -66,7 +66,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
             /// 2. form ID for form triggers
             /// </summary>
             [Column("EntityId")]
-            [Index(IndexTypes.UniqueNonClustered, Name = "IX_ZapierSubscriptionHook_EntityId")]
             public string EntityId { get; set; }
 
             [Column("Type")]

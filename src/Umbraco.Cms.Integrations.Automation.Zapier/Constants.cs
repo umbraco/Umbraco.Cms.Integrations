@@ -23,13 +23,20 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
             public const string Settings = "Umbraco:Forms:Integrations:Automation:Zapier:Settings";
         }
 
-        public static class Content
+        public static class ContentProperties
         {
             public const string Id = "id";
 
             public const string Name = "name";
 
             public const string PublishDate = "publishDate";
+        }
+
+        public static class EntityType
+        {
+            public const int Content = 1;
+
+            public const int Form = 2;
         }
     }
 }
