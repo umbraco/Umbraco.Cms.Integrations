@@ -1,4 +1,5 @@
-﻿using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
+﻿using System.Collections.Generic;
+using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 
 #if NETCOREAPP
