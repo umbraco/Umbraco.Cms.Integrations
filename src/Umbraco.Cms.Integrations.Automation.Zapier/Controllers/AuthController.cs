@@ -12,7 +12,7 @@ using Umbraco.Cms.Core.Security;
 #else
 using System.Web.Http;
 using System.Configuration;
-
+using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
 using Umbraco.Web.WebApi;
 #endif
 

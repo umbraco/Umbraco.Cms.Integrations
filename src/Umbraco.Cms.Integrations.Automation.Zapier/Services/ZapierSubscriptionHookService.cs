@@ -43,22 +43,23 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
         }
 #endif
 
-        public IEnumerable<ContentConfigDto> GetAll()
+        public IEnumerable<SubscriptionDto> GetAll()
         {
             using (var scope = _scopeProvider.CreateScope())
             {
                 var data = scope.Database.Query<ZapierMigration.ZapierSubscriptionHookTable>().ToList();
 
-                return data.Select(p => new ContentConfigDto
+                return data.Select(p => new SubscriptionDto
                 {
                     Id = p.Id,
-                    ContentTypeAlias = p.ContentTypeAlias,
+                    EntityId = p.EntityId,
+                    Type = p.Type,
                     HookUrl = p.HookUrl
                 });
             }
         }
 
-        public string Add(string contentTypeAlias, string hookUrl)
+        public string Add(string entityId, int type, string hookUrl)
         {
             try
             {
@@ -66,7 +67,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
                 {
                     var zapContentConfig = new ZapierMigration.ZapierSubscriptionHookTable
                     {
-                        ContentTypeAlias = contentTypeAlias,
+                        EntityId = entityId,
+                        Type = type,
                         HookUrl = hookUrl,
                     };
 
@@ -90,14 +92,14 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
             }
         }
 
-        public string Delete(string contentTypeAlias, string hookUrl)
+        public string Delete(string entityId, int type, string hookUrl)
         {
             try
             {
                 using (var scope = _scopeProvider.CreateScope())
                 {
                     var entity = scope.Database.Query<ZapierMigration.ZapierSubscriptionHookTable>()
-                        .FirstOrDefault(p => p.ContentTypeAlias == contentTypeAlias && p.HookUrl == hookUrl);
+                        .FirstOrDefault(p => p.EntityId == entityId && p.Type == type && p.HookUrl == hookUrl);
                     if (entity != null)
                     {
                         scope.Database.Delete(entity);
@@ -122,18 +124,18 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
             }
         }
 
-        public bool TryGetByAlias(string contentTypeAlias, out IEnumerable<ContentConfigDto> dto)
+        public bool TryGetByAlias(string contentTypeAlias, out IEnumerable<SubscriptionDto> dto)
         {
             using (var scope = _scopeProvider.CreateScope())
             {
                 var entities =
                     scope.Database
                         .Query<ZapierMigration.ZapierSubscriptionHookTable>()
-                        .Where(p => p.ContentTypeAlias == contentTypeAlias)
+                        .Where(p => p.EntityId == contentTypeAlias)
                         .ToList();
 
                 dto = entities.Any()
-                    ? entities.Select(p => new ContentConfigDto { HookUrl = p.HookUrl })
+                    ? entities.Select(p => new SubscriptionDto { HookUrl = p.HookUrl })
                     : null;
 
                 return entities.Any();
