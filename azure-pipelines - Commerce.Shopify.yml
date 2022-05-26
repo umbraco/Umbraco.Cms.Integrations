@@ -1,5 +1,5 @@
 trigger:
-- feature/shopify-integration
+- v9/bugfix/rendering-component
 
 pool:
   vmImage: 'windows-latest'
