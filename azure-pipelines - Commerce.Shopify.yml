@@ -1,5 +1,5 @@
 trigger:
-- v9/bugfix/partial-view-missing
+- main
 
 pool:
   vmImage: 'windows-latest'
