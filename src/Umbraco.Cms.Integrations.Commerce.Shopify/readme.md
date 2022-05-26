@@ -76,7 +76,7 @@ And render the form using (assuming a property based on the created data type, w
 @Html.RenderProductsList(Model.ShopifyProductPicker)
 ```
 
-You can use the default rendering view and style it using the existing CSS classes, or use the default view as inspiration for your own rendering views. The path to your personalized view will be then passed as parameter to the HTML helper method.
+You can use the default rendering view and style it using the existing CSS classes, or use it as inspiration for your own views. The path to your custom view will be then passed as parameter to the HTML helper method.
 
 ### Developer Notes
 
