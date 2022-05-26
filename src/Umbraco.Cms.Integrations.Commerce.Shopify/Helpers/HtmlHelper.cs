@@ -17,14 +17,14 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Helpers
     public static class ShopifyHtmlExtensions
     {
 #if NETCOREAPP
-        public static IHtmlContent RenderShopifyProductsList(this HtmlHelper htmlHelper, List<ProductViewModel> vm)
+        public static IHtmlContent RenderShopifyProductsList(this IHtmlHelper<dynamic> htmlHelper, List<ProductViewModel> vm, string renderingViewPath = "")
         {
-            return htmlHelper.Partial($"{Constants.AppPluginFolderPath}/Render/Products.cshtml", vm);
+            return htmlHelper.Partial(string.IsNullOrEmpty(renderingViewPath) ? Constants.RenderingComponent.DefaultV9ViewPath : renderingViewPath, vm);
         }
 #else
-        public static IHtmlString RenderShopifyProductsList(this HtmlHelper htmlHelper, List<ProductViewModel> vm)
+        public static IHtmlString RenderShopifyProductsList(this HtmlHelper htmlHelper, List<ProductViewModel> vm, string renderingViewPath = "")
         {
-            return htmlHelper.Partial($"{Constants.AppPluginFolderPath}/Render/Products.cshtml", vm);
+            return htmlHelper.Partial(string.IsNullOrEmpty(renderingViewPath) ? Constants.RenderingComponent.DefaultV8ViewPath : renderingViewPath, vm);
         }
 #endif
     }
