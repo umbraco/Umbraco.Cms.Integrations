@@ -14,7 +14,7 @@ This repository houses open-source extensions, created for Umbraco CMS, that int
 
 [Semrush](./src/Umbraco.Cms.Integrations.SEO.Semrush/) - a search tool available as a content app, helping editors research and use appropriate keywords for their content, to help with website search engine optimisation.
 
-[GoogleSearchConsole.URLInspectionTool](./src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool) - a tool allowing programmatic access to URL-level data for properties managed in Google Search Console and the indexed version of a URL.
+[GoogleSearchConsole.URLInspectionTool](./src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool/) - a tool allowing programmatic access to URL-level data for properties managed in Google Search Console and the indexed version of a URL.
 
 ### CRM
 
