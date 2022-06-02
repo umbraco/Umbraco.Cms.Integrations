@@ -44,7 +44,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
         [Obsolete("Used only for Umbraco Zapier app v1.0.0. For updated versions use GetContentByType")]
         public IEnumerable<PublishedContentDto> GetSampleContent()
         {
-            if (!IsUserValid()) return null;
+            if (!IsAccessValid()) return null;
 
             var rootNodes = _contentService.GetRootContent()
                 .Where(p => p.Published)
@@ -60,7 +60,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
         public List<Dictionary<string, string>> GetContentByType(string alias)
         {
-            if (!IsUserValid()) return null;
+            if (!IsAccessValid()) return null;
 
             var contentType = _contentTypeService.Get(alias);
             if (contentType == null) return new List<Dictionary<string, string>>();

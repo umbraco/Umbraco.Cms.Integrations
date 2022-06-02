@@ -38,7 +38,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
         [HttpPost]
         public bool UpdatePreferences([FromBody] SubscriptionDto dto)
         {
-            if (!IsUserValid() || dto == null) return false;
+            if (!IsAccessValid() || dto == null) return false;
 
             var result = dto.SubscribeHook
                 ? _zapierSubscriptionHookService.Add(dto.EntityId, dto.Type, dto.HookUrl)

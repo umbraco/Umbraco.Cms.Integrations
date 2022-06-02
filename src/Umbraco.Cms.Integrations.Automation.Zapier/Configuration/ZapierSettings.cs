@@ -12,8 +12,12 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Configuration
         public ZapierSettings(NameValueCollection appSettings)
         {
             UserGroup = appSettings[Constants.UmbracoCmsIntegrationsAutomationZapierUserGroup];
+
+            ApiKey = appSettings[Constants.UmbracoCmsIntegrationsAutomationZapierApiKey];
         }
 
         public string UserGroup { get; set; }
+
+        public string ApiKey { get; set; }
     }
 }
