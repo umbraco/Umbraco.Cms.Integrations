@@ -35,7 +35,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
         public IEnumerable<ContentTypeDto> GetContentTypes()
         {
-            if (!IsUserValid()) return null;
+            if (!IsAccessValid()) return null;
 
             var contentTypes = _contentTypeService.GetAll();
 

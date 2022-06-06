@@ -36,10 +36,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             _userValidationService = userValidationService;
         }
 
-        public bool IsUserValid()
+        public bool IsAccessValid()
         {
             string username = string.Empty;
             string password = string.Empty;
+            string apiKey = string.Empty;
 
 #if NETCOREAPP
             if (Request.Headers.TryGetValue(Constants.ZapierAppConfiguration.UsernameHeaderKey,
@@ -48,6 +49,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             if (Request.Headers.TryGetValue(Constants.ZapierAppConfiguration.PasswordHeaderKey,
                     out var passwordValues))
                 password = passwordValues.First();
+            if (Request.Headers.TryGetValue(Constants.ZapierAppConfiguration.ApiKeyHeaderKey,
+                    out var apiKeyValues))
+                apiKey = apiKeyValues.First();
 #else
             if (Request.Headers.TryGetValues(Constants.ZapierAppConfiguration.UsernameHeaderKey,
                     out var usernameValues))
@@ -55,11 +59,17 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
             if (Request.Headers.TryGetValues(Constants.ZapierAppConfiguration.PasswordHeaderKey,
                     out var passwordValues))
                 password = passwordValues.First();
+            if (Request.Headers.TryGetValues(Constants.ZapierAppConfiguration.ApiKeyHeaderKey,
+                    out var apiKeyValues))
+                apiKey = apiKeyValues.First();
 #endif
 
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password)) return false;
+            if (string.IsNullOrEmpty(apiKey) && (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))) return false;
 
-            var isAuthorized = _userValidationService.Validate(username, password, Options.UserGroup).GetAwaiter()
+            if (!string.IsNullOrEmpty(apiKey))
+                return apiKey == Options.ApiKey;
+
+            var isAuthorized = _userValidationService.Validate(username, password, Options.UserGroupAlias).GetAwaiter()
                 .GetResult();
             if (!isAuthorized) return false;
 
