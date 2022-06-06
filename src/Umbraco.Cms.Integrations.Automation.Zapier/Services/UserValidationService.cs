@@ -61,11 +61,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 
             if (!isUserValid) return false;
 
-            if (!string.IsNullOrEmpty(_zapierSettings.UserGroup))
+            if (!string.IsNullOrEmpty(_zapierSettings.UserGroupAlias))
             {
                 var user = _userService.GetByUsername(username);
 
-                return user != null && user.Groups.Any(p => p.Name == _zapierSettings.UserGroup);
+                return user != null && user.Groups.Any(p => p.Alias == _zapierSettings.UserGroupAlias);
             }
 
             return true;
