@@ -1,5 +1,5 @@
 trigger:
-- feature/google-compliance
+- main
 
 pool:
   vmImage: 'windows-latest'
