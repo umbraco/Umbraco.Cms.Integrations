@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
 		<GoogleSearchConsolePropertyEditorFilesPath>
-			$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\**\*.*
+			$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\**\*.*
 		</GoogleSearchConsolePropertyEditorFilesPath>
 	</PropertyGroup>
 	<Target Name="CopyGoogleSearchConsolePropertyEditorAssets" BeforeTargets="Build">
@@ -12,7 +12,7 @@
 			Text="Copying Google Search Console Property Editor files: $(GoogleSearchConsolePropertyEditorFilesPath) - #@(GoogleSearchConsolePropertyEditorFiles->Count()) files"
 			Importance="high" />
 		<Copy SourceFiles="@(GoogleSearchConsolePropertyEditorFiles)"
-		      DestinationFiles="@(GoogleSearchConsolePropertyEditorFiles->'$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\%(RecursiveDir)%(Filename)%(Extension)')"
+		      DestinationFiles="@(GoogleSearchConsolePropertyEditorFiles->'$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\%(RecursiveDir)%(Filename)%(Extension)')"
 		      SkipUnchangedFiles="true" />
 
 	</Target>
@@ -20,7 +20,7 @@
 	<Target Name="ClearGoogleSearchConsolePropertyEditorAssets" BeforeTargets="Clean">
 		<ItemGroup>
 			<GoogleSearchConsolePropertyEditorDir
-				Include="$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms\SEO\GoogleSearchConsole\" />
+				Include="$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms\SEO\GoogleSearchConsole\URLInspectionTool\" />
 		</ItemGroup>
 		<Message Text="Clear old Google Search Console Property Editor data"  Importance="high" />
 		<RemoveDir Directories="@(GoogleSearchConsolePropertyEditorDir)"  />
