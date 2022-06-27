@@ -1,28 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 #if NETCOREAPP
 using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.PublishedContent;
 #else
 using Umbraco.Core.Models;
+using Umbraco.Core.Models.PublishedContent;
 #endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
 {
     public static class ContentExtensions
     {
-        public static Dictionary<string, string> ToContentTypeDictionary(this IContentType contentType)
+        public static Dictionary<string, string> ToContentTypeDictionary(this IContentType contentType, IPublishedContent content)
         {
             var contentDict = new Dictionary<string, string>
             {
-                {Constants.ContentProperties.Id, "1" },
-                {Constants.ContentProperties.Name, contentType.Name },
-                {Constants.ContentProperties.PublishDate, DateTime.UtcNow.ToString("s") }
+                {Constants.ContentProperties.Id, content != null ? content.Id.ToString() : "1" },
+                {Constants.ContentProperties.Name, content != null ? content.Name : contentType.Name },
+                {Constants.ContentProperties.PublishDate, content != null ? content.UpdateDate.ToString("s") : DateTime.UtcNow.ToString("s") }
             };
 
             foreach (var propertyType in contentType.PropertyTypes)
             {
-                contentDict.Add(propertyType.Alias, string.Empty);
+                if (content == null)
+                {
+                    contentDict.Add(propertyType.Alias, string.Empty);
+                    continue;
+                }
+
+                var contentProperty = content.Properties.First(p => p.Alias == propertyType.Alias);
+
+                contentDict.Add(propertyType.Alias, contentProperty.GetValue().ToString());
             }
 
             return contentDict;
