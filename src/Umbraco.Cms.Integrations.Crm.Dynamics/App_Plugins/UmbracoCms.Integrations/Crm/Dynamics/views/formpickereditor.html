@@ -1,0 +1,39 @@
+﻿<div ng-controller="Umbraco.Cms.Integrations.Crm.Dynamics.FormPickerController as vm">
+    <umb-editor-view>
+        <umb-editor-container>
+            <umb-box>
+                <umb-box-header title="{{ model.title }}" description="{{ model.subtitle }}"></umb-box-header>
+                <umb-box-content>
+                    <div class="dynOverlayGroup">
+                        <div class="form-search">
+                            <i class="icon-search"></i>
+                            <input type="text" class="-full-width-input" ng-model="vm.searchTerm" placeholder="Type to search..." umb-auto-focus="" aria-invalid="false">
+                        </div>
+                    </div>
+                    <div class="dynOverlayGroup">
+                        <ul class="dynFormsList">
+                            <li ng-repeat="form in vm.dynamicsFormsList | orderBy:'name' | filter:vm.searchTerm" ng-click="model.pickForm(form)" class="ng-scope" role="button" tabindex="0">
+                                <a href="" ng-attr-title="form.name">
+                                    <i class="icon-umb-contour"></i>
+                                    <span class="formLine">{{form.name}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </umb-box-content>
+            </umb-box>
+        </umb-editor-container>
+
+        <umb-editor-footer>
+            <umb-editor-footer-content-right>
+                <umb-button type="button"
+                            button-style="link"
+                            label-key="general_close"
+                            shortcut="esc"
+                            action="model.close()">
+                </umb-button>
+            </umb-editor-footer-content-right>
+        </umb-editor-footer>
+
+    </umb-editor-view>
+</div>
