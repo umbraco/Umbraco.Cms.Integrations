@@ -1,58 +1,52 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 
-using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
+using Umbraco.Integrations.Library.Configuration;
+using Umbraco.Integrations.Library.Interfaces;
 
 #if NETCOREAPP
 using Microsoft.Extensions.Options;
 
-using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Security;
 #else
 using System.Configuration;
 
 using Umbraco.Core.Services;
 #endif
 
-namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
+namespace Umbraco.Integrations.Library.Services
 {
     public class UserValidationService : IUserValidationService
     {
         private readonly IUserService _userService;
 
-        private readonly ZapierSettings _zapierSettings;
+        private readonly LibrarySettings _settings;
 
 #if NETCOREAPP
         private readonly IBackOfficeUserManager _backOfficeUserManager;
 
-        public UserValidationService(IOptions<ZapierSettings> options, IBackOfficeUserManager backOfficeUserManager, IUserService userService)
+        public UserValidationService(IOptions<LibrarySettings> options, IBackOfficeUserManager backOfficeUserManager, IUserService userService)
         {
             _backOfficeUserManager = backOfficeUserManager;
 
             _userService = userService;
 
-            _zapierSettings = options.Value;
+            _settings = options.Value;
         }
 #else
         public UserValidationService(IUserService userService)
         {
             _userService = userService;
 
-            _zapierSettings = new ZapierSettings(ConfigurationManager.AppSettings);
+            _settings = new LibrarySettings(ConfigurationManager.AppSettings);
         }
 #endif
 
-        /// <summary>
-        /// Allow access by validating API Key. If API key is missing, validate user credentials.
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        /// <param name="apiKey"></param>
-        /// <returns></returns>
-        public async Task<bool> Validate(string username, string password, string apiKey)
+        public async Task<bool> Validate(string username, string password, string apiKey, string userGroup = "")
         {
             if (!string.IsNullOrEmpty(apiKey))
-                return apiKey == _zapierSettings.ApiKey;
+                return apiKey == _settings.ApiKey;
 
 #if NETCOREAPP
             var isUserValid =
@@ -63,11 +57,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 
             if (!isUserValid) return false;
 
-            if (!string.IsNullOrEmpty(_zapierSettings.UserGroupAlias))
+            if (!string.IsNullOrEmpty(_settings.UserGroupAlias))
             {
                 var user = _userService.GetByUsername(username);
 
-                return user != null && user.Groups.Any(p => p.Alias == _zapierSettings.UserGroupAlias);
+                return user != null && user.Groups.Any(p => p.Alias == _settings.UserGroupAlias);
             }
 
             return true;

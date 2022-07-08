@@ -13,5 +13,7 @@ namespace Umbraco.Integrations.Library.Interfaces
         ICacheHelper CreateCacheHelper();
 
         ILoggingService CreateLoggingService();
+
+        ILoggingService CreateUserValidationService();
     }
 }

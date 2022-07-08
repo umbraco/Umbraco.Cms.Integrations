@@ -18,16 +18,19 @@
 	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
 		<PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
 		<PackageReference Include="UmbracoCms.Web" version="8.5.4" />
+		<PackageReference Include="Umbraco.Integrations.Library" version="1.0.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
 		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
+		<PackageReference Include="Umbraco.Integrations.Library" version="1.0.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net60'">
 		<PackageReference Include="Umbraco.Cms.Web.Website" version="10.0.1" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="10.0.1" />
+		<PackageReference Include="Umbraco.Integrations.Library" version="1.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -57,10 +60,6 @@
 	  <Compile Remove="Services\ICacheHelper.cs" />
 	  <Compile Remove="Services\ISemrushTokenService.cs" />
 	  <Compile Remove="Services\SemrushTokenService.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Umbraco.Integrations.Library\Umbraco.Integrations.Library.csproj" />
 	</ItemGroup>
 
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">

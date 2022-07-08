@@ -8,7 +8,6 @@ using Umbraco.Core;
 using Umbraco.Core.Composing;
 #endif
 
-using Umbraco.Integrations.Library.Builders;
 using Umbraco.Integrations.Library.Factories;
 using Umbraco.Integrations.Library.Interfaces;
 using Umbraco.Integrations.Library.Services;
@@ -27,6 +26,8 @@ namespace Umbraco.Integrations.Library
             builder.Services.AddSingleton<ICacheHelper, CacheHelper>();
 
             builder.Services.AddSingleton<ILoggingService, LoggingService>();
+
+            builder.Services.AddSingleton<IUserValidationService, UserValidationService>();
         }
 #else
         public void Compose(Composition composition)
@@ -38,6 +39,8 @@ namespace Umbraco.Integrations.Library
             composition.Register<ICacheHelper, CacheHelper>(Lifetime.Singleton);
 
             composition.Register<ILoggingService, LoggingService>(Lifetime.Singleton);
+
+            composition.Register<IUserValidationService, UserValidationService>(Lifetime.Singleton);
         }
 #endif
 
