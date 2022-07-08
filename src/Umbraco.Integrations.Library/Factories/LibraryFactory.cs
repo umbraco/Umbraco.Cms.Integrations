@@ -37,6 +37,6 @@ namespace Umbraco.Integrations.Library.Factories
 
         public ILoggingService CreateLoggingService() => _loggingService;
 
-        public ILoggingService CreateUserValidationService() => _userValidationService;
+        public IUserValidationService CreateUserValidationService() => _userValidationService;
     }
 }

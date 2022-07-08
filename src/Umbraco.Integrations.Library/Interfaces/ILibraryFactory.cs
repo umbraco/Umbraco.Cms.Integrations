@@ -14,6 +14,6 @@ namespace Umbraco.Integrations.Library.Interfaces
 
         ILoggingService CreateLoggingService();
 
-        ILoggingService CreateUserValidationService();
+        IUserValidationService CreateUserValidationService();
     }
 }
