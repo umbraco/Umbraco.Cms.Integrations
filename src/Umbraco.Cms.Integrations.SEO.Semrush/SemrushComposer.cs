@@ -20,18 +20,12 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush
         {
             builder.ContentApps().Append<SemrushContentApp>();
 
-            builder.Services.AddSingleton<ISemrushTokenService, SemrushTokenService>();
-            builder.Services.AddSingleton<ICacheHelper, CacheHelper>();
-
             builder.Services.AddScoped<TokenBuilder>();
         }
 #else
  public void Compose(Composition composition)
         {
             composition.ContentApps().Append<SemrushContentApp>();
-
-            composition.Register<ISemrushTokenService, SemrushTokenService>(Lifetime.Singleton);
-            composition.Register<ICacheHelper, CacheHelper>(Lifetime.Singleton);
 
             composition.Register<TokenBuilder>(Lifetime.Request);
         }

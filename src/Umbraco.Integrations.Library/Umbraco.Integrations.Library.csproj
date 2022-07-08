@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net472;net50;net60</TargetFrameworks>
+  </PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Umbraco.Integrations.Library</PackageId>
+		<Title>Umbraco Integrations: Library</Title>
+		<Description>A library with reusable components for Umbraco CMS and Umbraco Forms.</Description>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+		<Version>1.0.0</Version>
+		<Authors>Umbraco HQ</Authors>
+		<Company>Umbraco</Company>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+		<PackageReference Include="UmbracoCms.Web" version="8.5.4" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net60'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="10.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="10.0.1" />
+	</ItemGroup>
+
+	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
+		<ItemGroup>
+			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
+		</ItemGroup>
+	</Target>
+
+</Project>

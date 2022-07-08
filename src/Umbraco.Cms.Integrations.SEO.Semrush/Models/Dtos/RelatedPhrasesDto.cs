@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Umbraco.Integrations.Library.Dtos;
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos
 {

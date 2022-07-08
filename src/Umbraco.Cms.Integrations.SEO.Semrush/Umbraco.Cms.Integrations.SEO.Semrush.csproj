@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net472;net50</TargetFrameworks>
+		<TargetFrameworks>net472;net50;net60</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -25,6 +25,11 @@
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
 	</ItemGroup>
 
+	<ItemGroup Condition="'$(TargetFramework)' == 'net60'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="10.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="10.0.1" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\**\*.*">
 			<Pack>true</Pack>
@@ -44,7 +49,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Models\Dtos\AuthorizationRequestDto.cs" />
+	  <Compile Remove="Models\Dtos\ErrorDto.cs" />
+	  <Compile Remove="Models\Dtos\TokenDto.cs" />
 	  <Compile Remove="SemrushComponent.cs" />
+	  <Compile Remove="Services\CacheHelper.cs" />
+	  <Compile Remove="Services\ICacheHelper.cs" />
+	  <Compile Remove="Services\ISemrushTokenService.cs" />
+	  <Compile Remove="Services\SemrushTokenService.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Umbraco.Integrations.Library\Umbraco.Integrations.Library.csproj" />
 	</ItemGroup>
 
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">

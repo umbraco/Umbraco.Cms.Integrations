@@ -51,7 +51,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Au
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GoogleSearchConsole", "GoogleSearchConsole", "{4B3C1538-84B4-4963-A8B9-DF7656900E15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool", "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool\Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.csproj", "{B7F4963E-81F6-4829-AF7F-59E4FFF57266}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool", "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool\Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.csproj", "{B7F4963E-81F6-4829-AF7F-59E4FFF57266}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Testsite.V10", "Umbraco.Cms.Integrations.Testsite.V10\Umbraco.Cms.Integrations.Testsite.V10.csproj", "{F79A1FC5-153E-49A8-925A-43E4649B2746}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Integrations.Library", "Umbraco.Integrations.Library\Umbraco.Integrations.Library.csproj", "{7B6445B8-5135-4FE0-905B-CF4947DA5A83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
