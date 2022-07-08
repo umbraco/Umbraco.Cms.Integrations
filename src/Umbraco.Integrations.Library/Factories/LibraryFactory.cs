@@ -16,13 +16,17 @@ namespace Umbraco.Integrations.Library.Factories
 
         private readonly ILoggingService _loggingService;
 
-        public LibraryFactory(ITokenService tokenService, ICacheHelper cacheHelper, ILoggingService loggingService)
+        private readonly IUserValidationService _userValidationService;
+
+        public LibraryFactory(ITokenService tokenService, ICacheHelper cacheHelper, ILoggingService loggingService, IUserValidationService userValidationService)
         {
             _tokenService = tokenService;
 
             _cacheHelper = cacheHelper;
 
             _loggingService = loggingService;
+
+            _userValidationService = userValidationService;
         }
 
         public HttpClient CreateClient() => _client;
@@ -32,5 +36,7 @@ namespace Umbraco.Integrations.Library.Factories
         public ICacheHelper CreateCacheHelper() => _cacheHelper;
 
         public ILoggingService CreateLoggingService() => _loggingService;
+
+        public ILoggingService CreateUserValidationService() => _userValidationService;
     }
 }
