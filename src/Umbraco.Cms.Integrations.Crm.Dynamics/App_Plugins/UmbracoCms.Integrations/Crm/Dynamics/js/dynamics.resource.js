@@ -29,6 +29,11 @@
                     $http.get(`${apiEndpoint}/GetForms`),
                     "Failed");
             },
+            getEmbedCode: function (formId) {
+                return umbRequestHelper.resourcePromise(
+                    $http.get(`${apiEndpoint}/GetEmbedCode?formId=${formId}`),
+                    "Failed");
+            },
             checkOAuthConfiguration: function () {
                 return umbRequestHelper.resourcePromise(
                     $http.get(`${apiEndpoint}/CheckOAuthConfiguration`),

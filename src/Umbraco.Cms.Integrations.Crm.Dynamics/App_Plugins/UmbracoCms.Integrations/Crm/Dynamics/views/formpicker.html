@@ -5,10 +5,8 @@
 
     <umb-node-preview ng-if="model.value"
                       name="model.value.name"
-                      icon="model.icon"
-                      description="model.value.fields"
                       allow-remove="true" ,
-                      on-remove="vm.remove()">
+                      on-remove="vm.removeForm()">
     </umb-node-preview>
 
     <a ng-if="!model.value && !vm.loading"

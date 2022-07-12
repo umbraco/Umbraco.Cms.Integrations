@@ -12,5 +12,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos
 
         [JsonProperty("msdyncrm_formdefinition")]
         public string Definition { get; set; }
+
+        [JsonProperty("msdyncrm_javascriptcode")]
+        public string EmbedCode { get; set; }
     }
 }

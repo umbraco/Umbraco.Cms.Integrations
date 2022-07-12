@@ -22,6 +22,7 @@ using Newtonsoft.Json.Linq;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
+using System.Linq;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
 {
@@ -47,8 +48,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
             DynamicsService dynamicsService, 
             DynamicsConfigurationService dynamicsConfigurationService)
 #else
-        public FormsController(IAuthorizationService authorizationService, 
-            DynamicsService dynamicsService, 
+        public FormsController(IAuthorizationService authorizationService,
+            DynamicsService dynamicsService,
             DynamicsConfigurationService dynamicsConfigurationService)
 #endif
         {
@@ -69,7 +70,20 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
         public string GetAuthorizationUrl() => _authorizationService.GetAuthorizationUrl();
 
         [HttpGet]
-        public OAuthConfigurationDto CheckOAuthConfiguration() => _dynamicsConfigurationService.GetOAuthConfiguration();
+        public async Task<OAuthConfigurationDto> CheckOAuthConfiguration()
+        {
+            var oauthConfiguration = _dynamicsConfigurationService.GetOAuthConfiguration();
+
+            if (oauthConfiguration == null) return new OAuthConfigurationDto();
+
+            var identity = await _dynamicsService.GetIdentity(oauthConfiguration.AccessToken);
+
+            if (!identity.IsAuthorized) return new OAuthConfigurationDto();
+
+            oauthConfiguration.IsAuthorized = true;
+
+            return oauthConfiguration;
+        } 
 
         [HttpPost]
         public async Task<string> GetAccessToken([FromBody] OAuthRequestDto authRequestDto)
@@ -99,8 +113,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
 
                 var identity = await _dynamicsService.GetIdentity(tokenDto.AccessToken);
 
-                if(identity != null)
-                     _dynamicsConfigurationService.AddorUpdateOAuthConfiguration(tokenDto.AccessToken, identity.UserId, identity.FullName);
+                if (identity != null)
+                    _dynamicsConfigurationService.AddorUpdateOAuthConfiguration(tokenDto.AccessToken, identity.UserId, identity.FullName);
 
                 return result;
             }
@@ -137,6 +151,9 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
 
             return JsonConvert.DeserializeObject<ResponseDto<FormDto>>(result);
         }
+
+        [HttpGet]
+        public async Task<string> GetEmbedCode(string formId) => await _dynamicsService.GetEmbedCode(formId);
 
         [HttpGet]
         public string GetSystemUserFullName() => _dynamicsConfigurationService.GetSystemUserFullName();

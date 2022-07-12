@@ -13,7 +13,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
         name: "Dynamics Form Picker",
         view: "~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics/views/formpicker.html",
         Group = "Pickers",
-        Icon = "icon-handshake"
+        Icon = "icon-handshake", 
+        ValueType = ValueTypes.Json
         )]
     public class DynamicsFormPickerPropertyEditor : DataEditor
     {

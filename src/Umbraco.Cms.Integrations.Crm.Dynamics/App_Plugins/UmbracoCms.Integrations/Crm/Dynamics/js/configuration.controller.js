@@ -4,8 +4,7 @@
     vm.oauthConfig = {};
 
     umbracoCmsIntegrationsCrmDynamicsResource.checkOAuthConfiguration().then(function(response) {
-
-        if (response) {
+        if (response && response.isAuthorized) {
             vm.oauthConfig.isConnected = true;
             vm.oauthConfig.fullName = response.fullName;
         }

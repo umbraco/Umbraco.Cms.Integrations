@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net472;net50</TargetFrameworks>
+		<TargetFrameworks>net472;net50;net60</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -25,6 +25,12 @@
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
 		<PackageReference Include="Umbraco.Cms.Web.Common" version="9.0.1" />
 	</ItemGroup>
+	
+	<ItemGroup Condition="'$(TargetFramework)' == 'net60'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="10.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="10.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" version="10.0.1" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\**\*.*">
@@ -45,14 +51,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\css\styles.css" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\js\configuration.controller.js" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\js\dynamics.resource.js" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\js\formpicker.controller.js" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\package.manifest" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\views\configuration.html" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\views\formpicker.html" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\views\formpickereditor.html" />
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\DynamicsFormV8.cshtml" />
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\DynamicsFormV9.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\DynamicsFormV9.cshtml">
+	    <SubType>Component</SubType>
+	  </Content>
 	</ItemGroup>
 
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
