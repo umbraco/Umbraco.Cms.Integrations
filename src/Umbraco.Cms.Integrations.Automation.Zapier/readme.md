@@ -1,9 +1,8 @@
 # Umbraco.Cms.Integrations.Automation.Zapier
 
-This integration provides a dashboard interface that allows users to map content types with Zap triggers webhooks.
+This integration provides a dashboard interface that allows users to vizualize registered subscription hooks. When a Zap is turned on, the subscription hook is saved into the database; turning off the Zap will remove the registered subscription hook.
 
-When the content type gets published, the details of the configuration are looked up into the database and if a record is found, 
-will send a request to the Zap, triggering the matching actions.
+When content gets published, the content type is looked up in the subscription hooks list from the database, and if a record is found, A POST request will be sent to the webhook URL with details of the current node. This eventually will cause the Zap's trigger to be invoked, triggering the assigned actions of the Zap.
 
 A Zap is an automated workflow that connects various apps and services together. Each Zap consists of a trigger and one or more actions.
 
@@ -26,9 +25,17 @@ The Umbraco app manages two types of events:
 
 The trigger event to be used by this integration is _New Content Published_.
 
-When creating the Zap trigger, you will be prompted to enter a username, password and the URL for your Umbraco website.
+When creating the Zap trigger, you will be prompted to enter a username, password and the URL for your Umbraco website, or you can use instead an API key.
+If the following setting is present, then the API key based authentication will take precendence and will be the main method of authorization.
+```
+<appSettings>
+...
+  <add key="Umbraco.Cms.Integrations.Automation.Zapier.ApiKey" value="[your_api_key]" />
+...
+</appSettings>
+```
 
-Then the Umbraco application will validate the credentials entered and return a message in case the validation fails.
+If no API key is present, then the Umbraco application will validate the credentials entered and return a message in case the validation fails.
 
 If you want to extend the security layer, you can also specify a user group that the user trying to connect needs to be a part of, by adding the following 
 setting in `Web.config`:
@@ -46,9 +53,10 @@ In the _Content_ area of the backoffice, find the _Zapier Integrations_ dashboar
 
 The dashboard is composed of two sections:
 * Content Properties - Zapier details and input fields for adding content configurations
-* Registered Webhooks - list of created content configurations
+* Registered Subscription Hooks - list of registered entities.
 
-Each content type can only have one webhook configuration attached. After a configuration has been added for a specific content type, the content type item gets removed from the input field, 
-and it can be restored by deleting the configuration from the database.
+Subscription hooks are split in two categories: 
+* 1 = Content
+* 2 = Form
 
 The _Trigger Webhook_ action will send a test request to the Zap trigger, enabling the preview of requests in the Zap setup workflow.
