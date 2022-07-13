@@ -1,5 +1,5 @@
 trigger:
-- feature/zapier-trigger-data
+- main
 
 pool:
   vmImage: 'windows-latest'
