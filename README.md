@@ -21,4 +21,4 @@ This repository houses open-source extensions, created for Umbraco CMS, that int
 [HubSpot](./src/Umbraco.Cms.Integrations.Crm.Hubspot/) - a form picker and rendering component for Hubspot forms.
 
 ### Automation
-[Zapier](./src/Umbraco.Cms.Integrations.Automation.Zapier/) - a dashboard interface allowing users to map content types with Zap triggers webhooks.
+[Zapier](./src/Umbraco.Cms.Integrations.Automation.Zapier/) - a dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published.
