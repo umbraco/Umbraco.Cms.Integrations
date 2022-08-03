@@ -1,8 +1,9 @@
 ﻿{
 	"javascript": [
 		"~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics/js/configuration.controller.js",
-    "~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics/js/formpicker.controller.js",
-		"~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics/js/dynamics.resource.js"
+		"~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics/js/formpicker.controller.js",
+		"~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics/js/dynamics.resource.js",
+		"~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics/js/oauthconfiguration.directive.js"
 	],
 	"css": [
 		"~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics/css/styles.css"

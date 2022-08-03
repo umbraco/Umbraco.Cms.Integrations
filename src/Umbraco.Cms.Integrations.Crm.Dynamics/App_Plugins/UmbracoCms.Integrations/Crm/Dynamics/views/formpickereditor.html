@@ -5,14 +5,17 @@
                 <umb-box-header title="{{ model.title }}" description="{{ model.subtitle }}"></umb-box-header>
                 <umb-box-content>
                     <div class="dynOverlayGroup">
+                        <oauth-configuration on-connected="connected()" on-revoked="revoked()"></oauth-configuration>
+                    </div>
+                    <div class="dynOverlayGroup" ng-if="vm.isConnected">
                         <div class="form-search">
                             <i class="icon-search"></i>
                             <input type="text" class="-full-width-input" ng-model="vm.searchTerm" placeholder="Type to search..." umb-auto-focus="" aria-invalid="false">
                         </div>
                     </div>
-                    <div class="dynOverlayGroup">
+                    <div class="dynOverlayGroup" ng-if="vm.isConnected">
                         <ul class="dynFormsList">
-                            <li ng-repeat="form in vm.dynamicsFormsList | orderBy:'name' | filter:vm.searchTerm" ng-click="model.selectForm(form, vm.iFrameEmbedded)" 
+                            <li ng-repeat="form in vm.dynamicsFormsList | orderBy:'name' | filter:vm.searchTerm" ng-click="model.selectForm(form, vm.iFrameEmbedded)"
                                 class="ng-scope" role="button" tabindex="0">
                                 <a href="" ng-attr-title="form.name">
                                     <i class="icon-umb-contour"></i>
@@ -21,7 +24,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="dynOverlayGroup">
+                    <div class="dynOverlayGroup" ng-if="vm.isConnected">
                         <umb-toggle checked="vm.iFrameEmbedded"
                                     on-click="vm.toggleRenderMode()"
                                     show-labels="true"

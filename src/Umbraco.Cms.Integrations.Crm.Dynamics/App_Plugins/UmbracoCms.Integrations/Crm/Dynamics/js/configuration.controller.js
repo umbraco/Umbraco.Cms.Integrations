@@ -3,10 +3,13 @@
 
     vm.oauthConfig = {};
 
-    umbracoCmsIntegrationsCrmDynamicsResource.checkOAuthConfiguration().then(function(response) {
+    umbracoCmsIntegrationsCrmDynamicsResource.checkOAuthConfiguration().then(function (response) {
         if (response && response.isAuthorized) {
             vm.oauthConfig.isConnected = true;
             vm.oauthConfig.fullName = response.fullName;
+
+            if (typeof $scope.connected === "function")
+                $scope.connected();
         }
     });
 
@@ -23,6 +26,9 @@
         umbracoCmsIntegrationsCrmDynamicsResource.revokeAccessToken().then(function () {
             vm.oauthConfig.isConnected = false;
             notificationsService.success("Dynamics Configuration", "OAuth connection revoked.");
+
+            if (typeof $scope.revoked === "function")
+                $scope.revoked();
         });
     }
 
@@ -41,9 +47,11 @@
                     umbracoCmsIntegrationsCrmDynamicsResource.getSystemUserFullName().then(function(response) {
                         vm.oauthConfig.fullName = response;
                     });
+
+                    if (typeof $scope.connected === "function")
+                        $scope.connected();
                 }
             });
-
         }
     }, false);
 }

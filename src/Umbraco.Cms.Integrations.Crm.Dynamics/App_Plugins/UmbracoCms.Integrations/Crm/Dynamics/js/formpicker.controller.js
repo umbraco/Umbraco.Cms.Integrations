@@ -6,6 +6,7 @@
     vm.dynamicsFormsList = [];
     vm.searchTerm = "";
     vm.iFrameEmbedded = false;
+    vm.isConnected = false;
 
     umbracoCmsIntegrationsCrmDynamicsResource.checkOAuthConfiguration().then(function (response) {
         if (response.isAuthorized) {
@@ -59,6 +60,7 @@
     };
 
     function loadForms() {
+        vm.dynamicsFormsList = [];
         umbracoCmsIntegrationsCrmDynamicsResource.getForms().then(function (response) {
             if (response) {
                 response.value.forEach(item => {
@@ -72,6 +74,16 @@
             }
         });
     }
+
+    $scope.connected = function () {
+        vm.isConnected = true;
+        loadForms();
+    };
+
+    $scope.revoked = function () {
+        vm.isConnected = false;
+        vm.dynamicsFormsList = [];
+    };
 }
 
 angular.module("umbraco")
