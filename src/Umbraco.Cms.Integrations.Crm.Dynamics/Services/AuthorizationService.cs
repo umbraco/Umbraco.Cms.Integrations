@@ -1,10 +1,4 @@
-﻿
-using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
+﻿using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 
 #if NETCOREAPP
 using Microsoft.Extensions.Options;
@@ -16,6 +10,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 {
     public class AuthorizationService : IAuthorizationService
     {
+        private readonly DynamicsSettings _settings;
+
         public const string ClientId = "813c5a65-cfd6-48d6-8928-dffe02aaf61a";
 
         public const string RedirectUri = OAuthProxyBaseUrl;
@@ -26,12 +22,28 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
         public const string OAuthProxyTokenEndpoint = "{0}oauth/v1/token";
 
-        protected const string OAuthScopes = "https://org069121b1.api.crm4.dynamics.com/.default";
+        protected const string OAuthScopes = "{0}.default";
 
         protected const string DynamicsAuthorizationUrl =
             "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id={0}&response_type=code&redirect_uri={1}&response_mode=query&scope={2}";
 
-        public string GetAuthorizationUrl() =>
-            string.Format(DynamicsAuthorizationUrl, ClientId, OAuthProxyBaseUrl, OAuthScopes);
+#if NETCOREAPP
+        public AuthorizationService(IOptions<DynamicsSettings> options)
+        {
+            _settings = options.Value;
+        }
+#else
+        public AuthorizationService()
+        {
+            _settings = new DynamicsSettings(ConfigurationManager.AppSettings);
+        }
+#endif
+
+        public string GetAuthorizationUrl()
+        {
+            var scopes = string.Format(OAuthScopes, _settings.InstanceUrl);
+            return string.Format(DynamicsAuthorizationUrl, ClientId, OAuthProxyBaseUrl, scopes);
+        }
+            
     }
 }

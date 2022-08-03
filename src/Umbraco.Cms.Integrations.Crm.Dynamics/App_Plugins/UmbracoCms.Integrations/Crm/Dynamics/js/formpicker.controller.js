@@ -5,6 +5,7 @@
     vm.loading = false;
     vm.dynamicsFormsList = [];
     vm.searchTerm = "";
+    vm.iFrameEmbedded = false;
 
     umbracoCmsIntegrationsCrmDynamicsResource.checkOAuthConfiguration().then(function (response) {
         if (response.isAuthorized) {
@@ -30,6 +31,10 @@
         $scope.model.value = null;
     }
 
+    vm.toggleRenderMode = function () {
+        vm.iFrameEmbedded = !vm.iFrameEmbedded;
+    }
+
     vm.openDynamicsFormPickerOverlay = function () {
 
         var options = {
@@ -37,7 +42,10 @@
             subtitle: "Select a form",
             view: "/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics/views/formpickereditor.html",
             size: "medium",
-            selectForm: function (form) {
+            selectForm: function (form, iFrameEmbedded) {
+
+                form.iFrameEmbedded = iFrameEmbedded;
+
                 vm.saveForm(form);
 
                 editorService.close();
@@ -57,7 +65,8 @@
                     vm.dynamicsFormsList.push({
                         id: item.msdyncrm_marketingformid,
                         name: item.msdyncrm_name,
-                        embedCode: ""
+                        embedCode: "",
+                        iFrameEmbedded: vm.iFrameEmbedded
                     });
                 });
             }

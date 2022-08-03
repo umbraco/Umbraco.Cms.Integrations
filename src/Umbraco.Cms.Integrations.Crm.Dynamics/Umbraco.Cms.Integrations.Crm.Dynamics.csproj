@@ -51,12 +51,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\DynamicsForm.cshtml" />
 	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\DynamicsFormV8.cshtml" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\DynamicsFormV9.cshtml" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\DynamicsFormV9.cshtml">
+	  <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\DynamicsForm.cshtml">
 	    <SubType>Component</SubType>
 	  </Content>
 	</ItemGroup>

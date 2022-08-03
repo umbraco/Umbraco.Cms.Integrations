@@ -14,14 +14,18 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Helpers
     public static class DynamicsHtmlExtensions
     {
 #if NETCOREAPP
-        public static IHtmlContent RenderDynamicsForm(this IHtmlHelper<dynamic> htmlHelper, FormViewModel formVM)
+        public static IHtmlContent RenderDynamicsForm(this IHtmlHelper<dynamic> htmlHelper, FormViewModel formVM, string renderingViewPath = "")
         {
-            return htmlHelper.Partial("~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics/Render/DynamicsFormV9.cshtml", formVM);
+            return htmlHelper.Partial(string.IsNullOrEmpty(renderingViewPath) 
+                ? Constants.RenderingComponent.DefaultViewPath : renderingViewPath,
+                formVM);
         }
 #else
-        public static IHtmlString RenderDynamicsForm(this HtmlHelper helper, FormViewModel formVM)
+        public static IHtmlString RenderDynamicsForm(this HtmlHelper helper, FormViewModel formVM, string renderingViewPath = "")
         {
-            return helper.Partial("~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics/Render/DynamicsFormV8.cshtml", formVM);
+            return helper.Partial(string.IsNullOrEmpty(renderingViewPath)
+                ? Constants.RenderingComponent.DefaultV8ViewPath : renderingViewPath,
+                formVM);
         }
 #endif
     }

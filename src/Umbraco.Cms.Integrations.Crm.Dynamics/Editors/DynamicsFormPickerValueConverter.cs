@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
 using System;
-
+using Umbraco.Cms.Integrations.Crm.Dynamics.Helpers;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
 
 #if NETCOREAPP
 using Microsoft.Extensions.Options;
@@ -30,7 +28,22 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
         {
             if (source == null) return null;
 
-            return JsonConvert.DeserializeObject<FormViewModel>(source.ToString());
+            var jObject = JObject.Parse(source.ToString());
+
+            var embedCode = jObject["embedCode"].ToString();
+            var iFrameEmbedd = (bool)jObject["iFrameEmbedded"];
+
+            var vm = new FormViewModel
+            {
+                IFrameEmbedded = iFrameEmbedd,
+                FormBlockId = embedCode.ParseAttributeValue(Constants.EmbedAttribute.DataFormBlockId),
+                ContainerId = embedCode.ParseAttributeValue(Constants.EmbedAttribute.ContainerId),
+                ContainerClass = embedCode.ParseAttributeValue(Constants.EmbedAttribute.ContainerClass),
+                WebsiteId = embedCode.ParseAttributeValue(Constants.EmbedAttribute.DataWebsiteId),
+                Hostname = embedCode.ParseAttributeValue(Constants.EmbedAttribute.DataHostname)
+            };
+
+            return vm;
         }
     }
 }

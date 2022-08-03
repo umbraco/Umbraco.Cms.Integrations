@@ -9,8 +9,12 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Configuration
         public DynamicsSettings(NameValueCollection appSettings)
         {
             InstanceUrl = appSettings[Constants.UmbracoCmsIntegrationsCrmDynamicsInstanceUrlKey];
+
+            InstanceWebApiUrl = appSettings[Constants.UmbracoCmsIntegrationsCrmDynamicsInstanceWebApiUrlKey];
         }
 
         public string InstanceUrl { get; set; }
+
+        public string InstanceWebApiUrl { get; set; }
     }
 }

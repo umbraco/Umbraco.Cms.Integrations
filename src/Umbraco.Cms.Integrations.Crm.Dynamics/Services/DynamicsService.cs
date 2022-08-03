@@ -52,7 +52,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"{_settings.InstanceUrl}systemusers")
+                RequestUri = new Uri($"{_settings.InstanceWebApiUrl}systemusers")
             };
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
@@ -74,7 +74,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"{_settings.InstanceUrl}msdyncrm_formpages?$select=msdyncrm_javascriptcode,_msdyncrm_marketingformid_value" +
+                RequestUri = new Uri($"{_settings.InstanceWebApiUrl}msdyncrm_formpages?$select=msdyncrm_javascriptcode,_msdyncrm_marketingformid_value" +
                     $"&$filter=_msdyncrm_marketingformid_value eq {formId}")
             };
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", oauthConfiguration.AccessToken);
@@ -95,7 +95,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"{_settings.InstanceUrl}WhoAmI")
+                RequestUri = new Uri($"{_settings.InstanceWebApiUrl}WhoAmI")
             };
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 

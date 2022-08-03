@@ -12,13 +12,24 @@
                     </div>
                     <div class="dynOverlayGroup">
                         <ul class="dynFormsList">
-                            <li ng-repeat="form in vm.dynamicsFormsList | orderBy:'name' | filter:vm.searchTerm" ng-click="model.selectForm(form)" class="ng-scope" role="button" tabindex="0">
+                            <li ng-repeat="form in vm.dynamicsFormsList | orderBy:'name' | filter:vm.searchTerm" ng-click="model.selectForm(form, vm.iFrameEmbedded)" 
+                                class="ng-scope" role="button" tabindex="0">
                                 <a href="" ng-attr-title="form.name">
                                     <i class="icon-umb-contour"></i>
                                     <span class="formLine">{{form.name}}</span>
                                 </a>
                             </li>
                         </ul>
+                    </div>
+                    <div class="dynOverlayGroup">
+                        <umb-toggle checked="vm.iFrameEmbedded"
+                                    on-click="vm.toggleRenderMode()"
+                                    show-labels="true"
+                                    label-on="Render with iFrame"
+                                    label-off="Render with Script"
+                                    label-position="right"
+                                    hide-icons="true">
+                        </umb-toggle>
                     </div>
                 </umb-box-content>
             </umb-box>
