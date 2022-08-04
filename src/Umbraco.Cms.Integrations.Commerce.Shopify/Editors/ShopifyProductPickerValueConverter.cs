@@ -56,6 +56,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
                 where ids.Contains(p.Id)
                 select new ProductViewModel
                 {
+                    Id = p.Id,
                     Title = p.Title,
                     Body = p.Body,
                     Image = p.Image.Src
