@@ -138,7 +138,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri($"{_settings.InstanceWebApiUrl}msdyncrm_marketingforms")
+                RequestUri = new Uri($"{_settings.HostUrl}{_settings.ApiPath}msdyncrm_marketingforms")
             };
             requestMessage.Headers.Authorization =
                 new AuthenticationHeaderValue("Bearer", oauthConfiguration.AccessToken);

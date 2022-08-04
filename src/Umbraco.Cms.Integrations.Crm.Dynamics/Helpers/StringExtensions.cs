@@ -2,7 +2,7 @@
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Helpers
 {
-    public static class EmbedCodeExtensions
+    public static class StringExtensions
     {
         /// <summary>
         /// Read <div></div> tags attributes like id, class, data- from input HTML using Regular Expressions.
@@ -10,7 +10,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Helpers
         /// <param name="html"></param>
         /// <param name="attributeKey"></param>
         /// <returns></returns>
-        public static string ParseAttributeValue(this string html, string attributeKey)
+        public static string ParseDynamicsEmbedCodeAttributeValue(this string html, string attributeKey)
         {
             string divPattern = @"<\s*{0}[^>]*>(.*?)<\s*/{0}\s*>";
             string attributePattern = @"{0}=""([^""]*)""";

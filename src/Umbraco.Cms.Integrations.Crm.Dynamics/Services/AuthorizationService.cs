@@ -41,7 +41,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
         public string GetAuthorizationUrl()
         {
-            var scopes = string.Format(OAuthScopes, _settings.InstanceUrl);
+            var scopes = string.Format(OAuthScopes, _settings.HostUrl);
             return string.Format(DynamicsAuthorizationUrl, ClientId, OAuthProxyBaseUrl, scopes);
         }
             

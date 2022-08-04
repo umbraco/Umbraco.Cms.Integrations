@@ -6,9 +6,9 @@
     var id = Guid.NewGuid();
 }
 
-@if (Model.IFrameEmbedded)
+@if (Model.IframeEmbedded)
 {
-    <iframe frameBorder="0" style="width:100%" id=@id></iframe>
+    <iframe frameBorder="0" style="width:100%;height:100%;" id=@id></iframe>
     <script>
         var sandboxSrc = "https://@(Model.Hostname)/t/formsandbox/@(Model.WebsiteId)/@(Model.FormBlockId)?ad="
             + encodeURIComponent(document.location.toString()); document.getElementById('@id').setAttribute('src', sandboxSrc);

@@ -31,16 +31,16 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
             var jObject = JObject.Parse(source.ToString());
 
             var embedCode = jObject["embedCode"].ToString();
-            var iFrameEmbedd = (bool)jObject["iFrameEmbedded"];
+            var iframeEmbedd = (bool)jObject["iframeEmbedded"];
 
             var vm = new FormViewModel
             {
-                IFrameEmbedded = iFrameEmbedd,
-                FormBlockId = embedCode.ParseAttributeValue(Constants.EmbedAttribute.DataFormBlockId),
-                ContainerId = embedCode.ParseAttributeValue(Constants.EmbedAttribute.ContainerId),
-                ContainerClass = embedCode.ParseAttributeValue(Constants.EmbedAttribute.ContainerClass),
-                WebsiteId = embedCode.ParseAttributeValue(Constants.EmbedAttribute.DataWebsiteId),
-                Hostname = embedCode.ParseAttributeValue(Constants.EmbedAttribute.DataHostname)
+                IframeEmbedded = iframeEmbedd,
+                FormBlockId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataFormBlockId),
+                ContainerId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.ContainerId),
+                ContainerClass = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.ContainerClass),
+                WebsiteId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataWebsiteId),
+                Hostname = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataHostname)
             };
 
             return vm;

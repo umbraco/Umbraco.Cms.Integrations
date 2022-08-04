@@ -9,9 +9,9 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
 
         public const string TargetStateName = "dynamicsOAuthConfiguration-db";
 
-        public const string UmbracoCmsIntegrationsCrmDynamicsInstanceUrlKey = "Umbraco.Cms.Integrations.Crm.Dynamics.InstanceUrl";
+        public const string UmbracoCmsIntegrationsCrmDynamicsHostUrlKey = "Umbraco.Cms.Integrations.Crm.Dynamics.HostUrl";
 
-        public const string UmbracoCmsIntegrationsCrmDynamicsInstanceWebApiUrlKey = "Umbraco.Cms.Integrations.Crm.Dynamics.InstanceWebApiUrl";
+        public const string UmbracoCmsIntegrationsCrmDynamicsApiPathKey = "Umbraco.Cms.Integrations.Crm.Dynamics.ApiPath";
 
         public const string AppPluginFolderPath = "~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics";
 

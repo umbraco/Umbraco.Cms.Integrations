@@ -25,7 +25,11 @@
 
         umbracoCmsIntegrationsCrmDynamicsResource.revokeAccessToken().then(function () {
             vm.oauthConfig.isConnected = false;
-            notificationsService.success("Dynamics Configuration", "OAuth connection revoked.");
+
+            // if directive runs from property editor, the notifications should be hidden, because they will not be displayed properly behind the overlay window.
+            // if directive runs from data type, the notifications are displayed
+            if (typeof $scope.connected === "undefined")
+                notificationsService.success("Dynamics Configuration", "OAuth connection revoked.");
 
             if (typeof $scope.revoked === "function")
                 $scope.revoked();
@@ -38,11 +42,18 @@
 
             umbracoCmsIntegrationsCrmDynamicsResource.getAccessToken(event.data.code).then(function (response) {
                 if (response.startsWith("Error:")) {
-                    notificationsService.error("Dynamics Configuration", response);
+
+                    // if directive runs from property editor, the notifications should be hidden, because they will not be displayed properly behind the overlay window.
+                    // if directive runs from data type, the notifications are displayed
+                    if (typeof $scope.connected === "undefined")
+                        notificationsService.error("Dynamics Configuration", response);
                 } else {
                     vm.oauthConfig.isConnected = true;
-                    
-                    notificationsService.success("Dynamics Configuration", "OAuth connected.");
+
+                    // if directive runs from property editor, the notifications should be hidden, because they will not be displayed properly behind the overlay window.
+                    // if directive runs from data type, the notifications are displayed
+                    if (typeof $scope.connected === "undefined")
+                        notificationsService.success("Dynamics Configuration", "OAuth connected.");
 
                     umbracoCmsIntegrationsCrmDynamicsResource.getSystemUserFullName().then(function(response) {
                         vm.oauthConfig.fullName = response;

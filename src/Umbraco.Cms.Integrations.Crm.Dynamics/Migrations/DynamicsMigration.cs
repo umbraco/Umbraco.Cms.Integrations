@@ -62,7 +62,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
         public int Id { get; set; }
 
         [Column("AccessToken")]
-        [SpecialDbType(SpecialDbTypes.NTEXT)]
+        [Length(2048)]
         public string AccessToken { get; set; }
 
         [Column("UserId")]

@@ -4,8 +4,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels
 {
     public class FormViewModel
     {
-        [JsonProperty("iFrameEmbedded")]
-        public bool IFrameEmbedded { get; set; }
+        [JsonProperty("iframeEmbedded")]
+        public bool IframeEmbedded { get; set; }
 
         [JsonProperty("formBlockId")]
         public string FormBlockId { get; set; }
