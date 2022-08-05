@@ -62,8 +62,4 @@
 		</ItemGroup>
 	</Target>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <Exec Command="set UmbracoCmsIntegrationsTestsiteV8Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V8&#xD;&#xA;  set DynamicsDir=%25UmbracoCmsIntegrationsTestsiteV8Path%25\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics&#xD;&#xA;  if not exist %25DynamicsDir%25 mkdir -p %25DynamicsDir%25&#xD;&#xA;  xcopy &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Crm\Dynamics&quot; &quot;%25DynamicsDir%25&quot; /e /y&#xD;&#xA;  xcopy &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Crm\Dynamics&quot; &quot;%25DynamicsDir%25&quot; /e /y" />
-	</Target>
-
 </Project>
