@@ -4,13 +4,13 @@
             <umb-box>
                 <umb-box-header title="{{ model.title }}" description="{{ model.subtitle }}"></umb-box-header>
                 <umb-box-content>
-                    <div class="hsOverlayGroup">
+                    <div class="hsOverlayGroup" ng-if="vm.isConnected">
                         <div class="form-search">
                             <i class="icon-search"></i>
                             <input type="text" class="-full-width-input" ng-model="vm.searchTerm" placeholder="Type to search..." umb-auto-focus="" aria-invalid="false">
                         </div>
                     </div>
-                    <div class="hsOverlayGroup">
+                    <div class="hsOverlayGroup" ng-if="vm.isConnected">
                         <ul class="hsFormsList">
                             <li ng-repeat="form in vm.hubspotFormsList | orderBy:'name' | filter:vm.searchTerm" ng-click="model.pickForm(form)" class="ng-scope" role="button" tabindex="0">
                                 <a href="" ng-attr-title="form.name">
@@ -20,6 +20,14 @@
                                 </a>
                             </li>
                         </ul>
+                    </div>
+                </umb-box-content>
+            </umb-box>
+            <umb-box>
+                <umb-box-header title="HubSpot - Authorization Status" description="Please connect to HubSpot."></umb-box-header>
+                <umb-box-content>
+                    <div class="hsOverlayGroup">
+                        <hubspot-authorization on-connected="connected()" on-revoked="revoked()"></hubspot-authorization>
                     </div>
                 </umb-box-content>
             </umb-box>

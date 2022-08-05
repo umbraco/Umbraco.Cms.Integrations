@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net472;net50</TargetFrameworks>
+		<TargetFrameworks>net472;net50;net60</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -19,7 +19,7 @@
 		<PackageReference Include="UmbracoCms.Web" version="8.4.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net50' OR '$(TargetFramework)' == 'net60'">
 		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
 		<PackageReference Include="Umbraco.Cms.Web.Common" version="9.0.1" />
@@ -43,10 +43,18 @@
 		</Content>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\hubspotauthorization.directive.js" />
+	</ItemGroup>
+
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
 		<ItemGroup>
 			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
 		</ItemGroup>
+	</Target>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command=" set UmbracoCmsIntegrationsTestsiteV8Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V8&#xD;&#xA;  set HubspotDir=%25UmbracoCmsIntegrationsTestsiteV8Path%25\App_Plugins\UmbracoCms.Integrations\Crm\Hubspot&#xD;&#xA;  if not exist %25HubspotDir%25 mkdir -p %25HubspotDir%25&#xD;&#xA;  xcopy &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Crm\Hubspot&quot; &quot;%25HubspotDir%25&quot; /e /y" />
 	</Target>
 
 </Project>
