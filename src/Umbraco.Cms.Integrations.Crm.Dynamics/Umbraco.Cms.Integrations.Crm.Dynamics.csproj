@@ -20,16 +20,10 @@
 		<PackageReference Include="UmbracoCms.Web" version="8.4.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net50' Or '$(TargetFramework)' == 'net60'">
 		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
 		<PackageReference Include="Umbraco.Cms.Web.Common" version="9.0.1" />
-	</ItemGroup>
-	
-	<ItemGroup Condition="'$(TargetFramework)' == 'net60'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="10.0.1" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="10.0.1" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="10.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,10 +1,12 @@
 ﻿#if NETCOREAPP
+using Microsoft.Extensions.DependencyInjection;
+
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
-
-using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
+using Umbraco.Cms.Core.Notifications;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Migrations;
 #else
 using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
 using Umbraco.Core;
@@ -20,6 +22,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
         {
             var options = builder.Services.AddOptions<DynamicsSettings>()
                 .Bind(builder.Config.GetSection(Constants.Configuration.Settings));
+
+            builder.AddNotificationHandler<UmbracoApplicationStartingNotification, UmbracoAppStartingHandler>();
 
             builder.Services.AddSingleton<IAuthorizationService, AuthorizationService>();
 
