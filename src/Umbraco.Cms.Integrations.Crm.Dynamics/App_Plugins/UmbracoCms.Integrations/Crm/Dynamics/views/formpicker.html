@@ -1,0 +1,23 @@
+﻿<div ng-controller="Umbraco.Cms.Integrations.Crm.Dynamics.FormPickerController as vm">
+
+    <umb-load-indicator ng-if="vm.loading">
+    </umb-load-indicator>
+
+    <umb-node-preview ng-if="model.value"
+                      name="model.value.name"
+                      allow-remove="true" ,
+                      on-remove="vm.removeForm()">
+    </umb-node-preview>
+
+    <a ng-if="!model.value && !vm.loading"
+       class="umb-node-preview-add"
+       href=""
+       ng-click="vm.openDynamicsFormPickerOverlay()"
+       prevent-default>
+        <localize key="general_add">Add</localize>
+    </a>
+
+    <div ng-if="vm.error" class="alert alert-warning">
+        {{ vm.error }}
+    </div>
+</div>

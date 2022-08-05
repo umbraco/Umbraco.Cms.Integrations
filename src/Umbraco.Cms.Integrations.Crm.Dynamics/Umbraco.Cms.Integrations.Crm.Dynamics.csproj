@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net472;net50;net60</TargetFrameworks>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Umbraco.Cms.Integrations.Crm.Dynamics</PackageId>
+		<Title>Umbraco CMS Integrations: CRM - Dynamics</Title>
+		<Description>An extension for Umbraco CMS providing a form picker and rendering component for Dynamics 365 Marketing.</Description>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+		<Version>1.0.0</Version>
+		<Authors>Umbraco HQ</Authors>
+		<Company>Umbraco</Company>
+		<ApplicationManifest>App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\package.manifest</ApplicationManifest>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+		<PackageReference Include="UmbracoCms.Web" version="8.4.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net50' Or '$(TargetFramework)' == 'net60'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" version="9.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\**\*.*">
+			<Pack>true</Pack>
+			<PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\</PackagePath>
+		</Content>
+		<None Include="build\**\*.*">
+			<Pack>True</Pack>
+			<PackagePath>buildTransitive</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\**\*.*">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\js\oauthConfiguration.directive.js" />
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\DynamicsForm.cshtml" />
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\DynamicsFormV8.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\DynamicsForm.cshtml">
+	    <SubType>Component</SubType>
+	  </Content>
+	</ItemGroup>
+
+	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
+		<ItemGroup>
+			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
+		</ItemGroup>
+	</Target>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="set UmbracoCmsIntegrationsTestsiteV8Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V8&#xD;&#xA;  set DynamicsDir=%25UmbracoCmsIntegrationsTestsiteV8Path%25\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics&#xD;&#xA;  if not exist %25DynamicsDir%25 mkdir -p %25DynamicsDir%25&#xD;&#xA;  xcopy &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Crm\Dynamics&quot; &quot;%25DynamicsDir%25&quot; /e /y&#xD;&#xA;  xcopy &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Crm\Dynamics&quot; &quot;%25DynamicsDir%25&quot; /e /y" />
+	</Target>
+
+</Project>
