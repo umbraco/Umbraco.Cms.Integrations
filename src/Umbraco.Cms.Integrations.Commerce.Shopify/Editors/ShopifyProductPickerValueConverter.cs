@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.ViewModels;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
 
@@ -50,7 +50,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 
             var ids = (long[]) inter;
 
-            var result = _apiService.GetResults().GetAwaiter().GetResult();
+            var t = Task.Run(async () => await _apiService.GetResults());
+
+            var result = t.Result;
 
             var products = from p in result.Result.Products
                 where ids.Contains(p.Id)
