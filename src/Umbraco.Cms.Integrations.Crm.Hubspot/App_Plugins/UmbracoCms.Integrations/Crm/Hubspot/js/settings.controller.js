@@ -29,8 +29,11 @@
             }
 
             if (response.isValid !== true) {
-                notificationsService.warning("HubSpot Configuration",
-                    "Invalid setup. Please review the API/OAuth settings.");
+                // if directive runs from property editor, the notifications should be hidden, because they will not be displayed properly behind the overlay window.
+                // if directive runs from data type, the notifications are displayed
+                if (typeof $scope.connected === "undefined")
+                    notificationsService.warning("HubSpot Configuration",
+                        "Invalid setup. Please review the API/OAuth settings.");
             }
         });
 
@@ -46,7 +49,12 @@
     vm.onRevokeToken = function() {
         umbracoCmsIntegrationsCrmHubspotResource.revokeAccessToken().then(function (response) {
             vm.oauthSetup.isConnected = false;
-            notificationsService.success("HubSpot Configuration", "OAuth connection revoked.");
+
+            if(typeof $scope.connected === "undefined")
+                notificationsService.success("HubSpot Configuration", "OAuth connection revoked.");
+
+            if (typeof $scope.revoked === "function")
+                $scope.revoked();
         });
     }
 
@@ -56,11 +64,17 @@
 
             umbracoCmsIntegrationsCrmHubspotResource.getAccessToken(event.data.code).then(function (response) {
                 if (response.startsWith("Error:")) {
-                    notificationsService.error("HubSpot Configuration", response);
+                    if (typeof $scope.connected === "undefined")
+                        notificationsService.error("HubSpot Configuration", response);
                 } else {
                     vm.oauthSetup.isConnected = true;
                     vm.status.description = umbracoCmsIntegrationsCrmHubspotService.configDescription.OAuthConnected;
-                    notificationsService.success("HubSpot Configuration", "OAuth connected.");
+
+                    if (typeof $scope.connected === "undefined")
+                        notificationsService.success("HubSpot Configuration", "OAuth connected.");
+
+                    if (typeof $scope.connected === "function")
+                        $scope.connected();
                 }
             });
 

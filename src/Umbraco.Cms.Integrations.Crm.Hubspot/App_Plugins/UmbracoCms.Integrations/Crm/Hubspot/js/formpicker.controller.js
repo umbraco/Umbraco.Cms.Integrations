@@ -10,6 +10,7 @@
             vm.searchTerm = "";
             vm.error = "";
             vm.isValid = true;
+            vm.isConnected = false;
 
             // check configuration
             checkConfiguration(loadForms);
@@ -65,6 +66,7 @@
                 if (vm.status.useOAuth === true) {
                     // use OAuth
                     umbracoCmsIntegrationsCrmHubspotResource.validateAccessToken().then(function (response) {
+                        
                         if (response.isExpired === true || response.isValid === false) {
                             vm.loading = false;
                             notificationsService.warning("HubSpot API", "Unable to connect to HubSpot. Please review the settings of the form picker property's data type.");
@@ -77,7 +79,8 @@
 
                             if (data.isValid === false || data.isExpired === true) {
                                 notificationsService.error("HubSpot API", "Unable to retrieve the list of forms from HubSpot. Please review the settings of the form picker property's data type.");
-                            }
+                            } else
+                                vm.isConnected = true;
                         });
                     });
                 } else {
@@ -89,9 +92,20 @@
 
                         if (data.isValid === false || data.isExpired === true) {
                             notificationsService.error("HubSpot API", "Invalid API key");
-                        }
+                        } else
+                            vm.isConnected = true;
                     });
 
                 }
             }
+
+            $scope.connected = function () {
+                vm.isConnected = true;
+                loadForms();
+            };
+
+            $scope.revoked = function () {
+                vm.isConnected = false;
+                vm.hubspotFormsList = [];
+            };
         });
