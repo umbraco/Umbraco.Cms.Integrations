@@ -4,10 +4,9 @@
 
     const oauthName = "OAuth";
 
-    vm.oauthSetup = {
-        authEventHandled : false
-    };
+    vm.oauthSetup = {};
     vm.status = {};
+    vm.authEventHandled = false;
 
     $scope.$on('formSubmitting', function () {
 
@@ -51,7 +50,7 @@
     vm.onRevokeToken = function() {
         umbracoCmsIntegrationsCrmHubspotResource.revokeAccessToken().then(function (response) {
             vm.oauthSetup.isConnected = false;
-            vm.oauthSetup.authEventHandled = false;
+            vm.authEventHandled = false;
 
             if(typeof $scope.connected === "undefined")
                 notificationsService.success("HubSpot Configuration", "OAuth connection revoked.");
@@ -66,11 +65,11 @@
 
         if (event.data.type === "hubspot:oauth:success") {
 
-            if (vm.oauthSetup.authEventHandled === true) return;
+            if (vm.authEventHandled === true) return;
 
             umbracoCmsIntegrationsCrmHubspotResource.getAccessToken(event.data.code).then(function (response) {
 
-                vm.oauthSetup.authEventHandled = true;
+                vm.authEventHandled = true;
 
                 if (response.startsWith("Error:")) {
                     if (typeof $scope.connected === "undefined")
