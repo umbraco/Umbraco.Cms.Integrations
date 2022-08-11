@@ -1,9 +1,4 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
-namespace Umbraco.Cms.Integrations.Testsite.V9
+namespace Umbraco.Cms.Integrations.Testsite.V10
 {
     public class Program
     {
@@ -21,7 +16,11 @@ namespace Umbraco.Cms.Integrations.Testsite.V9
                         optional: true,
                         reloadOnChange: true))
 #endif
-                .ConfigureLogging(x => x.ClearProviders())
-                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+                .ConfigureUmbracoDefaults()
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStaticWebAssets();
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }
