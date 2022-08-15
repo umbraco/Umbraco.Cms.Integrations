@@ -10,6 +10,7 @@
     <PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
     <Product>Umbraco.Cms.Integrations.Automation.Zapier</Product>
     <ApplicationManifest>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\package.manifest</ApplicationManifest>
+	  <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
