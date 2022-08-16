@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <language>
-	<area alias="zapierDashboard">
-		<key alias="title">Zapier Integrations</key>
-		<key alias="promptDeleteTitle">Delete Registered Webhook</key>
-		<key alias="promptDeleteContent">Are you sure?</key>
+	<area alias="dashboardTabs">
+		<key alias="zapierIntegrations">Zapier Integrations</key>
 	</area>
 </language>
