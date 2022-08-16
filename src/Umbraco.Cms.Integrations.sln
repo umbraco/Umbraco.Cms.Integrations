@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31515.178
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Commerce.CommerceTools", "Umbraco.Cms.Integrations.Commerce.CommerceTools\Umbraco.Cms.Integrations.Commerce.CommerceTools.csproj", "{85A73911-0146-409F-9488-33EA5750A07C}"
 EndProject
@@ -55,7 +55,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.SE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dynamics", "Dynamics", "{8764ECBB-1B39-4D8A-A86B-ECD0D3F0F3D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Crm.Dynamics", "Umbraco.Cms.Integrations.Crm.Dynamics\Umbraco.Cms.Integrations.Crm.Dynamics.csproj", "{E837A4C4-8518-42AA-AC75-EA1CA0DE3EC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.Dynamics", "Umbraco.Cms.Integrations.Crm.Dynamics\Umbraco.Cms.Integrations.Crm.Dynamics.csproj", "{E837A4C4-8518-42AA-AC75-EA1CA0DE3EC4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Testsite.V10", "Umbraco.Cms.Integrations.Testsite.V10\Umbraco.Cms.Integrations.Testsite.V10.csproj", "{493F2509-0CCF-4027-8ECA-B4C4D3FDA80E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,6 +109,10 @@ Global
 		{E837A4C4-8518-42AA-AC75-EA1CA0DE3EC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E837A4C4-8518-42AA-AC75-EA1CA0DE3EC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E837A4C4-8518-42AA-AC75-EA1CA0DE3EC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{493F2509-0CCF-4027-8ECA-B4C4D3FDA80E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{493F2509-0CCF-4027-8ECA-B4C4D3FDA80E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{493F2509-0CCF-4027-8ECA-B4C4D3FDA80E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{493F2509-0CCF-4027-8ECA-B4C4D3FDA80E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

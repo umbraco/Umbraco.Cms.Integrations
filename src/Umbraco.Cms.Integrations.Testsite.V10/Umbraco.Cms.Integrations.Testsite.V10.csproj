@@ -1,0 +1,223 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="appsettings.Local.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\Bergmania.OpenStreetMap\bergmania.openstreetmap.html" />
+    <Content Include="App_Plugins\Bergmania.OpenStreetMap\lang\da-DK.xml" />
+    <Content Include="App_Plugins\Bergmania.OpenStreetMap\lang\en-US.xml" />
+    <Content Include="App_Plugins\Bergmania.OpenStreetMap\lib\autocomplete\css\autocomplete.css" />
+    <Content Include="App_Plugins\Bergmania.OpenStreetMap\lib\leaflet\images\layers-2x.png" />
+    <Content Include="App_Plugins\Bergmania.OpenStreetMap\lib\leaflet\images\layers.png" />
+    <Content Include="App_Plugins\Bergmania.OpenStreetMap\lib\leaflet\images\marker-icon-2x.png" />
+    <Content Include="App_Plugins\Bergmania.OpenStreetMap\lib\leaflet\images\marker-icon.png" />
+    <Content Include="App_Plugins\Bergmania.OpenStreetMap\lib\leaflet\images\marker-shadow.png" />
+    <Content Include="App_Plugins\Bergmania.OpenStreetMap\lib\leaflet\leaflet.css" />
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\backoffice\icons\icon-shopify.svg">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\productPicker.controller.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\productPickerSettings.controller.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\shopify.resource.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\shopify.service.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\package.manifest">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\Render\Products.cshtml">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\Render\ProductsV9.cshtml">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPicker.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPickerOverlay.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPickerSettings.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\css\styles.css">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\js\configuration.controller.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\js\dynamics.resource.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\js\formpicker.controller.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\js\oauthconfiguration.directive.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\package.manifest">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\DynamicsForm.cshtml">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\</PackagePath>
+      <SubType>Component</SubType>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\DynamicsFormV8.cshtml">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\views\configuration.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\views\formpicker.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\views\formpickereditor.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\css\urlInspection.css">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\images\btn_google_signin_dark_disabled_web.png">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\images\btn_google_signin_dark_normal_web.png">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\js\url-inspection-tool.controller.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\js\url-inspection-tool.resource.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\lang\en-US.xml">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\package.manifest">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\urlInspection.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\package.manifest">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\Semrush\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrush.controller.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\Semrush\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrush.css">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\Semrush\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrush.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\Semrush\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrush.resource.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\Semrush\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrushColumns.json">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\Semrush\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\semrushDataSources.json">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\Semrush\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\status.controller.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\Semrush\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\statusEditor.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\Semrush\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Umbraco.Cms" Version="10.0.1" />
+  </ItemGroup>
+
+  <!-- Force Windows to use ICU. Otherwise Windows 10 2019H1+ will do it, but older Windows 10 and most, if not all, Windows Server editions will run NLS -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="68.2.0.9" />
+    <PackageReference Include="Umbraco.TheStarterKit" Version="10.0.0" />
+    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="68.2.0.9" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
+  </ItemGroup>
+
+
+  <PropertyGroup>
+    <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="App_Plugins\Bergmania.OpenStreetMap\bergmania.openstreetmap.controller.js" />
+    <None Include="App_Plugins\Bergmania.OpenStreetMap\lib\autocomplete\js\autocomplete.js" />
+    <None Include="App_Plugins\Bergmania.OpenStreetMap\lib\autocomplete\js\autocomplete.min.js" />
+    <None Include="App_Plugins\Bergmania.OpenStreetMap\lib\autocomplete\js\autocomplete.umd.min.js" />
+    <None Include="App_Plugins\Bergmania.OpenStreetMap\lib\leaflet\leaflet-src.esm.js" />
+    <None Include="App_Plugins\Bergmania.OpenStreetMap\lib\leaflet\leaflet-src.esm.js.map" />
+    <None Include="App_Plugins\Bergmania.OpenStreetMap\lib\leaflet\leaflet-src.js" />
+    <None Include="App_Plugins\Bergmania.OpenStreetMap\package.manifest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj" />
+    <ProjectReference Include="..\Umbraco.Cms.Integrations.Crm.Dynamics\Umbraco.Cms.Integrations.Crm.Dynamics.csproj" />
+    <ProjectReference Include="..\Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool\Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.csproj" />
+    <ProjectReference Include="..\Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj" />
+  </ItemGroup>
+
+  <!-- Keep this as false if ModelsBuilder mode is InMemoryAuto -->
+  <PropertyGroup>
+    <RazorCompileOnBuild>false</RazorCompileOnBuild>
+    <RazorCompileOnPublish>false</RazorCompileOnPublish>
+  </PropertyGroup>
+</Project>
