@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net472;net50;net60</TargetFrameworks>
+		<TargetFrameworks>net472;net50</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -19,7 +19,7 @@
 		<PackageReference Include="UmbracoCms.Web" version="8.5.4" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net50' or '$(TargetFramework)' == 'net60'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
 		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
 	</ItemGroup>
