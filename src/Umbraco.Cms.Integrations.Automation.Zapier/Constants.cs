@@ -24,7 +24,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
         public static class Configuration
         {
-            public const string Settings = "Umbraco:Forms:Integrations:Automation:Zapier:Settings";
+            public const string Settings = "Umbraco:Cms:Integrations:Automation:Zapier:Settings";
         }
 
         public static class ContentProperties
