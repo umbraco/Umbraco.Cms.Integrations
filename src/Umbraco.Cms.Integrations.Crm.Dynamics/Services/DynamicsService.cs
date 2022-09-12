@@ -89,7 +89,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             var embedCode = JsonConvert.DeserializeObject<ResponseDto<FormDto>>(result);
 
-            return embedCode.Value.First().EmbedCode;
+            return embedCode.Value.FirstOrDefault() != null ? embedCode.Value.First().EmbedCode : string.Empty;
         }
 
         private async Task<string> GetUserId(string accessToken)
