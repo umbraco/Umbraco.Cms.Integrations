@@ -1,6 +1,6 @@
 # Umbraco.Cms.Integrations.Crm.Dynamics
 
-This integration provides a form picker and rendering component for forms managed withing a Microsoft Dynamics 365 Marketing instance.
+This integration provides a form picker and rendering component for forms managed within a Microsoft Dynamics 365 Marketing instance.
 
 ## Prerequisites
 
