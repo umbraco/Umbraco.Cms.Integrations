@@ -124,7 +124,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
                 var errorResult = await response.Content.ReadAsStringAsync();
                 var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
 
-                return "Error: " + errorDto.Message;
+                return "Error: " + errorDto.ErrorDescription;
             }
 
             return "Error: An unexpected error occurred.";

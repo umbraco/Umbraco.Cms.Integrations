@@ -9,5 +9,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos
 
         [JsonProperty("message")]
         public string Message { get; set; }
+
+        [JsonProperty("error_description")]
+        public string ErrorDescription { get; set; }
     }
 }
