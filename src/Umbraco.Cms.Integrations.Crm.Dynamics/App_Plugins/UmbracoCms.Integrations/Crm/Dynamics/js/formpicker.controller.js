@@ -3,13 +3,9 @@
     var vm = this;
 
     vm.loading = false;
-    vm.dynamicsFormsList = [];
-
     vm.searchTerm = "";
-
     vm.selectedForm = {};
     vm.iframeEmbedded = false;
-
     vm.isConnected = false;
 
     umbracoCmsIntegrationsCrmDynamicsResource.checkOAuthConfiguration().then(function (response) {
@@ -25,6 +21,10 @@
     vm.saveForm = function (form) {
 
         umbracoCmsIntegrationsCrmDynamicsResource.getEmbedCode(form.id).then(function (response) {
+
+            if (response.length == 0) {
+                notificationsService.warning("Dynamics API", "Unable to embed selected form. Please check if it is live.");
+            }
 
             form.embedCode = response;
 
@@ -49,9 +49,11 @@
             size: "medium",
             selectForm: function (form, iframeEmbedded) {
 
-                form.iframeEmbedded = iframeEmbedded;
+                if (form.id !== undefined) {
+                    form.iframeEmbedded = iframeEmbedded;
 
-                vm.saveForm(form);
+                    vm.saveForm(form);
+                }
 
                 editorService.close();
             },
@@ -64,8 +66,9 @@
     };
 
     function loadForms() {
-        vm.dynamicsFormsList = [];
+        vm.loading = true;
         umbracoCmsIntegrationsCrmDynamicsResource.getForms().then(function (response) {
+            vm.dynamicsFormsList = [];
             if (response) {
                 response.value.forEach(item => {
                     vm.dynamicsFormsList.push({
@@ -76,6 +79,7 @@
                     });
                 });
             }
+            vm.loading = false;
         });
     }
 
