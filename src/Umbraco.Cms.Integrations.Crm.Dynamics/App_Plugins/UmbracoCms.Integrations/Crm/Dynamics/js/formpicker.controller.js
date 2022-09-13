@@ -79,8 +79,8 @@
                     });
                 });
             }
+            vm.loading = false;
         });
-        vm.loading = false;
     }
 
     $scope.connected = function () {
