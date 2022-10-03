@@ -6,6 +6,8 @@
 
     public static class Constants
     {
+        public const string PropertyEditorAlias = "Umbraco.Cms.Integrations.Crm.Hubspot.FormPicker";
+
         public const string UmbracoCmsIntegrationsCrmHubspotApiKey = "Umbraco.Cms.Integrations.Crm.Hubspot.ApiKey";
 
         public const string UmbracoCmsIntegrationsCrmHubspotRegion = "Umbraco.Cms.Integrations.Crm.Hubspot.Region";

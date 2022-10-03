@@ -1,4 +1,5 @@
 ﻿#if NETCOREAPP
+using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.IO;
 using Umbraco.Cms.Core.PropertyEditors;
 #else
@@ -9,10 +10,10 @@ using Umbraco.Core.PropertyEditors;
 namespace Umbraco.Cms.Integrations.Crm.Hubspot
 {
     [DataEditor(
-        alias: "Umbraco.Cms.Integrations.Crm.Hubspot.FormPicker",
+        alias: Constants.PropertyEditorAlias,
         name: "HubSpot Form Picker",
         view: "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/views/formpicker.html",
-        Group = "Pickers",
+        Group = Core.Constants.PropertyEditors.Groups.Pickers,
         Icon = "icon-handshake"
         )]
     public class HubspotFormPickerPropertyEditor: DataEditor
