@@ -11,6 +11,9 @@
 
             if (typeof $scope.connected === "function")
                 $scope.connected();
+        } else if (response.message.length > 0) {
+            if (typeof $scope.connected === "undefined")
+                notificationsService.error("Dynamics Configuration", response.message);
         }
     });
 
@@ -41,7 +44,7 @@
     window.addEventListener("message", function (event) {
         if (event.data.type === "hubspot:oauth:success") {
             vm.oauthSuccessEventCount += 1;
-            
+
             if (vm.oauthSuccessEventCount == 1) {
                 umbracoCmsIntegrationsCrmDynamicsResource.getAccessToken(event.data.code).then(function (response) {
 

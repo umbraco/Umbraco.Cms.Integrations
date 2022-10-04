@@ -19,5 +19,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos
 
         [JsonProperty("isAuthorized")]
         public bool IsAuthorized { get; set; }
+
+        [JsonProperty("message")]
+        public string Message { get; set; }
     }
 }

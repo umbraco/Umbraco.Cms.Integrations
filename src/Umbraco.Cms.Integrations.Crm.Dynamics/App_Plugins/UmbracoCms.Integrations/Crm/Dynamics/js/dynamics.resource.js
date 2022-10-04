@@ -16,7 +16,7 @@
             },
             revokeAccessToken: function () {
                 return umbRequestHelper.resourcePromise(
-                    $http.post(`${apiEndpoint}/RevokeAccessToken`),
+                    $http.delete(`${apiEndpoint}/RevokeAccessToken`),
                     "Failed");
             },
             getSystemUserFullName: function () {
