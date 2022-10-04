@@ -1,7 +1,7 @@
-﻿
-#if NETCOREAPP
+﻿#if NETCOREAPP
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
 #else
@@ -74,11 +74,11 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
         {
             var oauthConfiguration = _dynamicsConfigurationService.GetOAuthConfiguration();
 
-            if (oauthConfiguration == null) return new OAuthConfigurationDto();
+            if (oauthConfiguration == null) return new OAuthConfigurationDto { Message = string.Empty };
 
             var identity = await _dynamicsService.GetIdentity(oauthConfiguration.AccessToken);
 
-            if (!identity.IsAuthorized) return new OAuthConfigurationDto();
+            if (!identity.IsAuthorized) return new OAuthConfigurationDto { Message = identity.Error?.Message };
 
             oauthConfiguration.IsAuthorized = true;
 
@@ -113,8 +113,10 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
 
                 var identity = await _dynamicsService.GetIdentity(tokenDto.AccessToken);
 
-                if (identity != null)
+                if (identity.IsAuthorized)
                     _dynamicsConfigurationService.AddorUpdateOAuthConfiguration(tokenDto.AccessToken, identity.UserId, identity.FullName);
+                else
+                    return "Error: " + identity.Error.Message;
 
                 return result;
             }
@@ -158,7 +160,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
         [HttpGet]
         public string GetSystemUserFullName() => _dynamicsConfigurationService.GetSystemUserFullName();
 
-        [HttpPost]
-        public void RevokeAccessToken() => _dynamicsConfigurationService.Delete();
+        [HttpDelete]
+        public string RevokeAccessToken() => _dynamicsConfigurationService.Delete();
     }
 }

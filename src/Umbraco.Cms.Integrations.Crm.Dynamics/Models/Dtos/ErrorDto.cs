@@ -7,6 +7,9 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos
         [JsonProperty("status")]
         public string Status { get; set; }
 
+        [JsonProperty("code")]
+        public string Code { get; set; }
+
         [JsonProperty("message")]
         public string Message { get; set; }
 

@@ -49,7 +49,9 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
         public async Task<IdentityDto> GetIdentity(string accessToken)
         {
-            var userId = await GetUserId(accessToken);
+            var user = await GetUser(accessToken);
+
+            if (!user.IsAuthorized) return user;
 
             var requestMessage = new HttpRequestMessage
             {
@@ -64,9 +66,10 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             var result = await response.Content.ReadAsStringAsync();
 
-            var systemUsers = JsonConvert.DeserializeObject<ResponseDto<IdentityDto>>(result);
+            var systemUser = JsonConvert.DeserializeObject<ResponseDto<IdentityDto>>(result).Value.FirstOrDefault(p => p.UserId == user.UserId.ToString());
+            systemUser.IsAuthorized = true;
 
-            return systemUsers.Value.FirstOrDefault(p => p.UserId == userId.ToString());
+            return systemUser;
         }
 
         public async Task<string> GetEmbedCode(string formId)
@@ -92,7 +95,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             return embedCode.Value.FirstOrDefault() != null ? embedCode.Value.First().EmbedCode : string.Empty;
         }
 
-        private async Task<string> GetUserId(string accessToken)
+        private async Task<IdentityDto> GetUser(string accessToken)
         {
             var requestMessage = new HttpRequestMessage
             {
@@ -103,11 +106,18 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             var response = await ClientFactory().SendAsync(requestMessage);
 
-            if(!response.IsSuccessStatusCode) return String.Empty;
-
             var result = await response.Content.ReadAsStringAsync();
 
-            return JObject.Parse(result)["UserId"].ToString();
+            if (!response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<IdentityDto>(result);
+            }
+
+            return new IdentityDto
+            {
+                IsAuthorized = true,
+                UserId = JObject.Parse(result)["UserId"].ToString()
+            };
         }
     }
 }
