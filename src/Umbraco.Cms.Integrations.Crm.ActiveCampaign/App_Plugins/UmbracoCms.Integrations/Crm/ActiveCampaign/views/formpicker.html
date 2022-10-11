@@ -1,0 +1,22 @@
+﻿<div ng-controller="Umbraco.Cms.Integrations.Crm.ActiveCampaign.FormPickerController as vm">
+    <umb-load-indicator ng-if="vm.loading">
+    </umb-load-indicator>
+
+    <umb-node-preview ng-if="model.value"
+                      name="model.value.name"
+                      allow-remove="true" ,
+                      on-remove="vm.removeForm()">
+    </umb-node-preview>
+
+    <a ng-if="!model.value && !vm.loading"
+       class="umb-node-preview-add"
+       href=""
+       ng-click="vm.openActiveCampaignFormPickerOverlay()"
+       prevent-default>
+        <localize key="general_add">Add</localize>
+    </a>
+
+    <div ng-if="vm.status" class="alert alert-warning">
+        {{ vm.status }}
+    </div>
+</div>

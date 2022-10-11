@@ -1,0 +1,10 @@
+﻿{
+	"javascript": [
+		"~/App_Plugins/UmbracoCms.Integrations/Crm/ActiveCampaign/js/configuration.controller.js",
+		"~/App_Plugins/UmbracoCms.Integrations/Crm/ActiveCampaign/js/formpicker.controller.js",
+		"~/App_Plugins/UmbracoCms.Integrations/Crm/ActiveCampaign/js/activecampaign.resource.js"
+	],
+	"css": [
+		"~/App_Plugins/UmbracoCms.Integrations/Crm/ActiveCampaign/css/styles.css"
+	]
+}

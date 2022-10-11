@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageId>
+		<Title>Umbraco CMS Integrations: CRM - ActiveCampaign</Title>
+		<Description>An extension for Umbraco CMS providing a form picker and rendering component for ActiveCampaign.</Description>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+		<Version>1.0.0</Version>
+		<Authors>Umbraco HQ</Authors>
+		<Company>Umbraco</Company>
+		<ApplicationManifest>App_Plugins\UmbracoCms.Integrations\Crm\ActiveCampaign\package.manifest</ApplicationManifest>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="10.1.0" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="10.1.0" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" version="10.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="App_Plugins\UmbracoCms.Integrations\Crm\ActiveCampaign\backoffice\" />
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="set UmbracoCmsIntegrationsTestsiteV10Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V10&#xD;&#xA;set AcDir=%25UmbracoCmsIntegrationsTestsiteV10Path%25\App_Plugins\UmbracoCms.Integrations\Crm\ActiveCampaign&#xD;&#xA;if not exist %25AcDir%25 mkdir -p %25AcDir%25&#xD;&#xA;xcopy &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Crm\ActiveCampaign&quot; &quot;%25AcDir%25&quot; /e /y&#xD;&#xA;" />
+	</Target>
+
+</Project>

@@ -1,0 +1,38 @@
+﻿.acOverlayGroup {
+    margin-bottom: 1rem;
+}
+
+.acFormsList {
+    list-style-type: none;
+    margin: 0;
+    margin-top: 10px;
+}
+
+.acFormsList a {
+    display: block;
+    position: relative;
+    padding: .25rem .375rem .25rem 1.5rem;
+}
+
+.acFormsList a:hover {
+    text-decoration: none;
+    background-color: #eee;
+}
+
+.acFormsList a i {
+    position: absolute;
+    top: .4rem;
+    left: .25rem;
+}
+
+.acFormsList .formLine {
+    display: block;
+}
+
+.acSettings {
+    padding-top: 4px;
+}
+
+.acFormSelected {
+    background: #fee4e1;
+}
