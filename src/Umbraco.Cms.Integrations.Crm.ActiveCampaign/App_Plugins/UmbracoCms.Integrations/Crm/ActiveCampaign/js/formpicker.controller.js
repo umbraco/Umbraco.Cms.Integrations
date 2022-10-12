@@ -12,6 +12,10 @@
     umbracoCmsIntegrationsCrmActiveCampaignResource.checkApiAccess().then(function (response) {
         vm.isApiConfigurationValid = response.isApiConfigurationValid;
         if (response.isApiConfigurationValid) {
+            if ($scope.model.value) {
+                loadForm();
+            }
+
             loadForms();
         }
         else {
@@ -50,13 +54,20 @@
         editorService.open(options);
     };
 
+    function loadForm() {
+        vm.loading = true;
+        umbracoCmsIntegrationsCrmActiveCampaignResource.getForm($scope.model.value.id).then(function (response) {
+            if (response.message !== undefined && response.message.length > 0)
+                vm.status = response.message;
+        });
+    }
+
     function loadForms() {
         vm.loading = true;
         umbracoCmsIntegrationsCrmActiveCampaignResource.getForms().then(function (response) {
             vm.formsList = [];
-            console.log(response);
             if (response) {
-                response.forEach(item => {
+                response.data.forEach(item => {
                     vm.formsList.push({
                         id: item.id,
                         name: item.name
@@ -64,8 +75,6 @@
                 });
             }
             vm.loading = false;
-
-            console.log(vm.formsList);
         });
     }
 }

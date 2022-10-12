@@ -13,7 +13,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Helpers
             return htmlHelper.Partial(string.IsNullOrEmpty(renderingViewPath) 
                 ? "~/App_Plugins/UmbracoCms.Integrations/Crm/ActiveCampaign/Render/ActiveCampaignForm.cshtml" 
                 : renderingViewPath,
-                formVM);
+                formVM ?? new FormViewModel());
         }
     }
 }

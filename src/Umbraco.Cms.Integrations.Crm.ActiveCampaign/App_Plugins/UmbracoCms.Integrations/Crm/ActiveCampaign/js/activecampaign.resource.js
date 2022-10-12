@@ -13,6 +13,11 @@
                 return umbRequestHelper.resourcePromise(
                     $http.get(`${apiEndpoint}/GetForms`),
                     "Failed");
+            },
+            getForm: function (id) {
+                return umbRequestHelper.resourcePromise(
+                    $http.get(`${apiEndpoint}/GetForm?id=${id}`),
+                    "Failed");
             }
         };
     }
