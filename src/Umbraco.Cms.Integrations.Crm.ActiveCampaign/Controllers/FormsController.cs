@@ -40,7 +40,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
             if (!response.IsSuccessStatusCode)
                 return new JsonResult(new ResponseDto
                 {
-                    Message = String.IsNullOrEmpty(content)
+                    Message = string.IsNullOrEmpty(content)
                         ? response.StatusCode == System.Net.HttpStatusCode.Forbidden
                             ? Constants.Resources.AuthorizationFailed : Constants.Resources.ApiAccessFailed
                         : JsonNode.Parse(content)["message"].ToString()
@@ -66,7 +66,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
             if (!response.IsSuccessStatusCode)
                 return new JsonResult(new ResponseDto
                 {
-                    Message = String.IsNullOrEmpty(content)
+                    Message = string.IsNullOrEmpty(content)
                         ? response.StatusCode == System.Net.HttpStatusCode.Forbidden
                             ? Constants.Resources.AuthorizationFailed : Constants.Resources.ApiAccessFailed
                         : JsonNode.Parse(content)["message"].ToString()
