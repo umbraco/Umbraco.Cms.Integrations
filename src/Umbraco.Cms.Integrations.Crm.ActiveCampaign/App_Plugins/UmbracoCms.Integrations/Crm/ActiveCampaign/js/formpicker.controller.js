@@ -60,7 +60,7 @@
     function getFormDetails(id) {
         vm.loading = true;
         umbracoCmsIntegrationsCrmActiveCampaignResource.getForm(id).then(function (response) {
-            if (response.message !== null && response.message.length > 0)
+            if (response.message && response.message.length > 0)
                 vm.status = response.message;
             else
                 vm.selectedForm = response.form;

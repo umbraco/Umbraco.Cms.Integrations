@@ -38,7 +38,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
-                return new JsonResult(new ResponseDto
+                return new JsonResult(new FormCollectionResponseDto
                 {
                     Message = string.IsNullOrEmpty(content)
                         ? response.StatusCode == System.Net.HttpStatusCode.Forbidden
@@ -46,7 +46,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
                         : JsonNode.Parse(content)["message"].ToString()
                 });
 
-            return new JsonResult(JsonSerializer.Deserialize<ResponseDto>(content));
+            return new JsonResult(JsonSerializer.Deserialize<FormCollectionResponseDto>(content));
         }
 
         [HttpGet]
@@ -64,7 +64,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
-                return new JsonResult(new ResponseDto
+                return new JsonResult(new FormResponseDto
                 {
                     Message = string.IsNullOrEmpty(content)
                         ? response.StatusCode == System.Net.HttpStatusCode.Forbidden
@@ -72,7 +72,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
                         : JsonNode.Parse(content)["message"].ToString()
                 });
 
-            return new JsonResult(JsonSerializer.Deserialize<ResponseDto>(content));
+            return new JsonResult(JsonSerializer.Deserialize<FormResponseDto>(content));
         }
 
     }
