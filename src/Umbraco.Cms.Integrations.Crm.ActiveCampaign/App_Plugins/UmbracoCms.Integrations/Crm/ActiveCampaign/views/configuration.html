@@ -1,5 +1,5 @@
 ﻿<div ng-controller="Umbraco.Cms.Integrations.Crm.ActiveCampaign.ConfigurationController as vm">
     <p>
-        <b>{{ vm.status }}</b>
+        {{ vm.status }} <b ng-if="vm.account">{{ vm.account }}</b>
     </p>
 </div>

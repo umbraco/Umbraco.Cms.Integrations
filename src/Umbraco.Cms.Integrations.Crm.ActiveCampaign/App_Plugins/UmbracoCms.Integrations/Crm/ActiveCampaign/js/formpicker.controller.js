@@ -13,7 +13,7 @@
         vm.isApiConfigurationValid = response.isApiConfigurationValid;
         if (response.isApiConfigurationValid) {
             if ($scope.model.value) {
-                loadForm();
+                getFormDetails($scope.model.value);
             }
 
             loadForms();
@@ -23,12 +23,15 @@
         }
     });
 
-    vm.saveForm = function (form) {
-        $scope.model.value = form;
+    vm.saveForm = function (formId) {
+        $scope.model.value = formId;
+
+        getFormDetails(formId);
     }
 
     vm.removeForm = function () {
         $scope.model.value = null;
+        vm.selectedForm = {};
     }
 
     vm.openActiveCampaignFormPickerOverlay = function () {
@@ -41,7 +44,7 @@
             selectForm: function (form) {
 
                 if (form.id !== undefined) {
-                    vm.saveForm(form);
+                    vm.saveForm(form.id);
                 }
 
                 editorService.close();
@@ -54,11 +57,15 @@
         editorService.open(options);
     };
 
-    function loadForm() {
+    function getFormDetails(id) {
         vm.loading = true;
-        umbracoCmsIntegrationsCrmActiveCampaignResource.getForm($scope.model.value.id).then(function (response) {
-            if (response.message !== undefined && response.message.length > 0)
+        umbracoCmsIntegrationsCrmActiveCampaignResource.getForm(id).then(function (response) {
+            if (response.message !== null && response.message.length > 0)
                 vm.status = response.message;
+            else
+                vm.selectedForm = response.form;
+
+            vm.loading = false;
         });
     }
 
@@ -66,14 +73,17 @@
         vm.loading = true;
         umbracoCmsIntegrationsCrmActiveCampaignResource.getForms().then(function (response) {
             vm.formsList = [];
-            if (response) {
-                response.data.forEach(item => {
+
+            if (response.forms != null) {
+                response.forms.forEach(item => {
                     vm.formsList.push({
                         id: item.id,
                         name: item.name
                     });
                 });
             }
+            else vm.status = response.message;
+
             vm.loading = false;
         });
     }

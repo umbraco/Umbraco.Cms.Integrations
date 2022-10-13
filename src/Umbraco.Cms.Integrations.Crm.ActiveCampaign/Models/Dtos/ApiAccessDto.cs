@@ -1,12 +1,11 @@
-﻿using Newtonsoft.Json;
-
+﻿
 namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.Dtos
 {
     public class ApiAccessDto
     {
-        private string _baseUrl { get; set; }
+        private readonly string _baseUrl;
 
-        private string _apiKey { get; set; }
+        private readonly string _apiKey;
 
         public ApiAccessDto(string baseUrl, string apiKey)
         {
@@ -14,12 +13,10 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.Dtos
             _apiKey = apiKey;
         }
 
-        [JsonProperty("account")]
         public string Account => IsApiConfigurationValid
             ? _baseUrl.Substring(0, _baseUrl.IndexOf(".")).Replace("https://", string.Empty)
             : string.Empty;
 
-        [JsonProperty("isApiConfigurationValid")]
         public bool IsApiConfigurationValid => !string.IsNullOrEmpty(_baseUrl) && !string.IsNullOrEmpty(_apiKey);
     }
 }

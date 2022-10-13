@@ -28,12 +28,9 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Editors
         {
             if (source == null) return null;
 
-            var node = JsonNode.Parse(source.ToString());
-
             return new FormViewModel
             {
-                Id = node["id"].ToString(),
-                Name = node["name"].ToString(),
+                Id = source.ToString(),
                 Account = _settings.BaseUrl.Substring(0, _settings.BaseUrl.IndexOf(".")).Replace("https://", string.Empty)
             };
         }

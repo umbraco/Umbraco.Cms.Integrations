@@ -26,10 +26,10 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
         }
 
         [HttpGet]
-        public ApiAccessDto CheckApiAccess() => new ApiAccessDto(_settings.BaseUrl, _settings.ApiKey);
+        public IActionResult CheckApiAccess() => new JsonResult(new ApiAccessDto(_settings.BaseUrl, _settings.ApiKey));
 
         [HttpGet]
-        public async Task<ResponseDto<IEnumerable<FormDto>>> GetForms()
+        public async Task<IActionResult> GetForms()
         {
             var client = _httpClientFactory.CreateClient(Constants.FormsHttpClient);
 
@@ -38,26 +38,19 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
-                return new ResponseDto<IEnumerable<FormDto>>
+                return new JsonResult(new ResponseDto
                 {
-                    Data = Enumerable.Empty<FormDto>(),
                     Message = String.IsNullOrEmpty(content)
                         ? response.StatusCode == System.Net.HttpStatusCode.Forbidden
                             ? Constants.Resources.AuthorizationFailed : Constants.Resources.ApiAccessFailed
                         : JsonNode.Parse(content)["message"].ToString()
-                };
+                });
 
-            return new ResponseDto<IEnumerable<FormDto>>
-            {
-                Data = string.IsNullOrEmpty(content)
-                    ? Enumerable.Empty<FormDto>()
-                    : JsonNode.Parse(content)["forms"].Deserialize<IEnumerable<FormDto>>(),
-                Message = String.Empty
-            };
+            return new JsonResult(JsonSerializer.Deserialize<ResponseDto>(content));
         }
 
         [HttpGet]
-        public async Task<ResponseDto<FormDto>?> GetForm(string id)
+        public async Task<IActionResult> GetForm(string id)
         {
             var client = _httpClientFactory.CreateClient(Constants.FormsHttpClient);
 
@@ -71,21 +64,15 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
-                return new ResponseDto<FormDto>
+                return new JsonResult(new ResponseDto
                 {
                     Message = String.IsNullOrEmpty(content)
                         ? response.StatusCode == System.Net.HttpStatusCode.Forbidden
                             ? Constants.Resources.AuthorizationFailed : Constants.Resources.ApiAccessFailed
                         : JsonNode.Parse(content)["message"].ToString()
-                };
+                });
 
-            return new ResponseDto<FormDto>
-            {
-                Data = string.IsNullOrEmpty(content)
-                ? new FormDto()
-                : JsonNode.Parse(content)["form"].Deserialize<FormDto>(),
-                Message = String.Empty
-            };
+            return new JsonResult(JsonSerializer.Deserialize<ResponseDto>(content));
         }
 
     }

@@ -2,8 +2,8 @@
     <umb-load-indicator ng-if="vm.loading">
     </umb-load-indicator>
 
-    <umb-node-preview ng-if="model.value"
-                      name="model.value.name"
+    <umb-node-preview ng-if="vm.selectedForm"
+                      name="vm.selectedForm.name"
                       allow-remove="true" ,
                       on-remove="vm.removeForm()">
     </umb-node-preview>

@@ -3,8 +3,11 @@
 
     umbracoCmsIntegrationsCrmActiveCampaignResource.checkApiAccess().then(function (response) {
 
+        if (response.isApiConfigurationValid)
+            vm.account = response.account;
+
         vm.status = response.isApiConfigurationValid 
-            ? "Connected. Account name: " + response.account
+            ? "Connected. Account name: "
             : "Invalid API configuration."
     });
 }

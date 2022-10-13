@@ -1,17 +1,15 @@
-﻿using Newtonsoft.Json;
-
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.Dtos
 {
-    public class ResponseDto<T>
-        where T : class
+    public class ResponseDto
     {
-        [JsonProperty("data")]
-        [JsonPropertyName("data")]
-        public T Data { get; set; }
+        [JsonPropertyName("form")]
+        public FormDto Form { get; set; }
 
-        [JsonProperty("message")]
+        [JsonPropertyName("forms")]
+        public List<FormDto> Forms { get; set; }
+
         [JsonPropertyName("message")]
         public string Message { get; set; }
     }
