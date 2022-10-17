@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageId>
+		<Title>Umbraco CMS Integrations: CRM - ActiveCampaign</Title>
+		<Description>An extension for Umbraco CMS providing a form picker and rendering component for ActiveCampaign.</Description>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+		<Version>1.0.0</Version>
+		<Authors>Umbraco HQ</Authors>
+		<Company>Umbraco</Company>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="10.1.0" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="10.1.0" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" version="10.1.0" />
+	</ItemGroup>
+
+</Project>
