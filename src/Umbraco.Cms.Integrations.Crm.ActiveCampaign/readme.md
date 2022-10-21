@@ -12,7 +12,9 @@ Required minimum versions of Umbraco CMS:
 ### Authentication
 
 All requests to the ActiveCampaign API are authenticated by providing
-an API key. The API key is included as an HTTP header called _Api_Token_
+an API key. The API key is included as an HTTP header called _Api_Token_.
+
+If the configuration is incomplete, the user will receive an error message.
 
 ### Configuration
 
