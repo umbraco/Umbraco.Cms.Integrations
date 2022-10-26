@@ -1,0 +1,28 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<ActiveCampaignPropertyEditorFilesPath>
+			$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\ActiveCampaign\**\*.*
+		</ActiveCampaignPropertyEditorFilesPath>
+	</PropertyGroup>
+	<Target Name="CopyActiveCampaignPropertyEditorAssets" BeforeTargets="Build">
+		<ItemGroup>
+			<ActiveCampaignPropertyEditorFiles Include="$(ActiveCampaignPropertyEditorFilesPath)" />
+		</ItemGroup>
+		<Message
+			Text="Copying ActiveCampaign Property Editor files: $(ActiveCampaignPropertyEditorFilesPath) - #@(ActiveCampaignPropertyEditorFiles->Count()) files"
+			Importance="high" />
+		<Copy SourceFiles="@(ActiveCampaignPropertyEditorFiles)"
+		      DestinationFiles="@(ActiveCampaignPropertyEditorFiles->'$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\Crm\ActiveCampaign\%(RecursiveDir)%(Filename)%(Extension)')"
+		      SkipUnchangedFiles="true" />
+	</Target>
+
+	<Target Name="ClearActiveCampaignPropertyEditorAssets" BeforeTargets="Clean">
+		<ItemGroup>
+			<ActiveCampaignPropertyEditorDir
+				Include="$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms\Crm\ActiveCampaign\" />
+		</ItemGroup>
+		<Message Text="Clear old ActiveCampaign Property Editor data"  Importance="high" />
+		<RemoveDir Directories="@(ActiveCampaignPropertyEditorDir)"  />
+	</Target>
+
+</Project>
