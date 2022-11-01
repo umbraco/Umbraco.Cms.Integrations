@@ -3,7 +3,23 @@
 		<ActiveCampaignPropertyEditorFilesPath>
 			$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\ActiveCampaign\**\*.*
 		</ActiveCampaignPropertyEditorFilesPath>
+		<ActiveCampaignPropertyEditorIconPath>
+			$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\backoffice\icons\icon-activecampaign.svg
+		</ActiveCampaignPropertyEditorIconPath>
 	</PropertyGroup>
+
+	<Target Name="CopyActiveCampaignPropertyEditorIcon" BeforeTargets="Build">
+		<ItemGroup>
+			<ActiveCampaignPropertyEditorIcon Include="$(ActiveCampaignPropertyEditorIconPath)" />
+		</ItemGroup>
+		<Message
+			Text="Copying ActiveCampaign icon"
+			Importance="high" />
+		<Copy SourceFiles="@(ActiveCampaignPropertyEditorIconPath)"
+		      DestinationFiles="@(ActiveCampaignPropertyEditorFiles->'$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\backoffice\icons\')"
+		      SkipUnchangedFiles="true" />
+	</Target>
+	
 	<Target Name="CopyActiveCampaignPropertyEditorAssets" BeforeTargets="Build">
 		<ItemGroup>
 			<ActiveCampaignPropertyEditorFiles Include="$(ActiveCampaignPropertyEditorFilesPath)" />
