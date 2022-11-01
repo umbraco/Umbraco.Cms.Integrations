@@ -13,7 +13,7 @@ variables:
 steps:
 - task: NuGetToolInstaller@1
   displayName: 'Install NuGet'
-  
+
 - task: DotNetCoreCLI@2
   displayName: 'NuGet Restore'
   inputs:
