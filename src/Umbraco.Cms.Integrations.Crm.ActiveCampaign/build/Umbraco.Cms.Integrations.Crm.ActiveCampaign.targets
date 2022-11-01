@@ -3,7 +3,11 @@
 		<ActiveCampaignPropertyEditorFilesPath>
 			$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\ActiveCampaign\**\*.*
 		</ActiveCampaignPropertyEditorFilesPath>
+		<ActiveCampaignPropertyEditorIconPath>
+			$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\backoffice\icons\*.*
+		</ActiveCampaignPropertyEditorIconPath>
 	</PropertyGroup>
+	
 	<Target Name="CopyActiveCampaignPropertyEditorAssets" BeforeTargets="Build">
 		<ItemGroup>
 			<ActiveCampaignPropertyEditorFiles Include="$(ActiveCampaignPropertyEditorFilesPath)" />
@@ -16,13 +20,28 @@
 		      SkipUnchangedFiles="true" />
 	</Target>
 
+	<Target Name="CopyActiveCampaignPropertyEditorIcon" BeforeTargets="Build">
+		<ItemGroup>
+			<ActiveCampaignPropertyEditorIcon Include="$(ActiveCampaignPropertyEditorIconPath)" />
+		</ItemGroup>
+		<Message
+			Text="Copying ActiveCampaign icon"
+			Importance="high" />
+		<Copy SourceFiles="@(ActiveCampaignPropertyEditorIcon)"
+		      DestinationFolder="$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\backoffice\icons"
+		      SkipUnchangedFiles="true" />
+	</Target>
+
 	<Target Name="ClearActiveCampaignPropertyEditorAssets" BeforeTargets="Clean">
 		<ItemGroup>
 			<ActiveCampaignPropertyEditorDir
 				Include="$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms\Crm\ActiveCampaign\" />
+			<ActiveCampaignPropertyEditorIconPath
+				Include="$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms\backoffice\icons\icon-activecampaign.svg" />
 		</ItemGroup>
 		<Message Text="Clear old ActiveCampaign Property Editor data"  Importance="high" />
 		<RemoveDir Directories="@(ActiveCampaignPropertyEditorDir)"  />
+		<Delete Files="@(ActiveCampaignPropertyEditorIconPath)" />
 	</Target>
 
 </Project>
