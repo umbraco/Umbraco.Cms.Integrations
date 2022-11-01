@@ -11,11 +11,12 @@
 		<Title>Umbraco CMS Integrations: CRM - ActiveCampaign</Title>
 		<Description>An extension for Umbraco CMS providing a form picker and rendering component for ActiveCampaign.</Description>
 		<PackageIconUrl></PackageIconUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main/src/Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
 		<Version>1.0.0</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
+		<PackageTags>Umbraco-Marketplace</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
