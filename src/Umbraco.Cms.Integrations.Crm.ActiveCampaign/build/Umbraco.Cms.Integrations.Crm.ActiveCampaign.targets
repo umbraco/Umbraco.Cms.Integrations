@@ -16,7 +16,7 @@
 			Text="Copying ActiveCampaign icon"
 			Importance="high" />
 		<Copy SourceFiles="@(ActiveCampaignPropertyEditorIconPath)"
-		      DestinationFiles="@(ActiveCampaignPropertyEditorFiles->'$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\backoffice\icons\')"
+		      DestinationFiles="@(ActiveCampaignPropertyEditorIcon->'$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\backoffice\icons\')"
 		      SkipUnchangedFiles="true" />
 	</Target>
 	
