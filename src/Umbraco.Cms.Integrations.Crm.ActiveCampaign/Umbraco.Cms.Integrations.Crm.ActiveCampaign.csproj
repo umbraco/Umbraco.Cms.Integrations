@@ -43,4 +43,11 @@
 		</Content>
 	</ItemGroup>
 
+	<ItemGroup>
+		<Content Include="App_Plugins\UmbracoCms.Integrations\backoffice\icons\icon-activecampaign.svg">
+			<Pack>true</Pack>
+			<PackagePath>App_Plugins\UmbracoCms.Integrations\backoffice\icons</PackagePath>
+		</Content>
+	</ItemGroup>
+
 </Project>
