@@ -1,4 +1,7 @@
 ﻿{
+	"name": "Umbraco.Cms.Integrations.SEO.Semrush",
+	"version": "1.1.1",
+	"allowPackageTelemetry": true,
 	"javascript": [
 		"~/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/semrush.controller.js",
 		"~/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/status.controller.js",
