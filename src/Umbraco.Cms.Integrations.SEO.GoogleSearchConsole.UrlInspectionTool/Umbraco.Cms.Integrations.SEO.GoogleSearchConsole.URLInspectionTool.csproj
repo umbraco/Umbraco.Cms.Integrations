@@ -8,12 +8,12 @@
 		<Title>Umbraco CMS Integrations: SEO - Google Search Console URL Inspection Tool</Title>
 		<Description>An extension for Umbraco CMS providing programmatic access to URL-level data for properties managed in Search Console and the indexed version of a URL.</Description>
 		<PackageIconUrl></PackageIconUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>0.1.0</Version>
+		<Version>0.2.0</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
-		<ApplicationManifest>App_Plugins\UmbracoCms.Integrations\SEO\GoogleSearchConsole\URLInspectionTool\package.manifest</ApplicationManifest>
+		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">

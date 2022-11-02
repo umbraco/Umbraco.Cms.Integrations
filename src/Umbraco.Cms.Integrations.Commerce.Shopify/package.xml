@@ -3,7 +3,7 @@
   <info>
     <package>
       <name>Umbraco.Cms.Integrations.Commerce.Shopify</name>
-      <version>1.0.2</version>
+      <version>1.1.2</version>
       <iconUrl></iconUrl>
       <licence url="https://opensource.org/licenses/MIT">MIT</licence>
       <url>https://github.com/umbraco/Umbraco.Cms.Integrations</url>

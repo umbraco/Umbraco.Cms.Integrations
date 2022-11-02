@@ -8,11 +8,12 @@
 		<Title>Umbraco CMS Integrations: SEO - Semrush</Title>
 		<Description>An extension for Umbraco CMS providing keyword research tools powered by Semrush via a content app.</Description>
 		<PackageIconUrl></PackageIconUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.SEO.Semrush</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>1.1.0</Version>
+		<Version>1.2.0</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
+		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
