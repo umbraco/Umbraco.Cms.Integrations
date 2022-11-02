@@ -4,13 +4,13 @@
     <TargetFrameworks>net472;net50</TargetFrameworks>
     <Authors>Umbraco HQ</Authors>
     <Company>Umbraco</Company>
-	  <Title>Umbraco CMS Integrations: Automation - Zapier</Title>
+	<Title>Umbraco CMS Integrations: Automation - Zapier</Title>
     <Description>An extension for Umbraco CMS providing an automation tool for calling Zapier triggers when specific content gets published.</Description>
     <RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Automation.Zapier</PackageProjectUrl>
     <Product>Umbraco.Cms.Integrations.Automation.Zapier</Product>
-    <ApplicationManifest>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\package.manifest</ApplicationManifest>
-	  <Version>1.0.3</Version>
+	<Version>1.0.4</Version>
+	<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">

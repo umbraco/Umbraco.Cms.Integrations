@@ -1,0 +1,50 @@
+{
+  "AuthorDetails": {
+    "Description": "Umbraco HQ",
+    "Url": "https://umbraco.com/",
+    "ImageUrl": "https://avatars.githubusercontent.com/u/1419552?s=200&v=4"
+  },
+  "Category": "CMS Extensions",
+  "LicenseType": "Free",
+  "PackageType": "Package",
+  "PackagesByAuthor": [
+    "Umbraco.Cms.Integrations.Commerce.CommerceTools",
+    "Umbraco.Cms.Integrations.Commerce.Shopify",
+    "Umbraco.Cms.Integrations.SEO.Semrush",
+    "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool",
+    "Umbraco.Cms.Integrations.Crm.Hubspot",
+    "Umbraco.Cms.Integrations.Crm.Dynamics",
+    "Umbraco.Cms.Integrations.Crm.ActiveCampaign"
+  ],
+  "RelatedPackages": [
+    {
+      "PackageId": "Umbraco.Cms.Integrations.Commerce.CommerceTools",
+      "Description": "A product and category picker that can be added as a property editor for content, with a value converter providing a strongly typed model for rendering."
+    },
+    {
+      "PackageId": "Umbraco.Cms.Integrations.Commerce.Shopify",
+      "Description": "A products picker that can be added as a property editor for content, with a value converter providing a strongly typed model for rendering."
+    },
+    {
+      "PackageId": "Umbraco.Cms.Integrations.SEO.Semrush",
+      "Description": "A search tool available as a content app, helping editors research and use appropriate keywords for their content, to help with website search engine optimisation."
+    },
+    {
+      "PackageId": "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool",
+      "Description": "A tool allowing programmatic access to URL-level data for properties managed in Google Search Console and the indexed version of a URL."
+    },
+    {
+      "PackageId": "Umbraco.Cms.Integrations.Crm.Hubspot",
+      "Description": "A form picker and rendering component for Hubspot forms."
+    },
+    {
+      "PackageId": "Umbraco.Cms.Integrations.Crm.Dynamics",
+      "Description": "A form picker and rendering component for Dynamics 365 Marketing forms."
+    },
+    {
+      "PackageId": "Umbraco.Cms.Integrations.Crm.ActiveCampaign",
+      "Description": "A form picker and rendering component for ActiveCampaign forms."
+    }
+  ],
+  "Tags": []
+}
