@@ -9,6 +9,7 @@ using Umbraco.Extensions;
 #else
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Web;
 #endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
@@ -62,17 +63,13 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
 
         private static bool IsMedia(IPublishedProperty contentProperty, out string url)
         {
-            switch(contentProperty.PropertyType.EditorAlias)
+            switch (contentProperty.PropertyType.EditorAlias)
             {
-                case Constants.MediaAliases.UmbracoMediaPicker:
+                case Core.Constants.PropertyEditors.Aliases.MediaPicker:
                     var mediaPickerValue = contentProperty.GetValue() as IPublishedContent;
-#if NETCOREAPP
                     url = mediaPickerValue.Url();
-#else
-                    url = mediaPickerValue.Url;
-#endif
                     return true;
-                case Constants.MediaAliases.UmbracoMediaPicker3:
+                case Core.Constants.PropertyEditors.Aliases.MediaPicker3:
                     var mediaPicker3Value = contentProperty.GetValue() as MediaWithCrops;
                     url = mediaPicker3Value.LocalCrops.Src;
                     return true;

@@ -42,12 +42,5 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
             public const int Form = 2;
         }
-
-        public static class MediaAliases
-        {
-            public const string UmbracoMediaPicker = "Umbraco.MediaPicker";
-
-            public const string UmbracoMediaPicker3 = "Umbraco.MediaPicker3";
-        }
     }
 }
