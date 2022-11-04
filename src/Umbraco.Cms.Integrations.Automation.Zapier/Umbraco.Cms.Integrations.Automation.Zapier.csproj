@@ -9,12 +9,12 @@
     <RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
     <PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Automation.Zapier</PackageProjectUrl>
     <Product>Umbraco.Cms.Integrations.Automation.Zapier</Product>
-	<Version>1.0.4</Version>
+	<Version>1.1.0</Version>
 	<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <PackageReference Include="UmbracoCms.Web" Version="8.5.4" />
+    <PackageReference Include="UmbracoCms.Web" Version="8.14.0" />
   </ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">

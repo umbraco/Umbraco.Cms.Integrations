@@ -5,9 +5,11 @@ using System.Linq;
 #if NETCOREAPP
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Extensions;
 #else
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Web;
 #endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
@@ -33,7 +35,10 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
 
                 var contentProperty = content.Properties.First(p => p.Alias == propertyType.Alias);
 
-                contentDict.Add(propertyType.Alias, contentProperty.GetValue().ToString());
+                if(IsMedia(contentProperty, out string url))
+                    contentDict.Add(propertyType.Alias, url);
+                else
+                    contentDict.Add(propertyType.Alias, contentProperty.GetValue().ToString());
             }
 
             return contentDict;
@@ -54,6 +59,24 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
             }
 
             return contentDict;
+        }
+
+        private static bool IsMedia(IPublishedProperty contentProperty, out string url)
+        {
+            switch (contentProperty.PropertyType.EditorAlias)
+            {
+                case Core.Constants.PropertyEditors.Aliases.MediaPicker:
+                    var mediaPickerValue = contentProperty.GetValue() as IPublishedContent;
+                    url = mediaPickerValue.Url();
+                    return true;
+                case Core.Constants.PropertyEditors.Aliases.MediaPicker3:
+                    var mediaPicker3Value = contentProperty.GetValue() as MediaWithCrops;
+                    url = mediaPicker3Value.LocalCrops.Src;
+                    return true;
+                default:
+                    url = string.Empty;
+                    return false;
+            }
         }
     }
 }
