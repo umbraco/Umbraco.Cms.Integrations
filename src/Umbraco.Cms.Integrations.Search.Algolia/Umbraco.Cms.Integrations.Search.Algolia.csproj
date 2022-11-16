@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Umbraco.Cms.Integrations.Search.Algolia</PackageId>
+		<Title>Umbraco CMS Integrations: Search - Algolia</Title>
+		<Description>An extension for Umbraco CMS providing a custom search engine integration with Algolia.</Description>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main/src/Umbraco.Cms.Integrations.Search.Algolia</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+		<Version>1.0.0</Version>
+		<Authors>Umbraco HQ</Authors>
+		<Company>Umbraco</Company>
+		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Algolia.Search" Version="6.13.0" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="10.1.0" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="10.1.0" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" version="10.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\UmbracoCms.Integrations\Search\Algolia\**\*.*">
+			<Pack>true</Pack>
+			<PackagePath>App_Plugins\UmbracoCms.Integrations\Search\Algolia\</PackagePath>
+		</Content>
+		<None Include="build\**\*.*">
+			<Pack>True</Pack>
+			<PackagePath>buildTransitive</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="App_Plugins\**\*.*">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="set UmbracoCmsIntegrationsTestsiteV10Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V10&#xD;&#xA;set AlgoliaDir=%25UmbracoCmsIntegrationsTestsiteV10Path%25\App_Plugins\UmbracoCms.Integrations\Search\Algolia&#xD;&#xA;if not exist %25AlgoliaDir%25 mkdir -p %25AlgoliaDir%25&#xD;&#xA;xcopy &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Search\Algolia&quot; &quot;%25AlgoliaDir%25&quot; /e /y" />
+	</Target>
+
+</Project>
