@@ -1,5 +1,7 @@
-﻿function dashboardController(notificationsService, algoliaService, umbracoCmsIntegrationsSearchAlgoliaResource) {
+﻿function dashboardController(notificationsService, overlayService, eventsService, algoliaService, umbracoCmsIntegrationsSearchAlgoliaResource) {
     var vm = this;
+
+    vm.loading = false;
 
     vm.searchQuery = "";
     vm.searchIndex = {};
@@ -12,8 +14,9 @@
     vm.addIndex = addIndex;
     vm.saveIndex = saveIndex;
     vm.viewIndex = viewIndex;
-    vm.deleteIndex = deleteIndex;
+    vm.buildIndex = buildIndex;
     vm.search = search;
+    vm.deleteIndex = deleteIndex;
 
     function init() {
 
@@ -59,9 +62,8 @@
                 }
             },
             showProperties: function (contentType) {
-
                 algoliaService.getPropertiesByContentTypeId(contentType.id, (response) => {
-                    vm.manageIndex.properties = response;
+                    this.properties = response;
 
                     var contentTypeData = this.contentData.find(p => p.contentType == contentType.alias);
                     if (contentTypeData && contentTypeData.properties.length > 0) {
@@ -102,13 +104,20 @@
             }
         };
 
-        algoliaService.getContentTypes((response) => vm.manageIndex.contentTypes = response);
-
         getIndices();
+    }
+
+    function getIndices() {
+        vm.indices = [];
+
+        umbracoCmsIntegrationsSearchAlgoliaResource.getIndices().then(function (data) {
+            vm.indices = data;
+        });
     }
 
     function addIndex() {
         vm.viewState = "manage";
+        algoliaService.getContentTypes((response) => vm.manageIndex.contentTypes = response);
     }
 
     function saveIndex() {
@@ -117,6 +126,9 @@
             notificationsService.error("Index name and content schema are required");
             return false;
         }
+
+        vm.loading = true;
+
         umbracoCmsIntegrationsSearchAlgoliaResource
             .saveIndex(vm.manageIndex.name, vm.manageIndex.contentData)
             .then(function (response) {
@@ -130,6 +142,8 @@
                 vm.viewState = "list";
 
                 getIndices();
+
+                vm.loading = false;
             });
     }
 
@@ -144,17 +158,35 @@
         algoliaService.getContentTypes((response) => {
 
             vm.manageIndex.contentTypes = response;
-            
+
             for (var i = 0; i < vm.manageIndex.contentData.length; i++) {
                 vm.manageIndex.contentTypes.find(p => p.alias === vm.manageIndex.contentData[i].contentType).checked = true;
             }
         });
     }
 
-    function deleteIndex(index) {
-        umbracoCmsIntegrationsSearchAlgoliaResource.deleteIndex(index.id).then(function (response) {
-            getIndices();
-        });
+    function buildIndex(index) {
+        const dialogOptions = {
+            view: "/App_Plugins/UmbracoCms.Integrations/Search/Algolia/views/index.build.html",
+            index: index,
+            submit: function (model) {
+                vm.loading = true;
+
+                umbracoCmsIntegrationsSearchAlgoliaResource.buildIndex(model.index.id).then(function (response) {
+                    if (response.length > 0)
+                        notificationsService.warning("An error has occurred while building the index: " + response);
+                    else {
+                        vm.loading = false;
+                        overlayService.close();
+                    }
+                });
+            },
+            close: function () {
+                overlayService.close();
+            }
+        };
+
+        overlayService.open(dialogOptions);
     }
 
     function search() {
@@ -163,11 +195,9 @@
         });
     }
 
-    function getIndices() {
-        vm.indices = [];
-
-        umbracoCmsIntegrationsSearchAlgoliaResource.getIndices().then(function (data) {
-            vm.indices = data;
+    function deleteIndex(index) {
+        umbracoCmsIntegrationsSearchAlgoliaResource.deleteIndex(index.id).then(function (response) {
+            getIndices();
         });
     }
 }

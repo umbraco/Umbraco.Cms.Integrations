@@ -17,6 +17,7 @@
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
+		<PackageIcon>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main/src/Umbraco.Cms.Integrations.Search.Algolia/logo/algolia.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>

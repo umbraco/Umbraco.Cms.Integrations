@@ -14,6 +14,11 @@
                     $http.post(`${apiEndpoint}/SaveIndex`, { name: name, contentData: contentData }),
                     "Failed");
             },
+            buildIndex: function (id) {
+                return umbRequestHelper.resourcePromise(
+                    $http.post(`${apiEndpoint}/BuildIndex`, { id: id }),
+                    "Failed");
+            },
             deleteIndex: function (id) {
                 return umbRequestHelper.resourcePromise(
                     $http.delete(`${apiEndpoint}/DeleteIndex?id=${id}`),

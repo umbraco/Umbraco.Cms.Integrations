@@ -17,7 +17,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
             _settings = options.Value;
         }
 
-        public string PushData(string name, List<Record> payload)
+        public string PushData(string name, List<Record> payload = null)
         {
             try
             {
@@ -25,7 +25,16 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
                 var index = client.InitIndex(name);
 
-                index.SaveObjects(payload,  autoGenerateObjectId: false).Wait();
+                index.SaveObjects(payload != null
+                    ? payload
+                    : new List<Record> { 
+                        new Record { 
+                            ObjectID = Guid.NewGuid().ToString(), 
+                            Data = new Dictionary<string, string>()} 
+                    },  autoGenerateObjectId: false).Wait();
+
+                if(payload == null)
+                    index.ClearObjects().Wait();
 
                 return string.Empty;
             }
@@ -43,7 +52,29 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
                 var index = client.InitIndex(name);
 
-                await index.PartialUpdateObjectAsync(record);
+                var obj = index.GetObjects<Record>(new[] { record.ObjectID }).FirstOrDefault();
+                if (obj != null)
+                    await index.PartialUpdateObjectAsync(record);
+                else
+                    await index.SaveObjectAsync(record, autoGenerateObjectId: false);
+                
+                return string.Empty;
+            }
+            catch (AlgoliaException ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public async Task<string> DeleteData(string name, string objectId)
+        {
+            try
+            {
+                var client = new SearchClient(_settings.ApplicationId, _settings.AdminApiKey);
+
+                var index = client.InitIndex(name);
+
+                await index.DeleteObjectAsync(objectId);
 
                 return string.Empty;
             }

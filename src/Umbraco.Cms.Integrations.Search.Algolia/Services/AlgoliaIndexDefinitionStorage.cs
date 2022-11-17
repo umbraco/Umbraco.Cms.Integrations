@@ -3,11 +3,11 @@ using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 {
-    public class ScopeService : IScopeService<AlgoliaIndex>
+    public class AlgoliaIndexDefinitionStorage : IAlgoliaIndexDefinitionStorage<AlgoliaIndex>
     {
         private readonly IScopeProvider _scopeProvider;
 
-        public ScopeService(IScopeProvider scopeProvider)
+        public AlgoliaIndexDefinitionStorage(IScopeProvider scopeProvider)
         {
             _scopeProvider = scopeProvider;
         }
@@ -37,13 +37,6 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
             using var scope = _scopeProvider.CreateScope();
 
             return scope.Database.Single<AlgoliaIndex>("where Id = " + id);
-        }
-
-        public List<AlgoliaIndex> GetByContentTypeAlias(string alias)
-        {
-            using var scope = _scopeProvider.CreateScope();
-
-            return scope.Database.Fetch<AlgoliaIndex>("where SerializedData like '%" + alias + "%'");
         }
 
         public void Delete(int id)

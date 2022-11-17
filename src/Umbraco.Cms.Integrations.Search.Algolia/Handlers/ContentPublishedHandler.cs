@@ -9,45 +9,44 @@ using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Integrations.Search.Algolia.Services;
 
-namespace Umbraco.Cms.Integrations.Search.Algolia.Notifications
+namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 {
-    public class NewContentPublishedHandler : INotificationHandler<ContentPublishedNotification>
+    public class ContentPublishedHandler : INotificationAsyncHandler<ContentPublishedNotification>
     {
-        private readonly ILogger<NewContentPublishedHandler> _logger;
+        private readonly ILogger<ContentPublishedHandler> _logger;
 
-        private readonly IScopeService<AlgoliaIndex> _scopeService;
+        private readonly IAlgoliaIndexDefinitionStorage<AlgoliaIndex> _indexStorage;
 
         private readonly IAlgoliaIndexService _indexService;
 
-        public NewContentPublishedHandler(ILogger<NewContentPublishedHandler> logger,
-            IScopeService<AlgoliaIndex> scopeService, IAlgoliaIndexService algoliaIndexService)
+        public ContentPublishedHandler(ILogger<ContentPublishedHandler> logger,
+            IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage, IAlgoliaIndexService algoliaIndexService)
         {
             _logger = logger;
 
-            _scopeService = scopeService;
+            _indexStorage = indexStorage;
 
             _indexService = algoliaIndexService;
         }
 
-        public void Handle(ContentPublishedNotification notification)
+        public async Task HandleAsync(ContentPublishedNotification notification, CancellationToken cancellationToken)
         {
             try
             {
+                var indices = _indexStorage.Get();
                 foreach (var publishedItem in notification.PublishedEntities)
                 {
-                    var indices = _scopeService.GetByContentTypeAlias(publishedItem.ContentType.Alias);
-
                     foreach (var index in indices)
                     {
                         var indexConfiguration = JsonSerializer.Deserialize<List<ContentData>>(index.SerializedData)
                             .FirstOrDefault(p => p.ContentType == publishedItem.ContentType.Alias);
-                        if (indexConfiguration == null) continue;
+                        if (indexConfiguration == null || indexConfiguration.ContentType != publishedItem.ContentType.Alias) continue;
 
                         var record = new RecordBuilder()
                             .BuildFromContent(publishedItem, (p) => indexConfiguration.Properties.Any(q => q == p.Alias))
                             .Build();
 
-                        var result = _indexService.UpdateData(index.Name, record).ConfigureAwait(false).GetAwaiter().GetResult();
+                        var result = await _indexService.UpdateData(index.Name, record);
 
                         if (!string.IsNullOrEmpty(result))
                             _logger.LogError($"Failed to update data for Algolia index: {result}");

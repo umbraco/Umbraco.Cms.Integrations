@@ -15,6 +15,7 @@
                             id: data.groups[i].properties[j].id,
                             alias: data.groups[i].properties[j].alias,
                             name: data.groups[i].properties[j].label,
+                            display: `Group: ${data.groups[i].name} | Property: ${data.groups[i].properties[j].label}`,
                             checked: false
                         });
                     }

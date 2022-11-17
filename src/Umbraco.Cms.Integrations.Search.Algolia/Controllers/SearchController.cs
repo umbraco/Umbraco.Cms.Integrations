@@ -21,19 +21,19 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
         private readonly IAlgoliaSearchService<SearchResponse<Record>> _searchService;
 
-        private readonly IScopeService<AlgoliaIndex> _scopeService;
+        private readonly IAlgoliaIndexDefinitionStorage<AlgoliaIndex> _indexStorage;
 
         private readonly UmbracoHelper _umbracoHelper;
 
         public SearchController(IAlgoliaIndexService indexService, IAlgoliaSearchService<SearchResponse<Record>> searchService, 
-            IScopeService<AlgoliaIndex> scopeService,
+            IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
             UmbracoHelper umbracoHelper)
         {
             _indexService = indexService;
             
             _searchService = searchService;
 
-            _scopeService = scopeService;
+            _indexStorage = indexStorage;
 
             _umbracoHelper = umbracoHelper;
         }
@@ -41,7 +41,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
         [HttpGet]
         public IActionResult GetIndices()
         {
-            var results = _scopeService.Get().Select(p => new IndexConfiguration
+            var results = _indexStorage.Get().Select(p => new IndexConfiguration
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -56,7 +56,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
         {
             try
             {
-                _scopeService.AddOrUpdate(new AlgoliaIndex
+                _indexStorage.AddOrUpdate(new AlgoliaIndex
                 {
                     Id = index.Id,
                     Name = index.Name,
@@ -64,16 +64,33 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
                     Date = DateTime.Now
                 });
 
+                return _indexService.PushData(index.Name);
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        [HttpPost]
+        public string BuildIndex([FromBody] IndexConfiguration indexConfiguration)
+        {
+            try
+            {
+                var index = _indexStorage.GetById(indexConfiguration.Id);
+
                 var payload = new List<Record>();
 
-                foreach (var item in index.ContentData)
+                var indexContentData = JsonSerializer.Deserialize<List<ContentData>>(index.SerializedData);
+
+                foreach (var contentDataItem in indexContentData)
                 {
-                    var contentItems = _umbracoHelper.ContentAtXPath($"//{item.ContentType}");
+                    var contentItems = _umbracoHelper.ContentAtXPath($"//{contentDataItem.ContentType}");
 
                     foreach (var contentItem in contentItems)
                     {
                         var record = new RecordBuilder()
-                            .BuildFromContent(contentItem, (p) => item.Properties.Any(q => q == p.Alias))
+                            .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q == p.Alias))
                             .Build();
 
                         payload.Add(record);
@@ -82,7 +99,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
                 return _indexService.PushData(index.Name, payload);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return ex.Message;
             }
@@ -93,7 +110,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
         {
             try
             {
-                _scopeService.Delete(id);
+                _indexStorage.Delete(id);
 
                 return string.Empty;
             }
@@ -106,7 +123,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
         [HttpGet]
         public IActionResult Search(int indexId, string query)
         {
-            var index = _scopeService.GetById(indexId);
+            var index = _indexStorage.GetById(indexId);
 
             var searchResults = _searchService.Search(index.Name, query);
 
