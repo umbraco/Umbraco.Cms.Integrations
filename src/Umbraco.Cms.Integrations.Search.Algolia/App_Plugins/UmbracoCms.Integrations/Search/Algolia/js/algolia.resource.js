@@ -9,9 +9,9 @@
                     $http.get(`${apiEndpoint}/GetIndices`),
                     "Failed");
             },
-            saveIndex: function (name, contentData) {
+            saveIndex: function (id, name, contentData) {
                 return umbRequestHelper.resourcePromise(
-                    $http.post(`${apiEndpoint}/SaveIndex`, { name: name, contentData: contentData }),
+                    $http.post(`${apiEndpoint}/SaveIndex`, { id: id, name: name, contentData: contentData }),
                     "Failed");
             },
             buildIndex: function (id) {

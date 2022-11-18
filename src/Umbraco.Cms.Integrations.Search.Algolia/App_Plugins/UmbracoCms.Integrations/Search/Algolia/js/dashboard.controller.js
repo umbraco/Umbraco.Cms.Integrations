@@ -138,13 +138,13 @@
         vm.loading = true;
 
         umbracoCmsIntegrationsSearchAlgoliaResource
-            .saveIndex(vm.manageIndex.name, vm.manageIndex.contentData)
+            .saveIndex(vm.manageIndex.id, vm.manageIndex.name, vm.manageIndex.contentData)
             .then(function (response) {
                 if (response.success) {
                     vm.manageIndex.reset();
                     algoliaService.getContentTypes((response) => vm.manageIndex.contentTypes = response);
                 } else {
-                    notificationsService.error(response);
+                    notificationsService.error(response.error);
                 }
 
                 vm.viewState = "list";

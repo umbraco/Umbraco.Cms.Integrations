@@ -28,7 +28,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             IndexService = indexService;
         }
 
-        public async Task RebuildIndex(IEnumerable<IContent> entities, bool deleteIndexData = false)
+        protected async Task RebuildIndex(IEnumerable<IContent> entities, bool deleteIndexData = false)
         {
             try
             {
@@ -51,13 +51,13 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
                          : await IndexService.UpdateData(index.Name, record);
 
                         if (result.Failure)
-                            Logger.LogError($"Failed to delete data for Algolia index: {result}");
+                            Logger.LogError($"Failed to update data for Algolia index: {result}");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Failed to delete data for Algolia index: {ex.Message}");
+                Logger.LogError($"Failed to update data for Algolia index: {ex.Message}");
             }
         }
     }
