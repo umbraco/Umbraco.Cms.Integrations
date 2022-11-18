@@ -15,8 +15,9 @@
     vm.saveIndex = saveIndex;
     vm.viewIndex = viewIndex;
     vm.buildIndex = buildIndex;
-    vm.search = search;
+    vm.searchIndex = searchIndex;
     vm.deleteIndex = deleteIndex;
+    vm.search = search;
 
     function init() {
 
@@ -92,6 +93,8 @@
                 else {
                     const propertyIndex = this.contentData.find(p => p.contentType === this.selectedContentType).properties.indexOf(property.alias);
                     if (propertyIndex > -1) this.contentData.find(p => p.contentType === this.selectedContentType).properties.splice(propertyIndex, 1);
+
+                    this.properties.find(p => p.alias == property.alias).checked = false;
                 }
             },
             reset: function () {
@@ -124,6 +127,11 @@
 
         if (vm.manageIndex.name.length == 0 || vm.manageIndex.contentData.length == 0) {
             notificationsService.error("Index name and content schema are required");
+            return false;
+        }
+
+        if (vm.manageIndex.contentData.filter(p => p.properties.length == 0).length > 0) {
+            notificationsService.error("Selected content types must have at least one property.");
             return false;
         }
 
@@ -189,15 +197,20 @@
         overlayService.open(dialogOptions);
     }
 
-    function search() {
-        umbracoCmsIntegrationsSearchAlgoliaResource.search(vm.searchIndex.id, vm.searchQuery).then(function (response) {
-            vm.searchResults = response;
-        });
+    function searchIndex(index) {
+        vm.viewState = "search";
+        vm.searchIndex = index;
     }
 
     function deleteIndex(index) {
         umbracoCmsIntegrationsSearchAlgoliaResource.deleteIndex(index.id).then(function (response) {
             getIndices();
+        });
+    }
+
+    function search() {
+        umbracoCmsIntegrationsSearchAlgoliaResource.search(vm.searchIndex.id, vm.searchQuery).then(function (response) {
+            vm.searchResults = response;
         });
     }
 }
