@@ -17,7 +17,7 @@
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
-		<PackageIcon>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main/src/Umbraco.Cms.Integrations.Search.Algolia/logo/algolia.png</PackageIcon>
+		<PackageIcon>https://github.com/umbraco/Umbraco.Cms.Integrations/raw/feature/algolia-integration/src/Umbraco.Cms.Integrations.Search.Algolia/logo/algolia.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -43,6 +43,13 @@
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="logo\algolia.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

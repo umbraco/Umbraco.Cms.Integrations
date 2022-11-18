@@ -132,7 +132,7 @@
         umbracoCmsIntegrationsSearchAlgoliaResource
             .saveIndex(vm.manageIndex.name, vm.manageIndex.contentData)
             .then(function (response) {
-                if (response.length == 0) {
+                if (response.success) {
                     vm.manageIndex.reset();
                     algoliaService.getContentTypes((response) => vm.manageIndex.contentTypes = response);
                 } else {
@@ -173,8 +173,8 @@
                 vm.loading = true;
 
                 umbracoCmsIntegrationsSearchAlgoliaResource.buildIndex(model.index.id).then(function (response) {
-                    if (response.length > 0)
-                        notificationsService.warning("An error has occurred while building the index: " + response);
+                    if (response.failure)
+                        notificationsService.warning("An error has occurred while building the index: " + response.error);
                     else {
                         vm.loading = false;
                         overlayService.close();

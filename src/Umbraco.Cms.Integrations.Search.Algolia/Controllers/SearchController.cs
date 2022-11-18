@@ -52,7 +52,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
         } 
 
         [HttpPost]
-        public string SaveIndex([FromBody] IndexConfiguration index)
+        public async Task<IActionResult> SaveIndex([FromBody] IndexConfiguration index)
         {
             try
             {
@@ -64,16 +64,18 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
                     Date = DateTime.Now
                 });
 
-                return _indexService.PushData(index.Name);
+                var result = await _indexService.PushData(index.Name);
+
+                return new JsonResult(result);
             }
             catch(Exception ex)
             {
-                return ex.Message;
+                return new JsonResult(Result.Fail(ex.Message));
             }
         }
 
         [HttpPost]
-        public string BuildIndex([FromBody] IndexConfiguration indexConfiguration)
+        public async Task<IActionResult> BuildIndex([FromBody] IndexConfiguration indexConfiguration)
         {
             try
             {
@@ -97,26 +99,28 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
                     }
                 }
 
-                return _indexService.PushData(index.Name, payload);
+                var result = await _indexService.PushData(index.Name, payload);
+
+                return new JsonResult(result);
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                return new JsonResult(Result.Fail(ex.Message));
             }
         }
 
         [HttpDelete]
-        public string DeleteIndex(int id)
+        public IActionResult DeleteIndex(int id)
         {
             try
             {
                 _indexStorage.Delete(id);
 
-                return string.Empty;
+                return new JsonResult(Result.Ok());
             }
             catch(Exception ex)
             {
-                return ex.Message;
+                return new JsonResult(Result.Fail(ex.Message));
             }
         }
 

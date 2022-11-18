@@ -17,7 +17,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
             _settings = options.Value;
         }
 
-        public string PushData(string name, List<Record> payload = null)
+        public async Task<Result> PushData(string name, List<Record> payload = null)
         {
             try
             {
@@ -25,26 +25,26 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
                 var index = client.InitIndex(name);
 
-                index.SaveObjects(payload != null
+                await index.SaveObjectsAsync(payload != null
                     ? payload
                     : new List<Record> { 
                         new Record { 
                             ObjectID = Guid.NewGuid().ToString(), 
                             Data = new Dictionary<string, string>()} 
-                    },  autoGenerateObjectId: false).Wait();
+                    },  autoGenerateObjectId: false);
 
-                if(payload == null)
-                    index.ClearObjects().Wait();
+                if (payload == null)
+                    await index.ClearObjectsAsync();
 
-                return string.Empty;
+                return Result.Ok();
             }
             catch(AlgoliaException ex)
             {
-                return ex.Message;
+                return Result.Fail(ex.Message);
             }
         }
 
-        public async Task<string> UpdateData(string name, Record record)
+        public async Task<Result> UpdateData(string name, Record record)
         {
             try
             {
@@ -58,15 +58,15 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
                 else
                     await index.SaveObjectAsync(record, autoGenerateObjectId: false);
                 
-                return string.Empty;
+                return Result.Ok();
             }
             catch (AlgoliaException ex)
             {
-                return ex.Message;
+                return Result.Fail(ex.Message);
             }
         }
 
-        public async Task<string> DeleteData(string name, string objectId)
+        public async Task<Result> DeleteData(string name, string objectId)
         {
             try
             {
@@ -76,11 +76,11 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
                 await index.DeleteObjectAsync(objectId);
 
-                return string.Empty;
+                return Result.Ok();
             }
             catch (AlgoliaException ex)
             {
-                return ex.Message;
+                return Result.Fail(ex.Message);
             }
         }
     }
