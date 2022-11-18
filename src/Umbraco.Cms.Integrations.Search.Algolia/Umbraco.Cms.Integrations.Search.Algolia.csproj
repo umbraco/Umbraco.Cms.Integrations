@@ -17,7 +17,7 @@
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
-		<PackageIcon>https://github.com/umbraco/Umbraco.Cms.Integrations/raw/feature/algolia-integration/src/Umbraco.Cms.Integrations.Search.Algolia/logo/algolia.png</PackageIcon>
+		<PackageIcon>algolia.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -46,9 +46,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="logo\algolia.png">
-	    <Pack>True</Pack>
+	  <None Update="algolia.png">
 	    <PackagePath>\</PackagePath>
+	    <Pack>True</Pack>
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
 	  </None>
 	</ItemGroup>
 
