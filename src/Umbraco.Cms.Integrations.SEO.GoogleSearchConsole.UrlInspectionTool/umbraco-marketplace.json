@@ -47,5 +47,6 @@
       "Description": "A dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published."
     }
   ],
-  "Tags": []
+  "Tags": [],
+  "Title": "Google Search Console URL Inspection Tool"
 }
