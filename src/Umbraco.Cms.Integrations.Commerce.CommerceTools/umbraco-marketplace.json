@@ -6,7 +6,7 @@
   },
   "Category": "CMS Extensions",
   "LicenseType": "Free",
-  "PackageType": "Package",
+  "PackageType": "Integration",
   "PackagesByAuthor": [
     "Umbraco.Cms.Integrations.Commerce.Shopify",
     "Umbraco.Cms.Integrations.SEO.Semrush",
