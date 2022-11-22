@@ -1,30 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net472</TargetFramework>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <PackageId>Umbraco.Cms.Integrations.Commerce.CommerceTools</PackageId>
-    <Title>Umbraco CMS Integrations: Commerce - CommerceTools</Title>
-    <Description>An extension for Umbraco CMS providing product and category pickers for CommerceTools.</Description>
-    <PackageIconUrl></PackageIconUrl>
-    <PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Commerce.CommerceTools</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-    <Version>1.0.1</Version>
-    <Authors>Umbraco HQ</Authors>
-    <Company>Umbraco</Company>
-	  <PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
-  </PropertyGroup>
+	<PropertyGroup>
+		<PackageId>Umbraco.Cms.Integrations.Commerce.CommerceTools</PackageId>
+		<Title>Umbraco CMS Integrations: Commerce - CommerceTools</Title>
+		<Description>An extension for Umbraco CMS providing product and category pickers for CommerceTools.</Description>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Commerce.CommerceTools</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+		<Version>1.0.2</Version>
+		<Authors>Umbraco HQ</Authors>
+		<Company>Umbraco</Company>
+		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
+		<PackageIcon>commercetools.png</PackageIcon>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="UmbracoCms.Web" version="8.5.4" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="UmbracoCms.Web" version="8.5.4" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\**\*.*">
-      <Pack>true</Pack>
-      <PackagePath>content\App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\</PackagePath>
-    </Content>
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\**\*.*">
+			<Pack>true</Pack>
+			<PackagePath>content\App_Plugins\UmbracoCms.Integrations\Commerce\CommerceTools\</PackagePath>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="commercetools.png">
+			<Pack>true</Pack>
+			<PackagePath>\</PackagePath>
+		</Content>
+	</ItemGroup>
 
 </Project>

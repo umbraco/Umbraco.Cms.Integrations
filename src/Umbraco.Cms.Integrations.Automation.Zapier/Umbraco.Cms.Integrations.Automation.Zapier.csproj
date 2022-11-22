@@ -1,21 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net472;net50</TargetFrameworks>
-    <Authors>Umbraco HQ</Authors>
-    <Company>Umbraco</Company>
-	<Title>Umbraco CMS Integrations: Automation - Zapier</Title>
-    <Description>An extension for Umbraco CMS providing an automation tool for calling Zapier triggers when specific content gets published.</Description>
-    <RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Automation.Zapier</PackageProjectUrl>
-    <Product>Umbraco.Cms.Integrations.Automation.Zapier</Product>
-	<Version>1.1.0</Version>
-	<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net472;net50</TargetFrameworks>
+		<Authors>Umbraco HQ</Authors>
+		<Company>Umbraco</Company>
+		<Title>Umbraco CMS Integrations: Automation - Zapier</Title>
+		<Description>An extension for Umbraco CMS providing an automation tool for calling Zapier triggers when specific content gets published.</Description>
+		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Automation.Zapier</PackageProjectUrl>
+		<Product>Umbraco.Cms.Integrations.Automation.Zapier</Product>
+		<Version>1.1.1</Version>
+		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
+		<PackageIcon>zapier.png</PackageIcon>
+	</PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <PackageReference Include="UmbracoCms.Web" Version="8.14.0" />
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+		<PackageReference Include="UmbracoCms.Web" Version="8.14.0" />
+	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
 		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
@@ -38,6 +39,13 @@
 		<Content Include="App_Plugins\**\*.*">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="zapier.png">
+			<Pack>true</Pack>
+			<PackagePath>\</PackagePath>
 		</Content>
 	</ItemGroup>
 
