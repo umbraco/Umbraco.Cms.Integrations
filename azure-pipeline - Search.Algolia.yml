@@ -1,5 +1,5 @@
 trigger:
-- feature/algolia-integration
+- main
 
 pool:
   vmImage: 'windows-latest'
