@@ -15,7 +15,22 @@
             <div class="umb-panel-group__details-checks">
                 <div class="umb-panel-group__details-check-title">
                     <div class="umb-panel-group__details-check-name">Manage Algolia Indices</div>
-                    <div class="umb-panel-group__details-check-description">Search the index and view the results</div>
+                    <div class="umb-panel-group__details-check-description">
+                        <p>
+                            Algolia is an AI-powered search and discovery platform allowing you to create cutting-edge customer experiences for their websites or mobile apps.
+                            It's like the perfect mediator between your website and customers, making sure the conversation is as smooth and efficient as possible.
+                        </p>
+                        <p>
+                            The Algolia model provides Search as a Service through an externally hosted search engine, offering web search across the website based
+                            on the content payload pushed from the website to Algolia.
+                        </p>
+                        <p>
+                            To get started, you need to create an index and define the content schema - document types and properties.
+                            Then you can build your index, push data to Algolia and run searches across created indices.
+                            <br/>
+                            <a style="text-decoration: underline" href="https://www.algolia.com/doc/guides/getting-started/quick-start/">read more</a>
+                        </p>
+                    </div>
                     <div class="umb-panel-group__details-check-description">
                         <umb-button type="button"
                                     button-style="primary"
@@ -41,20 +56,26 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <p ng-repeat="item in index.contentData">{{ item.contentType }} - {{ item.properties.join() }}</p>
+                                    <umb-node-preview ng-repeat="item in index.contentData"
+                                                      icon="item.contentTypeIcon"
+                                                      name="item.contentType"
+                                                      alias="item.contentType"
+                                                      published="true"
+                                                      description="item.properties.join(', ')">
+                                    </umb-node-preview>
                                 </td>
                                 <td>
-                                    <umb-button label="build"
+                                    <umb-button label="Build"
                                                 type="button"
                                                 button-style="danger"
                                                 action="vm.buildIndex(index)">
                                     </umb-button>
-                                    <umb-button label="search"
+                                    <umb-button label="Search"
                                                 type="button"
                                                 button-style="success"
                                                 action="vm.searchIndex(index)">
                                     </umb-button>
-                                    <umb-button label="delete"
+                                    <umb-button label="Delete"
                                                 type="button"
                                                 button-style="inverse"
                                                 action="vm.deleteIndex(index)">
@@ -103,43 +124,28 @@
                                 </div>
                                 <div class="row">
                                     <div class="flex justify-start">
-                                        <div>
-                                            <h5>Content Types</h5>
-                                            <div class="mt2" ng-repeat="contentType in vm.manageIndex.contentTypes">
-                                                <div class="flex content-start flex-wrap">
-                                                    <div>
-                                                        <umb-toggle checked="contentType.checked"
-                                                                    on-click="vm.manageIndex.selectContentType(contentType)"
-                                                                    show-labels="true"
-                                                                    label-on="{{contentType.name}}"
-                                                                    label-off="{{contentType.name}}"
-                                                                    label-position="right">
-                                                        </umb-toggle>
-                                                    </div>
-                                                    <div class="ml2">
-                                                        <button ng-if="contentType.checked"
-                                                                type="button"
-                                                                style="border-top-width: 0;padding-top:0;"
-                                                                class="btn-link -underline" ng-click="vm.manageIndex.showProperties(contentType)">
-                                                            show properties
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="mr5" ng-model="vm.manageIndex.contentTypesList">
+                                            <h5>Document Types</h5>
+                                            <umb-node-preview ng-repeat="contentType in vm.manageIndex.contentTypesList"
+                                                              icon="contentType.icon"
+                                                              name="contentType.name"
+                                                              alias="contentType.alias"
+                                                              published="contentType.selected"
+                                                              allow-remove="contentType.allowRemove"
+                                                              allow-open="true"
+                                                              on-open="vm.manageIndex.showProperties(contentType)"
+                                                              on-remove="vm.manageIndex.removeContentType(contentType)">
+                                            </umb-node-preview>
                                         </div>
-                                        <div ng-if="vm.manageIndex.properties.length > 0">
-                                            <h5>Properties</h5>
-                                            <div class="mt2" ng-repeat="property in vm.manageIndex.properties">
-                                                <div class="flex content-start flex-wrap">
-                                                    <div>
-                                                        <umb-toggle checked="property.checked"
-                                                                    on-click="vm.manageIndex.selectProperty(property)"
-                                                                    show-labels="true"
-                                                                    label-on="{{ property.display }}"
-                                                                    label-off="{{ property.display }}"
-                                                                    label-position="right">
-                                                        </umb-toggle>
-                                                    </div>
+                                        <div ng-if="vm.manageIndex.propertiesList.length > 0">
+                                            <h5>{{ vm.manageIndex.selectedContentType.name }} Properties</h5>
+                                            <div class="row">
+                                                <div>
+                                                    <umb-content-grid content="vm.manageIndex.propertiesList"
+                                                                      content-properties="vm.manageIndex.includeProperties"
+                                                                      on-click="vm.manageIndex.selectProperty"
+                                                                      on-click-name="vm.manageIndex.selectProperty">
+                                                    </umb-content-grid>
                                                 </div>
                                             </div>
                                         </div>
@@ -163,7 +169,7 @@
         <div ng-if="vm.viewState === 'search'">
             <umb-editor-sub-header>
                 <umb-editor-sub-header-content-left>
-                    <button type="button" class="umb-package-details__back-action" ng-click="vm.searchIndex={};vm.viewState = 'list';">
+                    <button type="button" class="umb-package-details__back-action" ng-click="vm.searchQuery='';vm.selectedSearchIndex={};vm.viewState = 'list';">
                         <span aria-hidden="true">&larr;</span>
                         Back
                     </button>
@@ -180,7 +186,9 @@
                     <div class="umb-panel-group__details-check">
                         <div class="umb-panel-group__details-check-title">
                             <div class="umb-panel-group__details-check-name">Search over index</div>
-                            <div class="umb-panel-group__details-check-description">Please select the content types you want to index</div>
+                            <div class="umb-panel-group__details-check-description">
+                                Please enter the query you want to search by against index <b>{{ vm.selectedSearchIndex.name }}</b>
+                             </div>
                         </div>
                         <div class="umb-panel-group__details-status">
                             <div class="umb-panel-group__details-status-content">

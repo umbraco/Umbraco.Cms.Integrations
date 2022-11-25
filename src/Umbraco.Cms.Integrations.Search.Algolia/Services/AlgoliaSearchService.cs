@@ -1,4 +1,5 @@
 ﻿using Algolia.Search.Clients;
+using Algolia.Search.Http;
 using Algolia.Search.Models.Search;
 
 using Microsoft.Extensions.Options;
@@ -22,7 +23,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
             var client = new SearchClient(_settings.ApplicationId, _settings.AdminApiKey);
             
             var index = client.InitIndex(indexName);
-
+            
             var results = index.Search<Record>(new Query(query));
 
             return results;

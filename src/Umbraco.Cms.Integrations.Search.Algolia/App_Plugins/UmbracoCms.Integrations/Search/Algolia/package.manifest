@@ -7,5 +7,7 @@
 		"~/App_Plugins/UmbracoCms.Integrations/Search/Algolia/js/dashboard.controller.js",
 		"~/App_Plugins/UmbracoCms.Integrations/Search/Algolia/js/algolia.resource.js"
 	],
-	"css": []
+	"css": [
+		"~/App_Plugins/UmbracoCms.Integrations/Search/Algolia/css/algolia.css"
+	]
 }

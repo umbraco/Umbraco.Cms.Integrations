@@ -4,7 +4,7 @@
     vm.loading = false;
 
     vm.searchQuery = "";
-    vm.searchIndex = {};
+    vm.selectedSearchIndex = {};
     vm.searchResults = {};
 
     vm.viewState = "list";
@@ -20,57 +20,40 @@
     vm.search = search;
 
     function init() {
-
         // contentData property:
         //   array of objects:
         //     contentType -> string value
+        //     contentTypeIcon -> string value
         //     properties -> string array
         vm.manageIndex = {
             id: 0,
             name: "",
-            selectedContentType: "",
-            contentTypes: [],
-            properties: [],
+            selectedContentType: {},
+            contentTypesList: [],
+            propertiesList: [],
+            includeProperties: [
+                {
+                    "alias": "alias",
+                    "header": "Alias"
+                },
+                {
+                    "alias": "group",
+                    "header": "Group"
+                }
+            ],
             contentData: [],
-            selectContentType: function (contentType) {
-
-                this.properties = [];
-
-                var checked = !contentType.checked;
-
-                if (checked) {
-
-                    this.selectedContentType = contentType.alias;
-                    this.contentTypes.find(p => p.alias == contentType.alias).checked = true;
-
-                    var contentItem = {
-                        contentType: contentType.alias,
-                        properties: []
-                    };
-
-                    this.contentData.push(contentItem);
-                }
-                else {
-                    this.contentTypes.find(p => p.alias == contentType.alias).checked = false;
-
-                    const contentTypeIndex = this.contentData.findIndex((obj) => obj.contentType === contentType.alias);
-
-                    if (contentTypeIndex > -1) this.contentData.splice(contentTypeIndex, 1);
-
-                    this.selectedContentType = "";
-
-                    this.properties = [];
-                }
-            },
             showProperties: function (contentType) {
-                algoliaService.getPropertiesByContentTypeId(contentType.id, (response) => {
-                    this.properties = response;
 
-                    var contentTypeData = this.contentData.find(p => p.contentType == contentType.alias);
+                this.selectedContentType = contentType;
+
+                algoliaService.getPropertiesByContentTypeId(contentType.id, (response) => {
+                    this.propertiesList = response;
+
+                    var contentTypeData = this.contentData.find(obj => obj.contentType == contentType.alias);
                     if (contentTypeData && contentTypeData.properties.length > 0) {
-                        vm.manageIndex.properties = vm.manageIndex.properties.map((obj) => {
+                        vm.manageIndex.propertiesList = vm.manageIndex.propertiesList.map((obj) => {
                             if (contentTypeData.properties.find(p => p == obj.alias)) {
-                                obj.checked = true;
+                                obj.selected = true;
                             }
 
                             return obj;
@@ -78,31 +61,76 @@
                     }
                 });
             },
+            removeContentType: function (contentType) {
+
+                const contentTypeIndex = this.contentData.map(obj => obj.contentType).indexOf(contentType.alias);
+                this.contentData.splice(contentTypeIndex, 1);
+
+                this.selectedContentType = {};
+                this.contentTypesList.forEach(obj => {
+                    if (obj.alias == contentType.alias) {
+                        obj.selected = false;
+                        obj.allowRemove = false;
+                    }
+                });
+                this.propertiesList = [];
+            },
             selectProperty: function (property) {
-                var checked = !property.checked;
 
-                if (this.contentData.length == 0 || this.contentData.find(p => p.contentType === this.selectedContentType) === undefined) {
-                    notificationsService.warning("Please select the property matching content type.");
-                    return false;
-                }
+                var contentDataItem = vm.manageIndex.contentData.find(obj => obj.contentType == vm.manageIndex.selectedContentType.alias);
 
-                if (checked) {
-                    this.properties.find(p => p.alias == property.alias).checked = true;
-                    this.contentData.find(p => p.contentType === this.selectedContentType).properties.push(property.alias);
+                var selected = !property.selected;
+                if (selected) {
+                    // mark item selected
+                    vm.manageIndex.propertiesList.find(obj => obj.alias == property.alias).selected = true;
+
+                    // check if content type exists in the contentData array
+                    if (!contentDataItem) {
+                        var contentItem = {
+                            contentType: vm.manageIndex.selectedContentType.alias,
+                            contentTypeIcon: vm.manageIndex.selectedContentType.icon,
+                            properties: []
+                        };
+                        vm.manageIndex.contentData.push(contentItem);
+
+                        // select content type
+                        vm.manageIndex.contentTypesList.forEach(obj => {
+                            if (obj.alias == vm.manageIndex.selectedContentType.alias) {
+                                obj.selected = true;
+                                obj.allowRemove = true;
+                            }
+                        });
+                    }
+
+                    // add property
+                    vm.manageIndex.contentData.find(obj => obj.contentType == vm.manageIndex.selectedContentType.alias).properties.push(property.alias);
                 }
                 else {
-                    const propertyIndex = this.contentData.find(p => p.contentType === this.selectedContentType).properties.indexOf(property.alias);
-                    if (propertyIndex > -1) this.contentData.find(p => p.contentType === this.selectedContentType).properties.splice(propertyIndex, 1);
+                    // deselect item
+                    vm.manageIndex.propertiesList.find(obj => obj.alias == property.alias).selected = false;
 
-                    this.properties.find(p => p.alias == property.alias).checked = false;
+                    // remove property item
+                    const propertyIndex = vm.manageIndex.contentData
+                        .find(obj => obj.contentType == vm.manageIndex.selectedContentType.alias).properties.indexOf(property.alias);
+                    vm.manageIndex.contentData
+                            .find(obj => obj.contentType == vm.manageIndex.selectedContentType.alias).properties.splice(propertyIndex, 1);
+
+                    // remove content type item with no properties and deselect
+                    if (vm.manageIndex.contentData.find(obj => obj.contentType == vm.manageIndex.selectedContentType.alias).properties.length == 0) {
+                        vm.manageIndex.contentTypesList.find(obj => obj.alias == vm.manageIndex.selectedContentType.alias).selected = false;
+
+                        const contentTypeIndex = vm.manageIndex.contentData.map(obj => obj.contentType).indexOf(vm.manageIndex.selectedContentType.alias);
+                        vm.manageIndex.contentData.splice(contentTypeIndex, 1);
+                    }
                 }
             },
             reset: function () {
                 this.visible = false;
+                this.id = 0;
                 this.name = "";
-                this.selectedContentType = "";
-                this.contentTypes = [];
-                this.properties = [];
+                this.selectedContentType = {};
+                this.contentTypesList = [];
+                this.propertiesList = [];
                 this.contentData = [];
             }
         };
@@ -120,21 +148,16 @@
 
     function addIndex() {
         vm.viewState = "manage";
-        algoliaService.getContentTypes((response) => vm.manageIndex.contentTypes = response);
+        algoliaService.getContentTypes((response) => vm.manageIndex.contentTypesList = response);
     }
 
     function saveIndex() {
 
         if (vm.manageIndex.name.length == 0 || vm.manageIndex.contentData.length == 0) {
-            notificationsService.error("Index name and content schema are required");
+            notificationsService.error("Algolia", "Index name and content schema are required.");
             return false;
         }
-
-        if (vm.manageIndex.contentData.filter(p => p.properties.length == 0).length > 0) {
-            notificationsService.error("Selected content types must have at least one property.");
-            return false;
-        }
-
+      
         vm.loading = true;
 
         umbracoCmsIntegrationsSearchAlgoliaResource
@@ -143,8 +166,9 @@
                 if (response.success) {
                     vm.manageIndex.reset();
                     algoliaService.getContentTypes((response) => vm.manageIndex.contentTypes = response);
+                    notificationsService.success("Algolia", "Index saved.");
                 } else {
-                    notificationsService.error(response.error);
+                    notificationsService.error("Algolia", response.error);
                 }
 
                 vm.viewState = "list";
@@ -165,10 +189,16 @@
 
         algoliaService.getContentTypes((response) => {
 
-            vm.manageIndex.contentTypes = response;
+            vm.manageIndex.contentTypesList = response;
 
             for (var i = 0; i < vm.manageIndex.contentData.length; i++) {
-                vm.manageIndex.contentTypes.find(p => p.alias === vm.manageIndex.contentData[i].contentType).checked = true;
+
+                vm.manageIndex.contentTypesList.forEach(obj => {
+                    if (obj.alias == vm.manageIndex.contentData[i].contentType) {
+                        obj.selected = true;
+                        obj.allowRemove = true;
+                    }
+                });
             }
         });
     }
@@ -182,8 +212,9 @@
 
                 umbracoCmsIntegrationsSearchAlgoliaResource.buildIndex(model.index.id).then(function (response) {
                     if (response.failure)
-                        notificationsService.warning("An error has occurred while building the index: " + response.error);
+                        notificationsService.warning("Algolia", "An error has occurred while building the index: " + response.error);
                     else {
+                        notificationsService.success("Algolia", "Index built successfully.");
                         vm.loading = false;
                         overlayService.close();
                     }
@@ -199,17 +230,32 @@
 
     function searchIndex(index) {
         vm.viewState = "search";
-        vm.searchIndex = index;
+        vm.selectedSearchIndex = index;
     }
 
     function deleteIndex(index) {
-        umbracoCmsIntegrationsSearchAlgoliaResource.deleteIndex(index.id).then(function (response) {
-            getIndices();
-        });
+        const dialogOptions = {
+            title: "Delete",
+            content: "Are you sure you want to delete index <b>" + index.name + "</b>?",
+            confirmType: "delete",
+            submit: function () {
+                umbracoCmsIntegrationsSearchAlgoliaResource.deleteIndex(index.id).then(function (response) {
+                    if (response.success) {
+                        notificationsService.success("Algolia", "Index deleted.");
+                        getIndices();
+                    } else
+                        notificationsService.error("Algolia", response.error);
+
+                    overlayService.close();
+                });
+            }
+        };
+
+        overlayService.confirm(dialogOptions);
     }
 
     function search() {
-        umbracoCmsIntegrationsSearchAlgoliaResource.search(vm.searchIndex.id, vm.searchQuery).then(function (response) {
+        umbracoCmsIntegrationsSearchAlgoliaResource.search(vm.selectedSearchIndex.id, vm.searchQuery).then(function (response) {
             vm.searchResults = response;
         });
     }
