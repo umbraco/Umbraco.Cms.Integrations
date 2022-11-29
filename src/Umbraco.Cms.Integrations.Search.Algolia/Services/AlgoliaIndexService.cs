@@ -83,5 +83,23 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
                 return Result.Fail(ex.Message);
             }
         }
+
+        public async Task<Result> DeleteIndex(string name)
+        {
+            try
+            {
+                var client = new SearchClient(_settings.ApplicationId, _settings.AdminApiKey);
+
+                var index = client.InitIndex(name);
+
+                await index.DeleteAsync();
+
+                return Result.Ok();
+            }
+            catch (AlgoliaException ex)
+            {
+                return Result.Fail(ex.Message);
+            }
+        }
     }
 }

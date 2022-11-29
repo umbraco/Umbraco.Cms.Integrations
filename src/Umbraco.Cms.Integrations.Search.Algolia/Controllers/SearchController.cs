@@ -92,7 +92,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
                     foreach (var contentItem in contentItems)
                     {
                         var record = new RecordBuilder()
-                            .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q == p.Alias))
+                            .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
                             .Build();
 
                         payload.Add(record);
@@ -110,11 +110,15 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteIndex(int id)
+        public async Task<IActionResult> DeleteIndex(int id)
         {
             try
             {
+                var indexName = _indexStorage.GetById(id).Name;
+
                 _indexStorage.Delete(id);
+
+                await _indexService.DeleteIndex(indexName);
 
                 return new JsonResult(Result.Ok());
             }

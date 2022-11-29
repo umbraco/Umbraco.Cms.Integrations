@@ -1,12 +1,16 @@
-﻿
+﻿using System.Text.Json.Serialization;
+
 namespace Umbraco.Cms.Integrations.Search.Algolia.Models
 {
     public class ContentData
     {
-        public string ContentType { get; set; }
+        [JsonPropertyName("contentType")]
+        public ContentEntity ContentType { get; set; }
 
-        public string ContentTypeIcon { get; set; }
+        [JsonPropertyName("properties")]
+        public IEnumerable<ContentEntity> Properties { get; set; }
 
-        public string[] Properties { get; set; }
+        [JsonPropertyName("propertiesDescription")]
+        public IEnumerable<string> PropertiesDescription => Properties.Select(p => p.Name);
     }
 }

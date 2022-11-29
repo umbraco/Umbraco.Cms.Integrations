@@ -20,11 +20,23 @@
     vm.search = search;
 
     function init() {
-        // contentData property:
-        //   array of objects:
-        //     contentType -> string value
-        //     contentTypeIcon -> string value
-        //     properties -> string array
+        /* contentData property:
+          [
+	        {
+		        "contentType": {
+			        "alias": "",
+			        "name": "",
+			        "icon": ""
+		        },
+		        "properties": [
+			        { 
+				        "alias": "", 
+				        "name": "" 
+			        }
+		        ]
+	        }
+          ]
+         */
         vm.manageIndex = {
             id: 0,
             name: "",
@@ -49,10 +61,10 @@
                 algoliaService.getPropertiesByContentTypeId(contentType.id, (response) => {
                     this.propertiesList = response;
 
-                    var contentTypeData = this.contentData.find(obj => obj.contentType == contentType.alias);
+                    var contentTypeData = this.contentData.find(obj => obj.contentType.alias == contentType.alias);
                     if (contentTypeData && contentTypeData.properties.length > 0) {
                         vm.manageIndex.propertiesList = vm.manageIndex.propertiesList.map((obj) => {
-                            if (contentTypeData.properties.find(p => p == obj.alias)) {
+                            if (contentTypeData.properties.find(p => p.alias == obj.alias)) {
                                 obj.selected = true;
                             }
 
@@ -63,7 +75,7 @@
             },
             removeContentType: function (contentType) {
 
-                const contentTypeIndex = this.contentData.map(obj => obj.contentType).indexOf(contentType.alias);
+                const contentTypeIndex = this.contentData.map(obj => obj.contentType.alias).indexOf(contentType.alias);
                 this.contentData.splice(contentTypeIndex, 1);
 
                 this.selectedContentType = {};
@@ -77,7 +89,7 @@
             },
             selectProperty: function (property) {
 
-                var contentDataItem = vm.manageIndex.contentData.find(obj => obj.contentType == vm.manageIndex.selectedContentType.alias);
+                var contentDataItem = vm.manageIndex.contentData.find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias);
 
                 var selected = !property.selected;
                 if (selected) {
@@ -87,8 +99,11 @@
                     // check if content type exists in the contentData array
                     if (!contentDataItem) {
                         var contentItem = {
-                            contentType: vm.manageIndex.selectedContentType.alias,
-                            contentTypeIcon: vm.manageIndex.selectedContentType.icon,
+                            contentType: {
+                                alias: vm.manageIndex.selectedContentType.alias,
+                                name: vm.manageIndex.selectedContentType.name,
+                                icon: vm.manageIndex.selectedContentType.icon
+                            },
                             properties: []
                         };
                         vm.manageIndex.contentData.push(contentItem);
@@ -103,7 +118,12 @@
                     }
 
                     // add property
-                    vm.manageIndex.contentData.find(obj => obj.contentType == vm.manageIndex.selectedContentType.alias).properties.push(property.alias);
+                    vm.manageIndex.contentData
+                        .find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias)
+                        .properties.push({
+                            alias: property.alias,
+                            name: property.name
+                        });
                 }
                 else {
                     // deselect item
@@ -111,15 +131,17 @@
 
                     // remove property item
                     const propertyIndex = vm.manageIndex.contentData
-                        .find(obj => obj.contentType == vm.manageIndex.selectedContentType.alias).properties.indexOf(property.alias);
+                        .find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias)
+                            .properties.map(obj => obj.alias).indexOf(property.alias);
                     vm.manageIndex.contentData
-                            .find(obj => obj.contentType == vm.manageIndex.selectedContentType.alias).properties.splice(propertyIndex, 1);
+                            .find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias).properties.splice(propertyIndex, 1);
 
                     // remove content type item with no properties and deselect
-                    if (vm.manageIndex.contentData.find(obj => obj.contentType == vm.manageIndex.selectedContentType.alias).properties.length == 0) {
+                    if (vm.manageIndex.contentData.find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias).properties.length == 0) {
                         vm.manageIndex.contentTypesList.find(obj => obj.alias == vm.manageIndex.selectedContentType.alias).selected = false;
+                        vm.manageIndex.contentTypesList.find(obj => obj.alias == vm.manageIndex.selectedContentType.alias).allowRemove = false;
 
-                        const contentTypeIndex = vm.manageIndex.contentData.map(obj => obj.contentType).indexOf(vm.manageIndex.selectedContentType.alias);
+                        const contentTypeIndex = vm.manageIndex.contentData.map(obj => obj.contentType.alias).indexOf(vm.manageIndex.selectedContentType.alias);
                         vm.manageIndex.contentData.splice(contentTypeIndex, 1);
                     }
                 }
@@ -194,7 +216,7 @@
             for (var i = 0; i < vm.manageIndex.contentData.length; i++) {
 
                 vm.manageIndex.contentTypesList.forEach(obj => {
-                    if (obj.alias == vm.manageIndex.contentData[i].contentType) {
+                    if (obj.alias == vm.manageIndex.contentData[i].contentType.alias) {
                         obj.selected = true;
                         obj.allowRemove = true;
                     }

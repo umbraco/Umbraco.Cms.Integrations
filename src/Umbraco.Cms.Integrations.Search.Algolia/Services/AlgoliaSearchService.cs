@@ -1,5 +1,4 @@
 ﻿using Algolia.Search.Clients;
-using Algolia.Search.Http;
 using Algolia.Search.Models.Search;
 
 using Microsoft.Extensions.Options;

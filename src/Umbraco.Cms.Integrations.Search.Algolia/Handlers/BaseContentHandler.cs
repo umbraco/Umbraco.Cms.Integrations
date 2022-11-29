@@ -39,11 +39,11 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
                     foreach (var index in indices)
                     {
                         var indexConfiguration = JsonSerializer.Deserialize<List<ContentData>>(index.SerializedData)
-                            .FirstOrDefault(p => p.ContentType == entity.ContentType.Alias);
-                        if (indexConfiguration == null || indexConfiguration.ContentType != entity.ContentType.Alias) continue;
+                            .FirstOrDefault(p => p.ContentType.Alias == entity.ContentType.Alias);
+                        if (indexConfiguration == null || indexConfiguration.ContentType.Alias != entity.ContentType.Alias) continue;
 
                         var record = new RecordBuilder()
-                           .BuildFromContent(entity, (p) => indexConfiguration.Properties.Any(q => q == p.Alias))
+                           .BuildFromContent(entity, (p) => indexConfiguration.Properties.Any(q => q.Alias == p.Alias))
                            .Build();
 
                         var result = deleteIndexData

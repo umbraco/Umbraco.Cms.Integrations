@@ -9,5 +9,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
         Task<Result> UpdateData(string name, Record record); 
 
         Task<Result> DeleteData(string name, string objectId);
+
+        Task<Result> DeleteIndex(string name);
     }
 }

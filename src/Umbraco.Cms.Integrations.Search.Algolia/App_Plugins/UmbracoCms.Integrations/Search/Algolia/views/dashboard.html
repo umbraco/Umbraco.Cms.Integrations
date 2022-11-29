@@ -27,15 +27,17 @@
                         <p>
                             To get started, you need to create an index and define the content schema - document types and properties.
                             Then you can build your index, push data to Algolia and run searches across created indices.
-                            <br/>
-                            <a style="text-decoration: underline" href="https://www.algolia.com/doc/guides/getting-started/quick-start/">read more</a>
+                            <br />
+                            <a style="text-decoration: underline" target="_blank" href="https://www.algolia.com/doc/guides/getting-started/quick-start/">
+                                Read more about integrating Algolia Search
+                            </a>
                         </p>
                     </div>
                     <div class="umb-panel-group__details-check-description">
                         <umb-button type="button"
                                     button-style="primary"
                                     action="vm.addIndex()"
-                                    label="Add">
+                                    label="Add New Index Definition">
                         </umb-button>
                     </div>
                 </div>
@@ -57,11 +59,11 @@
                                 </td>
                                 <td>
                                     <umb-node-preview ng-repeat="item in index.contentData"
-                                                      icon="item.contentTypeIcon"
-                                                      name="item.contentType"
-                                                      alias="item.contentType"
+                                                      icon="item.contentType.icon"
+                                                      name="item.contentType.name"
+                                                      alias="item.contentType.alias"
                                                       published="true"
-                                                      description="item.properties.join(', ')">
+                                                      description="item.propertiesDescription.join(', ')">
                                     </umb-node-preview>
                                 </td>
                                 <td>
@@ -100,16 +102,12 @@
             <div class="umb-panel-group__details-group">
                 <div class="umb-panel-group__details-group-title">
                     <div class="umb-panel-group__details-group-name">
-                        Manage Index
+                        {{ vm.manageIndex.id == 0 ? "Add" : "Edit" }} Index Definition
                     </div>
                 </div>
                 <div class="umb-panel-group__details-checks">
                     <!-- Content Type, Index Name -->
                     <div class="umb-panel-group__details-check">
-                        <div class="umb-panel-group__details-check-title">
-                            <div class="umb-panel-group__details-check-name">Content Types</div>
-                            <div class="umb-panel-group__details-check-description">Please select the content types you want to index</div>
-                        </div>
                         <div class="umb-panel-group__details-status">
                             <div class="umb-panel-group__details-status-content">
                                 <div class="row">
@@ -126,6 +124,9 @@
                                     <div class="flex justify-start">
                                         <div class="mr5" ng-model="vm.manageIndex.contentTypesList">
                                             <h5>Document Types</h5>
+                                            <div class="umb-panel-group__details-check-description">
+                                                Please select the document types you would like to index,<br/> and click <b>Open</b> to choose the fields to include.
+                                            </div>
                                             <umb-node-preview ng-repeat="contentType in vm.manageIndex.contentTypesList"
                                                               icon="contentType.icon"
                                                               name="contentType.name"
@@ -188,7 +189,7 @@
                             <div class="umb-panel-group__details-check-name">Search over index</div>
                             <div class="umb-panel-group__details-check-description">
                                 Please enter the query you want to search by against index <b>{{ vm.selectedSearchIndex.name }}</b>
-                             </div>
+                            </div>
                         </div>
                         <div class="umb-panel-group__details-status">
                             <div class="umb-panel-group__details-status-content">
