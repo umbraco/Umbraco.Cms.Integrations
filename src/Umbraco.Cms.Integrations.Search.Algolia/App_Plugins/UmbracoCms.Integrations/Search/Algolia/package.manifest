@@ -1,0 +1,13 @@
+﻿{
+	"name": "Umbraco.Cms.Integrations.Search.Algolia",
+	"version": "1.0.0",
+	"allowPackageTelemetry": true,
+	"javascript": [
+		"~/App_Plugins/UmbracoCms.Integrations/Search/Algolia/js/algolia.service.js",
+		"~/App_Plugins/UmbracoCms.Integrations/Search/Algolia/js/dashboard.controller.js",
+		"~/App_Plugins/UmbracoCms.Integrations/Search/Algolia/js/algolia.resource.js"
+	],
+	"css": [
+		"~/App_Plugins/UmbracoCms.Integrations/Search/Algolia/css/algolia.css"
+	]
+}
