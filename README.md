@@ -26,3 +26,8 @@ This repository houses open-source extensions, created for Umbraco CMS, that int
 
 ### Automation
 [Zapier](./src/Umbraco.Cms.Integrations.Automation.Zapier/) - a dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published.
+
+### Search
+[Algolia](./src/Umbraco.Cms.Integrations.Search.Algolia/) - a custom dashboard for managing search indices in Algolia.
+
+
