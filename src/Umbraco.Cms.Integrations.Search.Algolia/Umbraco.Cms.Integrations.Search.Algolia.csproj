@@ -52,8 +52,5 @@
 		</Content>
 	</ItemGroup>
 
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <Exec Command="set UmbracoCmsIntegrationsTestsiteV10Path=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V10&#xD;&#xA;set AlgoliaDir=%25UmbracoCmsIntegrationsTestsiteV10Path%25\App_Plugins\UmbracoCms.Integrations\Search\Algolia&#xD;&#xA;if not exist %25AlgoliaDir%25 mkdir -p %25AlgoliaDir%25&#xD;&#xA;xcopy &quot;$(ProjectDir)App_Plugins\UmbracoCms.Integrations\Search\Algolia&quot; &quot;%25AlgoliaDir%25&quot; /e /y" />
-	</Target>
 
 </Project>
