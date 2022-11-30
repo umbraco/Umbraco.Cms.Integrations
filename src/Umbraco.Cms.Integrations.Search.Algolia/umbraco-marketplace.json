@@ -4,7 +4,7 @@
     "Url": "https://umbraco.com/",
     "ImageUrl": "https://avatars.githubusercontent.com/u/1419552?s=200&v=4"
   },
-  "Category": "CMS Extensions",
+  "Category": "Search",
   "LicenseType": "Free",
   "PackageType": "Integration",
   "PackagesByAuthor": [
@@ -51,5 +51,6 @@
       "Description": "A dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published."
     }
   ],
-  "Tags": []
+  "Tags": [],
+  "Title": "Algolia"
 }
