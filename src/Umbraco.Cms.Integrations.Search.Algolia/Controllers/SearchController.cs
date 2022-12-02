@@ -87,7 +87,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
                 foreach (var contentDataItem in indexContentData)
                 {
-                    var contentItems = _umbracoHelper.ContentAtXPath($"//{contentDataItem.ContentType}");
+                    var contentItems = _umbracoHelper.ContentAtXPath($"//{contentDataItem.ContentType.Alias}");
 
                     foreach (var contentItem in contentItems)
                     {

@@ -1,6 +1,9 @@
 ﻿function dashboardController(notificationsService, overlayService, eventsService, algoliaService, umbracoCmsIntegrationsSearchAlgoliaResource) {
     var vm = this;
 
+    const CREATE_INDEX_DEFINITION = "Create Index Definition";
+    const EDIT_INDEX_DEFINITION = "Edit Index Definition";
+
     vm.loading = false;
 
     vm.searchQuery = "";
@@ -18,27 +21,29 @@
     vm.searchIndex = searchIndex;
     vm.deleteIndex = deleteIndex;
     vm.search = search;
+    vm.back = back;
 
     function init() {
         /* contentData property:
           [
-	        {
-		        "contentType": {
-			        "alias": "",
-			        "name": "",
-			        "icon": ""
-		        },
-		        "properties": [
-			        { 
-				        "alias": "", 
-				        "name": "" 
-			        }
-		        ]
-	        }
+            {
+                "contentType": {
+                    "alias": "",
+                    "name": "",
+                    "icon": ""
+                },
+                "properties": [
+                    { 
+                        "alias": "", 
+                        "name": "" 
+                    }
+                ]
+            }
           ]
          */
         vm.manageIndex = {
             id: 0,
+            viewTitle: CREATE_INDEX_DEFINITION,
             name: "",
             selectedContentType: {},
             contentTypesList: [],
@@ -55,7 +60,6 @@
             ],
             contentData: [],
             showProperties: function (contentType) {
-
                 this.selectedContentType = contentType;
 
                 algoliaService.getPropertiesByContentTypeId(contentType.id, (response) => {
@@ -88,67 +92,64 @@
                 this.propertiesList = [];
             },
             selectProperty: function (property) {
-
                 var contentDataItem = vm.manageIndex.contentData.find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias);
 
-                var selected = !property.selected;
-                if (selected) {
-                    // mark item selected
-                    vm.manageIndex.propertiesList.find(obj => obj.alias == property.alias).selected = true;
+                // mark item selected
+                vm.manageIndex.propertiesList.find(obj => obj.alias == property.alias).selected = true;
 
-                    // check if content type exists in the contentData array
-                    if (!contentDataItem) {
-                        var contentItem = {
-                            contentType: {
-                                alias: vm.manageIndex.selectedContentType.alias,
-                                name: vm.manageIndex.selectedContentType.name,
-                                icon: vm.manageIndex.selectedContentType.icon
-                            },
-                            properties: []
-                        };
-                        vm.manageIndex.contentData.push(contentItem);
+                // check if content type exists in the contentData array
+                if (!contentDataItem) {
+                    var contentItem = {
+                        contentType: {
+                            alias: vm.manageIndex.selectedContentType.alias,
+                            name: vm.manageIndex.selectedContentType.name,
+                            icon: vm.manageIndex.selectedContentType.icon
+                        },
+                        properties: []
+                    };
+                    vm.manageIndex.contentData.push(contentItem);
 
-                        // select content type
-                        vm.manageIndex.contentTypesList.forEach(obj => {
-                            if (obj.alias == vm.manageIndex.selectedContentType.alias) {
-                                obj.selected = true;
-                                obj.allowRemove = true;
-                            }
-                        });
-                    }
-
-                    // add property
-                    vm.manageIndex.contentData
-                        .find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias)
-                        .properties.push({
-                            alias: property.alias,
-                            name: property.name
-                        });
+                    // select content type
+                    vm.manageIndex.contentTypesList.forEach(obj => {
+                        if (obj.alias == vm.manageIndex.selectedContentType.alias) {
+                            obj.selected = true;
+                            obj.allowRemove = true;
+                        }
+                    });
                 }
-                else {
-                    // deselect item
-                    vm.manageIndex.propertiesList.find(obj => obj.alias == property.alias).selected = false;
 
-                    // remove property item
-                    const propertyIndex = vm.manageIndex.contentData
-                        .find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias)
-                            .properties.map(obj => obj.alias).indexOf(property.alias);
-                    vm.manageIndex.contentData
-                            .find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias).properties.splice(propertyIndex, 1);
+                // add property
+                vm.manageIndex.contentData
+                    .find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias)
+                    .properties.push({
+                        alias: property.alias,
+                        name: property.name
+                    });
+            },
+            removeProperty: function (property) {
+                // deselect item
+                vm.manageIndex.propertiesList.find(obj => obj.alias == property.alias).selected = false;
 
-                    // remove content type item with no properties and deselect
-                    if (vm.manageIndex.contentData.find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias).properties.length == 0) {
-                        vm.manageIndex.contentTypesList.find(obj => obj.alias == vm.manageIndex.selectedContentType.alias).selected = false;
-                        vm.manageIndex.contentTypesList.find(obj => obj.alias == vm.manageIndex.selectedContentType.alias).allowRemove = false;
+                // remove property item
+                const propertyIndex = vm.manageIndex.contentData
+                    .find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias)
+                    .properties.map(obj => obj.alias).indexOf(property.alias);
+                vm.manageIndex.contentData
+                    .find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias).properties.splice(propertyIndex, 1);
 
-                        const contentTypeIndex = vm.manageIndex.contentData.map(obj => obj.contentType.alias).indexOf(vm.manageIndex.selectedContentType.alias);
-                        vm.manageIndex.contentData.splice(contentTypeIndex, 1);
-                    }
+                // remove content type item with no properties and deselect
+                if (vm.manageIndex.contentData.find(obj => obj.contentType.alias == vm.manageIndex.selectedContentType.alias).properties.length == 0) {
+                    vm.manageIndex.contentTypesList.find(obj => obj.alias == vm.manageIndex.selectedContentType.alias).selected = false;
+                    vm.manageIndex.contentTypesList.find(obj => obj.alias == vm.manageIndex.selectedContentType.alias).allowRemove = false;
+
+                    const contentTypeIndex = vm.manageIndex.contentData.map(obj => obj.contentType.alias).indexOf(vm.manageIndex.selectedContentType.alias);
+                    vm.manageIndex.contentData.splice(contentTypeIndex, 1);
                 }
             },
             reset: function () {
                 this.visible = false;
                 this.id = 0;
+                this.viewTitle = CREATE_INDEX_DEFINITION
                 this.name = "";
                 this.selectedContentType = {};
                 this.contentTypesList = [];
@@ -175,11 +176,13 @@
 
     function saveIndex() {
 
+        console.log(vm.manageIndex.name);
+
         if (vm.manageIndex.name.length == 0 || vm.manageIndex.contentData.length == 0) {
             notificationsService.error("Algolia", "Index name and content schema are required.");
             return false;
         }
-      
+
         vm.loading = true;
 
         umbracoCmsIntegrationsSearchAlgoliaResource
@@ -206,6 +209,7 @@
         vm.viewState = "manage";
 
         vm.manageIndex.id = index.id;
+        vm.manageIndex.viewTitle = EDIT_INDEX_DEFINITION;
         vm.manageIndex.name = index.name;
         vm.manageIndex.contentData = index.contentData;
 
@@ -280,6 +284,16 @@
         umbracoCmsIntegrationsSearchAlgoliaResource.search(vm.selectedSearchIndex.id, vm.searchQuery).then(function (response) {
             vm.searchResults = response;
         });
+    }
+
+    function back() {
+        vm.manageIndex.reset();
+
+        vm.searchQuery = '';
+        vm.selectedSearchIndex = {};
+        vm.searchResults = {};
+
+        vm.viewState = "list";
     }
 }
 

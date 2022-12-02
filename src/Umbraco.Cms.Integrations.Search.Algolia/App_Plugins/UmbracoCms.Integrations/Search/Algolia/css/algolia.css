@@ -1,5 +1,14 @@
-﻿.umb-content-grid {
-    display:grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap:10px;
+﻿/* align child element in two columns: 1/3 and 2/3 */
+.alg-col-2 {
+    display: grid;
+    grid-template-columns: 25% 60%;
+    gap: 20px;
 }
+
+/* align child element in three equal columns */
+.alg-col-3 {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    gap: 10px;
+}
+
