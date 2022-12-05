@@ -12,3 +12,20 @@
     gap: 10px;
 }
 
+.alg-toast {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    padding: var(--uui-size-layout-4);
+}
+
+
+.alg-dialog {
+    display: none;
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    transform: translate(-70%,-70%);
+    z-index: 1;
+}

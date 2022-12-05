@@ -1,10 +1,11 @@
-﻿function dashboardController(notificationsService, overlayService, eventsService, algoliaService, umbracoCmsIntegrationsSearchAlgoliaResource) {
+﻿function dashboardController(algoliaService, umbracoCmsIntegrationsSearchAlgoliaResource) {
     var vm = this;
 
     const CREATE_INDEX_DEFINITION = "Create Index Definition";
     const EDIT_INDEX_DEFINITION = "Edit Index Definition";
 
     vm.loading = false;
+    vm.delete = false;
 
     vm.searchQuery = "";
     vm.selectedSearchIndex = {};
@@ -22,6 +23,10 @@
     vm.deleteIndex = deleteIndex;
     vm.search = search;
     vm.back = back;
+
+    vm.showToast = showToast;
+    vm.showDeleteDialog = showDeleteDialog;
+    vm.showBuildDialog = showBuildDialog;
 
     function init() {
         /* contentData property:
@@ -76,6 +81,10 @@
                         });
                     }
                 });
+            },
+            hideProperties: function () {
+                this.selectedContentType = {};
+                this.propertiesList = [];
             },
             removeContentType: function (contentType) {
 
@@ -176,10 +185,12 @@
 
     function saveIndex() {
 
-        console.log(vm.manageIndex.name);
-
         if (vm.manageIndex.name.length == 0 || vm.manageIndex.contentData.length == 0) {
-            notificationsService.error("Algolia", "Index name and content schema are required.");
+            vm.showToast({
+                color: 'danger',
+                headline: 'Algolia',
+                message: 'Index name and content schema are required.'
+            });
             return false;
         }
 
@@ -191,9 +202,17 @@
                 if (response.success) {
                     vm.manageIndex.reset();
                     algoliaService.getContentTypes((response) => vm.manageIndex.contentTypes = response);
-                    notificationsService.success("Algolia", "Index saved.");
+                    vm.showToast({
+                        color: 'positive',
+                        headline: 'Algolia',
+                        message: 'Index saved.'
+                    });
                 } else {
-                    notificationsService.error("Algolia", response.error);
+                    vm.showToast({
+                        color: 'danger',
+                        headline: 'Algolia',
+                        message: response.error
+                    });
                 }
 
                 vm.viewState = "list";
@@ -230,28 +249,7 @@
     }
 
     function buildIndex(index) {
-        const dialogOptions = {
-            view: "/App_Plugins/UmbracoCms.Integrations/Search/Algolia/views/index.build.html",
-            index: index,
-            submit: function (model) {
-                vm.loading = true;
-
-                umbracoCmsIntegrationsSearchAlgoliaResource.buildIndex(model.index.id).then(function (response) {
-                    if (response.failure)
-                        notificationsService.warning("Algolia", "An error has occurred while building the index: " + response.error);
-                    else {
-                        notificationsService.success("Algolia", "Index built successfully.");
-                        vm.loading = false;
-                        overlayService.close();
-                    }
-                });
-            },
-            close: function () {
-                overlayService.close();
-            }
-        };
-
-        overlayService.open(dialogOptions);
+        vm.showBuildDialog(index);
     }
 
     function searchIndex(index) {
@@ -260,24 +258,7 @@
     }
 
     function deleteIndex(index) {
-        const dialogOptions = {
-            title: "Delete",
-            content: "Are you sure you want to delete index <b>" + index.name + "</b>?",
-            confirmType: "delete",
-            submit: function () {
-                umbracoCmsIntegrationsSearchAlgoliaResource.deleteIndex(index.id).then(function (response) {
-                    if (response.success) {
-                        notificationsService.success("Algolia", "Index deleted.");
-                        getIndices();
-                    } else
-                        notificationsService.error("Algolia", response.error);
-
-                    overlayService.close();
-                });
-            }
-        };
-
-        overlayService.confirm(dialogOptions);
+        vm.showDeleteDialog(index);
     }
 
     function search() {
@@ -294,6 +275,117 @@
         vm.searchResults = {};
 
         vm.viewState = "list";
+    }
+
+    /* Toast Config properties:
+     *  color
+     *  headline
+     *  message
+     */
+    function showToast(config) {
+        const con = document.querySelector('uui-toast-notification-container');
+
+        const toast = document.createElement('uui-toast-notification');
+        toast.color = config.color;
+
+        const toastLayout = document.createElement('uui-toast-notification-layout');
+        toastLayout.headline = config.headline;
+        toast.appendChild(toastLayout);
+
+        const messageEl = document.createElement('span');
+        messageEl.innerHTML = config.message;
+        toastLayout.appendChild(messageEl);
+
+        if (con) {
+            con.appendChild(toast);
+        }
+    }
+
+    /* delete handlers */
+    function showDeleteDialog(index) {
+        const dialog = document.getElementById('deleteDialog');
+        dialog.style.display = "block";
+
+        const p = document.createElement('p');
+        p.innerHTML = "Are you sure you want to delete index <b>" + index.name + "</b>?";
+
+        const dialogLayout = dialog.querySelector('uui-dialog-layout');
+        dialogLayout.appendChild(p);
+
+        // event listeners
+        var btnCancel = dialog.querySelector('#btnCancel');
+        btnCancel.addEventListener('click', closeDeleteDialog);
+
+        var btnDelete = dialog.querySelector('#btnDelete');
+        btnDelete.addEventListener('click', function () {
+            umbracoCmsIntegrationsSearchAlgoliaResource.deleteIndex(index.id).then(function (response) {
+                if (response.success) {
+                    vm.showToast({
+                        color: 'positive',
+                        headline: 'Algolia',
+                        message: 'Index deleted'
+                    });
+                    getIndices();
+                } else {
+                    vm.showToast({
+                        color: 'danger',
+                        headline: 'Algolia',
+                        message: 'An error has occurred: ' + response.error
+                    });
+                }
+
+                closeDeleteDialog();
+            });
+        });
+    }
+
+    function closeDeleteDialog() {
+        const dialog = document.getElementById('deleteDialog');
+        dialog.style.display = "none";
+
+        const dialogLayout = dialog.querySelector('uui-dialog-layout');
+        const p = dialogLayout.querySelector('p');
+        dialogLayout.removeChild(p);
+    }
+
+    /* build index handlers */
+    function showBuildDialog(index) {
+        const dialog = document.getElementById('buildDialog');
+        dialog.style.display = "block";
+
+        // add event listeners
+        var btnCancel = dialog.querySelector('#btnCancel');
+        btnCancel.addEventListener('click', closeBuildDialog);
+
+        var btnBuild = dialog.querySelector('#btnBuild');
+        btnBuild.addEventListener('click', function () {
+            vm.loading = true;
+
+            umbracoCmsIntegrationsSearchAlgoliaResource.buildIndex(index.id).then(function (response) {
+                if (response.failure) {
+                    vm.showToast({
+                        color: 'warning',
+                        headline: 'Algolia',
+                        message: 'An error has occurred while building the index: ' + response.error
+                    });
+                }
+                else {
+                    vm.showToast({
+                        color: 'positive',
+                        headline: 'Algolia',
+                        message: 'Index built successfully'
+                    });
+                    vm.loading = false;
+                }
+            });
+
+            closeBuildDialog();
+        });
+    }
+
+    function closeBuildDialog() {
+        const dialog = document.getElementById('buildDialog');
+        dialog.style.display = "none";
     }
 }
 
