@@ -18,7 +18,7 @@
     vm.addIndex = addIndex;
     vm.saveIndex = saveIndex;
     vm.viewIndex = viewIndex;
-    vm.buildIndex = buildIndex;
+    vm.buildIndexConfirm = buildIndexConfirm;
     vm.searchIndex = searchIndex;
     vm.deleteIndex = deleteIndex;
     vm.search = search;
@@ -65,6 +65,7 @@
             ],
             contentData: [],
             showProperties: function (contentType) {
+
                 this.selectedContentType = contentType;
 
                 algoliaService.getPropertiesByContentTypeId(contentType.id, (response) => {
@@ -81,10 +82,6 @@
                         });
                     }
                 });
-            },
-            hideProperties: function () {
-                this.selectedContentType = {};
-                this.propertiesList = [];
             },
             removeContentType: function (contentType) {
 
@@ -248,7 +245,7 @@
         });
     }
 
-    function buildIndex(index) {
+    function buildIndexConfirm(index) {
         vm.showBuildDialog(index);
     }
 
@@ -358,34 +355,38 @@
         btnCancel.addEventListener('click', closeBuildDialog);
 
         var btnBuild = dialog.querySelector('#btnBuild');
-        btnBuild.addEventListener('click', function () {
-            vm.loading = true;
-
-            umbracoCmsIntegrationsSearchAlgoliaResource.buildIndex(index.id).then(function (response) {
-                if (response.failure) {
-                    vm.showToast({
-                        color: 'warning',
-                        headline: 'Algolia',
-                        message: 'An error has occurred while building the index: ' + response.error
-                    });
-                }
-                else {
-                    vm.showToast({
-                        color: 'positive',
-                        headline: 'Algolia',
-                        message: 'Index built successfully'
-                    });
-                    vm.loading = false;
-                }
-            });
-
-            closeBuildDialog();
-        });
+        btnBuild.removeEventListener('click', buildIndex);
+        btnBuild.addEventListener('click', buildIndex, false);
+        btnBuild.indexId = index.id;
     }
 
     function closeBuildDialog() {
         const dialog = document.getElementById('buildDialog');
         dialog.style.display = "none";
+    }
+
+    function buildIndex(event) {
+        vm.loading = true;
+
+        umbracoCmsIntegrationsSearchAlgoliaResource.buildIndex(event.currentTarget.indexId).then(function (response) {
+            if (response.failure) {
+                vm.showToast({
+                    color: 'warning',
+                    headline: 'Algolia',
+                    message: 'An error has occurred while building the index: ' + response.error
+                });
+            }
+            else {
+                vm.showToast({
+                    color: 'positive',
+                    headline: 'Algolia',
+                    message: 'Index built successfully'
+                });
+                vm.loading = false;
+            }
+        });
+
+        closeBuildDialog();
     }
 }
 

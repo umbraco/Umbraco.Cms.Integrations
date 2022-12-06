@@ -20,7 +20,6 @@
     padding: var(--uui-size-layout-4);
 }
 
-
 .alg-dialog {
     display: none;
     left: 50%;
@@ -28,4 +27,12 @@
     position: absolute;
     transform: translate(-70%,-70%);
     z-index: 1;
+}
+
+.alg-description {
+    color: #515054;
+    font-size: 12px;
+    box-sizing: border-box;
+    resize: none;
+    width: 100%;
 }

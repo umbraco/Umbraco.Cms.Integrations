@@ -55,7 +55,7 @@
                                 <uui-button label="edit" look="default" color="default" ng-click="vm.viewIndex(index)">
                                     <uui-icon name="edit"></uui-icon>
                                 </uui-button>
-                                <uui-button label="build" look="default" color="danger" ng-click="vm.buildIndex(index)">
+                                <uui-button label="build" look="default" color="danger" ng-click="vm.buildIndexConfirm(index)">
                                     <uui-icon name="sync"></uui-icon>
                                 </uui-button>
                                 <uui-button label="search" look="default" color="positive" ng-click="vm.searchIndex(index)">
@@ -84,34 +84,29 @@
                 <form id="manageIndexFrm" name="manageIndexFrm">
                     <uui-form-layout-item>
                         <uui-label slot="label" for="inName" required="">Name</uui-label>
+                        <span class="alg-description" slot="description">Please enter a name for the index. After save,<br /> you will not be able to change it.</span>
                         <div>
-                            <input type="text" ng-model="vm.manageIndex.name" />
+                            <input type="text" ng-model="vm.manageIndex.name" ng-disabled="vm.manageIndex.id != 0" style="width:17%" no-dirty-check />
                         </div>
                     </uui-form-layout-item>
 
                     <div class="alg-col-2">
                         <uui-form-layout-item>
                             <uui-label slot="label">Document Types</uui-label>
-                            <span slot="description">Please select the document types you would like to index, and choose the fields to include.</span>
+                            <span class="alg-description" slot="description">Please select the document types you would like to index, and choose the fields to include.</span>
                             <uui-icon-registry-essential>
-                                <uui-ref-node selectable
+                                <uui-ref-node id="{{ contentType.alias }}"
                                               ng-attr-selected="{{contentType.selected || undefined}}"
                                               ng-repeat="contentType in vm.manageIndex.contentTypesList"
-                                              ng-on-selected="vm.manageIndex.showProperties(contentType)"
-                                              ng-on-unselected="vm.manageIndex.hideProperties()"
-                                              name="{{ contentType.name }}"
-                                              detail="{{ contentType.alias }}">
+                                              ng-on-open="vm.manageIndex.showProperties(contentType)"
+                                              name="{{ contentType.name }}">
                                     <umb-icon slot="icon" icon="{{ contentType.icon }}"></umb-icon>
-                                    <uui-tag ng-if="contentType.selected" size="s" slot="tag" color="positive">Selected</uui-tag>
+                                    <uui-tag ng-if="contentType.selected" size="s" slot="tag" color="primary">Selected</uui-tag>
                                     <uui-action-bar slot="actions">
-                                        <uui-button label="Choose properties"
-                                                    color="positive"
-                                                    ng-click="vm.manageIndex.showProperties(contentType)">
-                                            <uui-icon name="see"></uui-icon>
-                                        </uui-button>
                                         <uui-button label="Remove"
                                                     color="danger"
-                                                    ng-if="contentType.allowRemove">
+                                                    ng-if="contentType.allowRemove"
+                                                    ng-click="vm.manageIndex.removeContentType(contentType)">
                                             <uui-icon name="delete"></uui-icon>
                                         </uui-button>
                                     </uui-action-bar>
@@ -128,9 +123,8 @@
                                                            ng-on-unselected="vm.manageIndex.removeProperty(property)"
                                                            ng-repeat="property in vm.manageIndex.propertiesList"
                                                            name="{{ property.name }}">
-                                        <uui-tag ng-if="property.selected" size="s" slot="tag" color="positive">Selected</uui-tag>
+                                        <uui-tag ng-if="property.selected" size="s" slot="tag" color="primary">Selected</uui-tag>
                                         <ul style="list-style: none; padding-inline-start: 0px; margin: 0;">
-                                            <li><span style="font-weight: 700">Alias:</span> {{ property.alias }}</li>
                                             <li><span style="font-weight: 700">Group: </span> {{ property.group }}</li>
                                         </ul>
                                     </uui-card-content-node>
@@ -160,8 +154,7 @@
                 <form id="searchFrm" name="searchFrm">
                     <uui-form-layout-item>
                         <div>
-                            <uui-input id="inSearch" type="text" name="indexName" placeholder="" label="search" ng-model="vm.searchQuery" style="width: 50%">
-                            </uui-input>
+                            <input type="text" ng-model="vm.searchQuery" class="mt2" style="width:50%" no-dirty-check />
                             <uui-icon-registry-essential>
                                 <uui-button type="button" label="Search" look="primary" color="positive" ng-click="vm.search()">
                                     <uui-icon name="search"></uui-icon>
@@ -188,7 +181,7 @@
 </div>
 
 <!-- Notifications -->
-<uui-toast-notification-container auto-close="5000" bottom-up="" class="alg-toast">
+<uui-toast-notification-container auto-close="3000" bottom-up="" class="alg-toast">
 </uui-toast-notification-container>
 
 <uui-icon-registry-essential>
