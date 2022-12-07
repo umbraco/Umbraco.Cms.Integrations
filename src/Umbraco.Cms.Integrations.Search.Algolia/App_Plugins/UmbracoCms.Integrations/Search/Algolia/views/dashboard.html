@@ -1,231 +1,213 @@
 ﻿<div ng-controller="Umbraco.Cms.Integrations.Search.Algolia.DashboardController as vm">
 
     <div ng-show="vm.loading">
-        <umb-load-indicator></umb-load-indicator>
+        <umb-loading-indicator></umb-loading-indicator>
     </div>
 
-    <div class="umb-panel-group__details">
+    <uui-box headline="Algolia Indices" ng-if="vm.viewState == 'list'">
+        <div>
+            <h5>Manage Algolia Indices</h5>
+            <p>
+                Algolia is an AI-powered search and discovery platform allowing you to create cutting-edge customer experiences for their websites or mobile apps.
+                It's like the perfect mediator between your website and customers, making sure the conversation is as smooth and efficient as possible.
+            </p>
+            <p>
+                The Algolia model provides Search as a Service through an externally hosted search engine, offering web search across the website based
+                on the content payload pushed from the website to Algolia.
+            </p>
+            <p>
+                To get started, you need to create an index and define the content schema - document types and properties.
+                Then you can build your index, push data to Algolia and run searches across created indices.
+                <br />
+                <a style="text-decoration: underline" target="_blank" href="https://www.algolia.com/doc/guides/getting-started/quick-start/">
+                    Read more about integrating Algolia Search
+                </a>
+            </p>
+        </div>
+        <div>
+            <uui-button look="primary" color="default" label="Add New Index Definition" ng-click="vm.addIndex()"></uui-button>
+        </div>
+        <div class="mt2">
+            <uui-table aria-label="Indices Table" aria-describedby="#indicesTbl" style="width: 70%" ng-if="vm.indices.length > 0">
 
-        <div ng-if="vm.viewState == 'list'" class="umb-panel-group__details-group">
-            <div class="umb-panel-group__details-group-title">
-                <div class="umb-panel-group__details-group-name">
-                    Algolia Indices
-                </div>
-            </div>
-            <div class="umb-panel-group__details-checks">
-                <div class="umb-panel-group__details-check-title">
-                    <div class="umb-panel-group__details-check-name">Manage Algolia Indices</div>
-                    <div class="umb-panel-group__details-check-description">
-                        <p>
-                            Algolia is an AI-powered search and discovery platform allowing you to create cutting-edge customer experiences for their websites or mobile apps.
-                            It's like the perfect mediator between your website and customers, making sure the conversation is as smooth and efficient as possible.
-                        </p>
-                        <p>
-                            The Algolia model provides Search as a Service through an externally hosted search engine, offering web search across the website based
-                            on the content payload pushed from the website to Algolia.
-                        </p>
-                        <p>
-                            To get started, you need to create an index and define the content schema - document types and properties.
-                            Then you can build your index, push data to Algolia and run searches across created indices.
-                            <br />
-                            <a style="text-decoration: underline" target="_blank" href="https://www.algolia.com/doc/guides/getting-started/quick-start/">
-                                Read more about integrating Algolia Search
-                            </a>
-                        </p>
-                    </div>
-                    <div class="umb-panel-group__details-check-description">
-                        <umb-button type="button"
-                                    button-style="primary"
-                                    action="vm.addIndex()"
-                                    label="Add New Index Definition">
-                        </umb-button>
-                    </div>
-                </div>
-                <div ng-if="vm.indices.length > 0" class="ml2 mr7 umb-panel-group__details-status">
-                    <table class="table table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Schema</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="index in vm.indices">
-                                <td>
-                                    <button type="button" class="btn-link -underline" ng-click="vm.viewIndex(index)">
-                                        {{index.name}}
-                                    </button>
-                                </td>
-                                <td>
-                                    <umb-node-preview ng-repeat="item in index.contentData"
-                                                      icon="item.contentType.icon"
-                                                      name="item.contentType.name"
-                                                      alias="item.contentType.alias"
-                                                      published="true"
-                                                      description="item.propertiesDescription.join(', ')">
-                                    </umb-node-preview>
-                                </td>
-                                <td>
-                                    <umb-button label="Build"
-                                                type="button"
-                                                button-style="danger"
-                                                action="vm.buildIndex(index)">
-                                    </umb-button>
-                                    <umb-button label="Search"
-                                                type="button"
-                                                button-style="success"
-                                                action="vm.searchIndex(index)">
-                                    </umb-button>
-                                    <umb-button label="Delete"
-                                                type="button"
-                                                button-style="inverse"
-                                                action="vm.deleteIndex(index)">
-                                    </umb-button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <br />
-        <div ng-if="vm.viewState === 'manage'">
-            <umb-editor-sub-header>
-                <umb-editor-sub-header-content-left>
-                    <button type="button" class="umb-package-details__back-action" ng-click="vm.manageIndex.reset();vm.viewState = 'list';">
-                        <span aria-hidden="true">&larr;</span>
-                        Back
-                    </button>
-                </umb-editor-sub-header-content-left>
-            </umb-editor-sub-header>
-            <div class="umb-panel-group__details-group">
-                <div class="umb-panel-group__details-group-title">
-                    <div class="umb-panel-group__details-group-name">
-                        {{ vm.manageIndex.id == 0 ? "Create" : "Edit" }} Index Definition
-                    </div>
-                </div>
-                <div class="umb-panel-group__details-checks">
-                    <!-- Content Type, Index Name -->
-                    <div class="umb-panel-group__details-check">
-                        <div class="umb-panel-group__details-status">
-                            <div class="umb-panel-group__details-status-content">
-                                <div class="row">
-                                    <div class="flex">
-                                        <div class="mt2">
-                                            <label>Index Name</label>
-                                        </div>
-                                        <div class="ml2">
-                                            <input type="text" ng-model="vm.manageIndex.name" no-dirty-check />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="flex justify-start">
-                                        <div class="mr5" ng-model="vm.manageIndex.contentTypesList">
-                                            <h5>Document Types</h5>
-                                            <div class="umb-panel-group__details-check-description">
-                                                Please select the document types you would like to index,<br/> and click <b>Open</b> to choose the fields to include.
-                                            </div>
-                                            <umb-node-preview ng-repeat="contentType in vm.manageIndex.contentTypesList"
-                                                              icon="contentType.icon"
-                                                              name="contentType.name"
-                                                              alias="contentType.alias"
-                                                              published="contentType.selected"
-                                                              allow-remove="contentType.allowRemove"
-                                                              allow-open="true"
-                                                              on-open="vm.manageIndex.showProperties(contentType)"
-                                                              on-remove="vm.manageIndex.removeContentType(contentType)">
-                                            </umb-node-preview>
-                                        </div>
-                                        <div ng-if="vm.manageIndex.propertiesList.length > 0">
-                                            <h5>{{ vm.manageIndex.selectedContentType.name }} Properties</h5>
-                                            <div class="row">
-                                                <div>
-                                                    <umb-content-grid content="vm.manageIndex.propertiesList"
-                                                                      content-properties="vm.manageIndex.includeProperties"
-                                                                      on-click="vm.manageIndex.selectProperty"
-                                                                      on-click-name="vm.manageIndex.selectProperty">
-                                                    </umb-content-grid>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt2 row">
-                                    <umb-button type="button"
-                                                button-style="success"
-                                                action="vm.saveIndex()"
-                                                label="Save">
-                                    </umb-button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <uui-table-column style="width: 20%;"></uui-table-column>
+                <uui-table-column style="width: 60%;"></uui-table-column>
+                <uui-table-column style="width: 20%;"></uui-table-column>
 
+                <uui-table-head>
+                    <uui-table-head-cell>Name</uui-table-head-cell>
+                    <uui-table-head-cell>Definition</uui-table-head-cell>
+                    <uui-table-head-cell></uui-table-head-cell>
+                </uui-table-head>
+                <uui-table-row ng-repeat="index in vm.indices">
+                    <uui-table-cell>{{ index.name }}</uui-table-cell>
+                    <uui-table-cell>
+                        <uui-icon-registry-essential>
+                            <uui-ref-node ng-repeat="item in index.contentData" name="{{ item.contentType.name }}"
+                                          detail="{{ item.propertiesDescription.join(', ') }}">
+                                <umb-icon slot="icon" icon="{{ item.contentType.icon }}"></umb-icon>
+                            </uui-ref-node>
+                        </uui-icon-registry-essential>
+                    </uui-table-cell>
+                    <uui-table-cell>
+                        <uui-icon-registry-essential>
+                            <uui-action-bar>
+                                <uui-button label="edit" look="default" color="default" ng-click="vm.viewIndex(index)">
+                                    <uui-icon name="edit"></uui-icon>
+                                </uui-button>
+                                <uui-button label="build" look="default" color="danger" ng-click="vm.buildIndexConfirm(index)">
+                                    <uui-icon name="sync"></uui-icon>
+                                </uui-button>
+                                <uui-button label="search" look="default" color="positive" ng-click="vm.searchIndex(index)">
+                                    <uui-icon name="search"></uui-icon>
+                                </uui-button>
+                                <uui-button label="delete" look="default" color="default" ng-click="vm.deleteIndex(index)">
+                                    <uui-icon name="delete"></uui-icon>
+                                </uui-button>
+                            </uui-action-bar>
+                        </uui-icon-registry-essential>
+                    </uui-table-cell>
+                </uui-table-row>
+            </uui-table>
+        </div>
+    </uui-box>
+
+    <div ng-if="vm.viewState === 'manage'">
+        <uui-icon-registry-essential>
+            <uui-button compact look="default" ng-click="vm.back()" label="Back">
+                <span aria-hidden="true">&larr;</span> Back
+            </uui-button>
+        </uui-icon-registry-essential>
+        <div class="mt2"></div>
+        <uui-box headline="{{vm.manageIndex.viewTitle}}">
+            <uui-form>
+                <form id="manageIndexFrm" name="manageIndexFrm">
+                    <uui-form-layout-item>
+                        <uui-label slot="label" for="inName" required="">Name</uui-label>
+                        <span class="alg-description" slot="description">Please enter a name for the index. After save,<br /> you will not be able to change it.</span>
+                        <div>
+                            <input type="text" ng-model="vm.manageIndex.name" ng-disabled="vm.manageIndex.id != 0" style="width:17%" no-dirty-check />
+                        </div>
+                    </uui-form-layout-item>
+
+                    <div class="alg-col-2">
+                        <uui-form-layout-item>
+                            <uui-label slot="label">Document Types</uui-label>
+                            <span class="alg-description" slot="description">Please select the document types you would like to index, and choose the fields to include.</span>
+                            <uui-icon-registry-essential>
+                                <uui-ref-node id="{{ contentType.alias }}"
+                                              ng-attr-selected="{{contentType.selected || undefined}}"
+                                              ng-repeat="contentType in vm.manageIndex.contentTypesList"
+                                              ng-on-open="vm.manageIndex.showProperties(contentType)"
+                                              name="{{ contentType.name }}">
+                                    <umb-icon slot="icon" icon="{{ contentType.icon }}"></umb-icon>
+                                    <uui-tag ng-if="contentType.selected" size="s" slot="tag" color="primary">Selected</uui-tag>
+                                    <uui-action-bar slot="actions">
+                                        <uui-button label="Remove"
+                                                    color="danger"
+                                                    ng-if="contentType.allowRemove"
+                                                    ng-click="vm.manageIndex.removeContentType(contentType)">
+                                            <uui-icon name="delete"></uui-icon>
+                                        </uui-button>
+                                    </uui-action-bar>
+                                </uui-ref-node>
+                            </uui-icon-registry-essential>
+                        </uui-form-layout-item>
+                        <uui-form-layout-item ng-if="vm.manageIndex.propertiesList.length > 0">
+                            <uui-label slot="label">{{ vm.manageIndex.selectedContentType.name }} Properties</uui-label>
+                            <uui-icon-registry-essential>
+                                <div class="alg-col-3">
+                                    <uui-card-content-node selectable
+                                                           ng-attr-selected="{{property.selected || undefined}}"
+                                                           ng-on-selected="vm.manageIndex.selectProperty(property)"
+                                                           ng-on-unselected="vm.manageIndex.removeProperty(property)"
+                                                           ng-repeat="property in vm.manageIndex.propertiesList"
+                                                           name="{{ property.name }}">
+                                        <uui-tag ng-if="property.selected" size="s" slot="tag" color="primary">Selected</uui-tag>
+                                        <ul style="list-style: none; padding-inline-start: 0px; margin: 0;">
+                                            <li><span style="font-weight: 700">Group: </span> {{ property.group }}</li>
+                                        </ul>
+                                    </uui-card-content-node>
+                                </div>
+                            </uui-icon-registry-essential>
+                        </uui-form-layout-item>
+                    </div>
+                    <uui-button type="submit" label="Save" look="primary" color="positive" ng-click="vm.saveIndex()">
+                        Save
+                    </uui-button>
+                </form>
+            </uui-form>
+
+        </uui-box>
+    </div>
+
+    <div ng-if="vm.viewState === 'search'">
+        <uui-icon-registry-essential>
+            <uui-button compact look="default" ng-click="vm.back()" label="Back">
+                <span aria-hidden="true">&larr;</span> Back
+            </uui-button>
+        </uui-icon-registry-essential>
+        <div class="mt2"></div>
+        <uui-box headline="Search">
+            <small slot="header">Please enter the query you want to search by against index <b>{{ vm.selectedSearchIndex.name }}</b></small>
+            <uui-form>
+                <form id="searchFrm" name="searchFrm">
+                    <uui-form-layout-item>
+                        <div>
+                            <input type="text" ng-model="vm.searchQuery" class="mt2" style="width:50%" no-dirty-check />
+                            <uui-icon-registry-essential>
+                                <uui-button type="button" label="Search" look="primary" color="positive" ng-click="vm.search()">
+                                    <uui-icon name="search"></uui-icon>
+                                    Search
+                                </uui-button>
+                            </uui-icon-registry-essential>
+                        </div>
+                    </uui-form-layout-item>
+                </form>
+            </uui-form>
+            <!--RESULTS -->
+            <div>
+                <p>Items Count: {{ vm.searchResults.itemsCount }}</p>
+                <p>Pages Count: {{ vm.searchResults.pagesCount }}</p>
+                <p>Items per Page: {{ vm.searchResults.itemsPerPage }}</p>
+                <div ng-repeat="record in vm.searchResults.hits">
+                    <p ng-repeat="(key, value) in record">
+                        <b>{{ key }}</b> : {{ value }}
+                    </p>
                 </div>
             </div>
-        </div>
-        <br />
-        <div ng-if="vm.viewState === 'search'">
-            <umb-editor-sub-header>
-                <umb-editor-sub-header-content-left>
-                    <button type="button" class="umb-package-details__back-action" ng-click="vm.searchQuery='';vm.selectedSearchIndex={};vm.viewState = 'list';">
-                        <span aria-hidden="true">&larr;</span>
-                        Back
-                    </button>
-                </umb-editor-sub-header-content-left>
-            </umb-editor-sub-header>
-            <div class="umb-panel-group__details-group">
-                <div class="umb-panel-group__details-group-title">
-                    <div class="umb-panel-group__details-group-name">
-                        Search
-                    </div>
-                </div>
-                <div class="umb-panel-group__details-checks">
-                    <!-- Content Type, Index Name -->
-                    <div class="umb-panel-group__details-check">
-                        <div class="umb-panel-group__details-check-title">
-                            <div class="umb-panel-group__details-check-name">Search over index</div>
-                            <div class="umb-panel-group__details-check-description">
-                                Please enter the query you want to search by against index <b>{{ vm.selectedSearchIndex.name }}</b>
-                            </div>
-                        </div>
-                        <div class="umb-panel-group__details-status">
-                            <div class="umb-panel-group__details-status-content">
-                                <div class="row">
-                                    <div class="flex">
-                                        <div class="mt2" style="width:50%">
-                                            <input type="text" style="width:100%" ng-model="vm.searchQuery" no-dirty-check />
-                                        </div>
-                                        <div class="mt2">
-                                            <umb-button type="button"
-                                                        button-style="success"
-                                                        action="vm.search()"
-                                                        label="Search"
-                                                        label-key="general_search">
-                                            </umb-button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <!--RESULTS -->
-                                    <div>
-                                        <p>Items Count: {{ vm.searchResults.itemsCount }}</p>
-                                        <p>Pages Count: {{ vm.searchResults.pagesCount }}</p>
-                                        <p>Items per Page: {{ vm.searchResults.itemsPerPage }}</p>
-                                        <div ng-repeat="record in vm.searchResults.hits">
-                                            <p ng-repeat="(key, value) in record">
-                                                <b>{{ key }}</b> : {{ value }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </uui-box>
     </div>
 </div>
+
+<!-- Notifications -->
+<uui-toast-notification-container auto-close="3000" bottom-up="" class="alg-toast">
+</uui-toast-notification-container>
+
+<uui-icon-registry-essential>
+    <uui-dialog class="alg-dialog" id="deleteDialog">
+        <uui-dialog-layout>
+            <span slot="headline">
+                <uui-icon name="delete"></uui-icon> Delete
+            </span>
+            <!-- Content goes here -->
+            <uui-button id="btnCancel" slot="actions">Cancel</uui-button>
+            <uui-button id="btnDelete" slot="actions" look="primary" color="danger">Delete</uui-button>
+        </uui-dialog-layout>
+    </uui-dialog>
+    <uui-dialog class="alg-dialog" id="buildDialog">
+        <uui-dialog-layout>
+            <span slot="headline">
+                <uui-icon name="settings"></uui-icon> Build index
+            </span>
+            <p class="umb-alert umb-alert--warning mb2">
+                This will cause the index to be built.<br>
+                Depending on how much content there is in your site this could take a while.<br>
+                It is not recommended to rebuild an index during times of high website traffic
+                or when editors are editing content.
+            </p>
+            <uui-button id="btnCancel" slot="actions">Cancel</uui-button>
+            <uui-button id="btnBuild" slot="actions" look="primary" color="danger">Build</uui-button>
+        </uui-dialog-layout>
+    </uui-dialog>
+</uui-icon-registry-essential>

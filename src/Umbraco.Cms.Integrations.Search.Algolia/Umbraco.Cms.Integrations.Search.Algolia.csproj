@@ -22,9 +22,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="Algolia.Search" Version="6.13.0" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="10.1.0" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="10.1.0" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="10.1.0" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="10.3.0" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="10.3.0" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" version="10.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -51,6 +51,6 @@
 			<PackagePath>\</PackagePath>
 		</Content>
 	</ItemGroup>
-
+	
 
 </Project>
