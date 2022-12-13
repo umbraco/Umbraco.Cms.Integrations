@@ -1,0 +1,16 @@
+﻿.inriver-container {
+    margin: 20px;
+    /*position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);*/
+}
+
+#editorDialog {
+    display: none;
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    transform: translate(-70%,-70%);
+    z-index: 1;
+}

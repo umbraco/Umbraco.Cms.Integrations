@@ -67,7 +67,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Search", "Search", "{F56605
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Algolia", "Algolia", "{F2CAA1F7-9BED-4EB6-8875-D176B92D393A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Search.Algolia", "Umbraco.Cms.Integrations.Search.Algolia\Umbraco.Cms.Integrations.Search.Algolia.csproj", "{54A624E5-5321-4CC8-B74B-11ABF3605242}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Search.Algolia", "Umbraco.Cms.Integrations.Search.Algolia\Umbraco.Cms.Integrations.Search.Algolia.csproj", "{54A624E5-5321-4CC8-B74B-11ABF3605242}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PIM", "PIM", "{B5D14B4B-0E39-4C01-9021-D9A75F358DE1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.PIM.Inriver", "Umbraco.Cms.Integrations.PIM.Inriver\Umbraco.Cms.Integrations.PIM.Inriver.csproj", "{904B3CF6-1015-465E-8244-70FC90466F22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +135,10 @@ Global
 		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Release|Any CPU.Build.0 = Release|Any CPU
+		{904B3CF6-1015-465E-8244-70FC90466F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{904B3CF6-1015-465E-8244-70FC90466F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{904B3CF6-1015-465E-8244-70FC90466F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{904B3CF6-1015-465E-8244-70FC90466F22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -156,6 +164,7 @@ Global
 		{8FC3A87F-C10E-4605-9D24-BFF46D472170} = {1A4D3D38-F5B2-4528-92A1-318A7D09949D}
 		{F2CAA1F7-9BED-4EB6-8875-D176B92D393A} = {F56605AE-2258-4F61-B454-4247334DFC26}
 		{54A624E5-5321-4CC8-B74B-11ABF3605242} = {F2CAA1F7-9BED-4EB6-8875-D176B92D393A}
+		{904B3CF6-1015-465E-8244-70FC90466F22} = {B5D14B4B-0E39-4C01-9021-D9A75F358DE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FB51E08-A3C8-4DFF-B3CB-E99C2ED021D5}

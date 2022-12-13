@@ -1,0 +1,29 @@
+﻿<div ng-controller="Umbraco.Cms.Integrations.PIM.Inriver.EntityPickerEditorController as vm">
+    <uui-box headline="{{model.title}}" class="inriver-container">
+        <div style="width:60%">
+            <uui-form>
+                <uui-form-layout-item>
+                    <span style="font-weight:700;font-size:15px;">Entity Type:</span>
+                    <uui-select id="selEntityTypes" label="Entity Types" placeholder="Please select an entity type"></uui-select>
+                </uui-form-layout-item>
+                <uui-form-layout-item>
+                    <uui-table aria-label="Entities table">
+                        <uui-table-row selectable ng-repeat="item in vm.entities">
+                            <uui-table-cell ng-repeat="(value, key) in item">{{key}}</uui-table-cell>
+                        </uui-table-row>
+                    </uui-table>
+                </uui-form-layout-item>
+            </uui-form>
+        </div>
+    </uui-box>
+    <umb-editor-footer>
+        <umb-editor-footer-content-right>
+            <umb-button type="button"
+                        button-style="link"
+                        label-key="general_close"
+                        shortcut="esc"
+                        action="model.close()">
+            </umb-button>
+        </umb-editor-footer-content-right>
+    </umb-editor-footer>
+</div>

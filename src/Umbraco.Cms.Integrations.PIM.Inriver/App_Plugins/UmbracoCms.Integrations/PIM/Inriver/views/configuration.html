@@ -1,0 +1,23 @@
+﻿<div ng-controller="Umbraco.Cms.Integrations.PIM.Inriver.ConfigurationController as vm">
+    <uui-icon-registry-essential>
+        <uui-card-content-node name="Inriver API" style="max-width: 800px;">
+            <uui-icon slot="icon" name="{{vm.configuration.icon}}"></uui-icon>
+                <uui-tag size="s" slot="tag" color="{{vm.configuration.tag}}">
+                    {{vm.configuration.status.success ? vm.configuration.status.data : vm.configuration.status.error}}
+                </uui-tag>
+                <div style="width:60%">
+                    <uui-form>
+                        <uui-form-layout-item>
+                            <span style="font-weight:700;font-size:15px;">Entity Type:</span>
+                            <uui-select id="selEntityTypes" label="Entity Types" placeholder="Please select an entity type"></uui-select>
+                        </uui-form-layout-item>
+                        <uui-form-layout-item>
+                            <uui-checkbox id="chkAllowChange" label="Allow editor to change entity type">
+                                <span style="font-weight:700;font-size:15px;">Allow editor to change entity type</span>
+                            </uui-checkbox>
+                        </uui-form-layout-item>
+                    </uui-form>
+                </div>
+        </uui-card-content-node>
+    </uui-icon-registry-essential>
+</div>
