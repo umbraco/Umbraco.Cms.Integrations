@@ -13,7 +13,7 @@ using Umbraco.Core.Composing;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot
 {
-    public class HubspotComposer : IUserComposer
+    public class HubspotComposer : IComposer
     {
 #if NETCOREAPP
         public void Compose(IUmbracoBuilder builder)
