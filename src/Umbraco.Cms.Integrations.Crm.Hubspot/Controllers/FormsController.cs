@@ -100,7 +100,9 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
                 return new ResponseDto { IsValid = false };
             }
 
-            var response = await ClientFactory().GetAsync($"{HubspotFormsApiEndpoint}?hapikey=" + hubspotApiKey);
+            var requestMessage = CreateRequest(hubspotApiKey);
+
+            var response = await ClientFactory().SendAsync(requestMessage);
 
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
@@ -159,12 +161,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
                 return new ResponseDto { IsValid = false };
             }
 
-            var requestMessage = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(HubspotFormsApiEndpoint)
-            };
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var requestMessage = CreateRequest(accessToken);
 
             var response = await ClientFactory().SendAsync(requestMessage);
             if (response.StatusCode == HttpStatusCode.Unauthorized)
@@ -208,6 +205,17 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
 #endif   
 
             return new ResponseDto();
+        }
+
+        private static HttpRequestMessage CreateRequest(string accessToken)
+        {
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(HubspotFormsApiEndpoint)
+            };
+            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            return requestMessage;
         }
 
         [HttpGet]
