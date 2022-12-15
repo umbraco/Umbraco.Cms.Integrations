@@ -52,5 +52,19 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Services
                 ? ServiceResponse<QueryResponse>.Ok(JsonSerializer.Deserialize<QueryResponse>(content))
                 : ServiceResponse<QueryResponse>.Fail(content);
         }
+
+        public async Task<ServiceResponse<IEnumerable<FieldValue>>> GetEntityFieldValues(int id)
+        {
+            var client = _httpClientFactory.CreateClient(Constants.InriverClient);
+
+            var response = await client.GetAsync($"entities/{id}/fieldValues");
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            return response.IsSuccessStatusCode
+               ? ServiceResponse<IEnumerable<FieldValue>>.Ok(JsonSerializer.Deserialize<IEnumerable<FieldValue>>(content))
+               : ServiceResponse<IEnumerable<FieldValue>>.Fail(content);
+
+        }
     }
 }

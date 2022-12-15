@@ -1,23 +1,38 @@
-﻿function configurationController($scope, umbracoCmsIntegrationsPimInriverResource) {
+﻿function configurationController($scope, umbracoCmsIntegrationsPimInriverService, umbracoCmsIntegrationsPimInriverResource) {
     var vm = this;
 
+    const selEntityTypes = document.getElementById("selEntityTypes");
+
     vm.configuration = {};
+
+    vm.entityTypes = [];
+    vm.fieldTypes = [];
+
+    vm.selectedEntityType = {};
+    vm.selectedFieldTypes = [];
+
+    console.log($scope.model.value);
 
     if ($scope.model.value == null) {
         $scope.model.value = {
             entityType: '',
-            allowChange: false
+            displayFieldTypeIds: []
         };
     }
-
     $scope.$on('formSubmitting', function () {
-        var selEntityTypes = document.getElementById("selEntityTypes");
-        var chkAllowChange = document.getElementById("chkAllowChange");
-
-        $scope.model.value.entityType = selEntityTypes.value;
-        $scope.model.value.allowChange = chkAllowChange.checked;
+        $scope.model.value.entityType = vm.selectedEntityType.value;
+        $scope.model.value.displayFieldTypeIds = vm.selectedFieldTypes;
     });
 
+    vm.entityTypeChange = function () {
+        var selectedEntityType = vm.entityTypes.find(obj => obj.value == selEntityTypes.value);
+
+        vm.selectedEntityType = selectedEntityType;
+        vm.fieldTypes = vm.selectedEntityType.fieldTypes;
+
+        vm.selectedFieldTypes = [];
+    }
+  
     umbracoCmsIntegrationsPimInriverResource.checkApiAccess().then(function (response) {
         vm.configuration.icon = response.success ? 'unlock' : 'lock';
         vm.configuration.tag = response.success ? 'positive' : 'danger';
@@ -25,28 +40,86 @@
 
         if (response.success) {
             umbracoCmsIntegrationsPimInriverResource.getEntityTypes().then(function (entityTypesResponse) {
-                var entityTypes = entityTypesResponse.data.map(obj => {
+                vm.entityTypes = entityTypesResponse.data.map(obj => {
                     var option = {
+                        value: obj.id,
                         name: obj.name,
-                        value: obj.id
+                        fieldTypes: obj.fieldTypes
                     };
-                    if ($scope.model.value !== null && $scope.model.value.EntityType == obj.id) {
+                    if ($scope.model.value !== null && $scope.model.value.entityType == obj.id) {
                         option.selected = true;
+
+                        vm.selectedEntityType = option;
                     }
                     return option;
                 });
-                bindValues(entityTypes);
+
+                vm.selectedFieldTypes = $scope.model.value.displayFieldTypeIds;
+
+                bindValues();
             });
 
         }
     });
 
-    function bindValues(entityTypes) {
-        var selEntityTypes = document.getElementById("selEntityTypes");
-        selEntityTypes.options = entityTypes;
+    // table rows selection
+    vm.selectFieldType = function (fieldTypeId) {
+        vm.selectedFieldTypes.push(fieldTypeId);
+    }
 
-        var chkAllowChange = document.getElementById("chkAllowChange");
-        chkAllowChange.checked = $scope.model.value.AllowChange;
+    vm.unselectFieldType = function (fieldTypeId) {
+        vm.selectedFieldTypes = vm.selectedFieldTypes.filter(id => fieldTypeId != id);
+    }
+
+    function bindValues() {
+        selEntityTypes.options = vm.entityTypes;
+        vm.fieldTypes = vm.selectedEntityType.fieldTypes;
+
+        $scope.model.value.displayFieldTypeIds.forEach(fieldTypeId => {
+            umbracoCmsIntegrationsPimInriverService.waitForElement("#tr" + fieldTypeId)
+                .then(element => element.setAttribute("selected", ""));
+        });
+    }
+
+    /**
+     * toggle rows selection with uui-checkbox - prototype
+     * */
+    vm._selectFieldType = function (fieldTypeId) {
+        var fieldTypeIndex = vm.selectedFieldTypes.indexOf(fieldTypeId);
+        if (fieldTypeIndex == -1) {
+            vm.selectedFieldTypes.push(fieldTypeId);
+            document.getElementById('chk' + fieldTypeId).setAttribute('checked', '');
+        }
+        else {
+            document.getElementById('chk' + fieldTypeId).removeAttribute('checked');
+            vm.selectedFieldTypes = vm.selectedFieldTypes.splice(fieldTypeIndex, 1);
+        }
+    }
+
+    vm._selectFieldTypes = function () {
+        const selectAll = vm.selectedFieldTypes.length == 0;
+
+        vm.selectedFieldTypes = [];
+
+        console.log('select all', selectAll);
+        if (selectAll == true) {
+            vm.selectedFieldTypes = vm.fieldTypes.map(obj => obj.fieldTypeId);
+            var elements = document.querySelectorAll("uui-checkbox");
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].setAttribute("checked", "");
+            }
+        }
+        else {
+            var elements = document.querySelectorAll("uui-checkbox");
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].removeAttribute("checked");
+            }
+        }
+
+        vm.fieldTypes = vm.fieldTypes.map(obj => {
+            obj.selected = selectAll;
+            return obj;
+        });
     }
 }
 

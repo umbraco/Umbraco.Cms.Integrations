@@ -1,13 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using Newtonsoft.Json;
 
 namespace Umbraco.Cms.Integrations.PIM.Inriver.Configuration
 {
     public class EditorSettings
     {
-        [JsonPropertyName("entityType")]
+        [JsonProperty("entityType")]
         public string EntityType { get; set; } = string.Empty;
 
-        [JsonPropertyName("allowChange")]
-        public bool AllowChange { get; set; }
+        [JsonProperty("displayFieldTypeIds")]
+        public string[] DisplayFieldTypeIds { get; set; }
     }
 }

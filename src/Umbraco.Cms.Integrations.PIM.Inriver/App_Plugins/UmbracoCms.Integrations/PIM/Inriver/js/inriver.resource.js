@@ -17,6 +17,10 @@
                     return umbRequestHelper.resourcePromise(
                         $http.get(`${apiEndpoint}/GetEntitySummary?id=${id}`), "Failed to access resource.")
                 },
+                getEntityFieldValues: function (id, fieldTypeIds) {
+                    return umbRequestHelper.resourcePromise(
+                        $http.get(`${apiEndpoint}/GetEntitySummary?id=${id}&fieldTypeIds=${fieldTypeIds}`), "Failed to access resource.")
+                },
                 query: function (entityTypeId) {
                     return umbRequestHelper.resourcePromise(
                         $http.post(`${apiEndpoint}/Query`, {

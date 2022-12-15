@@ -41,6 +41,14 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
         public async Task<IActionResult> GetEntitySummary(int id)
         {
             var results = await _inriverService.GetEntitySummary(id);
+            if(results.Success)
+            {
+                var fields = await _inriverService.GetEntityFieldValues(id);
+                if(fields.Success)
+                {
+                    results.Data.Fields = fields.Data;
+                }
+            }
 
             return new JsonResult(results);
         }

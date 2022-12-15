@@ -2,27 +2,9 @@
 
     var vm = this;
 
-    umbracoCmsIntegrationsPimInriverResource.getEntityTypes().then(function (entityTypesResponse) {
-        var entityTypes = entityTypesResponse.data.map(obj => {
-            var option = {
-                name: obj.name,
-                value: obj.id
-            };
-            if ($scope.model.configuration.entityType == obj.id) {
-                option.selected = true;
-            }
-            return option;
-        });
-        bindValues(entityTypes);
-    });
+    vm.entities = [];
 
-    function bindValues(entityTypes) {
-        var selEntityTypes = document.getElementById("selEntityTypes");
-        selEntityTypes.options = entityTypes;
-
-        var selectedEntityType = entityTypes.find(obj => obj.selected);
-        query(selectedEntityType.value);
-    }
+    query($scope.model.configuration.entityType);
 
     function query(entityTypeId) {
         umbracoCmsIntegrationsPimInriverResource.query(entityTypeId).then(function (response) {
@@ -30,7 +12,16 @@
                 vm.entities = [];
                 for (var i = 0; i < response.data.entityIds.length; i++) {
                     umbracoCmsIntegrationsPimInriverResource.getEntitySummary(response.data.entityIds[i]).then(function (summaryResponse) {
-                        vm.entities.push(summaryResponse.data);
+                        var entity = {
+                            id: summaryResponse.data.id,
+                            displayName: summaryResponse.data.displayName,
+                            description: summaryResponse.data.description,
+                            displayFields: summaryResponse.data.fields.filter(obj => {
+                                var index = $scope.model.configuration.displayFieldTypeIds.indexOf(obj.fieldTypeId);
+                                if (index > -1) return obj;
+                            })
+                        };
+                        vm.entities.push(entity);
                     });
                 }
             }

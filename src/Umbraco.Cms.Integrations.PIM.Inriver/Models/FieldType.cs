@@ -12,8 +12,5 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Models
 
         [JsonPropertyName("fieldTypeDescription")]
         public string Description { get; set; }
-
-        [JsonPropertyName("fieldDataType")]
-        public string DataType { get; set; }
     }
 }

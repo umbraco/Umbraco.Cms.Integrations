@@ -2,14 +2,19 @@
     <uui-box headline="{{model.title}}" class="inriver-container">
         <div style="width:60%">
             <uui-form>
-                <uui-form-layout-item>
-                    <span style="font-weight:700;font-size:15px;">Entity Type:</span>
-                    <uui-select id="selEntityTypes" label="Entity Types" placeholder="Please select an entity type"></uui-select>
-                </uui-form-layout-item>
-                <uui-form-layout-item>
-                    <uui-table aria-label="Entities table">
-                        <uui-table-row selectable ng-repeat="item in vm.entities">
-                            <uui-table-cell ng-repeat="(value, key) in item">{{key}}</uui-table-cell>
+                <uui-form-layout-item ng-if="vm.entities.length > 0">
+                    <uui-table class="uui-text">
+                        <uui-table-column style="width: 60px;"></uui-table-column>
+                        <uui-table-head>
+                            <uui-table-head-cell>Name</uui-table-head-cell>
+                            <uui-table-head-cell>Description</uui-table-head-cell>
+                            <uui-table-head-cell ng-repeat="displayField in vm.entities[0].displayFields">{{displayField.fieldTypeId}}</uui-table-head-cell>
+                        </uui-table-head>
+
+                        <uui-table-row ng-repeat="entity in vm.entities" selectable>
+                            <uui-table-cell>{{entity.displayName}}</uui-table-cell>
+                            <uui-table-cell>{{entity.description}}</uui-table-cell>
+                            <uui-table-cell ng-repeat="displayField in entity.displayFields">{{displayField.value}}</uui-table-cell>
                         </uui-table-row>
                     </uui-table>
                 </uui-form-layout-item>

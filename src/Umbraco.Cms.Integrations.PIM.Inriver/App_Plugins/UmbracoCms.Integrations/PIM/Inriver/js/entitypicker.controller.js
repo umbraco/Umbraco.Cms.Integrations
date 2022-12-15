@@ -3,14 +3,6 @@
     var vm = this;
     vm.error = '';
 
-    const dialog = document.getElementById('editorDialog');
-    dialog.style.display = "block";
-
-    // add event listeners
-    var btnCancel = dialog.querySelector('#btnCancel');
-    btnCancel.addEventListener('click', closeEditor);
-
-
     umbracoCmsIntegrationsPimInriverResource.checkApiAccess().then(function (response) {
         if (response.failure) 
             vm.error = response.data;
@@ -21,8 +13,8 @@
             title: "Inriver Entities",
             subtitle: "Select entity",
             configuration: {
-                entityType: $scope.model.config.configuration.EntityType,
-                allowChange: $scope.model.config.configuration.AllowChange
+                entityType: $scope.model.config.configuration.entityType,
+                displayFieldTypeIds: $scope.model.config.configuration.displayFieldTypeIds
             },
             view: "/App_Plugins/UmbracoCms.Integrations/PIM/Inriver/views/entitypickereditor.html",
             size: "medium",

@@ -2,22 +2,48 @@
     <uui-icon-registry-essential>
         <uui-card-content-node name="Inriver API" style="max-width: 800px;">
             <uui-icon slot="icon" name="{{vm.configuration.icon}}"></uui-icon>
-                <uui-tag size="s" slot="tag" color="{{vm.configuration.tag}}">
-                    {{vm.configuration.status.success ? vm.configuration.status.data : vm.configuration.status.error}}
-                </uui-tag>
-                <div style="width:60%">
-                    <uui-form>
-                        <uui-form-layout-item>
-                            <span style="font-weight:700;font-size:15px;">Entity Type:</span>
-                            <uui-select id="selEntityTypes" label="Entity Types" placeholder="Please select an entity type"></uui-select>
-                        </uui-form-layout-item>
-                        <uui-form-layout-item>
-                            <uui-checkbox id="chkAllowChange" label="Allow editor to change entity type">
-                                <span style="font-weight:700;font-size:15px;">Allow editor to change entity type</span>
-                            </uui-checkbox>
-                        </uui-form-layout-item>
-                    </uui-form>
-                </div>
+            <uui-tag size="s" slot="tag" color="{{vm.configuration.tag}}">
+                {{vm.configuration.status.success ? vm.configuration.status.data : vm.configuration.status.error}}
+            </uui-tag>
+            <div style="width:60%">
+                <uui-form>
+                    <uui-form-layout-item>
+                        <span style="font-weight:700;font-size:15px;">Entity Type:</span>
+                        <div style="margin-bottom: 20px;">Please select the Inriver entity type.</div>
+                        <uui-select id="selEntityTypes" label="Entity Types" placeholder="Please select an entity type"
+                                    ng-on-change="vm.entityTypeChange()"></uui-select>
+                    </uui-form-layout-item>
+                    <uui-form-layout-item ng-if="vm.fieldTypes.length > 0">
+                        <span style="font-weight:700;font-size:15px;">Field Types:</span>
+                        <div style="margin-bottom: 20px;">
+                           Please select the field types you want to display for the entity.
+                        </div>
+                        <uui-table class="uui-text">
+                            <uui-table-column style="width: 60px;"></uui-table-column>
+                            <uui-table-head>
+                                <!--<uui-table-head-cell style="--uui-table-cell-padding: 0">
+                                    <uui-checkbox style="padding: var(--uui-size-4) var(--uui-size-5);"
+                                                  ng-click="vm.selectFieldTypes()"></uui-checkbox>
+                                </uui-table-head-cell>-->
+                                <uui-table-head-cell>Id</uui-table-head-cell>
+                                <uui-table-head-cell>Name</uui-table-head-cell>
+                            </uui-table-head>
+
+                            <uui-table-row id="tr{{fieldType.fieldTypeId}}"
+                                           ng-repeat="fieldType in vm.fieldTypes" selectable
+                                           ng-on-selected="vm.selectFieldType(fieldType.fieldTypeId)"
+                                           ng-on-unselected="vm.unselectFieldType(fieldType.fieldTypeId)">
+                                <!--<uui-table-cell>
+                                    <uui-checkbox id="chk{{fieldType.fieldTypeId}}" ng-on-click="vm.selectFieldType(fieldType.fieldTypeId)">
+                                    </uui-checkbox>
+                                </uui-table-cell>-->
+                                <uui-table-cell>{{fieldType.fieldTypeId}}</uui-table-cell>
+                                <uui-table-cell>{{fieldType.fieldTypeDisplayName}}</uui-table-cell>
+                            </uui-table-row>
+                        </uui-table>
+                    </uui-form-layout-item>
+                </uui-form>
+            </div>
         </uui-card-content-node>
     </uui-icon-registry-essential>
 </div>
