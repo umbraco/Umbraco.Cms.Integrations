@@ -42,7 +42,7 @@
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</Content>
 	</ItemGroup>
-
+	
 	<ItemGroup>
 		<Content Include="inriver.png">
 			<Pack>true</Pack>

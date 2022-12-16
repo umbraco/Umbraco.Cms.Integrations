@@ -4,15 +4,15 @@
             <uui-form>
                 <uui-form-layout-item ng-if="vm.entities.length > 0">
                     <uui-table class="uui-text">
-                        <uui-table-column style="width: 60px;"></uui-table-column>
+                        <uui-table-column style="width: 120px !important"></uui-table-column>
                         <uui-table-head>
                             <uui-table-head-cell>Name</uui-table-head-cell>
                             <uui-table-head-cell>Description</uui-table-head-cell>
                             <uui-table-head-cell ng-repeat="displayField in vm.entities[0].displayFields">{{displayField.fieldTypeId}}</uui-table-head-cell>
                         </uui-table-head>
 
-                        <uui-table-row ng-repeat="entity in vm.entities" selectable>
-                            <uui-table-cell>{{entity.displayName}}</uui-table-cell>
+                        <uui-table-row ng-repeat="entity in vm.entities" selectable ng-on-selected="vm.save(entity.id)">
+                            <uui-table-cell style="width:30%;">{{entity.displayName}}</uui-table-cell>
                             <uui-table-cell>{{entity.description}}</uui-table-cell>
                             <uui-table-cell ng-repeat="displayField in entity.displayFields">{{displayField.value}}</uui-table-cell>
                         </uui-table-row>

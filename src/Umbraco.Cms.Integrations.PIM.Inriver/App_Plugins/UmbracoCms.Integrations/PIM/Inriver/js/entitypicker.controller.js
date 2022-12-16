@@ -1,12 +1,18 @@
 ﻿function entityPickerController($scope, editorService, notificationsService, umbracoCmsIntegrationsPimInriverResource) {
 
     var vm = this;
-    vm.error = '';
+
+    vm.selectedEntity = null;
+    vm.error = "";
 
     umbracoCmsIntegrationsPimInriverResource.checkApiAccess().then(function (response) {
         if (response.failure) 
             vm.error = response.data;
     });
+
+    if ($scope.model.value) {
+        getEntitySummary($scope.model.value.entityId);
+    }
 
     vm.openInriverEntityPickerOverlay = function () {
         var options = {
@@ -18,10 +24,9 @@
             },
             view: "/App_Plugins/UmbracoCms.Integrations/PIM/Inriver/views/entitypickereditor.html",
             size: "medium",
-            select: function (entity) {
-                //vm.saveForm(form);
-
-                //editorService.close();
+            save: function (entityId) {
+                vm.saveEntity(entityId);
+                editorService.close();
             },
             close: function () {
                 editorService.close();
@@ -30,22 +35,30 @@
 
         editorService.open(options);
     };
+    
+    vm.saveEntity = function (entityId) {
+        $scope.model.value = JSON.stringify({
+            entityId: entityId,
+            displayFields: $scope.model.config.configuration.displayFieldTypeIds
+        });
 
-    function closeEditor() {
-        const dialog = document.getElementById('editorDialog');
-        dialog.style.display = "none";
+        getEntitySummary(entityId);
     }
 
-    //vm.saveForm = function (formId) {
-    //    $scope.model.value = formId;
+    vm.removeEntity = function () {
+        $scope.model.value = null;
+        vm.selectedEntity = null;
+    }
 
-    //    getFormDetails(formId);
-    //}
+    function getEntitySummary(entityId) {
+        umbracoCmsIntegrationsPimInriverResource.getEntitySummary(entityId).then(function (response) {
+            if (response.success) {
+                vm.selectedEntity = response.data;
 
-    //vm.removeForm = function () {
-    //    $scope.model.value = null;
-    //    vm.selectedForm = {};
-    //}
+                vm.selectedEntity.detail = $scope.model.config.configuration.displayFieldTypeIds.join(",");
+            }
+        });
+    }
 
 }
 

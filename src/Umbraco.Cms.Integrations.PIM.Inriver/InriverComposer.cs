@@ -23,7 +23,7 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver
                         .Add("X-inRiver-APIKey", builder.Config.GetSection(Constants.SettingsPath)[nameof(InriverSettings.ApiKey)]);
                 });
 
-            builder.Services.AddScoped<IInriverService, InriverService>();
+            builder.Services.AddSingleton<IInriverService, InriverService>();
         }
     }
 }

@@ -27,6 +27,10 @@
             }
         });
     }
+
+    vm.save = function (entityId) {
+        $scope.model.save(entityId);
+    }
 }
 
 angular.module("umbraco")

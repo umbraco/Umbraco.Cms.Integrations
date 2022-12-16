@@ -1,9 +1,19 @@
 ﻿<div ng-controller="Umbraco.Cms.Integrations.PIM.Inriver.EntityPickerController as vm">
-    <a class="umb-node-preview-add"
-       ng-click="vm.openInriverEntityPickerOverlay()"
-       prevent-default>
-        <localize key="general_add">Add</localize>
-    </a>
+    <div ng-if="vm.selectedEntity !== null" style="max-width: 800px;">
+        <uui-ref-node name="{{vm.selectedEntity.displayName}}"
+                      detail="{{vm.selectedEntity.detail}}">
+            <uui-action-bar slot="actions">
+                <uui-button label="Remove" ng-click="vm.removeEntity()">Remove</uui-button>
+            </uui-action-bar>
+        </uui-ref-node>
+    </div>
+    <div ng-if="vm.selectedEntity === null">
+        <a class="umb-node-preview-add"
+           ng-click="vm.openInriverEntityPickerOverlay()"
+           prevent-default>
+            <localize key="general_add">Add</localize>
+        </a>
+    </div>
     <div ng-if="vm.error" class="alert alert-warning mt2" style="max-width: 800px;">
         {{ vm.error }}
     </div>

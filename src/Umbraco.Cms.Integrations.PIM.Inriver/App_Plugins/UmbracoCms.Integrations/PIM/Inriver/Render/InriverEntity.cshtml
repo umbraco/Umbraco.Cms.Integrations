@@ -1,0 +1,13 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Integrations.PIM.Inriver.Models.ViewModels.InriverEntityViewModel>
+
+<p>@Model.DisplayName</p>
+<p>@Model.DisplayDescription</p>
+@if(Model.Fields.Any())
+{
+    <ul>
+        @foreach(var field in Model.Fields)
+        {
+            <li><b>@field.Key</b>: @field.Value</li>
+        }
+    </ul>
+}
