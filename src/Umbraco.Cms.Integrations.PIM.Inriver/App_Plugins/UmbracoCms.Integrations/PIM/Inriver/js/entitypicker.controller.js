@@ -4,11 +4,20 @@
 
     vm.selectedEntity = null;
     vm.error = "";
+    vm.configuration = $scope.model.config.configuration;
 
     umbracoCmsIntegrationsPimInriverResource.checkApiAccess().then(function (response) {
         if (response.failure) 
             vm.error = response.data;
     });
+    
+    if (vm.configuration.entityType == undefined
+        || vm.configuration.entityType.length == 0
+        || vm.configuration.displayFieldTypeIds == null
+        || vm.configuration.displayFieldTypeIds.length == 0) {
+        vm.error = "Invalid Inriver configuration";
+        return;
+    }
 
     if ($scope.model.value) {
         getEntitySummary($scope.model.value.entityId);

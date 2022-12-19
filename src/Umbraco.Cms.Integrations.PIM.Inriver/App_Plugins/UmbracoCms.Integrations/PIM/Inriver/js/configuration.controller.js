@@ -1,4 +1,4 @@
-﻿function configurationController($scope, umbracoCmsIntegrationsPimInriverService, umbracoCmsIntegrationsPimInriverResource) {
+﻿function configurationController($scope, notificationsService, umbracoCmsIntegrationsPimInriverService, umbracoCmsIntegrationsPimInriverResource) {
     var vm = this;
 
     const selEntityTypes = document.getElementById("selEntityTypes");
@@ -11,7 +11,13 @@
     vm.selectedEntityType = {};
     vm.selectedFieldTypes = [];
 
-    console.log($scope.model.value);
+    vm.showToast = showToast;
+
+    //vm.showToast({
+    //    color: 'danger',
+    //    headline: 'Algolia',
+    //    message: 'Index name and content schema are required.'
+    //});
 
     if ($scope.model.value == null) {
         $scope.model.value = {
@@ -19,9 +25,17 @@
             displayFieldTypeIds: []
         };
     }
-    $scope.$on('formSubmitting', function () {
-        $scope.model.value.entityType = vm.selectedEntityType.value;
-        $scope.model.value.displayFieldTypeIds = vm.selectedFieldTypes;
+    $scope.$on('formSubmitting', function (ev) {
+        if (vm.selectedEntityType != undefined
+            || vm.selectedEntityType.value.length == 0
+            || vm.selectedFieldTypes.length == 0) {
+            notificationsService.error("Inriver", "Entity type and display fields are required. Configuration was not saved.");
+            ev.preventDefault();
+            return;
+        } else {
+            $scope.model.value.entityType = vm.selectedEntityType.value;
+            $scope.model.value.displayFieldTypeIds = vm.selectedFieldTypes;
+        }
     });
 
     vm.entityTypeChange = function () {
@@ -54,7 +68,8 @@
                     return option;
                 });
 
-                vm.selectedFieldTypes = $scope.model.value.displayFieldTypeIds;
+                if ($scope.model.value.displayFieldTypeIds != null)
+                    vm.selectedFieldTypes = $scope.model.value.displayFieldTypeIds;
 
                 bindValues();
             });
@@ -75,10 +90,36 @@
         selEntityTypes.options = vm.entityTypes;
         vm.fieldTypes = vm.selectedEntityType.fieldTypes;
 
-        $scope.model.value.displayFieldTypeIds.forEach(fieldTypeId => {
-            umbracoCmsIntegrationsPimInriverService.waitForElement("#tr" + fieldTypeId)
-                .then(element => element.setAttribute("selected", ""));
-        });
+        if ($scope.model.value.displayFieldTypeIds != null) {
+            $scope.model.value.displayFieldTypeIds.forEach(fieldTypeId => {
+                umbracoCmsIntegrationsPimInriverService.waitForElement("#tr" + fieldTypeId)
+                    .then(element => element.setAttribute("selected", ""));
+            });
+        }
+    }
+
+    /* Toast Config properties:
+     *  color
+     *  headline
+     *  message
+     */
+    function showToast(config) {
+        const con = document.querySelector('uui-toast-notification-container');
+
+        const toast = document.createElement('uui-toast-notification');
+        toast.color = config.color;
+
+        const toastLayout = document.createElement('uui-toast-notification-layout');
+        toastLayout.headline = config.headline;
+        toast.appendChild(toastLayout);
+
+        const messageEl = document.createElement('span');
+        messageEl.innerHTML = config.message;
+        toastLayout.appendChild(messageEl);
+
+        if (con) {
+            con.appendChild(toast);
+        }
     }
 
     /**

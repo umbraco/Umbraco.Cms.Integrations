@@ -1,9 +1,13 @@
 ﻿.inriver-container {
     margin: 20px;
-    /*position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);*/
+}
+
+.inriver-toast {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    padding: var(--uui-size-layout-4);
 }
 
 #editorDialog {
