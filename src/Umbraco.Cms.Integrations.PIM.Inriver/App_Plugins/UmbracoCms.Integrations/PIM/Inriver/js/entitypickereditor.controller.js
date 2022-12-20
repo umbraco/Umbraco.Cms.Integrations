@@ -2,11 +2,13 @@
 
     var vm = this;
 
+    vm.loading = false;
     vm.entities = [];
 
     query($scope.model.configuration.entityType);
 
     function query(entityTypeId) {
+        vm.loading = true;
         umbracoCmsIntegrationsPimInriverResource.query(entityTypeId).then(function (response) {
             if (response.success) {
                 vm.entities = [];
@@ -25,6 +27,8 @@
                     });
                 }
             }
+
+            vm.loading = false;
         });
     }
 

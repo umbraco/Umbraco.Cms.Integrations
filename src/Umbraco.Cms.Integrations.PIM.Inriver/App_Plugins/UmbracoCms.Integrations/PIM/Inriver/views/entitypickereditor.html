@@ -1,4 +1,6 @@
 ﻿<div ng-controller="Umbraco.Cms.Integrations.PIM.Inriver.EntityPickerEditorController as vm">
+    <umb-load-indicator ng-if="vm.loading">
+    </umb-load-indicator>
     <uui-box headline="{{model.title}}" class="inriver-container">
         <div style="width:60%">
             <uui-form>
