@@ -21,10 +21,6 @@
                         <uui-table class="uui-text">
                             <uui-table-column style="width: 60px;"></uui-table-column>
                             <uui-table-head>
-                                <!--<uui-table-head-cell style="--uui-table-cell-padding: 0">
-                                    <uui-checkbox style="padding: var(--uui-size-4) var(--uui-size-5);"
-                                                  ng-click="vm.selectFieldTypes()"></uui-checkbox>
-                                </uui-table-head-cell>-->
                                 <uui-table-head-cell>Id</uui-table-head-cell>
                                 <uui-table-head-cell>Name</uui-table-head-cell>
                             </uui-table-head>
@@ -33,10 +29,6 @@
                                            ng-repeat="fieldType in vm.fieldTypes" selectable
                                            ng-on-selected="vm.selectFieldType(fieldType.fieldTypeId)"
                                            ng-on-unselected="vm.unselectFieldType(fieldType.fieldTypeId)">
-                                <!--<uui-table-cell>
-                                    <uui-checkbox id="chk{{fieldType.fieldTypeId}}" ng-on-click="vm.selectFieldType(fieldType.fieldTypeId)">
-                                    </uui-checkbox>
-                                </uui-table-cell>-->
                                 <uui-table-cell>{{fieldType.fieldTypeId}}</uui-table-cell>
                                 <uui-table-cell>{{fieldType.fieldTypeDisplayName}}</uui-table-cell>
                             </uui-table-row>

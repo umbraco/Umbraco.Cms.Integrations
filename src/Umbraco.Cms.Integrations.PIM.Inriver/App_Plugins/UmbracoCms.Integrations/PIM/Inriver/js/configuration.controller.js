@@ -13,12 +13,6 @@
 
     vm.showToast = showToast;
 
-    //vm.showToast({
-    //    color: 'danger',
-    //    headline: 'Algolia',
-    //    message: 'Index name and content schema are required.'
-    //});
-
     if ($scope.model.value == null) {
         $scope.model.value = {
             entityType: '',
@@ -26,7 +20,7 @@
         };
     }
     $scope.$on('formSubmitting', function (ev) {
-        if (vm.selectedEntityType != undefined
+        if (vm.selectedEntityType == undefined
             || vm.selectedEntityType.value.length == 0
             || vm.selectedFieldTypes.length == 0) {
             notificationsService.error("Inriver", "Entity type and display fields are required. Configuration was not saved.");
@@ -96,71 +90,6 @@
                     .then(element => element.setAttribute("selected", ""));
             });
         }
-    }
-
-    /* Toast Config properties:
-     *  color
-     *  headline
-     *  message
-     */
-    function showToast(config) {
-        const con = document.querySelector('uui-toast-notification-container');
-
-        const toast = document.createElement('uui-toast-notification');
-        toast.color = config.color;
-
-        const toastLayout = document.createElement('uui-toast-notification-layout');
-        toastLayout.headline = config.headline;
-        toast.appendChild(toastLayout);
-
-        const messageEl = document.createElement('span');
-        messageEl.innerHTML = config.message;
-        toastLayout.appendChild(messageEl);
-
-        if (con) {
-            con.appendChild(toast);
-        }
-    }
-
-    /**
-     * toggle rows selection with uui-checkbox - prototype
-     * */
-    vm._selectFieldType = function (fieldTypeId) {
-        var fieldTypeIndex = vm.selectedFieldTypes.indexOf(fieldTypeId);
-        if (fieldTypeIndex == -1) {
-            vm.selectedFieldTypes.push(fieldTypeId);
-            document.getElementById('chk' + fieldTypeId).setAttribute('checked', '');
-        }
-        else {
-            document.getElementById('chk' + fieldTypeId).removeAttribute('checked');
-            vm.selectedFieldTypes = vm.selectedFieldTypes.splice(fieldTypeIndex, 1);
-        }
-    }
-
-    vm._selectFieldTypes = function () {
-        const selectAll = vm.selectedFieldTypes.length == 0;
-
-        vm.selectedFieldTypes = [];
-
-        console.log('select all', selectAll);
-        if (selectAll == true) {
-            vm.selectedFieldTypes = vm.fieldTypes.map(obj => obj.fieldTypeId);
-            var elements = document.querySelectorAll("uui-checkbox");
-            for (var i = 0; i < elements.length; i++) {
-                elements[i].setAttribute("checked", "");
-            }
-        }
-        else {
-            var elements = document.querySelectorAll("uui-checkbox");
-            for (var i = 0; i < elements.length; i++) {
-                elements[i].removeAttribute("checked");
-            }
-        }
-
-        vm.fieldTypes = vm.fieldTypes.map(obj => {
-            obj.selected = selectAll;
-            return obj;
-        });
     }
 }
 
