@@ -69,9 +69,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Algolia", "Algolia", "{F2CA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Search.Algolia", "Umbraco.Cms.Integrations.Search.Algolia\Umbraco.Cms.Integrations.Search.Algolia.csproj", "{54A624E5-5321-4CC8-B74B-11ABF3605242}"
 EndProject
+<<<<<<< HEAD
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PIM", "PIM", "{B5D14B4B-0E39-4C01-9021-D9A75F358DE1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.PIM.Inriver", "Umbraco.Cms.Integrations.PIM.Inriver\Umbraco.Cms.Integrations.PIM.Inriver.csproj", "{904B3CF6-1015-465E-8244-70FC90466F22}"
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Testsite.V11", "Umbraco.Cms.Integrations.Testsite.V11\Umbraco.Cms.Integrations.Testsite.V11.csproj", "{C3A51214-F058-4864-B0B2-4F788383A5EC}"
+>>>>>>> main
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,10 +139,17 @@ Global
 		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{904B3CF6-1015-465E-8244-70FC90466F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{904B3CF6-1015-465E-8244-70FC90466F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{904B3CF6-1015-465E-8244-70FC90466F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{904B3CF6-1015-465E-8244-70FC90466F22}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{C3A51214-F058-4864-B0B2-4F788383A5EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3A51214-F058-4864-B0B2-4F788383A5EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3A51214-F058-4864-B0B2-4F788383A5EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3A51214-F058-4864-B0B2-4F788383A5EC}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> main
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

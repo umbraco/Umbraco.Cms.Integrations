@@ -7,6 +7,8 @@ This integration provides a form picker and rendering component for forms manage
 Required minimum versions of Umbraco CMS: 
 - 8.5.4 for version 8
 - 9.0.1 for version 9
+- 10.0.0 for version 10
+- 11.0.0 for version 11
 
 ## How To Use
 

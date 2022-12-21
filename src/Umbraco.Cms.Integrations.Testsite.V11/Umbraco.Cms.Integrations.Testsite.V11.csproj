@@ -1,0 +1,80 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\css\styles.css">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\formpicker.controller.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\hubspot.resource.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\hubspot.service.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\hubspotauthorization.directive.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\js\settings.controller.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\package.manifest">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\Render\HubspotForm.cshtml">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\Render\HubspotFormV9.cshtml">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\formpicker.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\formpickereditor.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\views\settings.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Umbraco.Cms" Version="11.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Opt-in to app-local ICU to ensure consistent globalization APIs across different platforms -->
+    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="68.2.0.9" />
+    <ProjectReference Include="..\Umbraco.Cms.Integrations.Crm.Hubspot\Umbraco.Cms.Integrations.Crm.Hubspot.csproj" />
+    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="68.2.0.9" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Razor files are needed for the backoffice to work correctly -->
+    <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Remove RazorCompileOnBuild and RazorCompileOnPublish when not using ModelsMode InMemoryAuto -->
+    <RazorCompileOnBuild>false</RazorCompileOnBuild>
+    <RazorCompileOnPublish>false</RazorCompileOnPublish>
+  </PropertyGroup>
+  
+</Project>
