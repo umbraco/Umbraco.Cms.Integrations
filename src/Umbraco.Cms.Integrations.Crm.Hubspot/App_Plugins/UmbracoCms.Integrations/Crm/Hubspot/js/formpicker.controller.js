@@ -69,7 +69,7 @@
                         
                         if (response.isExpired === true || response.isValid === false) {
                             vm.loading = false;
-                            notificationsService.warning("HubSpot API", "Unable to connect to HubSpot. Please review the settings of the form picker property's data type.");
+                            notificationsService.warning("HubSpot API", response.error);
                             return;
                         }
 
@@ -78,7 +78,7 @@
                             vm.hubspotFormsList = data.forms;
 
                             if (data.isValid === false || data.isExpired === true) {
-                                notificationsService.error("HubSpot API", "Unable to retrieve the list of forms from HubSpot. Please review the settings of the form picker property's data type.");
+                                notificationsService.error("HubSpot API", response.error);
                             } else
                                 vm.isConnected = true;
                         });
@@ -91,7 +91,7 @@
                         vm.hubspotFormsList = data.forms;
 
                         if (data.isValid === false || data.isExpired === true) {
-                            notificationsService.error("HubSpot API", "Invalid API key");
+                            notificationsService.error("HubSpot API", data.error);
                         } else
                             vm.isConnected = true;
                     });
