@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
+using System;
+
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
-using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
+using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Configuration;
 
-namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
+namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core
 {
     public class ActiveCampaignComposer : IComposer
     {

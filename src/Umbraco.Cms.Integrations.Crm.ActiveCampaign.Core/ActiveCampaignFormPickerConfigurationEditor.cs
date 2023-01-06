@@ -2,7 +2,7 @@
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Services;
 
-namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
+namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core
 {
     public class ActiveCampaignFormPickerConfigurationEditor : ConfigurationEditor<ActiveCampaignFormPickerConfiguration>
     {
