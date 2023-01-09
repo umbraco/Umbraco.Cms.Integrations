@@ -15,7 +15,14 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
             foreach (var property in content.Properties.Where(filter ?? (p => true)))
             {
                 if (!_record.Data.ContainsKey(property.Alias))
-                    _record.Data.Add(property.Alias, property.GetValue().ToString());
+                {
+                    string propValue = property.GetValue().ToString();
+                    if (property.GetValue() is IEnumerable<object> list)
+                    {
+                        propValue = string.Join(",", list.Select(p => p.ToString()));
+                    }
+                    _record.Data.Add(property.Alias, propValue);
+                }
             }
 
             return this;
@@ -28,7 +35,14 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
             foreach (var property in publishedContent.Properties.Where(filter ?? (p => true)))
             {
                 if (!_record.Data.ContainsKey(property.Alias) && property.HasValue())
-                    _record.Data.Add(property.Alias, property.GetValue().ToString());
+                {
+                    string propValue = property.GetValue().ToString();
+                    if (property.GetValue() is IEnumerable<object> list)
+                    {
+                        propValue = string.Join(",", list.Select(p => p.ToString()));
+                    }
+                    _record.Data.Add(property.Alias, propValue);
+                }
             }
 
             return this;
