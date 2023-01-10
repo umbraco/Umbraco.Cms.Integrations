@@ -1,5 +1,5 @@
 ﻿
-namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.Dtos
+namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Models.Dtos
 {
     public class ApiAccessDto
     {

@@ -1,5 +1,5 @@
 ﻿
-namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration
+namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Configuration
 {
     public class ActiveCampaignSettings
     {

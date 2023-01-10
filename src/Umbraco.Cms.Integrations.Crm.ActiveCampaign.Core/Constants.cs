@@ -1,5 +1,5 @@
 ﻿
-namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
+namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core
 {
     public class Constants
     {
