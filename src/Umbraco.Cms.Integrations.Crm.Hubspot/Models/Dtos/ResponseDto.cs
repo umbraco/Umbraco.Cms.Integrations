@@ -22,6 +22,9 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Models.Dtos
         [JsonProperty("isExpired")]
         public bool IsExpired { get; set; }
 
+        [JsonProperty("error")]
+        public string Error { get; set; }
+
         [JsonProperty("forms")]
         public List<HubspotFormDto> Forms { get; set; }
     }
