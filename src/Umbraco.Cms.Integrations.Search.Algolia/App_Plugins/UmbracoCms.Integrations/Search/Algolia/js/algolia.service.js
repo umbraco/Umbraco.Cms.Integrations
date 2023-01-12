@@ -1,17 +1,32 @@
 ﻿function algoliaService(contentTypeResource) {
     return {
         getContentTypes: function (callback) {
+
             contentTypeResource.getAll().then(function (data) {
-                callback(data.filter(item => item.parentId == -1 && !item.isElement).map((item) => {
-                    return {
-                        id: item.id,
-                        icon: item.icon,
-                        alias: item.alias,
-                        name: item.name,
-                        selected: false,
-                        allowRemove: false
+
+                var contentTypesArr = [];
+
+                for (let i = 0; i < data.length; i++) {
+                    
+                    if (data[i].isElement) continue;
+
+                    contentTypeResource.getWhereCompositionIsUsedInContentTypes(data[i].id).then(function (response) {
+                        if (response.length === 0) {
+                            contentTypesArr.push({
+                                id: data[i].id,
+                                icon: data[i].icon,
+                                alias: data[i].alias,
+                                name: data[i].name,
+                                selected: false,
+                                allowRemove: false
+                            });
+                        }
+                    });
+
+                    if (data.length - 1 === i) {
+                        callback(contentTypesArr);
                     }
-                }));
+                }
             });
         },
         getPropertiesByContentTypeId: function (contentTypeId, callback) {
