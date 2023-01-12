@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Umbraco.Cms.Integrations.PIM.Inriver.Models
 {
-    public class Entity
+    public class EntitySummary
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
@@ -14,8 +14,5 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Models
 
         [JsonPropertyName("description")]
         public string Description { get; set; }
-
-        [JsonPropertyName("fields")]
-        public IEnumerable<FieldValue> Fields { get; set; }
     }
 }

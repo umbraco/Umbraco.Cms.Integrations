@@ -13,19 +13,16 @@
                     return umbRequestHelper.resourcePromise(
                         $http.get(`${apiEndpoint}/GetEntityTypes`), "Failed to access resource.")
                 },
-                getEntitySummary: function (id) {
-                    return umbRequestHelper.resourcePromise(
-                        $http.get(`${apiEndpoint}/GetEntitySummary?id=${id}`), "Failed to access resource.")
-                },
-                getEntityFieldValues: function (id, fieldTypeIds) {
-                    return umbRequestHelper.resourcePromise(
-                        $http.get(`${apiEndpoint}/GetEntitySummary?id=${id}&fieldTypeIds=${fieldTypeIds}`), "Failed to access resource.")
-                },
-                query: function (entityTypeId) {
+                query: function (entityTypeId, fieldTypeIds) {
                     return umbRequestHelper.resourcePromise(
                         $http.post(`${apiEndpoint}/Query`, {
-                            entityTypeId: entityTypeId
+                            entityTypeId: entityTypeId,
+                            fieldTypeIds: fieldTypeIds
                         }), "Failed to access resource.")
+                },
+                fetchData: function (request) {
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(`${apiEndpoint}/FetchData`, request), "Failed to access resource.")
                 }
             };
         });

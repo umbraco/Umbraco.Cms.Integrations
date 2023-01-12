@@ -30,32 +30,34 @@ namespace Umbraco.Cms.Integrations.Pim.Inriver.Editors
                 return null;
             }
 
+            var vm = new InriverEntityViewModel();
+
             var node = JsonNode.Parse(source.ToString());
 
             int entityId = (int) node["entityId"];
 
             var displayFields = node["displayFields"] as JsonArray;
 
-            var entitySummary = _inriverService.GetEntitySummary(entityId).ConfigureAwait(false).GetAwaiter().GetResult();
+            //var entitySummary = _inriverService.GetEntitySummary(entityId).ConfigureAwait(false).GetAwaiter().GetResult();
 
-            if (entitySummary.Failure) return null;
+            //if (entitySummary.Failure) return null;
 
-            var vm = new InriverEntityViewModel
-            {
-                DisplayName = entitySummary.Data.DisplayName,
-                DisplayDescription = entitySummary.Data.Description
-            };
+            //var vm = new InriverEntityViewModel
+            //{
+            //    DisplayName = entitySummary.Data.DisplayName,
+            //    DisplayDescription = entitySummary.Data.Description
+            //};
 
-            var entityFieldValues = _inriverService.GetEntityFieldValues(entityId)
-                .ConfigureAwait(false).GetAwaiter().GetResult();
-            if (entityFieldValues.Failure) return vm;
+            //var entityFieldValues = _inriverService.GetEntityFieldValues(entityId)
+            //    .ConfigureAwait(false).GetAwaiter().GetResult();
+            //if (entityFieldValues.Failure) return vm;
 
-            foreach(var displayField in displayFields)
-            {
-                var field = entityFieldValues.Data.First(p => p.FieldTypeId == displayField.GetValue<string>());
+            //foreach(var displayField in displayFields)
+            //{
+            //    var field = entityFieldValues.Data.First(p => p.FieldTypeId == displayField.GetValue<string>());
 
-                vm.Fields.Add(field.FieldTypeId, field.Value);
-            }
+            //    vm.Fields.Add(field.FieldTypeId, field.Value);
+            //}
 
             return vm;
         }

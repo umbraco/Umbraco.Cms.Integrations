@@ -8,5 +8,7 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver
         public const string SettingsPath = "Umbraco:Cms:Integrations:PIM:Inriver:Settings";
 
         public const string InriverClient = "InriverClient";
+
+        public const string InriverFetchClient = "InriverFetchClient";
     }
 }

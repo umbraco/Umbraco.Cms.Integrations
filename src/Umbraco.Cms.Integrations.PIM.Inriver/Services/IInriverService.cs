@@ -6,10 +6,8 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Services
     {
         Task<ServiceResponse<IEnumerable<EntityType>>> GetEntityTypes();
 
+        Task<ServiceResponse<IEnumerable<EntityData>>> FetchData(FetchDataRequest request);
+
         Task<ServiceResponse<QueryResponse>> Query(QueryRequest request);
-
-        Task<ServiceResponse<Entity>> GetEntitySummary(int id);
-
-        Task<ServiceResponse<IEnumerable<FieldValue>>> GetEntityFieldValues(int id);
     }
 }

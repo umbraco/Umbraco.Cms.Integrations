@@ -2,9 +2,10 @@
     <umb-load-indicator ng-if="vm.loading">
     </umb-load-indicator>
     <uui-box headline="{{model.title}}" class="inriver-container">
-        <div style="width:60%">
+        <uui-scroll-container style="width:100%">
             <uui-form>
                 <uui-form-layout-item ng-if="vm.entities.length > 0">
+
                     <uui-table class="uui-text">
                         <uui-table-column style="width: 120px !important"></uui-table-column>
                         <uui-table-head>
@@ -14,14 +15,18 @@
                         </uui-table-head>
 
                         <uui-table-row ng-repeat="entity in vm.entities" selectable ng-on-selected="vm.save(entity.id)">
-                            <uui-table-cell style="width:30%;">{{entity.displayName}}</uui-table-cell>
+                            <uui-table-cell>{{entity.displayName}}</uui-table-cell>
                             <uui-table-cell>{{entity.description}}</uui-table-cell>
-                            <uui-table-cell ng-repeat="displayField in entity.displayFields">{{displayField.value}}</uui-table-cell>
+                            <uui-table-cell ng-repeat="displayField in entity.displayFields">
+                                {{displayField.value | date : "dd.MM.y HH:mm"}}
+                            </uui-table-cell>
                         </uui-table-row>
                     </uui-table>
+                    {{vm.pagination.totalPages}}
+                    <uui-pagination ng-on-change="alert('aaa')" total={{vm.pagination.totalPages}}></uui-pagination>
                 </uui-form-layout-item>
             </uui-form>
-        </div>
+        </uui-scroll-container>
     </uui-box>
     <umb-editor-footer>
         <umb-editor-footer-content-right>

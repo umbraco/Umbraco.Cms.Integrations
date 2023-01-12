@@ -51,7 +51,7 @@
             displayFields: $scope.model.config.configuration.displayFieldTypeIds
         });
 
-        getEntitySummary(entityId);
+        //getEntitySummary(entityId);
     }
 
     vm.removeEntity = function () {
@@ -59,15 +59,15 @@
         vm.selectedEntity = null;
     }
 
-    function getEntitySummary(entityId) {
-        umbracoCmsIntegrationsPimInriverResource.getEntitySummary(entityId).then(function (response) {
-            if (response.success) {
-                vm.selectedEntity = response.data;
+    //function getEntitySummary(entityId) {
+    //    umbracoCmsIntegrationsPimInriverResource.getEntitySummary(entityId).then(function (response) {
+    //        if (response.success) {
+    //            vm.selectedEntity = response.data;
 
-                vm.selectedEntity.detail = $scope.model.config.configuration.displayFieldTypeIds.join(",");
-            }
-        });
-    }
+    //            vm.selectedEntity.detail = $scope.model.config.configuration.displayFieldTypeIds.join(",");
+    //        }
+    //    });
+    //}
 
 }
 

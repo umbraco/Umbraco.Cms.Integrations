@@ -32,31 +32,21 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
         [HttpGet]
         public async Task<IActionResult> GetEntityTypes()
         {
-            var results = await _inriverService.GetEntityTypes();
+            var result = await _inriverService.GetEntityTypes();
 
-            return new JsonResult(results);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetEntitySummary(int id)
-        {
-            var results = await _inriverService.GetEntitySummary(id);
-            if(results.Success)
-            {
-                var fields = await _inriverService.GetEntityFieldValues(id);
-                if(fields.Success)
-                {
-                    results.Data.Fields = fields.Data;
-                }
-            }
-
-            return new JsonResult(results);
+            return new JsonResult(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> Query([FromBody] QueryRequest request)
         {
-            var results = await _inriverService.Query(new QueryRequest
+            var x = await _inriverService.FetchData(new FetchDataRequest
+            {
+                EntityIds = new int[] { 7,8,9},
+                FieldTypeIds = "TaskName,TaskDescription"
+            });
+
+            var result = await _inriverService.Query(new QueryRequest
             {
                 SystemCriteria = new List<Criterion>
                 {
@@ -64,7 +54,39 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
                 }
             });
 
-            return new JsonResult(results);
+            var dataResult = await _inriverService.FetchData(new FetchDataRequest
+            {
+                EntityIds = result.Data.EntityIds,
+                FieldTypeIds = request.FieldTypeIds
+            });
+
+            return new JsonResult(result);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> FetchData([FromBody] FetchDataRequest request)
+        {
+            var result = await _inriverService.FetchData(request);
+
+            return new JsonResult(result);
+        }
+
+        //[HttpGet]
+        //public async Task<IActionResult> GetEntitySummary(int id)
+        //{
+        //    var results = await _inriverService.GetEntitySummary(id);
+        //    if(results.Success)
+        //    {
+        //        var fields = await _inriverService.GetEntityFieldValues(id);
+        //        if(fields.Success)
+        //        {
+        //            results.Data.Fields = fields.Data;
+        //        }
+        //    }
+
+        //    return new JsonResult(results);
+        //}
+
+       
     }
 }

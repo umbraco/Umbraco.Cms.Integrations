@@ -11,21 +11,21 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Services
 
         public InriverService(IHttpClientFactory httpClientFactory)
         {
-            _httpClientFactory = httpClientFactory; 
+            _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<ServiceResponse<Entity>> GetEntitySummary(int id)
-        {
-            var client = _httpClientFactory.CreateClient(Constants.InriverClient);
+        //public async Task<ServiceResponse<Entity>> GetEntitySummary(int id)
+        //{
+        //    var client = _httpClientFactory.CreateClient(Constants.InriverClient);
 
-            var response = await client.GetAsync($"entities/{id}/summary");
+        //    var response = await client.GetAsync($"entities/{id}/summary");
 
-            var content = await response.Content.ReadAsStringAsync();
+        //    var content = await response.Content.ReadAsStringAsync();
 
-            return response.IsSuccessStatusCode
-                ? ServiceResponse<Entity>.Ok(JsonSerializer.Deserialize<Entity>(content))
-                : ServiceResponse<Entity>.Fail(content);
-        }
+        //    return response.IsSuccessStatusCode
+        //        ? ServiceResponse<Entity>.Ok(JsonSerializer.Deserialize<Entity>(content))
+        //        : ServiceResponse<Entity>.Fail(content);
+        //}
 
         public async Task<ServiceResponse<IEnumerable<EntityType>>> GetEntityTypes()
         {
@@ -40,31 +40,32 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Services
                 : ServiceResponse<IEnumerable<EntityType>>.Fail(content);
         }
 
+        public async Task<ServiceResponse<IEnumerable<EntityData>>> FetchData(FetchDataRequest request)
+        {
+            var client = _httpClientFactory.CreateClient(Constants.InriverFetchClient);
+
+            var response = await client.PostAsync("entities:fetchdata",
+                new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json"));
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            return response.IsSuccessStatusCode
+                ? ServiceResponse<IEnumerable<EntityData>>.Ok(JsonSerializer.Deserialize<IEnumerable<EntityData>>(content))
+                : ServiceResponse<IEnumerable<EntityData>>.Fail(content);
+        }
+
         public async Task<ServiceResponse<QueryResponse>> Query(QueryRequest request)
         {
             var client = _httpClientFactory.CreateClient(Constants.InriverClient);
 
-            var response = await client.PostAsync("query", new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json"));
+            var response = await client.PostAsync("query",
+                new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json"));
 
             var content = await response.Content.ReadAsStringAsync();
 
             return response.IsSuccessStatusCode
                 ? ServiceResponse<QueryResponse>.Ok(JsonSerializer.Deserialize<QueryResponse>(content))
                 : ServiceResponse<QueryResponse>.Fail(content);
-        }
-
-        public async Task<ServiceResponse<IEnumerable<FieldValue>>> GetEntityFieldValues(int id)
-        {
-            var client = _httpClientFactory.CreateClient(Constants.InriverClient);
-
-            var response = await client.GetAsync($"entities/{id}/fieldValues");
-
-            var content = await response.Content.ReadAsStringAsync();
-
-            return response.IsSuccessStatusCode
-               ? ServiceResponse<IEnumerable<FieldValue>>.Ok(JsonSerializer.Deserialize<IEnumerable<FieldValue>>(content))
-               : ServiceResponse<IEnumerable<FieldValue>>.Fail(content);
-
         }
     }
 }

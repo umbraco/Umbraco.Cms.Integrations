@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net60</TargetFrameworks>
+    <TargetFrameworks>net60;net70</TargetFrameworks>
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <WarningsAsErrors>Nullable</WarningsAsErrors>
   </PropertyGroup>
@@ -21,8 +21,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="10.3.0" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="10.3.0" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[10.3.0,12)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[10.3.0,12)" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -42,7 +42,7 @@
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</Content>
 	</ItemGroup>
-	
+
 	<ItemGroup>
 		<Content Include="inriver.png">
 			<Pack>true</Pack>
