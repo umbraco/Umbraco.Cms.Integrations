@@ -10,23 +10,17 @@
                     
                     if (data[i].isElement) continue;
 
-                    contentTypeResource.getWhereCompositionIsUsedInContentTypes(data[i].id).then(function (response) {
-                        if (response.length === 0) {
-                            contentTypesArr.push({
-                                id: data[i].id,
-                                icon: data[i].icon,
-                                alias: data[i].alias,
-                                name: data[i].name,
-                                selected: false,
-                                allowRemove: false
-                            });
-                        }
+                    contentTypesArr.push({
+                        id: data[i].id,
+                        icon: data[i].icon,
+                        alias: data[i].alias,
+                        name: data[i].name,
+                        selected: false,
+                        allowRemove: false
                     });
-
-                    if (data.length - 1 === i) {
-                        callback(contentTypesArr);
-                    }
                 }
+
+                callback(contentTypesArr);
             });
         },
         getPropertiesByContentTypeId: function (contentTypeId, callback) {
