@@ -40,12 +40,6 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
         [HttpPost]
         public async Task<IActionResult> Query([FromBody] QueryRequest request)
         {
-            var x = await _inriverService.FetchData(new FetchDataRequest
-            {
-                EntityIds = new int[] { 7,8,9},
-                FieldTypeIds = "TaskName,TaskDescription"
-            });
-
             var result = await _inriverService.Query(new QueryRequest
             {
                 SystemCriteria = new List<Criterion>
@@ -54,13 +48,97 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
                 }
             });
 
-            var dataResult = await _inriverService.FetchData(new FetchDataRequest
+            if(result.Failure) return new JsonResult(ServiceResponse<IEnumerable<EntityData>>.Fail(result.Error));
+
+            var data = await _inriverService.FetchData(new FetchDataRequest
             {
                 EntityIds = result.Data.EntityIds,
                 FieldTypeIds = request.FieldTypeIds
             });
 
-            return new JsonResult(result);
+            var dataResult = new List<EntityData>
+            {
+                new EntityData { 
+                    EntityId = 7, 
+                    Summary = new EntitySummary{ DisplayName = "Task1" , Description = "This is my task"} ,
+                    Fields = new List<FieldValue>
+                    {
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" }
+                    }
+                },
+                new EntityData {
+                    EntityId = 7,
+                    Summary = new EntitySummary{ DisplayName = "Task2" , Description = "This is my task"} ,
+                    Fields = new List<FieldValue>
+                    {
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" }
+                    }
+                },
+                new EntityData {
+                    EntityId = 7,
+                    Summary = new EntitySummary{ DisplayName = "Task3" , Description = "This is my task"} ,
+                    Fields = new List<FieldValue>
+                    {
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" }
+                    }
+                },
+                new EntityData {
+                    EntityId = 7,
+                    Summary = new EntitySummary{ DisplayName = "Task4" , Description = "This is my task"} ,
+                    Fields = new List<FieldValue>
+                    {
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" }
+                    }
+                },
+                new EntityData {
+                    EntityId = 7,
+                    Summary = new EntitySummary{ DisplayName = "Task5" , Description = "This is my task"} ,
+                    Fields = new List<FieldValue>
+                    {
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" }
+                    }
+                },
+                new EntityData {
+                    EntityId = 7,
+                    Summary = new EntitySummary{ DisplayName = "Task6" , Description = "This is my task"} ,
+                    Fields = new List<FieldValue>
+                    {
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" }
+                    }
+                },
+                new EntityData {
+                    EntityId = 7,
+                    Summary = new EntitySummary{ DisplayName = "Task7" , Description = "This is my task"} ,
+                    Fields = new List<FieldValue>
+                    {
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" },
+                        new FieldValue { FieldTypeId = "Test", Value = "Task" }
+                    }
+                }
+
+            };
+
+            return new JsonResult(ServiceResponse<IEnumerable<EntityData>>.Ok(dataResult));
         }
 
         [HttpPost]
@@ -70,23 +148,5 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
 
             return new JsonResult(result);
         }
-
-        //[HttpGet]
-        //public async Task<IActionResult> GetEntitySummary(int id)
-        //{
-        //    var results = await _inriverService.GetEntitySummary(id);
-        //    if(results.Success)
-        //    {
-        //        var fields = await _inriverService.GetEntityFieldValues(id);
-        //        if(fields.Success)
-        //        {
-        //            results.Data.Fields = fields.Data;
-        //        }
-        //    }
-
-        //    return new JsonResult(results);
-        //}
-
-       
     }
 }

@@ -18,3 +18,14 @@
     transform: translate(-70%,-70%);
     z-index: 1;
 }
+
+.inriver-center {
+    display: block;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+
+.inriver-search {
+    width:70%;
+}

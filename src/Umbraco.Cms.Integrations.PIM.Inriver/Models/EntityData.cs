@@ -10,7 +10,7 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Models
         [JsonPropertyName("summary")]
         public EntitySummary Summary { get; set; }
 
-        [JsonPropertyName("fields")]
+        [JsonPropertyName("fieldValues")]
         public IEnumerable<FieldValue> Fields { get; set; }
     }
 }

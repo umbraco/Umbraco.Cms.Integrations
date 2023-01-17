@@ -3,6 +3,7 @@ using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 
 using Umbraco.Cms.Integrations.PIM.Inriver;
+using Umbraco.Cms.Integrations.PIM.Inriver.Models;
 using Umbraco.Cms.Integrations.PIM.Inriver.Models.ViewModels;
 using Umbraco.Cms.Integrations.PIM.Inriver.Services;
 
@@ -30,34 +31,29 @@ namespace Umbraco.Cms.Integrations.Pim.Inriver.Editors
                 return null;
             }
 
-            var vm = new InriverEntityViewModel();
-
             var node = JsonNode.Parse(source.ToString());
 
             int entityId = (int) node["entityId"];
 
             var displayFields = node["displayFields"] as JsonArray;
 
-            //var entitySummary = _inriverService.GetEntitySummary(entityId).ConfigureAwait(false).GetAwaiter().GetResult();
+            var fetchDataResponse = _inriverService.FetchData(new FetchDataRequest
+            {
+                EntityIds = new[] { entityId },
+                FieldTypeIds = string.Join(",", displayFields.Select(p => p.GetValue<string>()))
+            }).ConfigureAwait(false).GetAwaiter().GetResult();
 
-            //if (entitySummary.Failure) return null;
+            if (fetchDataResponse.Failure) return null;
 
-            //var vm = new InriverEntityViewModel
-            //{
-            //    DisplayName = entitySummary.Data.DisplayName,
-            //    DisplayDescription = entitySummary.Data.Description
-            //};
+            var entityData = fetchDataResponse.Data.FirstOrDefault();
+            if (entityData == null) return null;
 
-            //var entityFieldValues = _inriverService.GetEntityFieldValues(entityId)
-            //    .ConfigureAwait(false).GetAwaiter().GetResult();
-            //if (entityFieldValues.Failure) return vm;
-
-            //foreach(var displayField in displayFields)
-            //{
-            //    var field = entityFieldValues.Data.First(p => p.FieldTypeId == displayField.GetValue<string>());
-
-            //    vm.Fields.Add(field.FieldTypeId, field.Value);
-            //}
+            var vm = new InriverEntityViewModel
+            {
+                DisplayName = entityData.Summary.DisplayName,
+                DisplayDescription = entityData.Summary.Description,
+                Fields = entityData.Fields.ToDictionary(x => x.FieldTypeId, x => x.Value)                
+            };
 
             return vm;
         }

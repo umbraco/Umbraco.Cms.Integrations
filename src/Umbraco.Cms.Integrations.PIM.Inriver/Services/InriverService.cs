@@ -14,24 +14,11 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        //public async Task<ServiceResponse<Entity>> GetEntitySummary(int id)
-        //{
-        //    var client = _httpClientFactory.CreateClient(Constants.InriverClient);
-
-        //    var response = await client.GetAsync($"entities/{id}/summary");
-
-        //    var content = await response.Content.ReadAsStringAsync();
-
-        //    return response.IsSuccessStatusCode
-        //        ? ServiceResponse<Entity>.Ok(JsonSerializer.Deserialize<Entity>(content))
-        //        : ServiceResponse<Entity>.Fail(content);
-        //}
-
         public async Task<ServiceResponse<IEnumerable<EntityType>>> GetEntityTypes()
         {
             var client = _httpClientFactory.CreateClient(Constants.InriverClient);
 
-            var response = await client.GetAsync("model/entitytypes");
+            var response = await client.GetAsync("api/v1.0.0/model/entitytypes");
 
             var content = await response.Content.ReadAsStringAsync();
 
@@ -42,9 +29,9 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Services
 
         public async Task<ServiceResponse<IEnumerable<EntityData>>> FetchData(FetchDataRequest request)
         {
-            var client = _httpClientFactory.CreateClient(Constants.InriverFetchClient);
+            var client = _httpClientFactory.CreateClient(Constants.InriverClient);
 
-            var response = await client.PostAsync("entities:fetchdata",
+            var response = await client.PostAsync("api/v1.0.1/entities:fetchdata",
                 new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json"));
 
             var content = await response.Content.ReadAsStringAsync();
@@ -58,7 +45,7 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Services
         {
             var client = _httpClientFactory.CreateClient(Constants.InriverClient);
 
-            var response = await client.PostAsync("query",
+            var response = await client.PostAsync("api/v1.0.0/query",
                 new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json"));
 
             var content = await response.Content.ReadAsStringAsync();

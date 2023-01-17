@@ -2,19 +2,28 @@
     <umb-load-indicator ng-if="vm.loading">
     </umb-load-indicator>
     <uui-box headline="{{model.title}}" class="inriver-container">
-        <uui-scroll-container style="width:100%">
-            <uui-form>
-                <uui-form-layout-item ng-if="vm.entities.length > 0">
-
+        <div>
+            <uui-icon-registry-essential>
+                <uui-input id="inSearch" class="inriver-search" label="search" placeholder="Enter a name to search...">
+                </uui-input>
+                <uui-button type="button" label="Search" look="primary" color="positive" ng-click="vm.search()">
+                    <uui-icon name="search"></uui-icon>
+                </uui-button>
+            </uui-icon-registry-essential>
+        </div>
+        <uui-scroll-container class="mt2" style="width:100%">
+            <uui-form ng-if="vm.filteredEntities.length > 0">
+                <uui-form-layout-item>
                     <uui-table class="uui-text">
                         <uui-table-column style="width: 120px !important"></uui-table-column>
                         <uui-table-head>
                             <uui-table-head-cell>Name</uui-table-head-cell>
                             <uui-table-head-cell>Description</uui-table-head-cell>
-                            <uui-table-head-cell ng-repeat="displayField in vm.entities[0].displayFields">{{displayField.fieldTypeId}}</uui-table-head-cell>
+                            <uui-table-head-cell ng-repeat="displayField in vm.filteredEntities[0].displayFields">{{displayField.fieldTypeId}}</uui-table-head-cell>
                         </uui-table-head>
 
-                        <uui-table-row ng-repeat="entity in vm.entities" selectable ng-on-selected="vm.save(entity.id)">
+                        <uui-table-row ng-repeat="entity in vm.filteredEntities" selectable
+                                       ng-on-selected="vm.save(entity.id)">
                             <uui-table-cell>{{entity.displayName}}</uui-table-cell>
                             <uui-table-cell>{{entity.description}}</uui-table-cell>
                             <uui-table-cell ng-repeat="displayField in entity.displayFields">
@@ -22,10 +31,11 @@
                             </uui-table-cell>
                         </uui-table-row>
                     </uui-table>
-                    {{vm.pagination.totalPages}}
-                    <uui-pagination ng-on-change="alert('aaa')" total={{vm.pagination.totalPages}}></uui-pagination>
                 </uui-form-layout-item>
             </uui-form>
+            <div ng-show="!vm.loading" class="inriver-center">
+                <uui-pagination></uui-pagination>
+            </div>
         </uui-scroll-container>
     </uui-box>
     <umb-editor-footer>
