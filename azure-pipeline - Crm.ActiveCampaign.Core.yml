@@ -14,14 +14,6 @@ steps:
 - task: NuGetToolInstaller@1
   displayName: 'Install NuGet'
 
-- task: VSBuild@1
-  displayName: 'Build Project'
-  inputs:
-    solution: '$(coreProject)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
 - task: DotNetCoreCLI@2
   displayName: 'NuGet Restore'
   inputs:
