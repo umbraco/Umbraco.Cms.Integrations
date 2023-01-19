@@ -7,6 +7,9 @@
     vm.filteredEntities = [];
     vm.searchTerm = "";
 
+    const inSearch = document.getElementById("inSearch");
+    const paginationCtrl = document.querySelector("uui-pagination");
+
     vm.pagination = {
         pageNumber: 1,
         itemsPerPage: 3,
@@ -15,36 +18,30 @@
 
     query();
 
-    function registerListeners() {
-        var paginationCtrl = document.querySelector("uui-pagination");
-        paginationCtrl.setAttribute("current", 1);
-        paginationCtrl.setAttribute("total", vm.pagination.totalPages);
-        paginationCtrl.addEventListener("change", function () {
-            vm.filteredEntities = vm.entities
-                .slice((paginationCtrl.current - 1) * vm.pagination.itemsPerPage, paginationCtrl.current * vm.pagination.itemsPerPage);
-        });
-
-        var inSearch = document.getElementById("inSearch");
-        inSearch.addEventListener("change", function () {
-            console.log(inSearch.value);
-        });
-    }
-
-    vm.search = search;
-    function search() {
-        var inSearch = document.getElementById("inSearch");
-        var paginationCtrl = document.querySelector("uui-pagination");
-
+    vm.search = () => {        
         if (inSearch.length == 0) return false;
 
         let filteredArr = vm.entities.filter(obj => obj.displayName.includes(inSearch.value));
         vm.filteredEntities = filteredArr
-                     .slice((paginationCtrl.current - 1) * vm.pagination.itemsPerPage, paginationCtrl.current * vm.pagination.itemsPerPage);
+            .slice((paginationCtrl.current - 1) * vm.pagination.itemsPerPage, paginationCtrl.current * vm.pagination.itemsPerPage);
+
         vm.pagination.totalPages = Math.ceil(filteredArr.length / vm.pagination.itemsPerPage);
 
-        console.log(vm.pagination.totalPages);
+        paginationCtrl.total = vm.pagination.totalPages;
 
-        paginationCtrl.setAttribute("total", vm.pagination.totalPages);
+        /**
+         * uui-pagination total property is not updating the pagination UI in version of the library lower than 11.0
+         * */
+        const umbracoVersionSplit = window.Umbraco.Sys.ServerVariables.application.version.split('.');
+        if (Number(umbracoVersionSplit[0]) === 10) {
+            let visiblePagesArr = [];
+            for (var i = 0; i < vm.pagination.totalPages; i++) {
+                visiblePagesArr.push(i + 1);
+            }
+
+            paginationCtrl._visiblePages = visiblePagesArr;
+            paginationCtrl.requestUpdate();
+        }
     }
 
     function query() {
@@ -74,6 +71,15 @@
                 notificationsService.error("Inriver", response.error);
 
             vm.loading = false;
+        });
+    }
+
+    function registerListeners() {
+        paginationCtrl.setAttribute("current", 1);
+        paginationCtrl.setAttribute("total", vm.pagination.totalPages);
+        paginationCtrl.addEventListener("change", function () {
+            vm.filteredEntities = vm.entities
+                .slice((paginationCtrl.current - 1) * vm.pagination.itemsPerPage, paginationCtrl.current * vm.pagination.itemsPerPage);
         });
     }
 

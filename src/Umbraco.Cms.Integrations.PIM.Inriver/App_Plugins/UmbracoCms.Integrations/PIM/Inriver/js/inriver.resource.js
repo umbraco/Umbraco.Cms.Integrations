@@ -23,6 +23,10 @@
                 fetchData: function (request) {
                     return umbRequestHelper.resourcePromise(
                         $http.post(`${apiEndpoint}/FetchData`, request), "Failed to access resource.")
+                },
+                fetchEntityData: function (entityId) {
+                    return umbRequestHelper.resourcePromise(
+                        $http.get(`${apiEndpoint}/FetchEntityData?entityId=${entityId}`), "Failed to access resource.")
                 }
             };
         });

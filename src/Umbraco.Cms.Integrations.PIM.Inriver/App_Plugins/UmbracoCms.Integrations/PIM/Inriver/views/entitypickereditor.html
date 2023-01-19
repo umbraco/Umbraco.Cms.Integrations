@@ -4,11 +4,11 @@
     <uui-box headline="{{model.title}}" class="inriver-container">
         <div>
             <uui-icon-registry-essential>
-                <uui-input id="inSearch" class="inriver-search" label="search" placeholder="Enter a name to search...">
+                <uui-input id="inSearch" class="inriver-search" label="search" 
+                           ng-on-input="vm.search()" ng-model="vm.searchTerm"
+                           placeholder="Enter a name to search...">
+                    <uui-icon style="padding-left: 10px;" slot="prepend" name="search"></uui-icon>
                 </uui-input>
-                <uui-button type="button" label="Search" look="primary" color="positive" ng-click="vm.search()">
-                    <uui-icon name="search"></uui-icon>
-                </uui-button>
             </uui-icon-registry-essential>
         </div>
         <uui-scroll-container class="mt2" style="width:100%">

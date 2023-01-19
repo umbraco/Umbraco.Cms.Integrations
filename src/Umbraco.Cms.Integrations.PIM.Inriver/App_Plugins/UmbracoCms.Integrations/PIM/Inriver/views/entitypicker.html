@@ -1,6 +1,6 @@
 ﻿<div ng-controller="Umbraco.Cms.Integrations.PIM.Inriver.EntityPickerController as vm">
     <div ng-if="vm.selectedEntity !== null" style="max-width: 800px;">
-        <uui-ref-node name="{{vm.selectedEntity.displayName}}"
+        <uui-ref-node name="{{vm.selectedEntity.summary.displayName}}"
                       detail="{{vm.selectedEntity.detail}}">
             <uui-action-bar slot="actions">
                 <uui-button label="Remove" ng-click="vm.removeEntity()">Remove</uui-button>

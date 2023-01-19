@@ -1,4 +1,4 @@
-﻿function entityPickerController($scope, editorService, notificationsService, umbracoCmsIntegrationsPimInriverResource) {
+﻿function entityPickerController($scope, editorService, umbracoCmsIntegrationsPimInriverResource) {
 
     var vm = this;
 
@@ -20,7 +20,7 @@
     }
 
     if ($scope.model.value) {
-        getEntitySummary($scope.model.value.entityId);
+        getEntityData($scope.model.value.entityId);
     }
 
     vm.openInriverEntityPickerOverlay = function () {
@@ -51,7 +51,7 @@
             displayFields: $scope.model.config.configuration.displayFieldTypeIds
         });
 
-        //getEntitySummary(entityId);
+        getEntityData(entityId);
     }
 
     vm.removeEntity = function () {
@@ -59,15 +59,15 @@
         vm.selectedEntity = null;
     }
 
-    //function getEntitySummary(entityId) {
-    //    umbracoCmsIntegrationsPimInriverResource.getEntitySummary(entityId).then(function (response) {
-    //        if (response.success) {
-    //            vm.selectedEntity = response.data;
-
-    //            vm.selectedEntity.detail = $scope.model.config.configuration.displayFieldTypeIds.join(",");
-    //        }
-    //    });
-    //}
+    function getEntityData(entityId) {
+        umbracoCmsIntegrationsPimInriverResource.fetchEntityData(entityId).then(function (response) {
+            if (response.success) {
+                vm.selectedEntity = response.data[0];
+                vm.selectedEntity.detail = $scope.model.config.configuration.displayFieldTypeIds.join(",");
+            } else
+                vm.error = response.error;
+        });
+    }
 
 }
 
