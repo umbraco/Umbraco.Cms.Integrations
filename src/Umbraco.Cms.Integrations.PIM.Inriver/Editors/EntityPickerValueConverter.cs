@@ -40,7 +40,7 @@ namespace Umbraco.Cms.Integrations.Pim.Inriver.Editors
             var fetchDataResponse = _inriverService.FetchData(new FetchDataRequest
             {
                 EntityIds = new[] { entityId },
-                FieldTypeIds = string.Join(",", displayFields.Select(p => p.GetValue<string>()))
+                FieldTypeIds = string.Join(",", displayFields.Select(p => p["fieldTypeId"].GetValue<string>()))
             }).ConfigureAwait(false).GetAwaiter().GetResult();
 
             if (fetchDataResponse.Failure) return null;
@@ -52,7 +52,9 @@ namespace Umbraco.Cms.Integrations.Pim.Inriver.Editors
             {
                 DisplayName = entityData.Summary.DisplayName,
                 DisplayDescription = entityData.Summary.Description,
-                Fields = entityData.Fields.ToDictionary(x => x.FieldTypeId, x => x.Value)                
+                Fields = entityData.Fields.ToDictionary(
+                    x => displayFields.First(p => p["fieldTypeId"].GetValue<string>() == x.FieldTypeId)["fieldTypeDisplayName"].GetValue<string>(), 
+                    x => x.Value)                
             };
 
             return vm;

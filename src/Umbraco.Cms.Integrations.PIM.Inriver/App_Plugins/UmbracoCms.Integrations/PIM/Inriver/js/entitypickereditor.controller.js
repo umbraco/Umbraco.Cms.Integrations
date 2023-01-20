@@ -12,16 +12,16 @@
 
     vm.pagination = {
         pageNumber: 1,
-        itemsPerPage: 3,
+        itemsPerPage: 5,
         totalPages: 1
     };
 
     query();
 
-    vm.search = () => {        
+    vm.search = () => {
         if (inSearch.length == 0) return false;
 
-        let filteredArr = vm.entities.filter(obj => obj.displayName.includes(inSearch.value));
+        let filteredArr = vm.entities.filter(obj => obj.summary.displayName.includes(inSearch.value));
         vm.filteredEntities = filteredArr
             .slice((paginationCtrl.current - 1) * vm.pagination.itemsPerPage, paginationCtrl.current * vm.pagination.itemsPerPage);
 
@@ -47,19 +47,22 @@
     function query() {
 
         var entityTypeId = $scope.model.configuration.entityType;
-        var fieldTypeIds = $scope.model.configuration.displayFieldTypeIds.join(',');
+        var fieldTypes = $scope.model.configuration.fieldTypes;
 
         vm.loading = true;
-        umbracoCmsIntegrationsPimInriverResource.query(entityTypeId, fieldTypeIds).then(function (response) {
-
+        umbracoCmsIntegrationsPimInriverResource.query(entityTypeId, fieldTypes).then(function (response) {
             if (response.success) {
                 vm.entities = response.data.map(obj => {
                     return {
                         id: obj.entityId,
-                        displayName: obj.summary.displayName,
-                        description: obj.summary.description,
-                        displayFields: obj.fieldValues
-                    };
+                        summary: obj.summary,
+                        fields: obj.fieldValues.map(fieldObj => {
+                            return {
+                                fieldType: fieldTypes.find(fieldTypeObj => fieldTypeObj.fieldTypeId === fieldObj.fieldTypeId).fieldTypeDisplayName,
+                                value: fieldObj.value
+                            }
+                        })
+                    }
                 });
 
                 vm.pagination.totalPages = Math.ceil(vm.entities.length / vm.pagination.itemsPerPage);
@@ -67,6 +70,7 @@
                 vm.filteredEntities = vm.entities.slice(0, vm.pagination.itemsPerPage);
 
                 registerListeners();
+
             } else
                 notificationsService.error("Inriver", response.error);
 

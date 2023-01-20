@@ -19,15 +19,17 @@
                         <uui-table-head>
                             <uui-table-head-cell>Name</uui-table-head-cell>
                             <uui-table-head-cell>Description</uui-table-head-cell>
-                            <uui-table-head-cell ng-repeat="displayField in vm.filteredEntities[0].displayFields">{{displayField.fieldTypeId}}</uui-table-head-cell>
+                            <uui-table-head-cell ng-repeat="field in vm.filteredEntities[0].fields">
+                                {{field.fieldType}}
+                            </uui-table-head-cell>
                         </uui-table-head>
 
                         <uui-table-row ng-repeat="entity in vm.filteredEntities" selectable
                                        ng-on-selected="vm.save(entity.id)">
-                            <uui-table-cell>{{entity.displayName}}</uui-table-cell>
-                            <uui-table-cell>{{entity.description}}</uui-table-cell>
-                            <uui-table-cell ng-repeat="displayField in entity.displayFields">
-                                {{displayField.value | date : "dd.MM.y HH:mm"}}
+                            <uui-table-cell>{{entity.summary.displayName}}</uui-table-cell>
+                            <uui-table-cell>{{entity.summary.displayDescription}}</uui-table-cell>
+                            <uui-table-cell ng-repeat="field in entity.fields">
+                                {{field.value | date : "dd.MM.y HH:mm"}}
                             </uui-table-cell>
                         </uui-table-row>
                     </uui-table>

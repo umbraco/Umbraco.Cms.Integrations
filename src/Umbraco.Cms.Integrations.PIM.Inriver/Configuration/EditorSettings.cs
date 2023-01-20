@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 
+using Umbraco.Cms.Integrations.PIM.Inriver.Models;
+
 namespace Umbraco.Cms.Integrations.PIM.Inriver.Configuration
 {
     public class EditorSettings
@@ -7,7 +9,7 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Configuration
         [JsonProperty("entityType")]
         public string EntityType { get; set; } = string.Empty;
 
-        [JsonProperty("displayFieldTypeIds")]
-        public string[] DisplayFieldTypeIds { get; set; }
+        [JsonProperty("fieldTypes")]
+        public FieldType[] FieldTypes { get; set; }
     }
 }

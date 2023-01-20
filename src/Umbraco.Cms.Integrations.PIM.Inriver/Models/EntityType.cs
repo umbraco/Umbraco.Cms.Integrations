@@ -1,5 +1,4 @@
-﻿
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Umbraco.Cms.Integrations.PIM.Inriver.Models
 {

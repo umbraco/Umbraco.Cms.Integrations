@@ -53,7 +53,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
             var dataResult = await _inriverService.FetchData(new FetchDataRequest
             {
                 EntityIds = result.Data.EntityIds,
-                FieldTypeIds = request.FieldTypeIds
+                FieldTypeIds = string.Join(",", request.FieldTypes.Select(p => p.Id))
             });
 
             return new JsonResult(dataResult);

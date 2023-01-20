@@ -13,8 +13,8 @@
     
     if (vm.configuration.entityType == undefined
         || vm.configuration.entityType.length == 0
-        || vm.configuration.displayFieldTypeIds == null
-        || vm.configuration.displayFieldTypeIds.length == 0) {
+        || vm.configuration.fieldTypes == null
+        || vm.configuration.fieldTypes.length == 0) {
         vm.error = "Invalid Inriver configuration";
         return;
     }
@@ -25,11 +25,11 @@
 
     vm.openInriverEntityPickerOverlay = function () {
         var options = {
-            title: "Inriver Entities",
-            subtitle: "Select entity",
+            title: "Inriver " + $scope.model.config.configuration.entityType,
+            subtitle: "Select a " + $scope.model.config.configuration.entityType,
             configuration: {
                 entityType: $scope.model.config.configuration.entityType,
-                displayFieldTypeIds: $scope.model.config.configuration.displayFieldTypeIds
+                fieldTypes: $scope.model.config.configuration.fieldTypes
             },
             view: "/App_Plugins/UmbracoCms.Integrations/PIM/Inriver/views/entitypickereditor.html",
             size: "medium",
@@ -48,7 +48,7 @@
     vm.saveEntity = function (entityId) {
         $scope.model.value = JSON.stringify({
             entityId: entityId,
-            displayFields: $scope.model.config.configuration.displayFieldTypeIds
+            displayFields: $scope.model.config.configuration.fieldTypes
         });
 
         getEntityData(entityId);
@@ -63,7 +63,8 @@
         umbracoCmsIntegrationsPimInriverResource.fetchEntityData(entityId).then(function (response) {
             if (response.success) {
                 vm.selectedEntity = response.data[0];
-                vm.selectedEntity.detail = $scope.model.config.configuration.displayFieldTypeIds.join(",");
+                vm.selectedEntity.detail = $scope.model.config.configuration.fieldTypes
+                    .map(obj => obj.fieldTypeDisplayName).join(",");
             } else
                 vm.error = response.error;
         });

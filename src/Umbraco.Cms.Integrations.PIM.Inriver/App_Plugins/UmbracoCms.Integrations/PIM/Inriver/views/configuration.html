@@ -27,7 +27,7 @@
 
                             <uui-table-row id="tr{{fieldType.fieldTypeId}}"
                                            ng-repeat="fieldType in vm.fieldTypes" selectable
-                                           ng-on-selected="vm.selectFieldType(fieldType.fieldTypeId)"
+                                           ng-on-selected="vm.selectFieldType(fieldType)"
                                            ng-on-unselected="vm.unselectFieldType(fieldType.fieldTypeId)">
                                 <uui-table-cell>{{fieldType.fieldTypeId}}</uui-table-cell>
                                 <uui-table-cell>{{fieldType.fieldTypeDisplayName}}</uui-table-cell>
@@ -39,8 +39,3 @@
         </uui-card-content-node>
     </uui-icon-registry-essential>
 </div>
-
-
-<!-- Notifications -->
-<uui-toast-notification-container bottom-up="">
-</uui-toast-notification-container>

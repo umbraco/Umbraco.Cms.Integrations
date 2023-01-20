@@ -11,24 +11,22 @@
     vm.selectedEntityType = {};
     vm.selectedFieldTypes = [];
 
-    vm.showToast = showToast;
-
     if ($scope.model.value == null) {
         $scope.model.value = {
             entityType: '',
-            displayFieldTypeIds: []
+            fieldTypes: []
         };
     }
     $scope.$on('formSubmitting', function (ev) {
         if (vm.selectedEntityType == undefined
-            || vm.selectedEntityType.value.length == 0
+            || vm.selectedEntityType.length == 0
             || vm.selectedFieldTypes.length == 0) {
             notificationsService.error("Inriver", "Entity type and display fields are required. Configuration was not saved.");
             ev.preventDefault();
             return;
         } else {
             $scope.model.value.entityType = vm.selectedEntityType.value;
-            $scope.model.value.displayFieldTypeIds = vm.selectedFieldTypes;
+            $scope.model.value.fieldTypes = vm.selectedFieldTypes;
         }
     });
 
@@ -62,8 +60,8 @@
                     return option;
                 });
 
-                if ($scope.model.value.displayFieldTypeIds != null)
-                    vm.selectedFieldTypes = $scope.model.value.displayFieldTypeIds;
+                if ($scope.model.value.fieldTypes != null)
+                    vm.selectedFieldTypes = $scope.model.value.fieldTypes;
 
                 bindValues();
             });
@@ -72,21 +70,21 @@
     });
 
     // table rows selection
-    vm.selectFieldType = function (fieldTypeId) {
-        vm.selectedFieldTypes.push(fieldTypeId);
+    vm.selectFieldType = function (fieldType) {
+        vm.selectedFieldTypes.push(fieldType);
     }
 
     vm.unselectFieldType = function (fieldTypeId) {
-        vm.selectedFieldTypes = vm.selectedFieldTypes.filter(id => fieldTypeId != id);
+        vm.selectedFieldTypes = vm.selectedFieldTypes.filter(obj => obj.fieldTypeId != fieldTypeId);
     }
 
     function bindValues() {
         selEntityTypes.options = vm.entityTypes;
         vm.fieldTypes = vm.selectedEntityType.fieldTypes;
 
-        if ($scope.model.value.displayFieldTypeIds != null) {
-            $scope.model.value.displayFieldTypeIds.forEach(fieldTypeId => {
-                umbracoCmsIntegrationsPimInriverService.waitForElement("#tr" + fieldTypeId)
+        if ($scope.model.value.fieldTypes != null) {
+            $scope.model.value.fieldTypes.forEach(obj => {
+                umbracoCmsIntegrationsPimInriverService.waitForElement("#tr" + obj.fieldTypeId)
                     .then(element => element.setAttribute("selected", ""));
             });
         }

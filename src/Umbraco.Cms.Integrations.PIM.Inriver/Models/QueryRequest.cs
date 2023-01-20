@@ -8,9 +8,9 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string EntityTypeId { get; set; }
 
-        [JsonPropertyName("fieldTypeIds")]
+        [JsonPropertyName("fieldTypes")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public string FieldTypeIds { get; set; }
+        public FieldType[] FieldTypes { get; set; }
 
         [JsonPropertyName("systemCriteria")]
         public List<Criterion> SystemCriteria { get; set; }
