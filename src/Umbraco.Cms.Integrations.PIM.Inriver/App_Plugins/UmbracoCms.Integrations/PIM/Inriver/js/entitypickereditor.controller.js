@@ -59,7 +59,7 @@
                         fields: obj.fieldValues.map(fieldObj => {
                             return {
                                 fieldType: fieldTypes.find(fieldTypeObj => fieldTypeObj.fieldTypeId === fieldObj.fieldTypeId).fieldTypeDisplayName,
-                                value: fieldObj.value
+                                value: fieldObj.display
                             }
                         })
                     }

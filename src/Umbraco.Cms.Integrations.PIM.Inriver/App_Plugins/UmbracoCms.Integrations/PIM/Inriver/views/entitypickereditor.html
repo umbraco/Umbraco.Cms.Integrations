@@ -4,14 +4,14 @@
     <uui-box headline="{{model.title}}" class="inriver-container">
         <div>
             <uui-icon-registry-essential>
-                <uui-input id="inSearch" class="inriver-search" label="search" 
+                <uui-input id="inSearch" class="inriver-search" label="search"
                            ng-on-input="vm.search()" ng-model="vm.searchTerm"
                            placeholder="Enter a name to search...">
                     <uui-icon style="padding-left: 10px;" slot="prepend" name="search"></uui-icon>
                 </uui-input>
             </uui-icon-registry-essential>
         </div>
-        <uui-scroll-container class="mt2" style="width:100%">
+        <uui-scroll-container class="mt2" style="width:100%;height:600px;">
             <uui-form ng-if="vm.filteredEntities.length > 0">
                 <uui-form-layout-item>
                     <uui-table class="uui-text">
@@ -35,10 +35,10 @@
                     </uui-table>
                 </uui-form-layout-item>
             </uui-form>
-            <div ng-show="!vm.loading" class="inriver-center">
-                <uui-pagination></uui-pagination>
-            </div>
         </uui-scroll-container>
+        <div ng-show="!vm.loading" class="inriver-center">
+            <uui-pagination></uui-pagination>
+        </div>
     </uui-box>
     <umb-editor-footer>
         <umb-editor-footer-content-right>

@@ -5,7 +5,7 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Models.ViewModels
     {
         public InriverEntityViewModel()
         {
-            Fields = new Dictionary<string, string>();
+            Fields = new Dictionary<string, object>();
         }
 
         public int Id { get; set; }
@@ -14,6 +14,6 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Models.ViewModels
 
         public string DisplayDescription { get; set; }
 
-        public Dictionary<string, string> Fields { get; set; }
+        public Dictionary<string, object> Fields { get; set; }
     }
 }
