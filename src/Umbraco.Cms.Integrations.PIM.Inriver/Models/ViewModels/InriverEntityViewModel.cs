@@ -14,6 +14,8 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Models.ViewModels
 
         public string DisplayDescription { get; set; }
 
+        public string ResourceUrl { get; set; }
+
         public Dictionary<string, object> Fields { get; set; }
     }
 }

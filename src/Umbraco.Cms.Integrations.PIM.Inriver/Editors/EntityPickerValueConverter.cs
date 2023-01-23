@@ -52,6 +52,7 @@ namespace Umbraco.Cms.Integrations.Pim.Inriver.Editors
             {
                 DisplayName = entityData.Summary.DisplayName,
                 DisplayDescription = entityData.Summary.Description,
+                ResourceUrl = entityData.Summary.ResourceUrl,
                 Fields = entityData.Fields.ToDictionary(
                     x => displayFields.First(p => p["fieldTypeId"].GetValue<string>() == x.FieldTypeId)["fieldTypeDisplayName"].GetValue<string>(), 
                     x => x.Value)                

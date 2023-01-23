@@ -17,6 +17,7 @@
                     <uui-table class="uui-text">
                         <uui-table-column style="width: 120px !important"></uui-table-column>
                         <uui-table-head>
+                            <uui-table-head-cell></uui-table-head-cell>
                             <uui-table-head-cell>Name</uui-table-head-cell>
                             <uui-table-head-cell>Description</uui-table-head-cell>
                             <uui-table-head-cell ng-repeat="field in vm.filteredEntities[0].fields">
@@ -26,6 +27,9 @@
 
                         <uui-table-row ng-repeat="entity in vm.filteredEntities" selectable
                                        ng-on-selected="vm.save(entity.id)">
+                            <uui-table-cell>
+                                <img ng-if="entity.summary.resourceUrl.length > 0" ng-src="{{entity.summary.resourceUrl}}" width="100" />
+                            </uui-table-cell>
                             <uui-table-cell>{{entity.summary.displayName}}</uui-table-cell>
                             <uui-table-cell>{{entity.summary.displayDescription}}</uui-table-cell>
                             <uui-table-cell ng-repeat="field in entity.fields">

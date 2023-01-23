@@ -22,10 +22,13 @@
         if (inSearch.length == 0) return false;
 
         let filteredArr = vm.entities.filter(obj => obj.summary.displayName.includes(inSearch.value));
+
         vm.filteredEntities = filteredArr
             .slice((paginationCtrl.current - 1) * vm.pagination.itemsPerPage, paginationCtrl.current * vm.pagination.itemsPerPage);
 
         vm.pagination.totalPages = Math.ceil(filteredArr.length / vm.pagination.itemsPerPage);
+
+        paginationCtrl.style.display = vm.pagination.totalPages === 0 ? "none" : "block";
 
         paginationCtrl.total = vm.pagination.totalPages;
 

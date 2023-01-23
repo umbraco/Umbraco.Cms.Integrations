@@ -14,5 +14,8 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Models
 
         [JsonPropertyName("description")]
         public string Description { get; set; }
+
+        [JsonPropertyName("resourceUrl")]
+        public string ResourceUrl { get; set; }
     }
 }
