@@ -12,5 +12,9 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Models
 
         [JsonPropertyName("fieldTypeIds")]
         public string FieldTypeIds { get; set; }
+
+        [JsonPropertyName("outbound")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public Outbound Outbound { get; set; }
     }
 }

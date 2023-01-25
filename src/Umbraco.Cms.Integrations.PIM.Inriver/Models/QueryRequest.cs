@@ -12,7 +12,15 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public FieldType[] FieldTypes { get; set; }
 
+        [JsonPropertyName("linkedTypes")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string[] LinkedTypes { get; set; }
+
         [JsonPropertyName("systemCriteria")]
         public List<Criterion> SystemCriteria { get; set; }
+
+        [JsonPropertyName("culture")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public string Culture { get; set; }
     }
 }

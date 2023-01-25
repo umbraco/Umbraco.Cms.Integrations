@@ -27,10 +27,7 @@
         var options = {
             title: "Inriver " + $scope.model.config.configuration.entityType,
             subtitle: "Select a " + $scope.model.config.configuration.entityType,
-            configuration: {
-                entityType: $scope.model.config.configuration.entityType,
-                fieldTypes: $scope.model.config.configuration.fieldTypes
-            },
+            configuration: $scope.model.config.configuration,
             view: "/App_Plugins/UmbracoCms.Integrations/PIM/Inriver/views/entitypickereditor.html",
             size: "medium",
             save: function (entityId) {
@@ -48,7 +45,8 @@
     vm.saveEntity = function (entityId) {
         $scope.model.value = JSON.stringify({
             entityId: entityId,
-            displayFields: $scope.model.config.configuration.fieldTypes
+            displayFields: $scope.model.config.configuration.fieldTypes,
+            linkedTypes: $scope.model.config.configuration.linkedTypes
         });
 
         getEntityData(entityId);

@@ -13,11 +13,13 @@
                     return umbRequestHelper.resourcePromise(
                         $http.get(`${apiEndpoint}/GetEntityTypes`), "Failed to access resource.")
                 },
-                query: function (entityTypeId, fieldTypes) {
+                query: function (configuration, culture) {
                     return umbRequestHelper.resourcePromise(
                         $http.post(`${apiEndpoint}/Query`, {
-                            entityTypeId: entityTypeId,
-                            fieldTypes: fieldTypes
+                            entityTypeId: configuration.entityType,
+                            fieldTypes: configuration.fieldTypes,
+                            linkedTypes: configuration.linkedTypes,
+                            culture: culture
                         }), "Failed to access resource.")
                 },
                 fetchData: function (request) {

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
+using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Integrations.PIM.Inriver.Configuration;
 using Umbraco.Cms.Integrations.PIM.Inriver.Models;
 using Umbraco.Cms.Integrations.PIM.Inriver.Services;
@@ -16,11 +18,15 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
 
         private readonly IInriverService _inriverService;
 
-        public EntityController(IOptions<InriverSettings> options, IInriverService inriverService)
+        private readonly ILocalizationService _localizationService;
+
+        public EntityController(IOptions<InriverSettings> options, IInriverService inriverService, ILocalizationService localizationService)
         {
             _settings = options.Value;
 
             _inriverService = inriverService;
+
+            _localizationService = localizationService;
         }
 
         [HttpGet]
@@ -40,6 +46,8 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
         [HttpPost]
         public async Task<IActionResult> Query([FromBody] QueryRequest request)
         {
+            var language = _localizationService.GetLanguageByIsoCode(request.Culture);
+
             var result = await _inriverService.Query(new QueryRequest
             {
                 SystemCriteria = new List<Criterion>
@@ -48,13 +56,28 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
                 }
             });
 
-            if(result.Failure) return new JsonResult(ServiceResponse<IEnumerable<EntityData>>.Fail(result.Error));
+            if (result.Failure) return new JsonResult(ServiceResponse<IEnumerable<EntityData>>.Fail(result.Error));
 
             var dataResult = await _inriverService.FetchData(new FetchDataRequest
             {
                 EntityIds = result.Data.EntityIds,
-                FieldTypeIds = string.Join(",", request.FieldTypes.Select(p => p.Id))
+                FieldTypeIds = string.Empty,
+                Outbound = request.LinkedTypes != null && request.LinkedTypes.Length > 0 
+                    ? new Outbound { LinkTypeIds = string.Join(",", request.LinkedTypes) } 
+                    : null
             });
+
+            foreach (var item in dataResult.Data)
+            {
+                item.Fields = item.Fields.Where(p => request.FieldTypes.Any(q => q.Id == p.FieldTypeId));
+                foreach (var field in item.Fields)
+                {
+                    if (field.ValueDictionary != null)
+                    { 
+                        field.Value = field.ValueDictionary.First(p => p.Key == language.CultureInfo.TwoLetterISOLanguageName).Value;
+                    }
+                }
+            }
 
             return new JsonResult(dataResult);
         }

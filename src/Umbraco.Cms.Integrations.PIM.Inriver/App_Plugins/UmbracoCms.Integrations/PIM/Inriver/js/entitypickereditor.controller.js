@@ -1,4 +1,4 @@
-﻿function entityPickerEditorController($scope, editorService, notificationsService, umbracoCmsIntegrationsPimInriverResource) {
+﻿function entityPickerEditorController($scope, editorState, notificationsService, umbracoCmsIntegrationsPimInriverResource) {
 
     var vm = this;
 
@@ -6,6 +6,8 @@
     vm.entities = [];
     vm.filteredEntities = [];
     vm.searchTerm = "";
+
+    var currentVariant = editorState.current.variants.find(x => x.active === true);
 
     const inSearch = document.getElementById("inSearch");
     const paginationCtrl = document.querySelector("uui-pagination");
@@ -49,11 +51,10 @@
 
     function query() {
 
-        var entityTypeId = $scope.model.configuration.entityType;
         var fieldTypes = $scope.model.configuration.fieldTypes;
 
         vm.loading = true;
-        umbracoCmsIntegrationsPimInriverResource.query(entityTypeId, fieldTypes).then(function (response) {
+        umbracoCmsIntegrationsPimInriverResource.query($scope.model.configuration, currentVariant.language.culture).then(function (response) {
             if (response.success) {
                 vm.entities = response.data.map(obj => {
                     return {
@@ -92,6 +93,10 @@
 
     vm.save = function (entityId) {
         $scope.model.save(entityId);
+    }
+
+    vm.entitiesHaveResources = function () {
+        return vm.filteredEntities.filter(obj => obj.summary.resourceUrl !== null).length > 0;
     }
 }
 

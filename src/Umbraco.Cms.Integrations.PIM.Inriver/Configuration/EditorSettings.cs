@@ -11,5 +11,8 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Configuration
 
         [JsonProperty("fieldTypes")]
         public FieldType[] FieldTypes { get; set; }
+
+        [JsonProperty("linkedTypes")]
+        public string[] LinkedTypes { get; set; }
     }
 }

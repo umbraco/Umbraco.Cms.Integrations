@@ -5,7 +5,8 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Models.ViewModels
     {
         public InriverEntityViewModel()
         {
-            Fields = new Dictionary<string, object>();
+            Fields = Enumerable.Empty<FieldValue>();
+            Outbound = Enumerable.Empty<EntityData>();
         }
 
         public int Id { get; set; }
@@ -16,6 +17,8 @@ namespace Umbraco.Cms.Integrations.PIM.Inriver.Models.ViewModels
 
         public string ResourceUrl { get; set; }
 
-        public Dictionary<string, object> Fields { get; set; }
+        public IEnumerable<FieldValue> Fields { get; set; }
+
+        public IEnumerable<EntityData> Outbound { get; set; }
     }
 }

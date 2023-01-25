@@ -6,6 +6,7 @@ using Umbraco.Cms.Integrations.PIM.Inriver;
 using Umbraco.Cms.Integrations.PIM.Inriver.Models;
 using Umbraco.Cms.Integrations.PIM.Inriver.Models.ViewModels;
 using Umbraco.Cms.Integrations.PIM.Inriver.Services;
+using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Integrations.Pim.Inriver.Editors
 {
@@ -37,10 +38,17 @@ namespace Umbraco.Cms.Integrations.Pim.Inriver.Editors
 
             var displayFields = node["displayFields"] as JsonArray;
 
+            var linkedTypes = node["linkedTypes"] as JsonArray;
+
             var fetchDataResponse = _inriverService.FetchData(new FetchDataRequest
             {
                 EntityIds = new[] { entityId },
-                FieldTypeIds = string.Join(",", displayFields.Select(p => p["fieldTypeId"].GetValue<string>()))
+                FieldTypeIds = linkedTypes != null
+                    ? string.Empty
+                    : string.Join(",", displayFields.Select(p => p["fieldTypeId"].GetValue<string>())),
+                Outbound = linkedTypes != null
+                    ? new Outbound { LinkTypeIds = string.Join(",", linkedTypes.Select(p => p.GetValue<string>())) }
+                    : null
             }).ConfigureAwait(false).GetAwaiter().GetResult();
 
             if (fetchDataResponse.Failure) return null;
@@ -53,9 +61,8 @@ namespace Umbraco.Cms.Integrations.Pim.Inriver.Editors
                 DisplayName = entityData.Summary.DisplayName,
                 DisplayDescription = entityData.Summary.Description,
                 ResourceUrl = entityData.Summary.ResourceUrl,
-                Fields = entityData.Fields.ToDictionary(
-                    x => displayFields.First(p => p["fieldTypeId"].GetValue<string>() == x.FieldTypeId)["fieldTypeDisplayName"].GetValue<string>(), 
-                    x => x.Value)                
+                Fields = entityData.Fields,
+                Outbound = entityData.Outbound
             };
 
             return vm;
