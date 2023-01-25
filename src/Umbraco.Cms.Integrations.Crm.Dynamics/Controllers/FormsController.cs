@@ -93,27 +93,23 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
                 { "grant_type", "authorization_code" },
                 { "client_id", AuthorizationService.ClientId },
                 { "redirect_uri", AuthorizationService.RedirectUri },
-                { "code", authRequestDto.Code }
+                { "code", authRequestDto.Code } 
             };
 
-            string responseContent = string.Empty;
-            try
+            var requestMessage = new HttpRequestMessage
             {
-                var requestMessage = new HttpRequestMessage
-                {
-                    Method = HttpMethod.Post,
-                    RequestUri = new Uri(string.Format(AuthorizationService.OAuthProxyTokenEndpoint, AuthorizationService.OAuthProxyBaseUrl)),
-                    Content = new FormUrlEncodedContent(data)
-                };
-                requestMessage.Headers.Add("service_name", AuthorizationService.Service);
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(string.Format(AuthorizationService.OAuthProxyTokenEndpoint, AuthorizationService.OAuthProxyBaseUrl)),
+                Content = new FormUrlEncodedContent(data)
+            };
+            requestMessage.Headers.Add("service_name", AuthorizationService.Service);
 
-                var response = await ClientFactory().SendAsync(requestMessage);
+            var response = await ClientFactory().SendAsync(requestMessage);
+            if(response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
 
-                responseContent = await response.Content.ReadAsStringAsync();
-
-                response.EnsureSuccessStatusCode();
-
-                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(responseContent);
+                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
 
                 var identity = await _dynamicsService.GetIdentity(tokenDto.AccessToken);
 
@@ -122,24 +118,14 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
                 else
                     return "Error: " + identity.Error.Message;
 
-                return responseContent;
+                return result;
 
-            }
-            catch (HttpRequestException ex) when (ex.Message.Contains(HttpStatusCode.BadRequest.ToString()))
+            } else
             {
-                var errorDto = JsonConvert.DeserializeObject<ErrorDto>(responseContent);
-
-                return "Error: " + errorDto.ErrorDescription;
-            }
-            catch (HttpRequestException ex) when (ex.Message.Contains(HttpStatusCode.Unauthorized.ToString()))
-            {
-                var errorDto = JsonConvert.DeserializeObject<ErrorDto>(responseContent);
+                var errorResult = await response.Content.ReadAsStringAsync();
+                var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
 
                 return "Error: " + errorDto.ErrorDescription;
-            }
-            catch
-            {
-                return "Error: An unexpected error occurred.";
             }
         }
 
