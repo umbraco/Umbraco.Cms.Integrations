@@ -119,6 +119,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
                     return "Error: " + identity.Error.Message;
 
                 return result;
+            }
 
             var errorResult = await response.Content.ReadAsStringAsync();
             var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
