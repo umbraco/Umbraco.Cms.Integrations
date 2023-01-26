@@ -1,6 +1,6 @@
 ﻿using Umbraco.Cms.Core.PropertyEditors;
 
-namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
+namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core
 {
     public class ActiveCampaignFormPickerConfiguration
     {

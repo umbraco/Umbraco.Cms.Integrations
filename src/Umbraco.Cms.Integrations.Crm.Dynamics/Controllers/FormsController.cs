@@ -93,7 +93,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
                 { "grant_type", "authorization_code" },
                 { "client_id", AuthorizationService.ClientId },
                 { "redirect_uri", AuthorizationService.RedirectUri },
-                { "code", authRequestDto.Code }
+                { "code", authRequestDto.Code } 
             };
 
             var requestMessage = new HttpRequestMessage
@@ -121,15 +121,10 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
                 return result;
             }
 
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                var errorResult = await response.Content.ReadAsStringAsync();
-                var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
+            var errorResult = await response.Content.ReadAsStringAsync();
+            var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
 
-                return "Error: " + errorDto.ErrorDescription;
-            }
-
-            return "Error: An unexpected error occurred.";
+            return "Error: " + errorDto.ErrorDescription;
         }
 
         [HttpGet]

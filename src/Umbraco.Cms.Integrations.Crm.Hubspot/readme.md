@@ -14,26 +14,44 @@ Required minimum versions of Umbraco CMS:
 
 ### Authentication
 
-The package uses the OAuth protocol for authentication.
+The package uses the OAuth protocol for authentication or private access tokens (if you are using a private app installed on your HubSpot account).
 
 ### Additional Configuration
 
-To support multi-region HubSpot forms, the following app setting is required in `Web.config`:
+To support multi-region HubSpot forms, the following app settings are required:
+- Umbraco 8 `web.config`:
 ```
   <appSettings>
     ...
+    <add key="Umbraco.Cms.Integrations.Crm.Hubspot.ApiKey" value="[your_private_app_access_token]" />
     <add key="Umbraco.Cms.Integrations.Crm.Hubspot.Region" value="[region]" />
     ...
   </appSettings>
+```
+- Umbraco 9+ `appsettings.json`:
+```
+"Integrations": {
+  "Crm": {
+    "Dynamics": {
+      "Settings": {
+        "ApiKey": "[your_private_app_access_token]",
+        "Region": "[region]"
+      }
+    }
+  }
+}
 ```
 
 For example, in Europe, a setting of `eu1` should be used.
 
 ### Backoffice usage
 
+#### Note:
+**As of November 30, 2022, HubSpot API is accessible using a private app access token or OAuth.**
+
 To use the form picker, a new data type should be created based on the HubSpot Form Picker property editor.
 
-The settings in `Web.config` will be checked and a message presented indicating whether authenticiation is in place.
+The settings will be checked and a message presented indicating whether authenticiation is in place.
 
 If OAuth is being used for authentication is available, then the _Connect_ button will be enabled, prompting the user when clicked, 
 with the HubSpot authorization window.
@@ -41,6 +59,8 @@ with the HubSpot authorization window.
 The retrieved access token will be saved into the database and used for future requests.
 
 _Revoke_ action will remove the access token from the database and the authorization process will need to be repeated.
+
+If a private access token is used a message will be displayed notifying that access token is being used.
 
 ### Front-end rendering
 

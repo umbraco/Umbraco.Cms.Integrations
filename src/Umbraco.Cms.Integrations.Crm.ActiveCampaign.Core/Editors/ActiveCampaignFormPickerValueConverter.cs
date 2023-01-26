@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
-using System.Text.Json.Nodes;
+
+using System;
 
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
-using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
-using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.ViewModels;
+using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Configuration;
+using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Models.ViewModels;
 
-namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Editors
+namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Editors
 {
     public class ActiveCampaignFormPickerValueConverter : PropertyValueConverterBase
     {

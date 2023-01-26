@@ -1,15 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
+using System;
+using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 
-using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
-using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.Dtos;
+using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Configuration;
+using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Models.Dtos;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
 
-namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
+namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Controllers
 {
     [PluginController("UmbracoCmsIntegrationsCrmActiveCampaign")]
     public class FormsController : UmbracoAuthorizedApiController
