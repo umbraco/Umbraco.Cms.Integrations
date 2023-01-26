@@ -120,13 +120,10 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
 
                 return result;
 
-            } else
-            {
-                var errorResult = await response.Content.ReadAsStringAsync();
-                var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
+            var errorResult = await response.Content.ReadAsStringAsync();
+            var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
 
-                return "Error: " + errorDto.ErrorDescription;
-            }
+            return "Error: " + errorDto.ErrorDescription;
         }
 
         [HttpGet]
