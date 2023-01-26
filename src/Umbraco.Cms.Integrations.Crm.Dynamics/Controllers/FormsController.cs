@@ -105,7 +105,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
             requestMessage.Headers.Add("service_name", AuthorizationService.Service);
 
             var response = await ClientFactory().SendAsync(requestMessage);
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
 
