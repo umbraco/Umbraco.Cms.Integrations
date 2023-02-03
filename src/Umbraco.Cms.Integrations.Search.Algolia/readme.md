@@ -1,4 +1,4 @@
-# Umbraco.Forms.Integrations.Search.Algolia
+# Umbraco.Cms.Integrations.Search.Algolia
 
 This integration provides a custom dashboard for managing search indices in Algolia.
 
