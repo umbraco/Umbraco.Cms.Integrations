@@ -54,7 +54,9 @@
         var fieldTypes = $scope.model.configuration.fieldTypes;
 
         vm.loading = true;
-        umbracoCmsIntegrationsPimInriverResource.query($scope.model.configuration, currentVariant.language.culture).then(function (response) {
+        umbracoCmsIntegrationsPimInriverResource.query(
+            $scope.model.configuration,
+            currentVariant.language != null ? currentVariant.language.culture : "").then(function (response) {
             if (response.success) {
                 vm.entities = response.data.map(obj => {
                     return {

@@ -46,7 +46,10 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
         [HttpPost]
         public async Task<IActionResult> Query([FromBody] QueryRequest request)
         {
-            var language = _localizationService.GetLanguageByIsoCode(request.Culture);
+            var language = _localizationService.GetLanguageByIsoCode(
+                string.IsNullOrEmpty(request.Culture) 
+                    ? _localizationService.GetDefaultLanguageIsoCode()
+                    : request.Culture);
 
             var result = await _inriverService.Query(new QueryRequest
             {
