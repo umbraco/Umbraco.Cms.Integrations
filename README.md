@@ -30,4 +30,7 @@ This repository houses open-source extensions, created for Umbraco CMS, that int
 ### Search
 [Algolia](./src/Umbraco.Cms.Integrations.Search.Algolia/) - a custom dashboard for managing search indices in Algolia.
 
+### PIM
+[inriver](./src/Umbraco.Cms.Integrations.PIM.Inriver/) - a products picker that can be added as a property editor for content, with a value converter providing a strongly typed model for rendering, and a rendering component.
+
 
