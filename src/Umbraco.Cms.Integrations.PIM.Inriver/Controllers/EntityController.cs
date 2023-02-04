@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Integrations.PIM.Inriver.Configuration;
 using Umbraco.Cms.Integrations.PIM.Inriver.Models;
 using Umbraco.Cms.Integrations.PIM.Inriver.Services;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
+using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
 {
@@ -20,7 +20,9 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
 
         private readonly ILocalizationService _localizationService;
 
-        public EntityController(IOptions<InriverSettings> options, IInriverService inriverService, ILocalizationService localizationService)
+        public EntityController(IOptions<InriverSettings> options, 
+            IInriverService inriverService, 
+            ILocalizationService localizationService)
         {
             _settings = options.Value;
 
@@ -46,10 +48,9 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
         [HttpPost]
         public async Task<IActionResult> Query([FromBody] QueryRequest request)
         {
-            var language = _localizationService.GetLanguageByIsoCode(
-                string.IsNullOrEmpty(request.Culture) 
-                    ? _localizationService.GetDefaultLanguageIsoCode()
-                    : request.Culture);
+            var language = !string.IsNullOrEmpty(request.Culture)
+                ? _localizationService.GetLanguageByIsoCode(request.Culture)
+                : null;
 
             var result = await _inriverService.Query(new QueryRequest
             {
@@ -76,8 +77,12 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Controllers
                 foreach (var field in item.Fields)
                 {
                     if (field.ValueDictionary != null)
-                    { 
-                        field.Value = field.ValueDictionary.First(p => p.Key == language.CultureInfo.TwoLetterISOLanguageName).Value;
+                    {
+                        var fieldValue = field.ValueDictionary
+                            .FirstOrDefault(p => p.Key == (language != null
+                                ? language.CultureInfo.TwoLetterISOLanguageName
+                                : User.GetUmbracoIdentity().GetCulture().TwoLetterISOLanguageName));
+                        field.Value = fieldValue.Equals(default(KeyValuePair<string, string>)) ? string.Empty : fieldValue.Value;
                     }
                 }
             }
