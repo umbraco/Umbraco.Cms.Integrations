@@ -5,6 +5,7 @@
     vm.showResults = false;
     vm.oauthConfiguration = {};
     vm.inspectionResult = {};
+    vm.oauthSuccessEventCount = 0;
 
     // build default url inspection object
     var nodeUrls = getUrls();
@@ -23,6 +24,7 @@
     });
 
     vm.onConnectClick = function () {
+        window.addEventListener("message", getAccessToken, false);
         vm.authorizationWindow = window.open(vm.oauthConfiguration.authorizationUrl,
             "GoogleSearchConsole_Authorize",
             "width=900,height=700,modal=yes,alwaysRaised=yes");
@@ -30,6 +32,9 @@
 
     vm.onRevokeToken = function () {
         revokeToken();
+
+        vm.oauthSuccessEventCount = 0;
+        window.removeEventListener("message", getAccessToken);
     }
 
     vm.onInspect = function () {
@@ -73,9 +78,9 @@
             editorState.current.urls.find(p => p.text === vm.inspectionObj.inspectionUrl).culture;
     }
 
-    // authorization listener
-    window.addEventListener("message", function (event) {
+    function getAccessToken(event) {
         if (event.data.type === "google:oauth:success") {
+            vm.oauthSuccessEventCount += 1;
 
             var codeParam = "?code=";
             var scopeParam = "&scope=";
@@ -84,21 +89,22 @@
 
             var code = event.data.url.slice(event.data.url.indexOf(codeParam) + codeParam.length, event.data.url.indexOf(scopeParam));
 
-            umbracoCmsIntegrationsGoogleSearchConsoleUrlInspectionToolResource.getAccessToken(code).then(function (response) {
-                if (response !== "error") {
-                    vm.oauthConfiguration.isConnected = true;
-                    notificationsService.success("Google Search Console Authorization", "Access Approved");
-                } else {
-                    notificationsService.error("Google Search Console Authorization", "Access Denied");
-                }
-            });
+            if (vm.oauthSuccessEventCount == 1) {
+                umbracoCmsIntegrationsGoogleSearchConsoleUrlInspectionToolResource.getAccessToken(code).then(function (response) {
+                    if (response !== "error") {
+                        vm.oauthConfiguration.isConnected = true;
+                        notificationsService.success("Google Search Console Authorization", "Access Approved");
+                    } else {
+                        notificationsService.error("Google Search Console Authorization", "Access Denied");
+                    }
+                });
+            }
         } else if (event.data.type === "google:oauth:denied") {
             notificationsService.error("Google Search Console Authorization", "Access Denied");
             vm.oauthConfiguration.isConnected = false;
             vm.authorizationWindow.close();
         }
-
-    }, false);
+    }
 
     function refreshAccessToken() {
         notificationsService.warning("Google Search Console Authorization", "Refreshing access token.");

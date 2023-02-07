@@ -20,6 +20,8 @@
 
         var vm = this;
 
+        vm.oauthSuccessEventCount = 0;
+
         userService.getCurrentUser().then(function (user) {
             var isPartOfAdminUserGroup = user.userGroups.find(x => x === "admin");
             
@@ -135,10 +137,10 @@
 
         // event handlers
         vm.onConnectClick = function () {
-           
+
+            window.addEventListener("message", getAccessToken, false);
             vm.authWindow = window.open(vm.authorizationUrl,
                 "Semrush_Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
-
         }
 
         vm.onPropertyChange = function () {
@@ -169,25 +171,27 @@
             searchKeywords(1);
         }
 
-        // authorization listener
-        window.addEventListener("message", function (event) {
+        function getAccessToken(event) {
             if (event.data.type === "semrush:oauth:success") {
+                vm.oauthSuccessEventCount += 1;
 
                 var codeParam = "?code=";
 
-                vm.authWindow.close();
+                if (vm.authWindow) vm.authWindow.close();
 
                 var code = event.data.url.slice(event.data.url.indexOf(codeParam) + codeParam.length);
 
-                umbracoCmsIntegrationsSemrushResource.getAccessToken(code).then(function (response) {
-                    if (response !== "error") {
-                        vm.isConnected = true;
-                        vm.showSuccess("Semrush authentication", "Access Approved");
-                        validateToken();
-                    } else {
-                        vm.showError("Semrush authentication", "Access Denied");
-                    }
-                });
+                if (vm.oauthSuccessEventCount == 1) {
+                    umbracoCmsIntegrationsSemrushResource.getAccessToken(code).then(function (response) {
+                        if (response !== "error") {
+                            vm.isConnected = true;
+                            vm.showSuccess("Semrush authentication", "Access Approved");
+                            validateToken();
+                        } else {
+                            vm.showError("Semrush authentication", "Access Denied");
+                        }
+                    });
+                }
             } else if (event.data.type === "semrush:oauth:denied") {
                 vm.showError("Semrush authentication", "Access Denied");
 
@@ -195,8 +199,7 @@
 
                 revokeToken();
             }
-
-        }, false);
+        }
 
         function validateToken() {
             umbracoCmsIntegrationsSemrushResource.validateToken().then(function (response) {
@@ -216,6 +219,9 @@
                 vm.isConnected = false;
                 vm.isFreeAccount = null;
                 vm.searchKeywordsList = {};
+
+                vm.oauthSuccessEventCount = 0;
+                window.removeEventListener("message", getAccessToken);
             });
         }
 

@@ -110,7 +110,9 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             if (!response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<IdentityDto>(result);
+                return !string.IsNullOrEmpty(result) 
+                    ? JsonConvert.DeserializeObject<IdentityDto>(result)
+                    : new IdentityDto { IsAuthorized = false };
             }
 
             return new IdentityDto

@@ -19,6 +19,7 @@
 
     vm.onConnectClick = function () {
 
+        window.addEventListener("message", getAccessToken, false);
         umbracoCmsIntegrationsCrmDynamicsResource.getAuthorizationUrl().then(function (response) {
             vm.authWindow = window.open(response,
                 "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
@@ -37,17 +38,18 @@
 
             if (typeof $scope.revoked === "function")
                 $scope.revoked();
+
+            vm.oauthSuccessEventCount = 0;
+            window.removeEventListener("message", getAccessToken);
         });
     }
 
-    // authorization listener
-    window.addEventListener("message", function (event) {
+    function getAccessToken(event) {
         if (event.data.type === "hubspot:oauth:success") {
             vm.oauthSuccessEventCount += 1;
 
             if (vm.oauthSuccessEventCount == 1) {
                 umbracoCmsIntegrationsCrmDynamicsResource.getAccessToken(event.data.code).then(function (response) {
-
                     if (response.startsWith("Error:")) {
 
                         // if directive runs from property editor, the notifications should be hidden, because they will not be displayed properly behind the overlay window.
@@ -72,7 +74,7 @@
                 });
             }
         }
-    }, false);
+    }
 }
 
 angular.module("umbraco")
