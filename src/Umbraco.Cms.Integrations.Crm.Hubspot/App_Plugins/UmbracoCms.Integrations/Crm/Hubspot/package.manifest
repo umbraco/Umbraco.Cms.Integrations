@@ -1,6 +1,6 @@
 ﻿{
   "name": "Umbraco.Cms.Integrations.Crm.Hubspot",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "allowPackageTelemetry": true,
   "javascript": [
     "~/App_Plugins/UmbracoCms.Integrations/Crm/Hubspot/js/formpicker.controller.js",
