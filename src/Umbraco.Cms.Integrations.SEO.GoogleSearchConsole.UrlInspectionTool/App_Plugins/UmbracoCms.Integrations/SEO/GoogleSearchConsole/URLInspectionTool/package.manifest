@@ -1,6 +1,6 @@
 ﻿{
   "name": "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool",
-  "version": "0.1.1",
+  "version": "1.0.3",
   "allowPackageTelemetry": true,
   "javascript": [
     "~/App_Plugins/UmbracoCms.Integrations/SEO/GoogleSearchConsole/URLInspectionTool/js/url-inspection-tool.resource.js",
