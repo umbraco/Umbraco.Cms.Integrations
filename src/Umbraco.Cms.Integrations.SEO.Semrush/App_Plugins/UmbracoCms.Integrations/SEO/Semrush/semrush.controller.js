@@ -20,11 +20,9 @@
 
         var vm = this;
 
-        vm.oauthSuccessEventCount = 0;
-
         userService.getCurrentUser().then(function (user) {
             var isPartOfAdminUserGroup = user.userGroups.find(x => x === "admin");
-            
+
             vm.isAdmin = isPartOfAdminUserGroup !== undefined;
         });
 
@@ -173,7 +171,6 @@
 
         function getAccessToken(event) {
             if (event.data.type === "semrush:oauth:success") {
-                vm.oauthSuccessEventCount += 1;
 
                 var codeParam = "?code=";
 
@@ -181,17 +178,16 @@
 
                 var code = event.data.url.slice(event.data.url.indexOf(codeParam) + codeParam.length);
 
-                if (vm.oauthSuccessEventCount == 1) {
-                    umbracoCmsIntegrationsSemrushResource.getAccessToken(code).then(function (response) {
-                        if (response !== "error") {
-                            vm.isConnected = true;
-                            vm.showSuccess("Semrush authentication", "Access Approved");
-                            validateToken();
-                        } else {
-                            vm.showError("Semrush authentication", "Access Denied");
-                        }
-                    });
-                }
+                umbracoCmsIntegrationsSemrushResource.getAccessToken(code).then(function (response) {
+                    if (response !== "error") {
+                        vm.isConnected = true;
+                        vm.showSuccess("Semrush authentication", "Access Approved");
+                        validateToken();
+                    } else {
+                        vm.showError("Semrush authentication", "Access Denied");
+                    }
+                });
+
             } else if (event.data.type === "semrush:oauth:denied") {
                 vm.showError("Semrush authentication", "Access Denied");
 
@@ -220,7 +216,6 @@
                 vm.isFreeAccount = null;
                 vm.searchKeywordsList = {};
 
-                vm.oauthSuccessEventCount = 0;
                 window.removeEventListener("message", getAccessToken);
             });
         }

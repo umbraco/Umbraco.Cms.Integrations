@@ -2,7 +2,6 @@
     var vm = this;
 
     vm.oauthConfig = {};
-    vm.oauthSuccessEventCount = 0;
 
     umbracoCmsIntegrationsCrmDynamicsResource.checkOAuthConfiguration().then(function (response) {
         if (response && response.isAuthorized) {
@@ -39,40 +38,35 @@
             if (typeof $scope.revoked === "function")
                 $scope.revoked();
 
-            vm.oauthSuccessEventCount = 0;
             window.removeEventListener("message", getAccessToken);
         });
     }
 
     function getAccessToken(event) {
         if (event.data.type === "hubspot:oauth:success") {
-            vm.oauthSuccessEventCount += 1;
+            umbracoCmsIntegrationsCrmDynamicsResource.getAccessToken(event.data.code).then(function (response) {
+                if (response.startsWith("Error:")) {
 
-            if (vm.oauthSuccessEventCount == 1) {
-                umbracoCmsIntegrationsCrmDynamicsResource.getAccessToken(event.data.code).then(function (response) {
-                    if (response.startsWith("Error:")) {
+                    // if directive runs from property editor, the notifications should be hidden, because they will not be displayed properly behind the overlay window.
+                    // if directive runs from data type, the notifications are displayed
+                    if (typeof $scope.connected === "undefined")
+                        notificationsService.error("Dynamics Configuration", response);
+                } else {
+                    vm.oauthConfig.isConnected = true;
 
-                        // if directive runs from property editor, the notifications should be hidden, because they will not be displayed properly behind the overlay window.
-                        // if directive runs from data type, the notifications are displayed
-                        if (typeof $scope.connected === "undefined")
-                            notificationsService.error("Dynamics Configuration", response);
-                    } else {
-                        vm.oauthConfig.isConnected = true;
+                    // if directive runs from property editor, the notifications should be hidden, because they will not be displayed properly behind the overlay window.
+                    // if directive runs from data type, the notifications are displayed
+                    if (typeof $scope.connected === "undefined")
+                        notificationsService.success("Dynamics Configuration", "OAuth connected.");
 
-                        // if directive runs from property editor, the notifications should be hidden, because they will not be displayed properly behind the overlay window.
-                        // if directive runs from data type, the notifications are displayed
-                        if (typeof $scope.connected === "undefined")
-                            notificationsService.success("Dynamics Configuration", "OAuth connected.");
+                    umbracoCmsIntegrationsCrmDynamicsResource.getSystemUserFullName().then(function (response) {
+                        vm.oauthConfig.fullName = response;
+                    });
 
-                        umbracoCmsIntegrationsCrmDynamicsResource.getSystemUserFullName().then(function (response) {
-                            vm.oauthConfig.fullName = response;
-                        });
-
-                        if (typeof $scope.connected === "function")
-                            $scope.connected();
-                    }
-                });
-            }
+                    if (typeof $scope.connected === "function")
+                        $scope.connected();
+                }
+            });
         }
     }
 }

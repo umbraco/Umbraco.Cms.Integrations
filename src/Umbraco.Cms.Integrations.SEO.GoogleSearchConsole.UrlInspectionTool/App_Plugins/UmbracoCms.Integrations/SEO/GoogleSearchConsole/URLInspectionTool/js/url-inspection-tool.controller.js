@@ -5,7 +5,6 @@
     vm.showResults = false;
     vm.oauthConfiguration = {};
     vm.inspectionResult = {};
-    vm.oauthSuccessEventCount = 0;
 
     // build default url inspection object
     var nodeUrls = getUrls();
@@ -33,7 +32,6 @@
     vm.onRevokeToken = function () {
         revokeToken();
 
-        vm.oauthSuccessEventCount = 0;
         window.removeEventListener("message", getAccessToken);
     }
 
@@ -80,8 +78,6 @@
 
     function getAccessToken(event) {
         if (event.data.type === "google:oauth:success") {
-            vm.oauthSuccessEventCount += 1;
-
             var codeParam = "?code=";
             var scopeParam = "&scope=";
 
@@ -89,16 +85,15 @@
 
             var code = event.data.url.slice(event.data.url.indexOf(codeParam) + codeParam.length, event.data.url.indexOf(scopeParam));
 
-            if (vm.oauthSuccessEventCount == 1) {
-                umbracoCmsIntegrationsGoogleSearchConsoleUrlInspectionToolResource.getAccessToken(code).then(function (response) {
-                    if (response !== "error") {
-                        vm.oauthConfiguration.isConnected = true;
-                        notificationsService.success("Google Search Console Authorization", "Access Approved");
-                    } else {
-                        notificationsService.error("Google Search Console Authorization", "Access Denied");
-                    }
-                });
-            }
+            umbracoCmsIntegrationsGoogleSearchConsoleUrlInspectionToolResource.getAccessToken(code).then(function (response) {
+                if (response !== "error") {
+                    vm.oauthConfiguration.isConnected = true;
+                    notificationsService.success("Google Search Console Authorization", "Access Approved");
+                } else {
+                    notificationsService.error("Google Search Console Authorization", "Access Denied");
+                }
+            });
+
         } else if (event.data.type === "google:oauth:denied") {
             notificationsService.error("Google Search Console Authorization", "Access Denied");
             vm.oauthConfiguration.isConnected = false;
