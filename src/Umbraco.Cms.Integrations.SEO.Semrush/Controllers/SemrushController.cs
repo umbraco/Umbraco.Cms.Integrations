@@ -99,16 +99,17 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
             requestMessage.Headers.Add(SemrushSettings.SemrushServiceHeaderKey.Key, SemrushSettings.SemrushServiceHeaderKey.Value);
 
             var response = await ClientFactory().SendAsync(requestMessage);
+
+            var result = await response.Content.ReadAsStringAsync();
+
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsStringAsync();
-
                 _semrushTokenService.SaveParameters(SemrushSettings.TokenDbKey, result);
 
                 return result;
             }
 
-            return "error";
+            return "Error: " + result;
         }
 
         [HttpPost]
