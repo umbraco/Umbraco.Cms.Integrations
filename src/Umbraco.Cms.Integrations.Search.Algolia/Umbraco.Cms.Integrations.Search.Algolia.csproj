@@ -13,7 +13,7 @@
 		<PackageIconUrl></PackageIconUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main/src/Umbraco.Cms.Integrations.Search.Algolia</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>1.1.1</Version>
+		<Version>1.2.0</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
@@ -27,6 +27,10 @@
 		<PackageReference Include="Umbraco.Cms.Web.Common" version="[10.3.0,12)" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<ProjectReference Include="..\Umbraco.Cms.Integrations.Library\Umbraco.Cms.Integrations.Library.csproj" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<Content Include="App_Plugins\UmbracoCms.Integrations\Search\Algolia\**\*.*">
 			<Pack>true</Pack>
@@ -51,5 +55,4 @@
 			<PackagePath>\</PackagePath>
 		</Content>
 	</ItemGroup>
-
 </Project>

@@ -11,6 +11,12 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Models
 
         public string ObjectID { get; set; }
 
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string Url { get; set; }
+
         public Dictionary<string, string> Data { get; set; }
     }
 }

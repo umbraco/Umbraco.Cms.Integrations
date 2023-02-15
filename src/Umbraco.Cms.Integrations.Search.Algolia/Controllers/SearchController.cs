@@ -3,6 +3,9 @@
 using Microsoft.AspNetCore.Mvc;
 
 using System.Text.Json;
+
+using Umbraco.Cms.Core.Routing;
+using Umbraco.Cms.Integrations.Library.Services;
 using Umbraco.Cms.Integrations.Search.Algolia.Builders;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
@@ -25,9 +28,17 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
         private readonly UmbracoHelper _umbracoHelper;
 
-        public SearchController(IAlgoliaIndexService indexService, IAlgoliaSearchService<SearchResponse<Record>> searchService, 
+        private readonly IPublishedUrlProvider _urlProvider;
+
+        private readonly IParserService _parserService;
+
+        public SearchController(
+            IAlgoliaIndexService indexService, 
+            IAlgoliaSearchService<SearchResponse<Record>> searchService, 
             IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
-            UmbracoHelper umbracoHelper)
+            UmbracoHelper umbracoHelper, 
+            IPublishedUrlProvider urlProvider,
+            IParserService parserService)
         {
             _indexService = indexService;
             
@@ -36,11 +47,16 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             _indexStorage = indexStorage;
 
             _umbracoHelper = umbracoHelper;
+
+            _urlProvider = urlProvider;
+
+            _parserService = parserService;
         }
 
         [HttpGet]
         public IActionResult GetIndices()
         {
+            
             var results = _indexStorage.Get().Select(p => new IndexConfiguration
             {
                 Id = p.Id,
@@ -91,7 +107,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
                     foreach (var contentItem in contentItems)
                     {
-                        var record = new RecordBuilder()
+                        var record = new PublishedContentRecordBuilder(_urlProvider, _parserService)
                             .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
                             .Build();
 
