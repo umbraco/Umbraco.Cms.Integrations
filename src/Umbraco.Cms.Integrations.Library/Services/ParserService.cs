@@ -2,7 +2,6 @@
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Integrations.Library.Parsing;
-using static Umbraco.Cms.Core.Models.Property;
 
 namespace Umbraco.Cms.Integrations.Library.Services
 {
