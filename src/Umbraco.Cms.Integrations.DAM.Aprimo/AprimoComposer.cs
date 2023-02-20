@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-
+using System.Net.Http.Headers;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
@@ -19,9 +19,19 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo
 
             builder.AddNotificationHandler<UmbracoApplicationStartingNotification, UmbracoAppStartingHandler>();
 
-            builder.Services.AddScoped<OAuthConfigurationStorage>();
+            builder.Services.AddSingleton<OAuthConfigurationStorage>();
 
             builder.Services.AddSingleton<IAprimoAuthorizationService, AprimoAuthorizationService>();
+
+            builder.Services.AddSingleton<IAprimoService, AprimoService>();
+
+            builder.Services
+                .AddHttpClient(Constants.AprimoClient, client =>
+                {
+                    client.BaseAddress = 
+                        new Uri($"https://{builder.Config.GetSection(Constants.SettingsPath)[nameof(AprimoSettings.Tenant)]}.dam.aprimo.com/api/core/");
+                    client.DefaultRequestHeaders.Add("API-VERSION", "1");
+                });
         }
     }
 }

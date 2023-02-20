@@ -1,1 +1,19 @@
-﻿
+﻿<div ng-controller="Umbraco.Cms.Integrations.DAM.Aprimo.MediaPickerController as vm">
+    <div ng-if="vm.selectedRecord !== null" style="width: 200px;">
+        <uui-card-media name="{{vm.selectedRecord.title}}" file-ext="{{vm.selectedRecord.extension}}">
+            <uui-action-bar slot="actions">
+                <uui-button look="secondary" label="Remove" ng-click="vm.removeAsset()">Remove</uui-button>
+            </uui-action-bar>
+        </uui-card-media>
+    </div>
+    <div ng-if="vm.selectedRecord === null">
+        <a class="umb-node-preview-add"
+           ng-click="vm.openAprimoMediaPickerOverlay()"
+           prevent-default>
+            <localize key="general_add">Add</localize>
+        </a>
+    </div>
+    <div ng-if="vm.error" class="alert alert-warning mt2" style="max-width: 800px;">
+        {{ vm.error }}
+    </div>
+</div>

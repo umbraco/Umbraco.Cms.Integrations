@@ -31,13 +31,14 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
             return scope.Database.FirstOrDefault<AprimoOAuthConfiguration>(string.Empty);
         }
 
-        public void Delete(int id)
+        public void Delete()
         {
             using var scope = _scopeProvider.CreateScope();
 
-            var entity = scope.Database.SingleById<AprimoOAuthConfiguration>(id);
+            var entities = scope.Database.Fetch<AprimoOAuthConfiguration>();
 
-            scope.Database.Delete(entity);
+            if (entities.Count() > 0)
+                scope.Database.Delete(entities.First());
 
             scope.Complete();
         }

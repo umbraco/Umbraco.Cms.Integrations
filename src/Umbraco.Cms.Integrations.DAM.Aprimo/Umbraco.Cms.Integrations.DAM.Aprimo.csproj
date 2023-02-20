@@ -45,15 +45,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\DAM\Aprimo\js\aprimo.resource.js" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\DAM\Aprimo\js\configuration.controller.js" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\DAM\Aprimo\package.manifest" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\DAM\Aprimo\views\configuration.html" />
-	  <None Remove="App_Plugins\UmbracoCms.Integrations\DAM\Aprimo\views\mediapicker.html" />
-	  <None Remove="Migrations\tka4zjt2.4oy~" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Content Include="aprimo.png">
 			<Pack>true</Pack>
 			<PackagePath>\</PackagePath>

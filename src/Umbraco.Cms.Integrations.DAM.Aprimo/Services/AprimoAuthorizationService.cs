@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-
+using System.Text.Json;
 using Umbraco.Cms.Integrations.DAM.Aprimo.Configuration;
 using Umbraco.Cms.Integrations.DAM.Aprimo.Models;
 
@@ -8,6 +8,10 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
     public class AprimoAuthorizationService : IAprimoAuthorizationService
     {
         private readonly AprimoSettings _settings;
+
+        private readonly IHttpClientFactory _httpClientFactory;
+
+        private readonly OAuthConfigurationStorage _storage;
 
         public const string Service = "Aprimo";
 
@@ -20,15 +24,18 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
             "&code_challenge={4}" +
             "&code_challenge_method=S256";
 
-        public const string TokenEndpoint = "https://localhost:44364/oauth/v1/token";
+        public const string TokenEndpoint = "https://localhost:44364/oauth/v1/token"; //"https://hubspot-forms-auth.umbraco.com/"
 
-        //public const string OAuthProxyBaseUrl = "https://localhost:44364/"; //"https://hubspot-forms-auth.umbraco.com/"; // for local testing: https://localhost:44364/;
-
-        //public const string OAuthProxyTokenEndpoint = "{0}oauth/v1/token";
-
-        public AprimoAuthorizationService(IOptions<AprimoSettings> options)
+        public AprimoAuthorizationService(
+            IOptions<AprimoSettings> options, 
+            IHttpClientFactory httpClientFactory,
+            OAuthConfigurationStorage storage)
         {
-            _settings= options.Value;
+            _settings = options.Value;
+            
+            _httpClientFactory = httpClientFactory;
+
+            _storage = storage;
         }
 
         public string GetAuthorizationUrl(OAuthCodeExchange oauthCodeExchange)
@@ -39,7 +46,91 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
                 _settings.ClientId,
                 _settings.RedirectUri,
                 oauthCodeExchange.CodeChallenge);
+        }
 
+        public async Task<string> GetAccessToken(string code)
+        {
+            var configurationEntity = _storage.Get();
+            if (configurationEntity == null) return "Error: " + Constants.ErrorResources.InvalidCodeChallenge;
+
+            var requestData = new Dictionary<string, string>
+            {
+                { "grant_type", "authorization_code" },
+                { "code", code },
+                { "client_id", _settings.ClientId },
+                { "redirect_uri", _settings.RedirectUri },
+                { "code_verifier", configurationEntity.CodeVerifier }
+            };
+
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(TokenEndpoint),
+                Content = new FormUrlEncodedContent(requestData)
+            };
+            requestMessage.Headers.Add("service_name", Service);
+            requestMessage.Headers.Add("tenant", _settings.Tenant);
+
+            var httpClient = _httpClientFactory.CreateClient();
+            var response = await httpClient.SendAsync(requestMessage);
+
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var data = JsonSerializer.Deserialize<OAuthResponse>(content);
+                if (data == null) return "Error: " + Constants.ErrorResources.RetrieveAccessToken;
+
+                configurationEntity.AccessToken = data.AccessToken;
+                configurationEntity.RefreshToken = data.RefreshToken;
+
+                _storage.AddOrUpdate(configurationEntity);
+
+                return string.Empty;
+            }
+
+            _storage.Delete();
+
+            return "Error: " + content;
+        }
+
+        public async Task<string> RefreshAccessToken()
+        {
+            var configurationEntity = _storage.Get();
+            if (configurationEntity == null) return Constants.ErrorResources.MissingRefreshToken;
+
+            var requestData = new Dictionary<string, string>
+            {
+                { "grant_type", "refresh_token" },
+                { "refresh_token", configurationEntity.RefreshToken },
+                { "client_id", _settings.ClientId }
+            };
+
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(TokenEndpoint),
+                Content = new FormUrlEncodedContent(requestData)
+            };
+            requestMessage.Headers.Add("service_name", Service);
+            requestMessage.Headers.Add("tenant", _settings.Tenant);
+
+            var httpClient = _httpClientFactory.CreateClient();
+            var response = await httpClient.SendAsync(requestMessage);
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                var data = JsonSerializer.Deserialize<OAuthResponse>(content);
+                if (data == null) return Constants.ErrorResources.InvalidAuthorizationResponse;
+
+                configurationEntity.AccessToken = data.AccessToken;
+                configurationEntity.RefreshToken = data.RefreshToken;
+
+                _storage.AddOrUpdate(configurationEntity);
+            }
+
+            return "Error: " + content;
         }
     }
 }

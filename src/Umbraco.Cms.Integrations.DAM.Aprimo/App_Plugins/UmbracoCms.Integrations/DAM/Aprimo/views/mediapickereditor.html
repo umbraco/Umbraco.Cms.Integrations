@@ -1,0 +1,49 @@
+﻿<div ng-controller="Umbraco.Cms.Integrations.DAM.Aprimo.MediaPickerEditorController as vm">
+    <umb-load-indicator ng-if="vm.loading">
+    </umb-load-indicator>
+    <uui-box headline="{{model.title}}" class="aprimo-editor-container">
+        <uui-scroll-container class="mt2" style="width:100%;height:400px;">
+            <uui-form ng-if="vm.data.items.length > 0">
+                <uui-form-layout-item>
+                    <uui-table class="uui-text">
+                        <uui-table-column style="width: 120px !important"></uui-table-column>
+                        <uui-table-head>
+                            <uui-table-head-cell>Thumbnail</uui-table-head-cell>
+                            <uui-table-head-cell>Title</uui-table-head-cell>
+                        </uui-table-head>
+
+                        <uui-table-row ng-repeat="item in vm.data.items" selectable
+                                       ng-on-selected="vm.save(item.id, item.title)">
+                            <uui-table-cell ng-if="item.thumbnail.uri.length > 0">
+                                <img ng-src="{{item.thumbnail.uri}}" width="100" />
+                            </uui-table-cell>
+                            <uui-table-cell>{{item.title}}</uui-table-cell>
+                        </uui-table-row>
+                    </uui-table>
+                </uui-form-layout-item>
+            </uui-form>
+        </uui-scroll-container>
+        <div ng-show="!vm.loading" class="aprimo-center">
+            <uui-pagination></uui-pagination>
+        </div>
+    </uui-box>
+    <uui-box headline="Content Selector" class="aprimo-editor-container">
+        <div>
+            <browser-support ng-if="!vm.browserIsSupported"></browser-support>
+        </div>
+        <uui-button label="Open" color="positive" look="primary" class="mt2"
+                    ng-click="vm.openContentSelector()" style="font-size:15px;">
+            Open
+        </uui-button>
+    </uui-box>
+    <umb-editor-footer>
+        <umb-editor-footer-content-right>
+            <umb-button type="button"
+                        button-style="link"
+                        label-key="general_close"
+                        shortcut="esc"
+                        action="model.close()">
+            </umb-button>
+        </umb-editor-footer-content-right>
+    </umb-editor-footer>
+</div>

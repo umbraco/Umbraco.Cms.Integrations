@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Dynamic;
+using System.Text;
 using System.Text.Json;
 using Umbraco.Cms.Integrations.DAM.Aprimo.Configuration;
 using Umbraco.Cms.Integrations.DAM.Aprimo.Extensions;
@@ -16,29 +18,57 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Controllers
     {
         private readonly AprimoSettings _settings;
 
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IAprimoAuthorizationService _authorizationService;
 
-        private readonly IAprimoAuthorizationService _aprimoAuthorizationService;
+        private readonly IAprimoService _assetsService;
 
         private readonly OAuthConfigurationStorage _oauthConfigurationStorage;
 
-        public AssetsController(IOptions<AprimoSettings> options, 
-            IHttpClientFactory httpClientFactory, 
-            IAprimoAuthorizationService aprimoAuthorizationService,
+        public AssetsController(
+            IOptions<AprimoSettings> options, 
+            IAprimoAuthorizationService authorizationService,
+            IAprimoService assetsService,
             OAuthConfigurationStorage oauthConfigurationStorage)
         {
             _settings = options.Value;
 
-            _httpClientFactory = httpClientFactory;
+            _authorizationService= authorizationService;
 
-            _aprimoAuthorizationService= aprimoAuthorizationService;
+            _assetsService = assetsService;
 
             _oauthConfigurationStorage = oauthConfigurationStorage;
         }
 
         [HttpGet]
+        public async Task<IActionResult> CheckApiConfiguration()
+        {
+            if (string.IsNullOrEmpty(_settings.Tenant)
+                || string.IsNullOrEmpty(_settings.ClientId)
+                || string.IsNullOrEmpty(_settings.RedirectUri))
+                return new JsonResult(AprimoResponse<string>.Fail(Constants.ErrorResources.InvalidApiConfiguration, false));
+
+            var result = await _assetsService.SearchRecord(Guid.NewGuid());
+            if (!result.IsAuthorized)
+            {
+                await _authorizationService.RefreshAccessToken();
+
+                var updatedResult = await _assetsService.SearchRecord(Guid.NewGuid());
+
+                return updatedResult.IsAuthorized
+                    ? new JsonResult(AprimoResponse<string>.Ok(string.Empty))
+                    : new JsonResult(AprimoResponse<string>.Fail(Constants.ErrorResources.Unauthorized, false));
+            }
+
+            return new JsonResult(AprimoResponse<string>.Ok(string.Empty));
+        }
+
+        [HttpGet]
         public string GetAuthorizationUrl()
         {
+            // remove any existing record of code exchange
+            _oauthConfigurationStorage.Delete();
+
+            // generate new code exchange
             var oauthCodeExchange = OAuthHelper.GenerateKeys();
 
             var configurationEntity = new AprimoOAuthConfiguration
@@ -50,53 +80,40 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Controllers
             };
             _oauthConfigurationStorage.AddOrUpdate(configurationEntity);
 
-            return _aprimoAuthorizationService.GetAuthorizationUrl(oauthCodeExchange);
+            return _authorizationService.GetAuthorizationUrl(oauthCodeExchange);
+        }
+
+        [HttpGet]
+        public string GetContentSelectorUrl()
+        {
+            dynamic selectorOptions = new ExpandoObject();
+            selectorOptions.title = "Select media";
+            selectorOptions.select = "single";
+
+            var encodedOptions = Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(selectorOptions)));
+
+            return string.Format("https://{0}.dam.aprimo.com/dam/selectcontent#options={1}",
+                _settings.Tenant, encodedOptions);
         }
 
         [HttpPost]
-        public async Task<string> GetAccessToken([FromBody] OAuthRequest request)
+        public async Task<string> GetAccessToken([FromBody] OAuthRequest request) =>
+            await _authorizationService.GetAccessToken(request.Code);
+
+        [HttpGet]
+        public async Task<IActionResult> GetRecordDetails(string id)
         {
-            var configurationEntity = _oauthConfigurationStorage.Get();
-            if (configurationEntity == null) return "Error: Invalid code challenge.";
+            var record = await _assetsService.SearchRecord(Guid.Parse(id));
 
-            var requestData = new Dictionary<string, string>
-            {
-                { "grant_type", "authorization_code" },
-                { "code", request.Code },
-                { "client_id", _settings.ClientId },
-                { "redirect_uri", _settings.RedirectUri },
-                { "code_verifier", configurationEntity.CodeVerifier }
-            };
+            return new JsonResult(record);
+        }
 
-            var requestMessage = new HttpRequestMessage
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(AprimoAuthorizationService.TokenEndpoint),
-                Content = new FormUrlEncodedContent(requestData)
-            };
-            requestMessage.Headers.Add("service_name",  AprimoAuthorizationService.Service);
-            requestMessage.Headers.Add("tenant", _settings.Tenant);
+        [HttpGet]
+        public async Task<IActionResult> GetRecords(string page)
+        {
+            var response = await _assetsService.SearchRecords(page);
 
-            var httpClient = _httpClientFactory.CreateClient();
-            var response = await httpClient.SendAsync(requestMessage);
-
-            var content = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode)
-            {
-                var data = JsonSerializer.Deserialize<OAuthResponse>(content);
-                if (data == null) return "Error: Failed to retrieve the access token.";
-
-                configurationEntity.AccessToken = data.AccessToken;
-                configurationEntity.RefreshToken= data.RefreshToken;
-
-                _oauthConfigurationStorage.AddOrUpdate(configurationEntity);
-
-                return string.Empty;
-            }
-
-            _oauthConfigurationStorage.Delete(configurationEntity.Id);
-
-            return "Error";
+            return new JsonResult(response);
         }
     }
 }

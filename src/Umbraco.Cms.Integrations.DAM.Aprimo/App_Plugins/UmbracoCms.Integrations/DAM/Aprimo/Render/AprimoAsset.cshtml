@@ -1,0 +1,9 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Integrations.DAM.Aprimo.Models.ViewModels.AprimoAssetViewModel>
+
+<div>
+    @if (!string.IsNullOrEmpty(Model.Thumbnail))
+    {
+        <img src="@Model.Thumbnail" alt="@Model.Title" />
+    }
+    <h3 style="display:inline;vertical-align:top;">@Model.Title</h3>
+</div>

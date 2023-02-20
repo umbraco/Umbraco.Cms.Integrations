@@ -1,6 +1,22 @@
 ﻿<div ng-controller="Umbraco.Cms.Integrations.DAM.Aprimo.ConfigurationController as vm">
-    <div>
-        <uui-button label="Connect" color="primary" look="primary" ng-click="vm.onConnect()"></uui-button>
-        <uui-button label="Revoke" color="danger" look="primary" ng-click="vm.onRevoke()"></uui-button>
-    </div>
+    <uui-icon-registry-essential>
+        <uui-card-content-node name="Aprimo API Configuration" style="max-width: 800px;">
+            <uui-icon slot="icon" name="{{vm.configuration.icon}}"></uui-icon>
+            <uui-tag size="s" slot="tag" color="{{vm.configuration.tag}}">
+                {{ vm.configuration.message }}
+            </uui-tag>
+            <div style="width:60%">
+
+                <browser-support ng-if="!vm.configuration.browserIsSupported"></browser-support>
+
+                <div class="mt2">
+                    <uui-button id="btnConnect" label="Connect" color="primary" look="primary"
+                                ng-click="vm.onConnect()" style="font-size:15px;"></uui-button>
+                    <uui-button id="btnRevoke" label="Revoke" color="danger" look="primary"
+                                ng-click="vm.onRevoke()" style="font-size:15px;"></uui-button>
+                </div>
+            </div>
+        </uui-card-content-node>
+    </uui-icon-registry-essential>
+
 </div>
