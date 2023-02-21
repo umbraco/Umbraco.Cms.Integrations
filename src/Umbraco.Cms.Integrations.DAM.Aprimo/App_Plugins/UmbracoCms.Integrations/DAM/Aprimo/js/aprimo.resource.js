@@ -37,6 +37,11 @@
                 return umbRequestHelper.resourcePromise(
                     $http.get(`${apiEndpoint}/GetRecordDetails?id=${id}`),
                     "Failed to access resource");
+            },
+            revokeAccessToken: function () {
+                return umbRequestHelper.resourcePromise(
+                    $http.delete(`${apiEndpoint}/RevokeAccessToken`),
+                    "Failed to access resource");
             }
         };
     });

@@ -19,6 +19,13 @@
 
     vm.onRevoke = () => {
         window.removeEventListener("message", getAccessToken);
+        umbracoCmsIntegrationsDamAprimoResource.revokeAccessToken().then(function () {
+            vm.configuration.isAuthorized = false;
+            vm.configuration.icon = response.failure ? "lock" : "unlock";
+            vm.configuration.tag = response.failure ? "danger" : "positive";
+
+            notificationsService.success("Aprimo", "Access token revoked.");
+        });
     };
 
     function getAccessToken(event) {

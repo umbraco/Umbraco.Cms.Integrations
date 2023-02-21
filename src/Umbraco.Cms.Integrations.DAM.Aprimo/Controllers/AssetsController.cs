@@ -115,5 +115,8 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Controllers
 
             return new JsonResult(response);
         }
+
+        [HttpDelete]
+        public void RevokeAccessToken() => _oauthConfigurationStorage.Delete();
     }
 }
