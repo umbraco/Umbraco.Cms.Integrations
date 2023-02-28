@@ -12,3 +12,13 @@
     width: 50%;
     padding: 10px;
 }
+
+.aprimo-label {
+    font-size: 15px;
+}
+
+/* rendering */
+.aprimo-title {
+    display: inline;
+    vertical-align: top;
+}

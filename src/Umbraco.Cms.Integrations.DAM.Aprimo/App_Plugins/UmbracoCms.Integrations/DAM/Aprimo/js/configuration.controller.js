@@ -1,12 +1,23 @@
-﻿function configurationController(notificationsService, umbracoCmsIntegrationsDamAprimoService, umbracoCmsIntegrationsDamAprimoResource) {
+﻿function configurationController($scope, notificationsService, umbracoCmsIntegrationsDamAprimoService, umbracoCmsIntegrationsDamAprimoResource) {
     var vm = this;
 
     vm.configuration = {};
+
+    const useContentSelector = document.getElementById("useContentSelector");
+    if ($scope.model.value != null && $scope.model.value.useContentSelector != null) {
+        useContentSelector.checked = $scope.model.value.useContentSelector;
+    }
 
     const btnConnect = document.getElementById("btnConnect");
     const btnRevoke = document.getElementById("btnRevoke");
 
     checkApiConfiguration();
+
+    $scope.$on('formSubmitting', function (ev) {
+        $scope.model.value = {
+            useContentSelector: useContentSelector.checked
+        };
+    });
 
     vm.onConnect = () => {
         window.addEventListener("message", getAccessToken, false);

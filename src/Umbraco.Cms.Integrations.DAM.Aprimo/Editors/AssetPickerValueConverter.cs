@@ -48,13 +48,13 @@ namespace Umbraco.Cms.Integrations.Dam.Aprimo.Editors
                 Id = source.ToString()
             };
 
-            var response = _assetsService.SearchRecord(Guid.Parse(vm.Id)).ConfigureAwait(false).GetAwaiter().GetResult();
+            var response = _assetsService.GetRecordById(Guid.Parse(vm.Id)).ConfigureAwait(false).GetAwaiter().GetResult();
             if(!response.IsAuthorized)
             {
                 var tokenResponse = _authorizationService.RefreshAccessToken().ConfigureAwait(false).GetAwaiter().GetResult();
                 if (string.IsNullOrEmpty(tokenResponse))
                 {
-                    response = _assetsService.SearchRecord(Guid.Parse(vm.Id)).ConfigureAwait(false).GetAwaiter().GetResult();
+                    response = _assetsService.GetRecordById(Guid.Parse(vm.Id)).ConfigureAwait(false).GetAwaiter().GetResult();
                     if(response.Success)
                     {
                         ToViewModel(response.Data, ref vm);

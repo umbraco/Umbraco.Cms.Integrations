@@ -10,10 +10,21 @@
                 <browser-support ng-if="!vm.configuration.browserIsSupported"></browser-support>
 
                 <div class="mt2">
+                    <uui-toggle id="useContentSelector" class="aprimo-label">
+                        Use
+                        <b>
+                            <a href="https://developers.aprimo.com/digital-asset-management/aprimo-integration-tools/aprimo-content-selector/" target="_blank">
+                                Content Selector
+                            </a>
+                        </b>
+                    </uui-toggle>
+                </div>
+
+                <div class="mt2">
                     <uui-button id="btnConnect" label="Connect" color="primary" look="primary"
-                                ng-click="vm.onConnect()" style="font-size:15px;"></uui-button>
+                                ng-click="vm.onConnect()" class="aprimo-label"></uui-button>
                     <uui-button id="btnRevoke" label="Revoke" color="danger" look="primary"
-                                ng-click="vm.onRevoke()" style="font-size:15px;"></uui-button>
+                                ng-click="vm.onRevoke()" class="aprimo-label"></uui-button>
                 </div>
             </div>
         </uui-card-content-node>

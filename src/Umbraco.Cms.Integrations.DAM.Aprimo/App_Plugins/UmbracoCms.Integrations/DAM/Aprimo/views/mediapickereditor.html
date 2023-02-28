@@ -1,8 +1,8 @@
 ﻿<div ng-controller="Umbraco.Cms.Integrations.DAM.Aprimo.MediaPickerEditorController as vm">
     <umb-load-indicator ng-if="vm.loading">
     </umb-load-indicator>
-    <uui-box headline="{{model.title}}" class="aprimo-editor-container">
-        <uui-scroll-container class="mt2" style="width:100%;height:400px;">
+    <uui-box ng-if="!vm.useContentSelector" headline="{{model.title}}" class="aprimo-editor-container">
+        <uui-scroll-container class="mt2" style="width:100%;height:600px;">
             <uui-form ng-if="vm.data.items.length > 0">
                 <uui-form-layout-item>
                     <uui-table class="uui-text">
@@ -27,7 +27,7 @@
             <uui-pagination></uui-pagination>
         </div>
     </uui-box>
-    <uui-box headline="Content Selector" class="aprimo-editor-container">
+    <uui-box ng-if="vm.useContentSelector" headline="Content Selector" class="aprimo-editor-container">
         <div>
             <browser-support ng-if="!vm.browserIsSupported"></browser-support>
         </div>

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+
 using System.Net.Http.Headers;
+
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
@@ -31,6 +33,9 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo
                     client.BaseAddress = 
                         new Uri($"https://{builder.Config.GetSection(Constants.SettingsPath)[nameof(AprimoSettings.Tenant)]}.dam.aprimo.com/api/core/");
                     client.DefaultRequestHeaders.Add("API-VERSION", "1");
+                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Umbraco.Cms.Integrations.DAM.Aprimo", "1.0.0"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Add("select-record", "title,tag,thumbnail");
                 });
         }
     }

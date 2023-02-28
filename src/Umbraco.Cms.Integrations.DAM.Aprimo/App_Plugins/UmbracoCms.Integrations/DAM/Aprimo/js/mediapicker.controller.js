@@ -6,8 +6,6 @@
 ;
     vm.error = "";
 
-    console.log($scope.model.value);
-
     umbracoCmsIntegrationsDamAprimoResource.checkApiConfiguration().then(function (response) {
         if (response.success) {
             if ($scope.model.value != null && $scope.model.value.length > 0) {
@@ -31,6 +29,7 @@
         var options = {
             title: "Aprimo Content API",
             subtitle: "Please select an asset",
+            configuration: $scope.model.config.configuration,
             view: "/App_Plugins/UmbracoCms.Integrations/DAM/Aprimo/views/mediapickereditor.html",
             size: "medium",
             save: function (assetObj) {

@@ -20,17 +20,14 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
             _oauthConfigurationStorage = oauthConfigurationStorage;
         }
 
-        public async Task<AprimoResponse<Record>> SearchRecord(Guid id)
+        public async Task<AprimoResponse<Record>> GetRecordById(Guid id)
         {
             var client = _httpClientFactory.CreateClient(Constants.AprimoClient);
 
-            var oauthConfiguration = _oauthConfigurationStorage.Get();
-            if (oauthConfiguration == null) return AprimoResponse<Record>.Fail(Constants.ErrorResources.Unauthorized, false);
+            if(!OAuthConfigurationIsValid(out string accessToken)) 
+                return AprimoResponse<Record>.Fail(Constants.ErrorResources.Unauthorized, false);
 
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Umbraco.Cms.Integrations.DAM.Aprimo", "1.0.0"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", oauthConfiguration.AccessToken);
-            client.DefaultRequestHeaders.Add("select-record", "title,tag,thumbnail");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             var response = await client.GetAsync($"record/{id}");
             var content = await response.Content.ReadAsStringAsync();
@@ -42,20 +39,23 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
                 return AprimoResponse<Record>.Ok(data ?? new Record()); 
             }
 
-            return AprimoResponse<Record>.Fail(content, response.StatusCode != System.Net.HttpStatusCode.Unauthorized);
+            var errorResponse = JsonSerializer.Deserialize<AprimoErrorResponse>(content);
+
+            return AprimoResponse<Record>.Fail(
+                errorResponse != null 
+                    ?errorResponse.ToString()
+                    : content, 
+                response.StatusCode != System.Net.HttpStatusCode.Unauthorized);
         }
 
         public async Task<AprimoResponse<SearchedRecordsPaged>> SearchRecords(string page)
         {
             var client = _httpClientFactory.CreateClient(Constants.AprimoClient);
 
-            var oauthConfiguration = _oauthConfigurationStorage.Get();
-            if (oauthConfiguration == null) return AprimoResponse<SearchedRecordsPaged>.Fail(Constants.ErrorResources.Unauthorized, false);
+            if(!OAuthConfigurationIsValid(out string accessToken)) 
+                return AprimoResponse<SearchedRecordsPaged>.Fail(Constants.ErrorResources.Unauthorized, false);
 
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Umbraco.Cms.Integrations.DAM.Aprimo", "1.0.0"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", oauthConfiguration.AccessToken);
-            client.DefaultRequestHeaders.Add("select-record", "title,tag,thumbnail");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             client.DefaultRequestHeaders.Add("page", page);
             client.DefaultRequestHeaders.Add("pagesize", "10");
 
@@ -78,7 +78,28 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
                 return AprimoResponse<SearchedRecordsPaged>.Ok(data ?? new SearchedRecordsPaged());
             }
 
-            return AprimoResponse<SearchedRecordsPaged>.Fail(content, response.StatusCode != System.Net.HttpStatusCode.Unauthorized);
+            var errorResponse = JsonSerializer.Deserialize<AprimoErrorResponse>(content);
+
+            return AprimoResponse<SearchedRecordsPaged>.Fail(
+                errorResponse != null
+                    ? errorResponse.ToString()
+                    : content,
+                response.StatusCode != System.Net.HttpStatusCode.Unauthorized);
+        }
+
+        private bool OAuthConfigurationIsValid(out string accessToken)
+        {
+            var oauthConfiguration = _oauthConfigurationStorage.Get();
+
+            if (oauthConfiguration == null || string.IsNullOrEmpty(oauthConfiguration.AccessToken))
+            {
+                accessToken = string.Empty;
+                return false;
+            }
+
+            accessToken= oauthConfiguration.AccessToken;
+
+            return true;
         }
     }
 }

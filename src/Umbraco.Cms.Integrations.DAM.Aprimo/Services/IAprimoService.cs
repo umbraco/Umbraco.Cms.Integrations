@@ -6,6 +6,6 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
     {
         Task<AprimoResponse<SearchedRecordsPaged>> SearchRecords(string page);
 
-        Task<AprimoResponse<Record>> SearchRecord(Guid id);
+        Task<AprimoResponse<Record>> GetRecordById(Guid id);
     }
 }

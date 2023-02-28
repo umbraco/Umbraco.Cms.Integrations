@@ -6,6 +6,8 @@
     vm.loading = false;
     vm.data = {};
     vm.browserIsSupported = umbracoCmsIntegrationsDamAprimoService.browserIsSupported();
+    vm.useContentSelector = $scope.model.configuration.useContentSelector != null
+        ? $scope.model.configuration.useContentSelector : false;
 
     vm.pagination = {
         pageNumber: 1,
@@ -14,14 +16,16 @@
     };
     const paginationCtrl = document.querySelector("uui-pagination");
 
-    umbracoCmsIntegrationsDamAprimoResource.checkApiConfiguration().then(function (response) {
-        if (response.success) {
-            vm.loading = true;
-            query(1);
-        }
-        else
-            notificationsService.error("Aprimo", response.error);
-    });
+    if (!vm.useContentSelector) {
+        umbracoCmsIntegrationsDamAprimoResource.checkApiConfiguration().then(function (response) {
+            if (response.success) {
+                vm.loading = true;
+                query(1);
+            }
+            else
+                notificationsService.error("Aprimo", response.error);
+        });
+    }
 
     vm.openContentSelector = function () {
         umbracoCmsIntegrationsDamAprimoResource.getContentSelectorUrl().then(function (response) {

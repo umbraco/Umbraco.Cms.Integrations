@@ -1,4 +1,5 @@
 ﻿using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Integrations.DAM.Aprimo.Configuration;
 
 namespace Umbraco.Cms.Integrations.DAM.Aprimo
 {
@@ -9,6 +10,11 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo
             name: "Configuration",
             view: "~/App_Plugins/UmbracoCms.Integrations/DAM/Aprimo/views/configuration.html",
             Description = "Media Picker configuration.")]
-        public string Configuration { get; set; }
+        public EditorConfiguration Configuration { get; set; }
+
+        public AprimoMediaPickerConfiguration()
+        {
+            Configuration= new EditorConfiguration();
+        }
     }
 }

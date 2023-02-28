@@ -47,12 +47,12 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Controllers
                 || string.IsNullOrEmpty(_settings.RedirectUri))
                 return new JsonResult(AprimoResponse<string>.Fail(Constants.ErrorResources.InvalidApiConfiguration, false));
 
-            var result = await _assetsService.SearchRecord(Guid.NewGuid());
+            var result = await _assetsService.GetRecordById(Guid.NewGuid());
             if (!result.IsAuthorized)
             {
                 await _authorizationService.RefreshAccessToken();
 
-                var updatedResult = await _assetsService.SearchRecord(Guid.NewGuid());
+                var updatedResult = await _assetsService.GetRecordById(Guid.NewGuid());
 
                 return updatedResult.IsAuthorized
                     ? new JsonResult(AprimoResponse<string>.Ok(string.Empty))
@@ -103,7 +103,7 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRecordDetails(string id)
         {
-            var record = await _assetsService.SearchRecord(Guid.Parse(id));
+            var record = await _assetsService.GetRecordById(Guid.Parse(id));
 
             return new JsonResult(record);
         }
