@@ -109,9 +109,9 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetRecords(string page)
+        public async Task<IActionResult> GetRecords(string page, string searchTerm)
         {
-            var response = await _assetsService.SearchRecords(page);
+            var response = await _assetsService.SearchRecords(page, searchTerm);
 
             return new JsonResult(response);
         }

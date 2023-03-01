@@ -3,9 +3,12 @@
 
     vm.configuration = {};
 
+    vm.useContentSelector = false;
+
     const useContentSelector = document.getElementById("useContentSelector");
     if ($scope.model.value != null && $scope.model.value.useContentSelector != null) {
         useContentSelector.checked = $scope.model.value.useContentSelector;
+        vm.useContentSelector = $scope.model.value.useContentSelector;
     }
 
     const btnConnect = document.getElementById("btnConnect");
@@ -15,7 +18,7 @@
 
     $scope.$on('formSubmitting', function (ev) {
         $scope.model.value = {
-            useContentSelector: useContentSelector.checked
+            useContentSelector: vm.useContentSelector
         };
     });
 
@@ -38,6 +41,10 @@
             notificationsService.success("Aprimo", "Access token revoked.");
         });
     };
+
+    vm.onUseContentSelector = () => {
+        vm.useContentSelector = useContentSelector.checked;
+    }
 
     function getAccessToken(event) {
         if (event.data.type === "hubspot:oauth:success") {

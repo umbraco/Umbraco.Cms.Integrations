@@ -28,9 +28,9 @@
                     $http.post(`${apiEndpoint}/RefreshAccessToken`),
                     "Failed");
             },
-            getRecords: function (page) {
+            getRecords: function (page, searchTerm) {
                 return umbRequestHelper.resourcePromise(
-                    $http.get(`${apiEndpoint}/GetRecords?page=${page}`),
+                    $http.get(`${apiEndpoint}/GetRecords?page=${page}&searchTerm=${searchTerm}`),
                     "Failed to access resource");
             },
             getRecordDetails: function (id) {

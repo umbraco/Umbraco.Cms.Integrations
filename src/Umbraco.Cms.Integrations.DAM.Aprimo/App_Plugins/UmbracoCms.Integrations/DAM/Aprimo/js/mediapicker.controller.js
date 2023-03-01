@@ -25,27 +25,14 @@
         }
     });
 
-    vm.openAprimoMediaPickerOverlay = function () {
-        var options = {
-            title: "Aprimo Content API",
-            subtitle: "Please select an asset",
-            configuration: $scope.model.config.configuration,
-            view: "/App_Plugins/UmbracoCms.Integrations/DAM/Aprimo/views/mediapickereditor.html",
-            size: "medium",
-            save: function (assetObj) {
-                vm.saveAsset(assetObj);
+    vm.selectRecord = () => {
+        if ($scope.model.config.configuration.useContentSelector)
+            openAprimoContentSelector();
+        else
+            openAprimoMediaPickerOverlay();
+    }
 
-                editorService.close();
-            },
-            close: function () {
-                editorService.close();
-            }
-        };
-
-        editorService.open(options);
-    };
-
-    vm.saveAsset = function (id) {
+    vm.saveAsset = (id) => {
         $scope.model.value = id;
 
         umbracoCmsIntegrationsDamAprimoResource.getRecordDetails(id).then(function (recordResponse) {
@@ -60,9 +47,47 @@
         });
     }
 
-    vm.removeAsset = function () {
+    vm.removeAsset = () => {
         $scope.model.value = null;
         vm.selectedRecord = null;
+    }
+
+    function openAprimoMediaPickerOverlay() {
+        var options = {
+            title: "Aprimo Content API",
+            subtitle: "Please select an asset",
+            configuration: $scope.model.config.configuration,
+            view: "/App_Plugins/UmbracoCms.Integrations/DAM/Aprimo/views/mediapickereditor.html",
+            size: "medium",
+            save: function (id) {
+                vm.saveAsset(id);
+
+                editorService.close();
+            },
+            close: function () {
+                editorService.close();
+            }
+        };
+
+        editorService.open(options);
+    };
+
+    function openAprimoContentSelector() {
+        umbracoCmsIntegrationsDamAprimoResource.getContentSelectorUrl().then(function (response) {
+            if (response.length > 0) {
+                window.open(response,
+                    "Aprimo Content Selector",
+                    "width=900,height=700,modal=yes,alwaysRaised=yes");
+
+                window.addEventListener("message", function (event) {
+                    if (event.data.result !== 'cancel' && event.data.selection !== undefined) {
+                        vm.saveAsset(event.data.selection[0].id);
+                    }
+                }, false);
+            }
+            else
+                notificationsService.warning("Aprimo", "Could not retrieve content selector URL.");
+        });
     }
 }
 

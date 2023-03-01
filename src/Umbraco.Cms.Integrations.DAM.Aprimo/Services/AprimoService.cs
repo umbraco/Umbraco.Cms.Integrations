@@ -48,7 +48,7 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
                 response.StatusCode != System.Net.HttpStatusCode.Unauthorized);
         }
 
-        public async Task<AprimoResponse<SearchedRecordsPaged>> SearchRecords(string page)
+        public async Task<AprimoResponse<SearchedRecordsPaged>> SearchRecords(string page, string searchTerm)
         {
             var client = _httpClientFactory.CreateClient(Constants.AprimoClient);
 
@@ -63,7 +63,9 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
             {
                 SearchExpression = new AprimoSearchExpression
                 {
-                    Expression = "ContentStatus = 'Released'"
+                    Expression = string.IsNullOrEmpty(searchTerm) 
+                        ? "ContentStatus = 'Released'"
+                        : searchTerm
                 }
             };
 
