@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
+
 using System.Text.Json;
+
 using Umbraco.Cms.Integrations.DAM.Aprimo.Configuration;
 using Umbraco.Cms.Integrations.DAM.Aprimo.Models;
 
@@ -9,11 +11,11 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
     {
         private readonly AprimoSettings _settings;
 
+        private readonly AprimoOAuthSettings _oauthSettings;
+
         private readonly IHttpClientFactory _httpClientFactory;
 
         private readonly OAuthConfigurationStorage _storage;
-
-        public const string Service = "Aprimo";
 
         public const string AuthorizationEndpoint = "https://{0}.aprimo.com/login/connect/authorize" +
             "?response_type=code" +
@@ -24,14 +26,15 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
             "&code_challenge={4}" +
             "&code_challenge_method=S256";
 
-        public const string TokenEndpoint = "https://localhost:44364/oauth/v1/token"; //"https://hubspot-forms-auth.umbraco.com/"
-
         public AprimoAuthorizationService(
             IOptions<AprimoSettings> options, 
+            IOptions<AprimoOAuthSettings> oauthOptions,
             IHttpClientFactory httpClientFactory,
             OAuthConfigurationStorage storage)
         {
             _settings = options.Value;
+
+            _oauthSettings = oauthOptions.Value;
             
             _httpClientFactory = httpClientFactory;
 
@@ -43,8 +46,8 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
             return string.Format(AuthorizationEndpoint,
                 _settings.Tenant,
                 oauthCodeExchange.State,
-                _settings.ClientId,
-                _settings.RedirectUri,
+                _oauthSettings.ClientId,
+                _oauthSettings.RedirectUri,
                 oauthCodeExchange.CodeChallenge);
         }
 
@@ -57,22 +60,23 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
             {
                 { "grant_type", "authorization_code" },
                 { "code", code },
-                { "client_id", _settings.ClientId },
-                { "redirect_uri", _settings.RedirectUri },
+                { "client_id", _oauthSettings.ClientId },
+                { "client_secret", _oauthSettings.ClientSecret },
+                { "redirect_uri", _oauthSettings.RedirectUri },
                 { "code_verifier", configurationEntity.CodeVerifier }
             };
 
-            var requestMessage = new HttpRequestMessage
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(TokenEndpoint),
-                Content = new FormUrlEncodedContent(requestData)
-            };
-            requestMessage.Headers.Add("service_name", Service);
-            requestMessage.Headers.Add("tenant", _settings.Tenant);
+            //var requestMessage = new HttpRequestMessage
+            //{
+            //    Method = HttpMethod.Post,
+            //    RequestUri = new Uri(TokenEndpoint),
+            //    Content = new FormUrlEncodedContent(requestData)
+            //};
+           // requestMessage.Headers.Add("service_name", Service);
+            //requestMessage.Headers.Add("tenant", _settings.Tenant);
 
-            var httpClient = _httpClientFactory.CreateClient();
-            var response = await httpClient.SendAsync(requestMessage);
+            var httpClient = _httpClientFactory.CreateClient(Constants.AprimoAuthClient);
+            var response = await httpClient.PostAsync("login/connect/token", new FormUrlEncodedContent(requestData));
 
             var content = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
@@ -102,20 +106,21 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
             {
                 { "grant_type", "refresh_token" },
                 { "refresh_token", configurationEntity.RefreshToken },
-                { "client_id", _settings.ClientId }
+                { "client_id", _oauthSettings.ClientId },
+                { "client_secret", _oauthSettings.ClientSecret }
             };
 
-            var requestMessage = new HttpRequestMessage
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(TokenEndpoint),
-                Content = new FormUrlEncodedContent(requestData)
-            };
-            requestMessage.Headers.Add("service_name", Service);
-            requestMessage.Headers.Add("tenant", _settings.Tenant);
+            //var requestMessage = new HttpRequestMessage
+            //{
+            //    Method = HttpMethod.Post,
+            //    RequestUri = new Uri(TokenEndpoint),
+            //    Content = new FormUrlEncodedContent(requestData)
+            //};
+            //requestMessage.Headers.Add("service_name", Service);
+            //requestMessage.Headers.Add("tenant", _settings.Tenant);
 
-            var httpClient = _httpClientFactory.CreateClient();
-            var response = await httpClient.SendAsync(requestMessage);
+            var httpClient = _httpClientFactory.CreateClient(Constants.AprimoAuthClient);
+            var response = await httpClient.PostAsync("login/connect/token", new FormUrlEncodedContent(requestData));
 
             var content = await response.Content.ReadAsStringAsync();
 

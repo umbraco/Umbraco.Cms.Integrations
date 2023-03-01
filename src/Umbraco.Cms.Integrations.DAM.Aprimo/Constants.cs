@@ -7,7 +7,11 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo
 
         public const string SettingsPath = "Umbraco:Cms:Integrations:DAM:Aprimo:Settings";
 
+        public const string OAuthSettingsPath = "Umbraco:Cms:Integrations:DAM:Aprimo:OAuthSettings";
+
         public const string AprimoClient = "AprimoHttpClient";
+
+        public const string AprimoAuthClient = "AprimoAuthHttpClient";
 
         public class Migration
         {

@@ -19,6 +19,10 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo
                 .AddOptions<AprimoSettings>()
                 .Bind(builder.Config.GetSection(Constants.SettingsPath));
 
+            builder.Services
+                .AddOptions<AprimoOAuthSettings>()
+                .Bind(builder.Config.GetSection(Constants.OAuthSettingsPath));
+
             builder.AddNotificationHandler<UmbracoApplicationStartingNotification, UmbracoAppStartingHandler>();
 
             builder.Services.AddSingleton<OAuthConfigurationStorage>();
@@ -30,13 +34,20 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo
             builder.Services
                 .AddHttpClient(Constants.AprimoClient, client =>
                 {
-                    client.BaseAddress = 
+                    client.BaseAddress =
                         new Uri($"https://{builder.Config.GetSection(Constants.SettingsPath)[nameof(AprimoSettings.Tenant)]}.dam.aprimo.com/api/core/");
                     client.DefaultRequestHeaders.Add("API-VERSION", "1");
                     client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Umbraco.Cms.Integrations.DAM.Aprimo", "1.0.0"));
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     client.DefaultRequestHeaders.Add("select-record", "title,tag,thumbnail");
                 });
+
+            builder.Services
+               .AddHttpClient(Constants.AprimoAuthClient, client =>
+               {
+                   client.BaseAddress =
+                       new Uri($"https://{builder.Config.GetSection(Constants.SettingsPath)[nameof(AprimoSettings.Tenant)]}.aprimo.com/");
+               });
         }
     }
 }

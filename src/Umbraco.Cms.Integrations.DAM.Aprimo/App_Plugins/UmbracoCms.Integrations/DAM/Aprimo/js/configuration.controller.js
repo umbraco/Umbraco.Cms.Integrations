@@ -23,7 +23,7 @@
     });
 
     vm.onConnect = () => {
-        window.addEventListener("message", getAccessToken, false);
+        window.addEventListener("message", handleAuthEvent, false);
 
         umbracoCmsIntegrationsDamAprimoResource.getAuthorizationUrl().then(function (response) {
             window.open(response,
@@ -32,11 +32,18 @@
     };
 
     vm.onRevoke = () => {
-        window.removeEventListener("message", getAccessToken);
+        window.removeEventListener("message", handleAuthEvent);
         umbracoCmsIntegrationsDamAprimoResource.revokeAccessToken().then(function () {
             vm.configuration.isAuthorized = false;
-            vm.configuration.icon = response.failure ? "lock" : "unlock";
-            vm.configuration.tag = response.failure ? "danger" : "positive";
+            vm.configuration.icon = "lock";
+            vm.configuration.tag = "danger";
+            vm.configuration.message = "Invalid access token.";
+
+            toggleDisabledState(
+                vm.configuration.isAuthorized
+                    ? btnRevoke : btnConnect,
+                vm.configuration.isAuthorized
+                    ? btnConnect : btnRevoke);
 
             notificationsService.success("Aprimo", "Access token revoked.");
         });
@@ -46,14 +53,12 @@
         vm.useContentSelector = useContentSelector.checked;
     }
 
-    function getAccessToken(event) {
-        if (event.data.type === "hubspot:oauth:success") {
-            umbracoCmsIntegrationsDamAprimoResource.getAccessToken(event.data.code).then(function (response) {
-                if (response.indexOf("Error") > -1)
-                    notificationsService.error("Aprimo", response);
-                else
-                    checkApiConfiguration();
-            });
+    function handleAuthEvent(event) {
+        if (event.data.type === "aprimo:oauth:success") {
+            notificationsService.success("Aprimo", "Connected.");
+            checkApiConfiguration();
+        } else if (event.data.type === "aprimo:oauth:error") {
+            notificationsService.error("Aprimo", event.data.response);
         }
     }
 
@@ -64,7 +69,7 @@
                 isAuthorized: response.isAuthorized,
                 icon: response.failure ? "lock" : "unlock",
                 tag: response.failure ? "danger" : "positive",
-                message: response.failure ? response.error : "Connected",
+                message: response.failure ? response.error : "Connected.",
                 browserIsSupported: umbracoCmsIntegrationsDamAprimoService.browserIsSupported()
             };
 

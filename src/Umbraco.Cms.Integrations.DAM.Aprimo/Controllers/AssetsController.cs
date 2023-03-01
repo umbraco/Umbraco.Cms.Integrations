@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+
 using System.Dynamic;
 using System.Text;
 using System.Text.Json;
+
 using Umbraco.Cms.Integrations.DAM.Aprimo.Configuration;
 using Umbraco.Cms.Integrations.DAM.Aprimo.Extensions;
 using Umbraco.Cms.Integrations.DAM.Aprimo.Migrations;
@@ -18,6 +20,8 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Controllers
     {
         private readonly AprimoSettings _settings;
 
+        private readonly AprimoOAuthSettings _oauthSettings;
+
         private readonly IAprimoAuthorizationService _authorizationService;
 
         private readonly IAprimoService _assetsService;
@@ -26,11 +30,14 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Controllers
 
         public AssetsController(
             IOptions<AprimoSettings> options, 
+            IOptions<AprimoOAuthSettings> oauthOptions,
             IAprimoAuthorizationService authorizationService,
             IAprimoService assetsService,
             OAuthConfigurationStorage oauthConfigurationStorage)
         {
             _settings = options.Value;
+
+            _oauthSettings = oauthOptions.Value;
 
             _authorizationService= authorizationService;
 
@@ -43,8 +50,8 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Controllers
         public async Task<IActionResult> CheckApiConfiguration()
         {
             if (string.IsNullOrEmpty(_settings.Tenant)
-                || string.IsNullOrEmpty(_settings.ClientId)
-                || string.IsNullOrEmpty(_settings.RedirectUri))
+                || string.IsNullOrEmpty(_oauthSettings.ClientId)
+                || string.IsNullOrEmpty(_oauthSettings.RedirectUri))
                 return new JsonResult(AprimoResponse<string>.Fail(Constants.ErrorResources.InvalidApiConfiguration, false));
 
             var result = await _assetsService.GetRecordById(Guid.NewGuid());
