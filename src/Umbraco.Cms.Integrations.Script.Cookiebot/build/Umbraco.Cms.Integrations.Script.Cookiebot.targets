@@ -1,0 +1,29 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<CookiebotPropertyEditorFilesPath>
+			$(MSBuildThisFileDirectory)..\Views\Partials\UmbracoCms.Integrations\Scripts\Cookiebot\**\*.*
+		</CookiebotPropertyEditorFilesPath>
+	</PropertyGroup>
+	<Target Name="CopyCookiebotPropertyEditorAssets" BeforeTargets="Build">
+		<ItemGroup>
+			<CookiebotPropertyEditorFiles Include="$(CookiebotPropertyEditorFilesPath)" />
+		</ItemGroup>
+		<Message
+			Text="Copying Cookiebot Property Editor files: $(CookiebotPropertyEditorFilesPath) - #@(CookiebotPropertyEditorFiles->Count()) files"
+			Importance="high" />
+		<Copy SourceFiles="@(CookiebotPropertyEditorFiles)"
+		      DestinationFiles="@(CookiebotPropertyEditorFiles->'$(MSBuildProjectDirectory)\Views\Partials\UmbracoCms.Integrations\Scripts\Cookiebot\%(RecursiveDir)%(Filename)%(Extension)')"
+		      SkipUnchangedFiles="true" />
+
+	</Target>
+
+	<Target Name="ClearCookiebotPropertyEditorAssets" BeforeTargets="Clean">
+		<ItemGroup>
+			<CookiebotPropertyEditorDir
+				Include="$(MSBuildProjectDirectory)\Views\Partials\UmbracoCms.Integrations\Scripts\Cookiebot\" />
+		</ItemGroup>
+		<Message Text="Clear old Cookiebot Property Editor data"  Importance="high" />
+		<RemoveDir Directories="@(CookiebotPropertyEditorDir)"  />
+	</Target>
+
+</Project>

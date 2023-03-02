@@ -1,0 +1,14 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+
+@using Umbraco.Cms.Integrations.Script.Cookiebot
+
+@{
+    var scriptSrc = "https://consent.cookiebot.com/" + Configuration[$"{Constants.SettingsPath}:Id"] + "/cd.js";
+}
+
+<script id="CookieDeclaration" 
+    src="@scriptSrc" 
+    type="text/javascript" async></script>
+
