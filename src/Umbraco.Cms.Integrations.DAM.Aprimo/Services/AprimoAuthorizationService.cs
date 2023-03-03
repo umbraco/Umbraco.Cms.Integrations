@@ -66,15 +66,6 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
                 { "code_verifier", configurationEntity.CodeVerifier }
             };
 
-            //var requestMessage = new HttpRequestMessage
-            //{
-            //    Method = HttpMethod.Post,
-            //    RequestUri = new Uri(TokenEndpoint),
-            //    Content = new FormUrlEncodedContent(requestData)
-            //};
-           // requestMessage.Headers.Add("service_name", Service);
-            //requestMessage.Headers.Add("tenant", _settings.Tenant);
-
             var httpClient = _httpClientFactory.CreateClient(Constants.AprimoAuthClient);
             var response = await httpClient.PostAsync("login/connect/token", new FormUrlEncodedContent(requestData));
 
@@ -109,15 +100,6 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
                 { "client_id", _oauthSettings.ClientId },
                 { "client_secret", _oauthSettings.ClientSecret }
             };
-
-            //var requestMessage = new HttpRequestMessage
-            //{
-            //    Method = HttpMethod.Post,
-            //    RequestUri = new Uri(TokenEndpoint),
-            //    Content = new FormUrlEncodedContent(requestData)
-            //};
-            //requestMessage.Headers.Add("service_name", Service);
-            //requestMessage.Headers.Add("tenant", _settings.Tenant);
 
             var httpClient = _httpClientFactory.CreateClient(Constants.AprimoAuthClient);
             var response = await httpClient.PostAsync("login/connect/token", new FormUrlEncodedContent(requestData));
