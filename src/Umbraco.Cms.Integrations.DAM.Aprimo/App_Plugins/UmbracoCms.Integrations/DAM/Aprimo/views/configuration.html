@@ -13,23 +13,20 @@
                     <uui-toggle id="useContentSelector" class="aprimo-label" label="Use Content Selector" ng-on-change="vm.onUseContentSelector()">
                         Use Content Selector
                     </uui-toggle>
+                    <uui-box ng-if="!vm.useContentSelector" class="aprimo-label">
+                        <p>
+                            Assets will be retrieved using an Umbraco interface communicating with the Aprimo API.
+                            This works with all browsers supported by Umbraco.
+                        </p>
+                    </uui-box>
                     <uui-box ng-if="vm.useContentSelector" class="aprimo-label">
                         <p>
-                            The Aprimo content selector is a pre-built UI to use Aprimo DAM as a tool for users to select content items in 3rd party systems.
+                            Assets will be retrieved using a richer Aprimo user interface,
+                            but is only available with
+                            <a href="https://help.aprimo.com/Content/Marketing_Operations_Help/aprimo_basics/browsers_configuring_concept.html" target="_blank">this</a>
+                            list of supported browsers. <br /><br/>
+                            <a href="https://developers.aprimo.com/digital-asset-management/aprimo-integration-tools/aprimo-content-selector/" target="_blank">Read more</a>
                         </p>
-                        <p>
-                            The Aprimo content selector can be launched in either ID mode or CDN mode.
-                            ID mode will return the record ID of the selected asset, and CDN mode will also return the public uri of the asset.
-                            Public CDN is required for CDN mode.
-                        </p>
-                        <p>
-                            The record ID that is returned can be used in the Aprimo REST API to get metadata on the
-                            selected record, and the public uri returned in CDN mode can be used to place the content in a field or on a page.
-                        </p>
-                        <p>
-                            The Aprimo Content Selector can only be used in a stand-alone browser window (or browser tab).
-                        </p>
-                        <a href="https://developers.aprimo.com/digital-asset-management/aprimo-integration-tools/aprimo-content-selector/" target="_blank">read more</a>
                     </uui-box>
                 </div>
 

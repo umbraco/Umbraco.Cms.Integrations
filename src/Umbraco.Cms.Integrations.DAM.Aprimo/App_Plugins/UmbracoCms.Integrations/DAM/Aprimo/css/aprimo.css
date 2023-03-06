@@ -16,10 +16,3 @@
 .aprimo-label {
     font-size: 15px;
 }
-
-/* rendering */
-.aprimo-title {
-    display: inline;
-    vertical-align: top;
-    padding-left: 10px;
-}

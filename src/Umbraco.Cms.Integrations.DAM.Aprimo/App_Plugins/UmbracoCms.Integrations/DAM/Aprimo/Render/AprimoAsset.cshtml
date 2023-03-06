@@ -1,11 +1,17 @@
 ﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Integrations.DAM.Aprimo.Models.ViewModels.AprimoAssetViewModel>
 
-<link href="~/App_Plugins/UmbracoCms.Integrations/DAM/Aprimo/css/aprimo.css" rel="stylesheet"/>
+<style type="text/css">
+    .aprimo-asset-row { display: flex; justify-content: center; }
+    .aprimo-asset-row .thumbnail { float: left; margin-right: 10px; }
+    .aprimo-asset-row .text { float: left; }
+</style>
 
-<div class="aprimo-container">
+<div class="aprimo-asset-row">
     @if (!string.IsNullOrEmpty(Model.Thumbnail))
     {
-        <img class="aprimo-thumbnail" src="@Model.Thumbnail" alt="@Model.Title" />
+        <img class="thumbnail" src="@Model.Thumbnail" alt="@Model.Title" />
     }
-    <h3 class="aprimo-title">@Model.Title</h3>
+    <div class="text">
+        <h3>@Model.Title</h3>
+    </div>
 </div>
