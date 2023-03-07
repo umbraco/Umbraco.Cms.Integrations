@@ -9,7 +9,7 @@
 	<PropertyGroup>
 		<PackageId>Umbraco.Cms.Integrations.DAM.Aprimo</PackageId>
 		<Title>Umbraco CMS Integrations: DAM - Aprimo</Title>
-		<Description>An extension for Umbraco CMS providing a media picker for digital assets managed in Aprimo workspace..</Description>
+		<Description>An extension for Umbraco CMS providing a media picker for digital assets managed in Aprimo workspace.</Description>
 		<PackageIconUrl></PackageIconUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main/src/Umbraco.Cms.Integrations.DAM.Aprimo</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>

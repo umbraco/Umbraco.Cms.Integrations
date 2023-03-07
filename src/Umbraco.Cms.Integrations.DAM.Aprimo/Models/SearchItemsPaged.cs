@@ -1,9 +1,8 @@
-﻿
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Umbraco.Cms.Integrations.DAM.Aprimo.Models
 {
-    public class SearchedRecordsPaged
+    public class SearchItemsPaged<T> where T: class
     {
         [JsonPropertyName("page")]
         public int Page { get; set; }
@@ -15,6 +14,6 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Models
         public int TotalCount { get; set; }
 
         [JsonPropertyName("items")]
-        public IEnumerable<Record> Items { get; set; } = Enumerable.Empty<Record>();
+        public IEnumerable<T> Items { get; set; } = Enumerable.Empty<T>();
     }
 }

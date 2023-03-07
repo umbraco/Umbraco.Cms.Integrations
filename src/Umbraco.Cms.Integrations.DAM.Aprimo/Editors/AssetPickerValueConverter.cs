@@ -4,9 +4,11 @@ using System.Text.Json.Nodes;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Integrations.DAM.Aprimo;
+using Umbraco.Cms.Integrations.DAM.Aprimo.Helpers;
 using Umbraco.Cms.Integrations.DAM.Aprimo.Models;
 using Umbraco.Cms.Integrations.DAM.Aprimo.Models.ViewModels;
 using Umbraco.Cms.Integrations.DAM.Aprimo.Services;
+using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Integrations.Dam.Aprimo.Editors
 {
@@ -48,18 +50,22 @@ namespace Umbraco.Cms.Integrations.Dam.Aprimo.Editors
                 Id = source.ToString()
             };
 
-            var response = _assetsService.GetRecordById(Guid.Parse(vm.Id)).ConfigureAwait(false).GetAwaiter().GetResult();
+            var response = _assetsService.GetRecordById(Guid.Parse(vm.Id))
+                .ConfigureAwait(false).GetAwaiter().GetResult();
             if(!response.IsAuthorized)
             {
-                var tokenResponse = _authorizationService.RefreshAccessToken().ConfigureAwait(false).GetAwaiter().GetResult();
+                var tokenResponse = _authorizationService.RefreshAccessToken()
+                    .ConfigureAwait(false).GetAwaiter().GetResult();
                 if (string.IsNullOrEmpty(tokenResponse))
                 {
                     response = _assetsService.GetRecordById(Guid.Parse(vm.Id)).ConfigureAwait(false).GetAwaiter().GetResult();
-                    if(response.Success)
+                    if (response.Success)
                     {
                         ToViewModel(response.Data, ref vm);
                     }
                 }
+                else
+                    _logger.LogError($"Failed to refresh access token: {tokenResponse}");
             } else if(response.Success)
             {
                 ToViewModel(response.Data, ref vm);
@@ -70,9 +76,44 @@ namespace Umbraco.Cms.Integrations.Dam.Aprimo.Editors
 
         private void ToViewModel(Record record, ref AprimoAssetViewModel vm)
         {
+            var languages = _assetsService.GetLanguages()
+                            .ConfigureAwait(false).GetAwaiter().GetResult();
+
             vm.Title = record.Title;
             vm.Thumbnail = record.Thumbnail.Uri;
-            vm.Tag = record.Tag;
+
+            if(record.MasterFileLatestVersion != null 
+                && record.MasterFileLatestVersion.AdditionalFiles!= null
+                && record.MasterFileLatestVersion.AdditionalFiles.Items != null)
+            {
+                vm.CropItemsVM = record.MasterFileLatestVersion.AdditionalFiles.Items
+                    .Where(p => p.Type == "Crop")
+                    .Select(p => p.ToAprimoCropItemViewModel());
+            }
+
+            if(record.Fields != null 
+                && record.Fields.Items != null 
+                && record.Fields.Items.Any())
+            {
+                foreach(var fieldItem in record.Fields.Items)
+                {
+                    var fieldVM = new AprimoFieldViewModel
+                    {
+                        Label = fieldItem.Label
+                    };
+
+                    foreach(var item in fieldItem.Values) 
+                    {
+                        var lang = languages.Data.Items.FirstOrDefault(p => p.Id == item.LanguageId);
+                        fieldVM.Values.Add(lang != null ? lang.Culture : "-",
+                            string.IsNullOrEmpty(item.Value)
+                                ? (item.Values != null ? string.Join(",", item.Values) : string.Empty)
+                                : item.Value);
+                    }
+
+                    vm.FieldsVM.Add(fieldVM);
+                }
+            }
         }
     }
 }
