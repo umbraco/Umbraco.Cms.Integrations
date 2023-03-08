@@ -39,8 +39,6 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo
                     client.DefaultRequestHeaders.Add("API-VERSION", "1");
                     client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Umbraco.Cms.Integrations.DAM.Aprimo", "1.0.0"));
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Add("select-record", "title,thumbnail,fields,masterfilelatestversion");
-                    client.DefaultRequestHeaders.Add("select-fileversion", "additionalfiles,preview,thumbnail");
                 });
 
             builder.Services

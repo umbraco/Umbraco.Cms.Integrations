@@ -50,15 +50,14 @@ namespace Umbraco.Cms.Integrations.Dam.Aprimo.Editors
                 Id = source.ToString()
             };
 
-            var response = _assetsService.GetRecordById(Guid.Parse(vm.Id))
-                .ConfigureAwait(false).GetAwaiter().GetResult();
+            var response = _assetsService.GetRecordById(Guid.Parse(vm.Id));
             if(!response.IsAuthorized)
             {
                 var tokenResponse = _authorizationService.RefreshAccessToken()
                     .ConfigureAwait(false).GetAwaiter().GetResult();
                 if (string.IsNullOrEmpty(tokenResponse))
                 {
-                    response = _assetsService.GetRecordById(Guid.Parse(vm.Id)).ConfigureAwait(false).GetAwaiter().GetResult();
+                    response = _assetsService.GetRecordById(Guid.Parse(vm.Id));
                     if (response.Success)
                     {
                         ToViewModel(response.Data, ref vm);
@@ -76,8 +75,7 @@ namespace Umbraco.Cms.Integrations.Dam.Aprimo.Editors
 
         private void ToViewModel(Record record, ref AprimoAssetViewModel vm)
         {
-            var languages = _assetsService.GetLanguages()
-                            .ConfigureAwait(false).GetAwaiter().GetResult();
+            var languages = _assetsService.GetLanguages();
 
             vm.Title = record.Title;
             vm.Thumbnail = record.Thumbnail.Uri;
@@ -86,7 +84,7 @@ namespace Umbraco.Cms.Integrations.Dam.Aprimo.Editors
                 && record.MasterFileLatestVersion.AdditionalFiles!= null
                 && record.MasterFileLatestVersion.AdditionalFiles.Items != null)
             {
-                vm.CropItemsVM = record.MasterFileLatestVersion.AdditionalFiles.Items
+                vm.Crops = record.MasterFileLatestVersion.AdditionalFiles.Items
                     .Where(p => p.Type == "Crop")
                     .Select(p => p.ToAprimoCropItemViewModel());
             }
@@ -111,7 +109,7 @@ namespace Umbraco.Cms.Integrations.Dam.Aprimo.Editors
                                 : item.Value);
                     }
 
-                    vm.FieldsVM.Add(fieldVM);
+                    vm.Fields.Add(fieldVM);
                 }
             }
         }

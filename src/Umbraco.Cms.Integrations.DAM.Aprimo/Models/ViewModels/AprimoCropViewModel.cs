@@ -1,14 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-
+﻿
 namespace Umbraco.Cms.Integrations.DAM.Aprimo.Models.ViewModels
 {
-    public class AprimoCropItemViewModel
+    public class AprimoCropViewModel
     {
         public int X { get; set; }
 
@@ -30,7 +23,7 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Models.ViewModels
 
         public string PublicLink { get; set; }
 
-        public AprimoCropItemViewModel(
+        public AprimoCropViewModel(
             int x, int y,
             int width, int height,
             int resizeWidth, int resizeHeight,

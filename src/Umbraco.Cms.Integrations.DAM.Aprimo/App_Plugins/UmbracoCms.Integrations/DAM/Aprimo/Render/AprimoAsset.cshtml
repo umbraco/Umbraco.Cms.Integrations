@@ -1,27 +1,5 @@
 ﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Integrations.DAM.Aprimo.Models.ViewModels.AprimoAssetViewModel>
 
-<style type="text/css">
-    .aprimo-asset-row {
-        display: flex;
-        justify-content: center;
-    }
-
-        .aprimo-asset-row .thumbnail {
-            float: left;
-            margin-right: 10px;
-        }
-
-        .aprimo-asset-row .text {
-            float: left;
-        }
-
-    .aprimo-crops-row {display: flex; width: 100%;}
-        .aprimo-crops-row .column {
-            flex: 50%;
-            padding: 10px;
-        }
-</style>
-
 <div class="aprimo-asset-row">
     @if (!string.IsNullOrEmpty(Model.Thumbnail))
     {
@@ -31,18 +9,17 @@
         <h3>@Model.Title</h3>
     </div>
 </div>
-@if (Model.CropItemsVM.Any())
+@if (Model.Crops.Any())
 {
     <div class="aprimo-asset-row">
         <h3>Crop Items</h3>
-        <br/>
         <div class="aprimo-crops-row">
-            @foreach (var cropItem in Model.CropItemsVM)
+            @foreach (var cropItem in Model.Crops)
             {
                 <div class="column">
                     @if (!string.IsNullOrEmpty(cropItem.PublicLink))
                     {
-                        <img src="@cropItem.PublicLink" class="thumbnail" />
+                        <img src="@cropItem.PublicLink" class="thumbnail" alt="@cropItem.Label" />
                     }
                     <p><b>Label:</b> @cropItem.Label</p>
                     <p><b>Size:</b> @cropItem.ResizeWidth x @cropItem.ResizeHeight</p>

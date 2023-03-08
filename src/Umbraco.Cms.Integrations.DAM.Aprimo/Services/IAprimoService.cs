@@ -4,10 +4,16 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
 {
     public interface IAprimoService
     {
-        Task<AprimoResponse<SearchItemsPaged<Language>>> GetLanguages();
+        AprimoResponse<SearchItemsPaged<Language>> GetLanguages();
 
-        Task<AprimoResponse<SearchItemsPaged<Record>>> SearchRecords(string page, string searchTerm);
+        Task<AprimoResponse<SearchItemsPaged<Language>>> GetLanguagesAsync();
 
-        Task<AprimoResponse<Record>> GetRecordById(Guid id);
+        AprimoResponse<SearchItemsPaged<Record>> SearchRecords(string page, string searchTerm);
+
+        Task<AprimoResponse<SearchItemsPaged<Record>>> SearchRecordsAsync(string page, string searchTerm);
+
+        AprimoResponse<Record> GetRecordById(Guid id);
+
+        Task<AprimoResponse<Record>> GetRecordByIdAsync(Guid id);
     }
 }

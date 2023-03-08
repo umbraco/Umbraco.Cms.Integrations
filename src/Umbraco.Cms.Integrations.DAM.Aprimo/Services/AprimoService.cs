@@ -1,5 +1,4 @@
-﻿using System.Dynamic;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
@@ -20,7 +19,10 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
             _oauthConfigurationStorage = oauthConfigurationStorage;
         }
 
-        public async Task<AprimoResponse<SearchItemsPaged<Language>>> GetLanguages()
+        public AprimoResponse<SearchItemsPaged<Language>> GetLanguages() => 
+            GetLanguagesAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+        public async Task<AprimoResponse<SearchItemsPaged<Language>>> GetLanguagesAsync()
         {
             var client = _httpClientFactory.CreateClient(Constants.AprimoClient);
 
@@ -48,7 +50,10 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
                 response.StatusCode != System.Net.HttpStatusCode.Unauthorized);
         }
 
-        public async Task<AprimoResponse<Record>> GetRecordById(Guid id)
+        public AprimoResponse<Record> GetRecordById(Guid id) => 
+            GetRecordByIdAsync(id).ConfigureAwait(false).GetAwaiter().GetResult();
+
+        public async Task<AprimoResponse<Record>> GetRecordByIdAsync(Guid id)
         {
             var client = _httpClientFactory.CreateClient(Constants.AprimoClient);
 
@@ -56,6 +61,9 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
                 return AprimoResponse<Record>.Fail(Constants.ErrorResources.Unauthorized, false);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            client.DefaultRequestHeaders.Add("select-record", "title,thumbnail,fields,masterfilelatestversion");
+            client.DefaultRequestHeaders.Add("select-fileversion", "additionalfiles");
 
             var response = await client.GetAsync($"record/{id}");
             var content = await response.Content.ReadAsStringAsync();
@@ -76,7 +84,10 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
                 response.StatusCode != System.Net.HttpStatusCode.Unauthorized);
         }
 
-        public async Task<AprimoResponse<SearchItemsPaged<Record>>> SearchRecords(string page, string searchTerm)
+        public AprimoResponse<SearchItemsPaged<Record>> SearchRecords(string page, string searchTerm) =>
+            SearchRecordsAsync(page, searchTerm).ConfigureAwait(false).GetAwaiter().GetResult();
+
+        public async Task<AprimoResponse<SearchItemsPaged<Record>>> SearchRecordsAsync(string page, string searchTerm)
         {
             var client = _httpClientFactory.CreateClient(Constants.AprimoClient);
 
@@ -86,6 +97,7 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             client.DefaultRequestHeaders.Add("page", page);
             client.DefaultRequestHeaders.Add("pagesize", "10");
+            client.DefaultRequestHeaders.Add("select-record", "title,thumbnail");
 
             var request = new AprimoRequest
             {
