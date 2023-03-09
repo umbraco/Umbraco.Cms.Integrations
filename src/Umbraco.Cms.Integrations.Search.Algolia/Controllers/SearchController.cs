@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
 using Umbraco.Cms.Core.Routing;
-using Umbraco.Cms.Integrations.Library.Services;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Services.Implement;
 using Umbraco.Cms.Integrations.Search.Algolia.Builders;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
@@ -30,7 +31,9 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
         private readonly IPublishedUrlProvider _urlProvider;
 
-        private readonly IParserService _parserService;
+        private readonly IContentService _contentService;
+
+        private readonly IAlgoliaSearchPropertyIndexValueFactory _algoliaSearchPropertyIndexValueFactory;
 
         public SearchController(
             IAlgoliaIndexService indexService, 
@@ -38,7 +41,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
             UmbracoHelper umbracoHelper, 
             IPublishedUrlProvider urlProvider,
-            IParserService parserService)
+            IContentService contentService,
+            IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory)
         {
             _indexService = indexService;
             
@@ -50,7 +54,9 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
             _urlProvider = urlProvider;
 
-            _parserService = parserService;
+            _contentService = contentService;
+
+            _algoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
         }
 
         [HttpGet]
@@ -107,8 +113,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
                     foreach (var contentItem in contentItems)
                     {
-                        var record = new PublishedContentRecordBuilder(_urlProvider, _parserService)
-                            .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
+                        var record = new ContentRecordBuilder(_urlProvider, _algoliaSearchPropertyIndexValueFactory)
+                            .BuildFromContent(_contentService.GetById(contentItem.Id), (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
                             .Build();
 
                         payload.Add(record);

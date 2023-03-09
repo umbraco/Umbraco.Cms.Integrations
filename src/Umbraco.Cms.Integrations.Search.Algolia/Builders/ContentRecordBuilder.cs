@@ -2,9 +2,8 @@
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Integrations.Library.Parsing;
-using Umbraco.Cms.Integrations.Library.Services;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
+using Umbraco.Cms.Integrations.Search.Algolia.Services;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
 {
@@ -14,13 +13,13 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
 
         private readonly IPublishedUrlProvider _urlProvider;
 
-        private readonly IParserService _parserService;
+        private readonly IAlgoliaSearchPropertyIndexValueFactory _algoliaSearchPropertyIndexValueFactory;
 
-        public ContentRecordBuilder(IPublishedUrlProvider urlProvider, IParserService parserService)
+        public ContentRecordBuilder(IPublishedUrlProvider urlProvider, IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory)
         {
             _urlProvider = urlProvider;
 
-            _parserService = parserService;
+            _algoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
         }
 
         public ContentRecordBuilder BuildFromContent(IContent content, Func<IProperty, bool> filter = null)
@@ -29,6 +28,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
 
             _record.Id = content.Id;
             _record.Name = content.Name;
+            _record.CreateDate = content.CreateDate.ToString();
+            _record.UpdateDate = content.UpdateDate.ToString();
             _record.Url = _urlProvider.GetUrl(content.Id);
 
             if (content.AvailableCultures.Count() > 0)
@@ -48,14 +49,14 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
                     {
                         foreach (var culture in content.AvailableCultures)
                         {
-                            string propValue = _parserService.GetParsedValue(property, culture);
-                            _record.Data.Add($"{property.Alias}-{culture}", propValue);
+                            var indexValue = _algoliaSearchPropertyIndexValueFactory.GetValue(property, culture);
+                            _record.Data.Add($"{indexValue.Key}-{culture}", indexValue.Value);
                         }
                     }
                     else
                     {
-                        string propValue = _parserService.GetParsedValue(property);
-                        _record.Data.Add(property.Alias, propValue);
+                        var indexValue = _algoliaSearchPropertyIndexValueFactory.GetValue(property, string.Empty);
+                        _record.Data.Add(indexValue.Key, indexValue.Value);
                     }
 
                 }

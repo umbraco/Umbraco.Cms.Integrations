@@ -4,7 +4,6 @@ using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Integrations.Library.Services;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Services;
 
@@ -17,8 +16,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage, 
             IAlgoliaIndexService indexService, 
             IPublishedUrlProvider urlProvider,
-            IParserService parserService)
-            :  base(logger, indexStorage, indexService, urlProvider, parserService)
+            IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory)
+            :  base(logger, indexStorage, indexService, urlProvider, algoliaSearchPropertyIndexValueFactory)
         { }
 
         public async Task HandleAsync(ContentPublishedNotification notification, CancellationToken cancellationToken) => await RebuildIndex(notification.PublishedEntities);

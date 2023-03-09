@@ -4,7 +4,7 @@ using System.Text.Json;
 
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Routing;
-using Umbraco.Cms.Integrations.Library.Services;
+using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Integrations.Search.Algolia.Builders;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
@@ -20,15 +20,15 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 
         protected readonly IAlgoliaIndexService IndexService;
 
-        protected readonly IPublishedUrlProvider _urlProvider;
+        protected readonly IPublishedUrlProvider UrlProvider;
 
-        protected readonly IParserService _parserService;
+        protected readonly IAlgoliaSearchPropertyIndexValueFactory AlgoliaSearchPropertyIndexValueFactory;
 
         public BaseContentHandler(ILogger<BaseContentHandler> logger,
             IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
             IAlgoliaIndexService indexService,
             IPublishedUrlProvider urlProvider,
-            IParserService parserService)
+            IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory)
         {
             Logger = logger;
 
@@ -36,9 +36,9 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 
             IndexService = indexService;
 
-            _urlProvider = urlProvider;    
+            UrlProvider = urlProvider;
 
-            _parserService = parserService;
+            AlgoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
         }
 
         protected async Task RebuildIndex(IEnumerable<IContent> entities, bool deleteIndexData = false)
@@ -55,7 +55,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
                             .FirstOrDefault(p => p.ContentType.Alias == entity.ContentType.Alias);
                         if (indexConfiguration == null || indexConfiguration.ContentType.Alias != entity.ContentType.Alias) continue;
 
-                        var record = new ContentRecordBuilder(_urlProvider, _parserService)
+                        var record = new ContentRecordBuilder(UrlProvider, AlgoliaSearchPropertyIndexValueFactory)
                            .BuildFromContent(entity, (p) => indexConfiguration.Properties.Any(q => q.Alias == p.Alias))
                            .Build();
 

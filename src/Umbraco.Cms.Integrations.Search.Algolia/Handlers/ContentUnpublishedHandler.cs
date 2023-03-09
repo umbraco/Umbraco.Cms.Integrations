@@ -4,7 +4,6 @@ using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Integrations.Library.Services;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Services;
 
@@ -13,12 +12,12 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
     public class ContentUnpublishedHandler : BaseContentHandler, INotificationAsyncHandler<ContentUnpublishedNotification>
     {
         public ContentUnpublishedHandler(
-            ILogger<ContentUnpublishedHandler> logger, 
+            ILogger<ContentUnpublishedHandler> logger,
             IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
-            IAlgoliaIndexService indexService, 
+            IAlgoliaIndexService indexService,
             IPublishedUrlProvider urlProvider,
-            IParserService parserService)
-           : base(logger, indexStorage, indexService, urlProvider, parserService)
+            IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory)
+           : base(logger, indexStorage, indexService, urlProvider, algoliaSearchPropertyIndexValueFactory)
         { }
 
         public async Task HandleAsync(ContentUnpublishedNotification notification, CancellationToken cancellationToken) =>
