@@ -1,21 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<EnableDefaultContentItems>false</EnableDefaultContentItems>
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="Views\Partials\UmbracoCms.Integrations\Scripts\Cookiebot\**\*.*">
-			<Pack>true</Pack>
-			<PackagePath>Views\Partials\UmbracoCms.Integrations\Scripts\Cookiebot\</PackagePath>
-		</Content>
-		<None Include="build\**\*.*">
-			<Pack>True</Pack>
-			<PackagePath>buildTransitive</PackagePath>
-		</None>
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Views\**" />
+	</ItemGroup>
 
 </Project>
