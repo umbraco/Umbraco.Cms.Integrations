@@ -4,13 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[10.3.0,12)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[10.3.0,12)" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="Views\Partials\UmbracoCms.Integrations\Scripts\Cookiebot\**\*.*">
@@ -23,12 +17,5 @@
 		</None>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Content Remove="Views\Partials\UmbracoCms.Integrations\Scripts\Cookiebot\Cookiebot.cshtml~RF11f2acff.TMP" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="Views\Partials\UmbracoCms.Integrations\Scripts\Cookiebot\Cookiebot.cshtml~RF11f2acff.TMP" />
-	</ItemGroup>
 
 </Project>

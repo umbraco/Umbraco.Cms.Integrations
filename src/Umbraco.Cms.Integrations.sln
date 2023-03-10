@@ -79,7 +79,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Cr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "General", "General", "{54684516-D990-41C7-885E-96A064A55BB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Script.Cookiebot", "Umbraco.Cms.Integrations.Script.Cookiebot\Umbraco.Cms.Integrations.Script.Cookiebot.csproj", "{B6830012-7233-41D5-8CD5-E67635388806}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Script.Cookiebot", "Umbraco.Cms.Integrations.Script.Cookiebot\Umbraco.Cms.Integrations.Script.Cookiebot.csproj", "{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -155,10 +155,10 @@ Global
 		{14303AD9-B64B-4DE1-AB4E-B0979277EAC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14303AD9-B64B-4DE1-AB4E-B0979277EAC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14303AD9-B64B-4DE1-AB4E-B0979277EAC2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B6830012-7233-41D5-8CD5-E67635388806}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6830012-7233-41D5-8CD5-E67635388806}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6830012-7233-41D5-8CD5-E67635388806}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6830012-7233-41D5-8CD5-E67635388806}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,7 +186,7 @@ Global
 		{54A624E5-5321-4CC8-B74B-11ABF3605242} = {F2CAA1F7-9BED-4EB6-8875-D176B92D393A}
 		{904B3CF6-1015-465E-8244-70FC90466F22} = {B5D14B4B-0E39-4C01-9021-D9A75F358DE1}
 		{14303AD9-B64B-4DE1-AB4E-B0979277EAC2} = {1A4D3D38-F5B2-4528-92A1-318A7D09949D}
-		{B6830012-7233-41D5-8CD5-E67635388806} = {54684516-D990-41C7-885E-96A064A55BB1}
+		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3} = {54684516-D990-41C7-885E-96A064A55BB1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FB51E08-A3C8-4DFF-B3CB-E99C2ED021D5}
