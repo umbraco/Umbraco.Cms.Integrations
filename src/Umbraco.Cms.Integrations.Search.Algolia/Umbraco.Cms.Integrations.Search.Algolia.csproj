@@ -26,10 +26,6 @@
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[10.3.0,12)" />
 		<PackageReference Include="Umbraco.Cms.Web.Common" version="[10.3.0,12)" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\Umbraco.Cms.Integrations.Library\Umbraco.Cms.Integrations.Library.csproj" />
-	</ItemGroup>
 	
 	<ItemGroup>
 		<Content Include="App_Plugins\UmbracoCms.Integrations\Search\Algolia\**\*.*">
