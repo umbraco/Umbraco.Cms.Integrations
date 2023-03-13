@@ -69,7 +69,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
             if(string.IsNullOrEmpty(parsedIndexValue)) return string.Empty;
 
-            var inputMedia = JsonSerializer.Deserialize<IEnumerable<LibraryMedia>>(parsedIndexValue);
+            var inputMedia = JsonSerializer.Deserialize<IEnumerable<MediaItem>>(parsedIndexValue);
 
             if (inputMedia == null) return string.Empty;
 

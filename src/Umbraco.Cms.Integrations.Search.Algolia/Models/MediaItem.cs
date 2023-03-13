@@ -2,7 +2,7 @@
 
 namespace Umbraco.Cms.Integrations.Search.Algolia
 {
-    public class LibraryMedia
+    public class MediaItem
     {
         [JsonPropertyName("key")]
         public string Key { get; set; } = string.Empty;
