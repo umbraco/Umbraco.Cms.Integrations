@@ -36,9 +36,6 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
             builder.Services.AddScoped<IAlgoliaIndexDefinitionStorage<AlgoliaIndex>, AlgoliaIndexDefinitionStorage>();
 
             builder.Services.AddScoped<IAlgoliaSearchPropertyIndexValueFactory, AlgoliaSearchPropertyIndexValueFactory>();
-
-            // use this syntax for registering your own converter
-            //builder.Services.AddScoped<IAlgoliaSearchPropertyIndexValueFactory, ExtendedAlgoliaSearchPropertyIndexValueFactory>();
         }
 
     }
