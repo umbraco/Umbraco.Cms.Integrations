@@ -34,6 +34,8 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
             builder.Services.AddSingleton<IAlgoliaSearchService<SearchResponse<Record>>, AlgoliaSearchService>();
 
             builder.Services.AddScoped<IAlgoliaIndexDefinitionStorage<AlgoliaIndex>, AlgoliaIndexDefinitionStorage>();
+
+            builder.Services.AddScoped<IAlgoliaSearchPropertyIndexValueFactory, AlgoliaSearchPropertyIndexValueFactory>();
         }
 
     }
