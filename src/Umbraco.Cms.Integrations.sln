@@ -77,9 +77,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.PI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core", "Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core\Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.csproj", "{14303AD9-B64B-4DE1-AB4E-B0979277EAC2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "General", "General", "{54684516-D990-41C7-885E-96A064A55BB1}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analytics", "Analytics", "{54684516-D990-41C7-885E-96A064A55BB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Script.Cookiebot", "Umbraco.Cms.Integrations.Script.Cookiebot\Umbraco.Cms.Integrations.Script.Cookiebot.csproj", "{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Analytics.Cookiebot", "Umbraco.Cms.Integrations.Analytics.Cookiebot\Umbraco.Cms.Integrations.Analytics.Cookiebot.csproj", "{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
