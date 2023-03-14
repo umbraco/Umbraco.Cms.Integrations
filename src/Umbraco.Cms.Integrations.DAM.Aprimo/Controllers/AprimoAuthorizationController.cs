@@ -29,7 +29,7 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Controllers
                 };
             } 
              
-            var response = await _aprimoAuthorizationService.GetAccessToken(code);
+            var response = await _aprimoAuthorizationService.GetAccessTokenAsync(code);
 
             return new ContentResult
             {

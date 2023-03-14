@@ -63,7 +63,8 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             client.DefaultRequestHeaders.Add("select-record", "title,thumbnail,fields,masterfilelatestversion");
-            client.DefaultRequestHeaders.Add("select-fileversion", "additionalfiles");
+            client.DefaultRequestHeaders.Add("select-fileversion", "renditions");
+            client.DefaultRequestHeaders.Add("select-rendition", "publiclinks");
 
             var response = await client.GetAsync($"record/{id}");
             var content = await response.Content.ReadAsStringAsync();

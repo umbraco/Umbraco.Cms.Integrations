@@ -53,8 +53,7 @@ namespace Umbraco.Cms.Integrations.Dam.Aprimo.Editors
             var response = _assetsService.GetRecordById(Guid.Parse(vm.Id));
             if(!response.IsAuthorized)
             {
-                var tokenResponse = _authorizationService.RefreshAccessToken()
-                    .ConfigureAwait(false).GetAwaiter().GetResult();
+                var tokenResponse = _authorizationService.RefreshAccessToken();
                 if (string.IsNullOrEmpty(tokenResponse))
                 {
                     response = _assetsService.GetRecordById(Guid.Parse(vm.Id));
@@ -81,12 +80,19 @@ namespace Umbraco.Cms.Integrations.Dam.Aprimo.Editors
             vm.Thumbnail = record.Thumbnail.Uri;
 
             if(record.MasterFileLatestVersion != null 
-                && record.MasterFileLatestVersion.AdditionalFiles!= null
-                && record.MasterFileLatestVersion.AdditionalFiles.Items != null)
+                && record.MasterFileLatestVersion.Renditions!= null
+                && record.MasterFileLatestVersion.Renditions.Items != null)
             {
-                vm.Crops = record.MasterFileLatestVersion.AdditionalFiles.Items
+                var originalItem = record.MasterFileLatestVersion.Renditions.Items
+                    .FirstOrDefault(p => p.Type == "Original");
+                if(originalItem != null)
+                {
+                    vm.MediaWithCrops.Original = originalItem.ToAprimoMediaItemViewModel();
+                }
+
+                vm.MediaWithCrops.Crops = record.MasterFileLatestVersion.Renditions.Items
                     .Where(p => p.Type == "Crop")
-                    .Select(p => p.ToAprimoCropItemViewModel());
+                    .Select(p => p.ToAprimoMediaItemViewModel());
             }
 
             if(record.Fields != null 

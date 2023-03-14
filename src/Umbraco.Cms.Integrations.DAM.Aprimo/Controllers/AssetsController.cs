@@ -57,7 +57,7 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Controllers
             var result = await _assetsService.GetRecordByIdAsync(Guid.NewGuid());
             if (!result.IsAuthorized)
             {
-                await _authorizationService.RefreshAccessToken();
+                await _authorizationService.RefreshAccessTokenAsync();
 
                 var updatedResult = await _assetsService.GetRecordByIdAsync(Guid.NewGuid());
 
@@ -105,7 +105,7 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Controllers
 
         [HttpPost]
         public async Task<string> GetAccessToken([FromBody] OAuthRequest request) =>
-            await _authorizationService.GetAccessToken(request.Code);
+            await _authorizationService.GetAccessTokenAsync(request.Code);
 
         [HttpGet]
         public async Task<IActionResult> GetRecordDetails(string id)

@@ -9,13 +9,13 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Models.ViewModels
 
         public string Thumbnail { get; set; } = string.Empty;
 
-        public IEnumerable<AprimoCropViewModel> Crops { get; set; }
+        public AprimoMediaWithCropsViewModel MediaWithCrops { get; set; }
 
         public List<AprimoFieldViewModel> Fields { get; set; }
 
         public AprimoAssetViewModel()
         {
-            Crops = Enumerable.Empty<AprimoCropViewModel>();
+            MediaWithCrops = new AprimoMediaWithCropsViewModel();
             Fields = new List<AprimoFieldViewModel>();
         }
     }

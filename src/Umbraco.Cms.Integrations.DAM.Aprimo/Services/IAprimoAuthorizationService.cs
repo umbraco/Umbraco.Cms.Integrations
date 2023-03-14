@@ -7,8 +7,12 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
     {
         string GetAuthorizationUrl(OAuthCodeExchange oauthCodeExchange);
 
-        Task<string> GetAccessToken(string code);
+        string GetAccessToken(string code);
 
-        Task<string> RefreshAccessToken();
+        Task<string> GetAccessTokenAsync(string code);
+
+        string RefreshAccessToken();
+
+        Task<string> RefreshAccessTokenAsync();
     }
 }

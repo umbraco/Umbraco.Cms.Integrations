@@ -51,7 +51,9 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
                 oauthCodeExchange.CodeChallenge);
         }
 
-        public async Task<string> GetAccessToken(string code)
+        public string GetAccessToken(string code) => GetAccessTokenAsync(code).ConfigureAwait(false).GetAwaiter().GetResult();
+
+        public async Task<string> GetAccessTokenAsync(string code)
         {
             var configurationEntity = _storage.Get();
             if (configurationEntity == null) return "Error: " + Constants.ErrorResources.InvalidCodeChallenge;
@@ -88,7 +90,9 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
             return "Error: " + content;
         }
 
-        public async Task<string> RefreshAccessToken()
+        public string RefreshAccessToken() => RefreshAccessTokenAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+        public async Task<string> RefreshAccessTokenAsync()
         {
             var configurationEntity = _storage.Get();
             if (configurationEntity == null) return Constants.ErrorResources.MissingRefreshToken;
@@ -115,6 +119,8 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
                 configurationEntity.RefreshToken = data.RefreshToken;
 
                 _storage.AddOrUpdate(configurationEntity);
+
+                return string.Empty;
             }
 
             return "Error: " + content;

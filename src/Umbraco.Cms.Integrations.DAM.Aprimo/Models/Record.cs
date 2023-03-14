@@ -40,17 +40,17 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Models
 
     public class RecordMasterFile
     {
-        [JsonPropertyName("additionalFiles")]
-        public RecordAdditionalFiles AdditionalFiles { get; set; }
+        [JsonPropertyName("renditions")]
+        public RecordRenditions Renditions { get; set; }
     }
 
-    public class RecordAdditionalFiles
+    public class RecordRenditions
     {
         [JsonPropertyName("items")]
-        public IEnumerable<RecordFileItem> Items { get; set; }
+        public IEnumerable<RecordRenditionItem> Items { get; set; }
     }
 
-    public class RecordFileItem
+    public class RecordRenditionItem
     {
         [JsonPropertyName("x")]
         public int X { get; set; }
@@ -70,6 +70,9 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Models
         [JsonPropertyName("resizeHeight")]
         public int ResizeHeight { get; set; }
 
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+
         [JsonPropertyName("presetName")]
         public string PresetName { get; set; }
 
@@ -82,8 +85,11 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Models
         [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonPropertyName("publicLink")]
-        public string PublicLink { get; set; }
+        [JsonPropertyName("extension")]
+        public string Extension { get; set; }
+
+        [JsonPropertyName("publicLinks")]
+        public RenditionPublicLinks PublicLinks { get; set; } = new RenditionPublicLinks();
     }
 
     public class RecordFields
@@ -111,6 +117,23 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Models
 
         [JsonPropertyName("values")]
         public string[] Values { get; set; }
+    }
+
+    public class RenditionPublicLinks
+    {
+        public RenditionPublicLinks()
+        {
+            Items = Enumerable.Empty<PublicLinkItem>();
+        }
+
+        [JsonPropertyName("items")]
+        public IEnumerable<PublicLinkItem> Items { get; set; }
+    }
+
+    public class PublicLinkItem
+    {
+        [JsonPropertyName("uri")]
+        public string Uri { get; set; }
     }
 
 }
