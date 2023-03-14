@@ -11,41 +11,15 @@
     "Umbraco.Cms.Integrations.Commerce.CommerceTools",
     "Umbraco.Cms.Integrations.Commerce.Shopify",
     "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool",
+    "Umbraco.Cms.Integrations.SEO.Semrush",
     "Umbraco.Cms.Integrations.Crm.Hubspot",
     "Umbraco.Cms.Integrations.Crm.Dynamics",
     "Umbraco.Cms.Integrations.Crm.ActiveCampaign",
-    "Umbraco.Cms.Integrations.Automation.Zapier"
+    "Umbraco.Cms.Integrations.Automation.Zapier",
+    "Umbraco.Cms.Integrations.Search.Algolia",
+    "Umbraco.Cms.Integrations.PIM.Inriver"
   ],
-  "RelatedPackages": [
-    {
-      "PackageId": "Umbraco.Cms.Integrations.Commerce.CommerceTools",
-      "Description": "A product and category picker that can be added as a property editor for content, with a value converter providing a strongly typed model for rendering."
-    },
-    {
-      "PackageId": "Umbraco.Cms.Integrations.Commerce.Shopify",
-      "Description": "A products picker that can be added as a property editor for content, with a value converter providing a strongly typed model for rendering."
-    },
-    {
-      "PackageId": "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool",
-      "Description": "A tool allowing programmatic access to URL-level data for properties managed in Google Search Console and the indexed version of a URL."
-    },
-    {
-      "PackageId": "Umbraco.Cms.Integrations.Crm.Hubspot",
-      "Description": "A form picker and rendering component for Hubspot forms."
-    },
-    {
-      "PackageId": "Umbraco.Cms.Integrations.Crm.Dynamics",
-      "Description": "A form picker and rendering component for Dynamics 365 Marketing forms."
-    },
-    {
-      "PackageId": "Umbraco.Cms.Integrations.Crm.ActiveCampaign",
-      "Description": "A form picker and rendering component for ActiveCampaign forms."
-    },
-    {
-      "PackageId": "Umbraco.Cms.Integrations.Automation.Zapier",
-      "Description": "A dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published."
-    }
-  ],
+  "RelatedPackages": [],
   "Tags": [],
   "Title": "Cookiebot"
 }

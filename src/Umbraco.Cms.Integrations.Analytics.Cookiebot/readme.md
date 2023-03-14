@@ -49,7 +49,8 @@ You can use this package as reference for creating your own. To do so, please fo
 - Use `Configuration[YOUR_SETTINGS_PATH:KEY]` to retrieve the required configuration values
 - Add `umbraco-markertplace.json` file with Marketplace details of the package
 
-
+Once your integration is ready, all that remains to do is to deploy the package to NuGet.
+You can use [this](https://learn.microsoft.com/en-us/nuget/what-is-nuget) section of the documentation from Microsoft to get started.
 
 
 
