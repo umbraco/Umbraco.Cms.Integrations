@@ -9,9 +9,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
 
         public const string TargetStateName = "dynamicsOAuthConfiguration-db";
 
-        public const string UmbracoCmsIntegrationsCrmDynamicsHostUrlKey = "Umbraco.Cms.Integrations.Crm.Dynamics.HostUrl";
-
-        public const string UmbracoCmsIntegrationsCrmDynamicsApiPathKey = "Umbraco.Cms.Integrations.Crm.Dynamics.ApiPath";
+        
 
         public const string AppPluginFolderPath = "~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics";
 
@@ -38,6 +36,27 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
         public static class Configuration
         {
             public const string Settings = "Umbraco:Cms:Integrations:Crm:Dynamics:Settings";
+
+            public const string OAuthSettings = "Umbraco:Cms:Integrations:Crm:Dynamics:OAuthSettings";
+
+            public const string UmbracoCmsIntegrationsCrmDynamicsHostUrlKey = "Umbraco.Cms.Integrations.Crm.Dynamics.HostUrl";
+
+            public const string UmbracoCmsIntegrationsCrmDynamicsApiPathKey = "Umbraco.Cms.Integrations.Crm.Dynamics.ApiPath";
+
+            public const string UmbracoCmsIntegrationsCrmDynamicsUseUmbracoAuthorizationKey = 
+                "Umbraco.Cms.Integrations.Crm.Dynamics.UseUmbracoAuthorization";
+
+            public const string UmbracoCmsIntegrationsCrmDynamicsClientIdKey = "Umbraco.Cms.Integrations.Crm.Dynamics.ClientId";
+
+            public const string UmbracoCmsIntegrationsCrmDynamicsClientSecretKey = "Umbraco.Cms.Integrations.Crm.Dynamics.ClientSecret";
+
+            public const string UmbracoCmsIntegrationsCrmDynamicsRedirectUriKey = "Umbraco.Cms.Integrations.Crm.Dynamics.RedirectUri";
+
+            public const string UmbracoCmsIntegrationsCrmDynamicsScopesKey = "Umbraco.Cms.Integrations.Crm.Dynamics.Scopes";
+
+            public const string UmbracoCmsIntegrationsCrmDynamicsAuthorizationEndpointKey = "Umbraco.Cms.Integrations.Crm.Dynamics.AuthorizationEndpoint";
+
+            public const string UmbracoCmsIntegrationsCrmDynamicsTokenEndpointKey = "Umbraco.Cms.Integrations.Crm.Dynamics.TokenEndpoint";
         }
     }
 }

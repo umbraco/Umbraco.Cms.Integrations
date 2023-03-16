@@ -8,13 +8,15 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Configuration
 
         public DynamicsSettings(NameValueCollection appSettings)
         {
-            HostUrl = appSettings[Constants.UmbracoCmsIntegrationsCrmDynamicsHostUrlKey];
+            HostUrl = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsHostUrlKey];
 
-            ApiPath = appSettings[Constants.UmbracoCmsIntegrationsCrmDynamicsApiPathKey];
+            ApiPath = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsApiPathKey];
         }
 
         public string HostUrl { get; set; }
 
         public string ApiPath { get; set; }
+
+        public bool UseUmbracoAuthorization { get; set; }
     }
 }

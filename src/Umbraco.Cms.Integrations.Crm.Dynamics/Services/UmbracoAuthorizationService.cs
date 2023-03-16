@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
-using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Net.Http;
 using System;
-using System.Collections.Generic;
+using Newtonsoft.Json;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 
 #if NETCOREAPP
@@ -15,45 +15,47 @@ using System.Configuration;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 {
-    public class AuthorizationService : BaseAuthorizationService, IDynamicsAuthorizationService
+    public class UmbracoAuthorizationService : BaseAuthorizationService, IDynamicsAuthorizationService
     {
         private readonly DynamicsSettings _settings;
 
-        private readonly DynamicsOAuthSettings _oauthSettings;
+        public const string ClientId = "813c5a65-cfd6-48d6-8928-dffe02aaf61a";
 
-        protected const string DynamicsAuthorizationUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize" +
-            "?client_id={0}" +
-            "&response_type=code" +
-            "&redirect_uri={1}" +
-            "&response_mode=query" +
-            "&scope={2}";
+        public const string RedirectUri = OAuthProxyBaseUrl;
+
+        public const string Service = "Dynamics";
+
+        public const string OAuthProxyBaseUrl = "https://hubspot-forms-auth.umbraco.com/"; // for local testing: https://localhost:44364;
+
+        public const string OAuthProxyTokenEndpoint = "{0}oauth/v1/token";
+
+        protected const string OAuthScopes = "{0}.default";
+
+        protected const string DynamicsAuthorizationUrl =
+            "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id={0}&response_type=code&redirect_uri={1}&response_mode=query&scope={2}";
 
 #if NETCOREAPP
-        public AuthorizationService(IOptions<DynamicsSettings> options, IOptions<DynamicsOAuthSettings> oauthOptions,
-            DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService)
-                : base(dynamicsService, dynamicsConfigurationService)
-
+        public UmbracoAuthorizationService(IOptions<DynamicsSettings> options, 
+            DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService) 
+            : base(dynamicsService, dynamicsConfigurationService)
         {
             _settings = options.Value;
-
-            _oauthSettings = oauthOptions.Value;
         }
 #else
-        public AuthorizationService(DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService)
+        public UmbracoAuthorizationService(DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService)
             : base(dynamicsService, dynamicsConfigurationService)
         {
             _settings = new DynamicsSettings(ConfigurationManager.AppSettings);
-
-            _oauthSettings = new DynamicsOAuthSettings(ConfigurationManager.AppSettings);
         }
 #endif
 
-        public string GetAuthorizationUrl() => string.Format(DynamicsAuthorizationUrl,
-            _oauthSettings.ClientId,
-            _oauthSettings.RedirectUri,
-            _oauthSettings.Scopes);
+        public string GetAuthorizationUrl()
+        {
+            var scopes = string.Format(OAuthScopes, _settings.HostUrl);
+            return string.Format(DynamicsAuthorizationUrl, ClientId, OAuthProxyBaseUrl, scopes);
+        }
 
-        public string GetAccessToken(string code) =>
+        public string GetAccessToken(string code) => 
             GetAccessTokenAsync(code).ConfigureAwait(false).GetAwaiter().GetResult();
 
         public async Task<string> GetAccessTokenAsync(string code)
@@ -61,18 +63,18 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             var data = new Dictionary<string, string>
             {
                 { "grant_type", "authorization_code" },
-                { "client_id", _oauthSettings.ClientId },
-                { "client_secret", _oauthSettings.ClientSecret },
-                { "redirect_uri", _oauthSettings.RedirectUri },
+                { "client_id", ClientId },
+                { "redirect_uri", RedirectUri },
                 { "code", code }
             };
 
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri(_oauthSettings.TokenEndpoint),
+                RequestUri = new Uri(string.Format(OAuthProxyTokenEndpoint, OAuthProxyBaseUrl)),
                 Content = new FormUrlEncodedContent(data)
             };
+            requestMessage.Headers.Add("service_name", Service);
 
             var response = await ClientFactory().SendAsync(requestMessage);
             if (response.IsSuccessStatusCode)
