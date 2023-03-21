@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
+namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
 {
-    public interface IDynamicsAuthorizationService
+    public interface ISemrushAuthorizationService
     {
         string GetAuthorizationUrl();
 

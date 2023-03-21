@@ -29,6 +29,7 @@ using Umbraco.Cms.Integrations.Crm.Hubspot.Models;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
 
+using static Umbraco.Cms.Integrations.Crm.Hubspot.HubspotComposer;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
 {
@@ -44,7 +45,13 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
         // public property to support unit tests
         public HubspotSettings Options;
 
+        public HubspotOAuthSettings OAuthOptions;
+
         private readonly ITokenService _tokenService;
+
+        private readonly IHubspotAuthorizationService _authorizationService;
+
+        private const string HubspotFormsApiEndpoint = "https://api.hubapi.com/forms/v2/forms";
 
 #if NETCOREAPP
         private readonly ILogger<FormsController> _logger;
@@ -52,36 +59,36 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
         private readonly ILogger _logger;
 #endif
 
-        public const string OAuthClientId = "1a04f5bf-e99e-48e1-9d62-6c25bf2bdefe";
-        private const string OAuthScopes = "oauth forms crm.objects.contacts.read crm.objects.contacts.write";
-        private const string OAuthProxyBaseUrl = "https://hubspot-forms-auth.umbraco.com/"; // for local testing: https://localhost:44364
-        private const string OAuthProxyEndpoint = "{0}oauth/v1/token";
-        private const string HubspotServiceName = "HubspotForms";
-
-        private const string AccessTokenDbKey = "Umbraco.Cms.Integrations.Hubspot.AccessTokenDbKey";
-        private const string RefreshTokenDbKey = "Umbraco.Cms.Integrations.Hubspot.RefreshTokenDbKey";
-
-        private const string HubspotFormsAuthorizationUrl =
-            "https://app-eu1.hubspot.com/oauth/authorize?client_id={0}&redirect_uri={1}&scope={2}";
-        private const string HubspotFormsApiEndpoint = "https://api.hubapi.com/forms/v2/forms";
-
 #if NETCOREAPP
-        public FormsController(IOptions<HubspotSettings> options, ITokenService tokenService, ILogger<FormsController> logger)
+        public FormsController(
+            IOptions<HubspotSettings> options,
+            IOptions<HubspotOAuthSettings> oauthOptions,
+            ITokenService tokenService, 
+            ILogger<FormsController> logger,
+            AuthorizationImplementationFactory authorizationImplementationFactory)
         {
             Options = options.Value;
 
+            OAuthOptions = oauthOptions.Value;
+
             _tokenService = tokenService;
 
             _logger = logger;
+
+            _authorizationService = authorizationImplementationFactory(Options.UseUmbracoAuthorization);
         }
 #else
-        public FormsController(ITokenService tokenService, ILogger logger)
+        public FormsController(ITokenService tokenService, ILogger logger, AuthorizationImplementationFactory authorizationImplementationFactory)
         {
             Options = new HubspotSettings(ConfigurationManager.AppSettings);
 
+            OAuthOptions = new HubspotOAuthSettings(ConfigurationManager.AppSettings);
+
             _tokenService = tokenService;
 
             _logger = logger;
+
+            _authorizationService = authorizationImplementationFactory(Options.UseUmbracoAuthorization);
         }
 #endif
 
@@ -152,7 +159,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
 
         public async Task<ResponseDto> GetAllOAuth()
         {
-            _tokenService.TryGetParameters(AccessTokenDbKey, out string accessToken);
+            _tokenService.TryGetParameters(Constants.AccessTokenDbKey, out string accessToken);
             if (string.IsNullOrEmpty(accessToken))
             {
 #if NETCOREAPP
@@ -226,8 +233,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             }
         }
 
-        private static HttpRequestMessage CreateRequest(string accessToken)
-        {
+        private HttpRequestMessage CreateRequest(string accessToken)
+        { 
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
@@ -243,103 +250,32 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             return
                 !string.IsNullOrEmpty(Options.ApiKey)
                     ? new HubspotFormPickerSettings { IsValid = true, Type = ConfigurationType.Api }
-                    : !string.IsNullOrEmpty(OAuthClientId)
-                       && !string.IsNullOrEmpty(OAuthScopes)
-                       && !string.IsNullOrEmpty(OAuthProxyBaseUrl)
-                       && !string.IsNullOrEmpty(OAuthProxyEndpoint)
+                    : Options.UseUmbracoAuthorization 
+                        ? new HubspotFormPickerSettings { IsValid = true, Type = ConfigurationType.OAuth }
+                        : !string.IsNullOrEmpty(OAuthOptions.ClientId)
+                       && !string.IsNullOrEmpty(OAuthOptions.Scopes)
+                       && !string.IsNullOrEmpty(OAuthOptions.ClientSecret)
+                       && !string.IsNullOrEmpty(OAuthOptions.TokenEndpoint)
                         ? new HubspotFormPickerSettings { IsValid = true, Type = ConfigurationType.OAuth }
                         : new HubspotFormPickerSettings();
         }
 
         [HttpGet]
-        public string GetAuthorizationUrl()
-        {
-            return string.Format(HubspotFormsAuthorizationUrl, OAuthClientId, OAuthProxyBaseUrl, OAuthScopes);
-        }
+        public string GetAuthorizationUrl() =>
+            _authorizationService.GetAuthorizationUrl();
 
         [HttpPost]
-        public async Task<string> GetAccessToken([FromBody] OAuthRequestDto authRequestDto)
-        {
-            var data = new Dictionary<string, string>
-            {
-                { "grant_type", "authorization_code" },
-                { "client_id", OAuthClientId },
-                { "redirect_uri", OAuthProxyBaseUrl },
-                { "code", authRequestDto.Code }
-            };
-
-            var requestMessage = new HttpRequestMessage
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(string.Format(OAuthProxyEndpoint, OAuthProxyBaseUrl)),
-                Content = new FormUrlEncodedContent(data)
-            };
-            requestMessage.Headers.Add("service_name", HubspotServiceName);
-
-            var response = await ClientFactory().SendAsync(requestMessage);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadAsStringAsync();
-
-                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
-
-                _tokenService.SaveParameters(AccessTokenDbKey, tokenDto.AccessToken);
-                _tokenService.SaveParameters(RefreshTokenDbKey, tokenDto.RefreshToken);
-
-                return result;
-            }
-
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                var errorResult = await response.Content.ReadAsStringAsync();
-                var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
-
-                return "Error: " + errorDto.Message;
-            }
-
-            return "Error: An unexpected error occurred.";
-        }
+        public async Task<string> GetAccessToken([FromBody] OAuthRequestDto authRequestDto) =>
+            await _authorizationService.GetAccessTokenAsync(authRequestDto.Code);
 
         [HttpPost]
-        public async Task<string> RefreshAccessToken()
-        {
-            _tokenService.TryGetParameters(RefreshTokenDbKey, out string refreshToken);
-
-            var data = new Dictionary<string, string>
-            {
-                {"grant_type", "refresh_token"},
-                {"client_id", OAuthClientId },
-                { "refresh_token", refreshToken }
-            };
-
-            var requestMessage = new HttpRequestMessage
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(string.Format(OAuthProxyEndpoint, OAuthProxyBaseUrl)),
-                Content = new FormUrlEncodedContent(data)
-            };
-            requestMessage.Headers.Add("service_name", HubspotServiceName);
-
-            var response = await ClientFactory().SendAsync(requestMessage);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadAsStringAsync();
-
-                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
-
-                _tokenService.SaveParameters(AccessTokenDbKey, tokenDto.AccessToken);
-                _tokenService.SaveParameters(RefreshTokenDbKey, tokenDto.RefreshToken);
-
-                return result;
-            }
-
-            return "error";
-        }
+        public async Task<string> RefreshAccessToken() =>
+            await _authorizationService.RefreshAccessTokenAsync();
 
         [HttpGet]
         public async Task<ResponseDto> ValidateAccessToken()
         {
-            _tokenService.TryGetParameters(AccessTokenDbKey, out string accessToken);
+            _tokenService.TryGetParameters(Constants.AccessTokenDbKey, out string accessToken);
 
             if (string.IsNullOrEmpty(accessToken)) 
                 return new ResponseDto 
@@ -368,8 +304,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
         [HttpPost]
         public void RevokeAccessToken()
         {
-            _tokenService.RemoveParameters(AccessTokenDbKey);
-            _tokenService.RemoveParameters(RefreshTokenDbKey);
+            _tokenService.RemoveParameters(Constants.AccessTokenDbKey);
+            _tokenService.RemoveParameters(Constants.RefreshTokenDbKey);
         }
     }
 }

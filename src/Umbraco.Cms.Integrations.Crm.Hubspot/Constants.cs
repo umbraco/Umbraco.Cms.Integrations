@@ -8,13 +8,34 @@
     {
         public const string PropertyEditorAlias = "Umbraco.Cms.Integrations.Crm.Hubspot.FormPicker";
 
-        public const string UmbracoCmsIntegrationsCrmHubspotApiKey = "Umbraco.Cms.Integrations.Crm.Hubspot.ApiKey";
+        public const string AccessTokenDbKey = "Umbraco.Cms.Integrations.Hubspot.AccessTokenDbKey";
 
-        public const string UmbracoCmsIntegrationsCrmHubspotRegion = "Umbraco.Cms.Integrations.Crm.Hubspot.Region";
+        public const string RefreshTokenDbKey = "Umbraco.Cms.Integrations.Hubspot.RefreshTokenDbKey";
 
         public static class Configuration
         {
             public const string Settings = "Umbraco:Cms:Integrations:Crm:Hubspot:Settings";
+
+            public const string OAuthSettings = "Umbraco:Cms:Integrations:Crm:Hubspot:OAuthSettings";
+
+            public const string UmbracoCmsIntegrationsCrmHubspotApiKey = "Umbraco.Cms.Integrations.Crm.Hubspot.ApiKey";
+
+            public const string UmbracoCmsIntegrationsCrmHubspotRegion = "Umbraco.Cms.Integrations.Crm.Hubspot.Region";
+
+            public const string UmbracoCmsIntegrationsCrmHubspotUseUmbracoAuthorizationKey =
+                "Umbraco.Cms.Integrations.Crm.Hubspot.UseUmbracoAuthorization";
+
+            public const string UmbracoCmsIntegrationsCrmHubspotClientIdKey = "Umbraco.Cms.Integrations.Crm.Hubspot.ClientId";
+
+            public const string UmbracoCmsIntegrationsCrmHubspotClientSecretKey = "Umbraco.Cms.Integrations.Crm.Hubspot.ClientSecret";
+
+            public const string UmbracoCmsIntegrationsCrmHubspotRedirectUriKey = "Umbraco.Cms.Integrations.Crm.Hubspot.RedirectUri";
+
+            public const string UmbracoCmsIntegrationsCrmHubspotScopesKey = "Umbraco.Cms.Integrations.Crm.Hubspot.Scopes";
+
+            public const string UmbracoCmsIntegrationsCrmHubspotAuthorizationEndpointKey = "Umbraco.Cms.Integrations.Crm.Hubspot.AuthorizationEndpoint";
+
+            public const string UmbracoCmsIntegrationsCrmHubspotTokenEndpointKey = "Umbraco.Cms.Integrations.Crm.Hubspot.TokenEndpoint";
         }
 
         public static class ErrorMessages

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
+namespace Umbraco.Cms.Integrations.Crm.Hubspot.Services
 {
-    public interface IDynamicsAuthorizationService
+    public interface IHubspotAuthorizationService
     {
         string GetAuthorizationUrl();
 

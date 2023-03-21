@@ -1,29 +1,23 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Specialized;
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Configuration
 {
     public class SemrushSettings
     {
-        public static int DefaultPageSize = 10;
+        public SemrushSettings() { }
 
-        public static string AuthProxyBaseAddress = "https://hubspot-forms-auth.umbraco.com/";
+        public SemrushSettings(NameValueCollection appSettings)
+        {
+            BaseUrl = appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoSemrushBaseUrlKey]; 
 
-        public static string AuthProxyTokenEndpoint = "oauth/v1/token";
+            UseUmbracoAuthorization = bool.TryParse(appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoSemrushUseUmbracoAuthorizationKey], 
+                out var key)
+               ? key
+               : true;
+        }
 
-        public static string SemrushBaseAddress = "https://oauth.semrush.com/";
+        public string BaseUrl { get; set; }
 
-        public static KeyValuePair<string, string> SemrushServiceHeaderKey =
-            new KeyValuePair<string, string>("service_name", "Semrush");
-
-        public static string SemrushAuthorizationEndpoint
-            = $"{SemrushBaseAddress}oauth2/authorize?ref=0053752252&client_id=umbraco&redirect_uri=%2Foauth2%2Fumbraco%2Fsuccess&response_type=code&scope=user.id,domains.info,url.info,positiontracking.info";
-
-        public static string SemrushKeywordsEndpoint =
-            SemrushBaseAddress + "api/v1/keywords/{0}?access_token={1}&phrase={2}&database={3}";
-
-        public static string TokenDbKey = "Umbraco.Cms.Integrations.Semrush.TokenDbKey";
-
-        public static string AllowLimitOffsetHeaderName = "Allow-Limit-Offset";
+        public bool UseUmbracoAuthorization { get; set; }
     }
 }

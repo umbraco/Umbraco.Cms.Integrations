@@ -1,26 +1,18 @@
-﻿using System.Threading.Tasks;
-
-using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
-
-using static Umbraco.Cms.Integrations.Crm.Dynamics.DynamicsComposer;
+﻿using Umbraco.Cms.Integrations.SEO.Semrush.Models;
 
 #if NETCOREAPP
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 using Umbraco.Cms.Web.Common.Controllers;
 #else
 using System.Web.Mvc;
-using System.Configuration;
 
 using Umbraco.Web.WebApi;
 #endif
 
-namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
+namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
 {
-    public class DynamicsAuthorizationController : UmbracoApiController
+    public class SemrushAuthorizationController : UmbracoApiController
     {
         [HttpGet]
 #if NETCOREAPP
@@ -28,7 +20,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
 #else
         public ActionResult OAuth(string code)
 #endif
-        { 
+        {
             return new ContentResult
             {
                 Content = string.IsNullOrEmpty(code)

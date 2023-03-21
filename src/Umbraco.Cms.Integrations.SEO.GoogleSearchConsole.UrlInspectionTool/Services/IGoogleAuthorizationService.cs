@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
+namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Services
 {
-    public interface IDynamicsAuthorizationService
+    public interface IGoogleAuthorizationService
     {
         string GetAuthorizationUrl();
 

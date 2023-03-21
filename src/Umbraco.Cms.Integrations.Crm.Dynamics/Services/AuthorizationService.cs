@@ -17,33 +17,20 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 {
     public class AuthorizationService : BaseAuthorizationService, IDynamicsAuthorizationService
     {
-        private readonly DynamicsSettings _settings;
-
         private readonly DynamicsOAuthSettings _oauthSettings;
 
-        protected const string DynamicsAuthorizationUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize" +
-            "?client_id={0}" +
-            "&response_type=code" +
-            "&redirect_uri={1}" +
-            "&response_mode=query" +
-            "&scope={2}";
-
 #if NETCOREAPP
-        public AuthorizationService(IOptions<DynamicsSettings> options, IOptions<DynamicsOAuthSettings> oauthOptions,
+        public AuthorizationService(IOptions<DynamicsOAuthSettings> oauthOptions,
             DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService)
                 : base(dynamicsService, dynamicsConfigurationService)
 
         {
-            _settings = options.Value;
-
             _oauthSettings = oauthOptions.Value;
         }
 #else
         public AuthorizationService(DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService)
             : base(dynamicsService, dynamicsConfigurationService)
         {
-            _settings = new DynamicsSettings(ConfigurationManager.AppSettings);
-
             _oauthSettings = new DynamicsOAuthSettings(ConfigurationManager.AppSettings);
         }
 #endif
@@ -99,12 +86,12 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
         public string RefreshAccessToken()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public Task<string> RefreshAccessTokenAsync(string code)
+        public Task<string> RefreshAccessTokenAsync()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

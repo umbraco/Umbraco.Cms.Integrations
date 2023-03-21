@@ -11,6 +11,10 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Configuration
             HostUrl = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsHostUrlKey];
 
             ApiPath = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsApiPathKey];
+
+            UseUmbracoAuthorization = bool.TryParse(appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsUseUmbracoAuthorizationKey], out var key) 
+                ? key 
+                : true;
         }
 
         public string HostUrl { get; set; }

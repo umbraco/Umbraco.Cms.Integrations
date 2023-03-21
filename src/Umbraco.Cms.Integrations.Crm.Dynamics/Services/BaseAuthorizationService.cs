@@ -15,6 +15,13 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
         protected readonly DynamicsConfigurationService DynamicsConfigurationService;
 
+        protected const string DynamicsAuthorizationUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize" +
+            "?client_id={0}" +
+            "&response_type=code" +
+            "&redirect_uri={1}" +
+            "&response_mode=query" +
+            "&scope={2}";
+
         public BaseAuthorizationService(DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService)
         {
             DynamicsService = dynamicsService;
@@ -22,6 +29,6 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             DynamicsConfigurationService = dynamicsConfigurationService;
         }
 
-        
+
     }
 }

@@ -31,9 +31,6 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
         protected const string OAuthScopes = "{0}.default";
 
-        protected const string DynamicsAuthorizationUrl =
-            "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id={0}&response_type=code&redirect_uri={1}&response_mode=query&scope={2}";
-
 #if NETCOREAPP
         public UmbracoAuthorizationService(IOptions<DynamicsSettings> options, 
             DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService) 
@@ -101,12 +98,12 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
         public string RefreshAccessToken()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
-        public Task<string> RefreshAccessTokenAsync(string code)
+        public Task<string> RefreshAccessTokenAsync()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
