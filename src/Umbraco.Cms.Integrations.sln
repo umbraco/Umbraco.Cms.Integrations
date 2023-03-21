@@ -81,6 +81,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAM", "DAM", "{9115D76C-6BC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.DAM.Aprimo", "Umbraco.Cms.Integrations.DAM.Aprimo\Umbraco.Cms.Integrations.DAM.Aprimo.csproj", "{56717ED4-0FA7-4536-B704-22D5886DFF87}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analytics", "Analytics", "{54684516-D990-41C7-885E-96A064A55BB1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Analytics.Cookiebot", "Umbraco.Cms.Integrations.Analytics.Cookiebot\Umbraco.Cms.Integrations.Analytics.Cookiebot.csproj", "{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -159,6 +163,10 @@ Global
 		{56717ED4-0FA7-4536-B704-22D5886DFF87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56717ED4-0FA7-4536-B704-22D5886DFF87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56717ED4-0FA7-4536-B704-22D5886DFF87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,6 +195,7 @@ Global
 		{904B3CF6-1015-465E-8244-70FC90466F22} = {B5D14B4B-0E39-4C01-9021-D9A75F358DE1}
 		{14303AD9-B64B-4DE1-AB4E-B0979277EAC2} = {1A4D3D38-F5B2-4528-92A1-318A7D09949D}
 		{56717ED4-0FA7-4536-B704-22D5886DFF87} = {9115D76C-6BC3-4EAF-AB4E-96A2B7B02D13}
+		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3} = {54684516-D990-41C7-885E-96A064A55BB1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FB51E08-A3C8-4DFF-B3CB-E99C2ED021D5}

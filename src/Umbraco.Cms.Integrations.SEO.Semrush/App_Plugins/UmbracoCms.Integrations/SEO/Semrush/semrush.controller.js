@@ -22,7 +22,7 @@
 
         userService.getCurrentUser().then(function (user) {
             var isPartOfAdminUserGroup = user.userGroups.find(x => x === "admin");
-            
+
             vm.isAdmin = isPartOfAdminUserGroup !== undefined;
         });
 
@@ -135,10 +135,10 @@
 
         // event handlers
         vm.onConnectClick = function () {
-           
+
+            window.addEventListener("message", getAccessToken, false);
             vm.authWindow = window.open(vm.authorizationUrl,
                 "Semrush_Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
-
         }
 
         vm.onPropertyChange = function () {
@@ -169,13 +169,12 @@
             searchKeywords(1);
         }
 
-        // authorization listener
-        window.addEventListener("message", function (event) {
+        function getAccessToken(event) {
             if (event.data.type === "semrush:oauth:success") {
 
                 var codeParam = "?code=";
 
-                vm.authWindow.close();
+                if (vm.authWindow) vm.authWindow.close();
 
                 var code = event.data.url.slice(event.data.url.indexOf(codeParam) + codeParam.length);
 
@@ -188,6 +187,7 @@
                         vm.showError("Semrush authentication", "Access Denied");
                     }
                 });
+
             } else if (event.data.type === "semrush:oauth:denied") {
                 vm.showError("Semrush authentication", "Access Denied");
 
@@ -195,8 +195,7 @@
 
                 revokeToken();
             }
-
-        }, false);
+        }
 
         function validateToken() {
             umbracoCmsIntegrationsSemrushResource.validateToken().then(function (response) {
@@ -216,6 +215,8 @@
                 vm.isConnected = false;
                 vm.isFreeAccount = null;
                 vm.searchKeywordsList = {};
+
+                window.removeEventListener("message", getAccessToken);
             });
         }
 

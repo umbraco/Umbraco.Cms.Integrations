@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
+
 using System.Text.Json;
+
 using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Notifications;
+using Umbraco.Cms.Core.Routing;
+using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Integrations.Search.Algolia.Builders;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
@@ -17,15 +20,25 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 
         protected readonly IAlgoliaIndexService IndexService;
 
+        protected readonly IPublishedUrlProvider UrlProvider;
+
+        protected readonly IAlgoliaSearchPropertyIndexValueFactory AlgoliaSearchPropertyIndexValueFactory;
+
         public BaseContentHandler(ILogger<BaseContentHandler> logger,
             IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
-            IAlgoliaIndexService indexService)
+            IAlgoliaIndexService indexService,
+            IPublishedUrlProvider urlProvider,
+            IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory)
         {
             Logger = logger;
 
             IndexStorage = indexStorage;
 
             IndexService = indexService;
+
+            UrlProvider = urlProvider;
+
+            AlgoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
         }
 
         protected async Task RebuildIndex(IEnumerable<IContent> entities, bool deleteIndexData = false)
@@ -42,7 +55,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
                             .FirstOrDefault(p => p.ContentType.Alias == entity.ContentType.Alias);
                         if (indexConfiguration == null || indexConfiguration.ContentType.Alias != entity.ContentType.Alias) continue;
 
-                        var record = new RecordBuilder()
+                        var record = new ContentRecordBuilder(UrlProvider, AlgoliaSearchPropertyIndexValueFactory)
                            .BuildFromContent(entity, (p) => indexConfiguration.Properties.Any(q => q.Alias == p.Alias))
                            .Build();
 

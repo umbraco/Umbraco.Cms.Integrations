@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<EnableDefaultContentItems>false</EnableDefaultContentItems>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Umbraco.Cms.Integrations.Analytics.Cookiebot</PackageId>
+		<Title>Umbraco CMS Integrations: Analytics - Cookiebot</Title>
+		<Description>An extension for Umbraco CMS providing an implementation model for Cookiebot banner and declaration.</Description>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Analytics.Cookiebot</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+		<Version>1.0.1</Version>
+		<Authors>Umbraco HQ</Authors>
+		<Company>Umbraco</Company>
+		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
+		<PackageIcon>cookiebot.png</PackageIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Views\**" />
+		<Content Include="cookiebot.png">
+			<Pack>true</Pack>
+			<PackagePath>\</PackagePath>
+		</Content>
+	</ItemGroup>
+
+</Project>

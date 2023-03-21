@@ -4,6 +4,10 @@ This repository houses open-source extensions, created for Umbraco CMS, that int
 
 ## Available Integrations
 
+### Analytics
+
+[Cookiebot](./src/Umbraco.Cms.Integrations.Analytics.Cookiebot/) - a Razor Class Library serving as an implementation model for Cookiebot banner and declaration.
+
 ### Commerce
 
 [CommerceTools](./src/Umbraco.Cms.Integrations.Commerce.CommerceTools/) - a product and category picker that can be added as a property editor for content, with a value converter providing a strongly typed model for rendering.

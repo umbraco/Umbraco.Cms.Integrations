@@ -6,7 +6,6 @@
 
     vm.oauthSetup = {};
     vm.status = {};
-    vm.authEventHandled = false;
 
     $scope.$on('formSubmitting', function () {
 
@@ -16,7 +15,7 @@
     });
 
     umbracoCmsIntegrationsCrmHubspotResource.checkApiConfiguration()
-        .then(function(response) {
+        .then(function (response) {
 
             vm.status = {
                 isValid: response.isValid === true,
@@ -40,6 +39,7 @@
 
     vm.onConnectClick = function () {
 
+        window.addEventListener("message", getAccessToken, false);
         umbracoCmsIntegrationsCrmHubspotResource.getAuthorizationUrl().then(function (response) {
             vm.authWindow = window.open(response,
                 "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
@@ -47,28 +47,24 @@
         });
     }
 
-    vm.onRevokeToken = function() {
+    vm.onRevokeToken = function () {
         umbracoCmsIntegrationsCrmHubspotResource.revokeAccessToken().then(function (response) {
             vm.oauthSetup.isConnected = false;
             vm.authEventHandled = false;
 
-            if(typeof $scope.connected === "undefined")
+            if (typeof $scope.connected === "undefined")
                 notificationsService.success("HubSpot Configuration", "OAuth connection revoked.");
 
             if (typeof $scope.revoked === "function")
                 $scope.revoked();
+
+            window.removeEventListener("message", getAccessToken);
         });
     }
 
-    // authorization listener
-    window.addEventListener("message", function (event) {
-
+    function getAccessToken(event) {
         if (event.data.type === "hubspot:oauth:success") {
-
-            if (vm.authEventHandled === true) return;
-
             umbracoCmsIntegrationsCrmHubspotResource.getAccessToken(event.data.code).then(function (response) {
-
                 vm.authEventHandled = true;
 
                 if (response.startsWith("Error:")) {
@@ -85,10 +81,8 @@
                         $scope.connected();
                 }
             });
-
         }
-    }, false);
-
+    }
 
     function validateOAuthSetup() {
         umbracoCmsIntegrationsCrmHubspotResource.validateAccessToken().then(function (response) {
