@@ -32,7 +32,7 @@
                 <div class="column">
                     @if (!string.IsNullOrEmpty(cropItem.Url))
                     {
-                        <img src="@cropItem.Url" class="thumbnail" alt="@cropItem.Name" />
+                        <img src="@cropItem.Url" class="thumbnail" alt="@cropItem.Name" width="@cropItem.ResizeWidth" height="@cropItem.ResizeHeight" />
                     }
                     <h3>@cropItem.Name</h3>
                     <p>

@@ -62,11 +62,12 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-            client.DefaultRequestHeaders.Add("select-record", "title,thumbnail,fields,masterfilelatestversion");
-            client.DefaultRequestHeaders.Add("select-fileversion", "renditions");
-            client.DefaultRequestHeaders.Add("select-rendition", "publiclinks");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"record/{id}");
+            request.Headers.Add("select-record", "title,thumbnail,fields,masterfilelatestversion");
+            request.Headers.Add("select-fileversion", "renditions");
+            request.Headers.Add("select-rendition", "publiclinks");
 
-            var response = await client.GetAsync($"record/{id}");
+            var response = await client.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
@@ -96,11 +97,13 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
                 return AprimoResponse<SearchItemsPaged<Record>>.Fail(Constants.ErrorResources.Unauthorized, false);
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            client.DefaultRequestHeaders.Add("page", page);
-            client.DefaultRequestHeaders.Add("pagesize", "10");
-            client.DefaultRequestHeaders.Add("select-record", "title,thumbnail");
 
-            var request = new AprimoRequest
+            var request = new HttpRequestMessage(HttpMethod.Post, $"search/records");
+            request.Headers.Add("page", page);
+            request.Headers.Add("pagesize", "10");
+            request.Headers.Add("select-record", "title,thumbnail");
+
+            var aprimoRequest = new AprimoRequest
             {
                 SearchExpression = new AprimoSearchExpression
                 {
@@ -109,9 +112,10 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Services
                         : searchTerm
                 }
             };
+            request.Content = new StringContent(JsonSerializer.Serialize(aprimoRequest), Encoding.UTF8, "application/json");
 
-            var response = await client.PostAsync($"search/records",
-                new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json"));
+            var response = await client.SendAsync(request);
+                
             var content = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
