@@ -77,3 +77,6 @@ Properties available from the strongly-typed model:
 - Thumbnail
 - Crops
 - Asset fields
+
+### Version history
+- 1.0.0 - Initial release
