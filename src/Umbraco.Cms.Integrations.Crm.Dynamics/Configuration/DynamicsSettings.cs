@@ -21,6 +21,6 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Configuration
 
         public string ApiPath { get; set; }
 
-        public bool UseUmbracoAuthorization { get; set; }
+        public bool UseUmbracoAuthorization { get; set; } = true;
     }
 }
