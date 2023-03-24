@@ -20,6 +20,6 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Con
 
         public string InspectUrl { get; set; }
 
-        public bool UseUmbracoAuthorization { get; set; }
+        public bool UseUmbracoAuthorization { get; set; } = true;
     }
 }
