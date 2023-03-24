@@ -18,6 +18,6 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Configuration
 
         public string BaseUrl { get; set; }
 
-        public bool UseUmbracoAuthorization { get; set; }
+        public bool UseUmbracoAuthorization { get; set; } = true;
     }
 }
