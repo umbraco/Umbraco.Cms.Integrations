@@ -42,3 +42,68 @@ The URL Inspection Tool API expects three parameters, two mandatory:
 
 More information can be found [here](https://developers.google.com/webmaster-tools/v1/urlInspection.index/inspect)
 
+## Authorization Workflow
+Starting with version 1.1.0 of the integration, the OAuth flow can be configured to use different Authorization Servers without requests routed through the `OAuth Proxy for Umbraco Integrations`.
+
+### Configuration
+To use the new setup, the following configuration is used:
+```
+<appSettings>
+...
+  <add key="Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.InspectUrl" value="https://searchconsole.googleapis.com/v1/urlInspection/index:inspect" />
+  <add key="Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UseUmbracoAuthorization" value="true" />
+  <add key="Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.ClientId" value="[YOUR_CLIENT_ID]" />
+  <add key="Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.ClientSecret" value="[YOUR_CLIENT_SECRET]" />
+  <add key="Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.RedirectUri" value="https://[YOUR_WEBSITE_BASE_URL]/umbraco/api/googleauthorization/oauth" />
+  <add key="Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.Scopes" value="[SCOPES]" />
+  <add key="Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.AuthorizationEndpoint" value="[AUTHORIZATION_ENDPOINT]" />
+  <add key="Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.TokenEndpoint" value="[TOKEN_ENDPOINT]" />
+...
+</appSettings>
+```
+
+or, 
+
+```
+ "Umbraco": {
+    "CMS": {
+      "Integrations": {
+        "SEO": {
+          "GoogleSearchConsole": {
+            "Settings": {
+              "InspectUrl": "https://searchconsole.googleapis.com/v1/urlInspection/index:inspect",
+              "UseUmbracoAuthorization": true
+            },
+            "OAuthSettings": {
+              "ClientId": "[YOUR_CLIENT_ID]",
+              "ClientSecret": "[YOUR_CLIENT_SECRET]",
+              "RedirectUri": "https://[YOUR_WEBSITE_BASE_URL]/umbraco/api/googleauthorization/oauth",
+              "AuthorizationEndpoint": "[AUTHORIZATION_ENDPOINT]",
+              "TokenEndpoint": "[TOKEN_ENDPOINT]",
+              "Scopes": "[SCOPES]"
+            }
+          },
+        }
+      }
+    }
+  }
+```
+
+### Configuration Breakdown
+- ClientId - client id of your own app
+- ClientSecret - client secret of your own app
+- RedirectUri - endpoint for Authorization controller that will receive the authorization code from the auth server
+- AuthorizationEndpoint - provider URL for handling authorization
+- TokenEndpoint - provider URL for retrieving access tokens
+
+### Implementation
+The `UseUmbracoAuthorization` flag will toggle between the default Umbraco authorization service and the custom one that will use your private configuration.
+
+`UmbracoAuthorizationService` provides the same implementation as on the previous versions of the package, while the `AuthorizationService` builds a custom authorization flow based on the provided settings.
+
+Both implement `IGoogleAuthorizationService` endpoint and provide the required endpoints for building the authorization URL and retrieving the acces token.
+
+The `AuthorizationImplementationFactory` is used to load the proper injected authorization service.
+
+`GoogleAuthorizationController` with its `OAuth` action will handle the response from the Authorization Server and send the proper message to the client using the `window.opener` interface.
+

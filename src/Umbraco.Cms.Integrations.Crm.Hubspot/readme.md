@@ -78,6 +78,73 @@ And render the form using (assuming a property based on the created data type, w
 @Html.RenderHubspotForm(Model.HubspotForm)
 ```
 
+## Authorization Workflow
+Starting with version 2.1.0 of the integration, the OAuth flow can be configured to use different Authorization Servers without requests routed through the `OAuth Proxy for Umbraco Integrations`.
+
+### Configuration
+To use the new setup, the following configuration is used:
+```
+<appSettings>
+...
+  <add key="Umbraco.Cms.Integrations.Crm.Hubspot.Region" value="[REGION]" />
+  <add key="Umbraco.Cms.Integrations.Crm.Hubspot.ApiKey" value="[YOUR_PRIVATE_APP_ACCESS_TOKEN]" />
+  <add key="Umbraco.Cms.Integrations.Crm.Hubspot.UseUmbracoAuthorization" value="true" />
+  <add key="Umbraco.Cms.Integrations.Crm.Hubspot.ClientId" value="[YOUR_CLIENT_ID]" />
+  <add key="Umbraco.Cms.Integrations.Crm.Hubspot.ClientSecret" value="[YOUR_CLIENT_SECRET]" />
+  <add key="Umbraco.Cms.Integrations.Crm.Hubspot.RedirectUri" value="https://[YOUR_WEBSITE_BASE_URL]/umbraco/api/hubspotauthorization/oauth" />
+  <add key="Umbraco.Cms.Integrations.Crm.Hubspot.Scopes" value="[SCOPES]" />
+  <add key="Umbraco.Cms.Integrations.Crm.Hubspot.AuthorizationEndpoint" value="[AUTHORIZATION_ENDPOINT]" />
+  <add key="Umbraco.Cms.Integrations.Crm.Hubspot.TokenEndpoint" value="[TOKEN_ENDPOINT]" />
+...
+</appSettings>
+```
+
+or, 
+
+```
+ "Umbraco": {
+    "CMS": {
+      "Integrations": {
+        "Crm": {
+          "Hubspot": {
+            "Settings": {
+              "Region": "[REGION]",
+              "ApiKey": "[YOUR_PRIVATE_APP_ACCESS_TOKEN]",
+              "UseUmbracoAuthorization": true
+            },
+            "OAuthSettings": {
+              "ClientId": "[YOUR_CLIENT_ID]",
+              "ClientSecret": "[YOUR_CLIENT_SECRET]",
+              "RedirectUri": "https://[YOUR_WEBSITE_BASE_URL]/umbraco/api/hubspotauthorization/oauth",
+              "AuthorizationEndpoint": "[AUTHORIZATION_ENDPOINT]",
+              "TokenEndpoint": "[TOKEN_ENDPOINT]",
+              "Scopes": "[SCOPES]"
+            }
+          },
+        }
+      }
+    }
+  }
+```
+
+### Configuration Breakdown
+- ClientId - client id of your own app
+- ClientSecret - client secret of your own app
+- RedirectUri - endpoint for Authorization controller that will receive the authorization code from the auth server
+- AuthorizationEndpoint - provider URL for handling authorization
+- TokenEndpoint - provider URL for retrieving access tokens
+
+### Implementation
+The `UseUmbracoAuthorization` flag will toggle between the default Umbraco authorization service and the custom one that will use your private configuration.
+
+`UmbracoAuthorizationService` provides the same implementation as on the previous versions of the package, while the `AuthorizationService` builds a custom authorization flow based on the provided settings.
+
+Both implement `IHubspotAuthorizationService` endpoint and provide the required endpoints for building the authorization URL and retrieving the acces token.
+
+The `AuthorizationImplementationFactory` is used to load the proper injected authorization service.
+
+`HubspotAuthorizationController` with its `OAuth` action will handle the response from the Authorization Server and send the proper message to the client using the `window.opener` interface.
+
 ### Developer Notes
 
 To copy the front-end assets to the test site While in DEBUG mode, use following post build events:
