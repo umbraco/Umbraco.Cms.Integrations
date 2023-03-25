@@ -21,13 +21,13 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
         public const string ClientId = "813c5a65-cfd6-48d6-8928-dffe02aaf61a";
 
-        public const string RedirectUri = OAuthProxyBaseUrl;
-
         public const string Service = "Dynamics";
 
         public const string OAuthProxyBaseUrl = "https://hubspot-forms-auth.umbraco.com/"; // for local testing: https://localhost:44364;
 
-        public const string OAuthProxyTokenEndpoint = "{0}oauth/v1/token";
+        public const string OAuthProxyRedirectUrl = OAuthProxyBaseUrl + "oauth/dynamics/";
+
+        public const string OAuthProxyTokenUrl = OAuthProxyBaseUrl + "oauth/v1/token";
 
         protected const string OAuthScopes = "{0}.default";
 
@@ -49,7 +49,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
         public string GetAuthorizationUrl()
         {
             var scopes = string.Format(OAuthScopes, _settings.HostUrl);
-            return string.Format(DynamicsAuthorizationUrl, ClientId, OAuthProxyBaseUrl, scopes);
+            return string.Format(DynamicsAuthorizationUrl, ClientId, OAuthProxyRedirectUrl, scopes);
         }
 
         public string GetAccessToken(string code) => 
@@ -61,14 +61,14 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             {
                 { "grant_type", "authorization_code" },
                 { "client_id", ClientId },
-                { "redirect_uri", RedirectUri },
+                { "redirect_uri", OAuthProxyRedirectUrl },
                 { "code", code }
             };
 
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
-                RequestUri = new Uri(string.Format(OAuthProxyTokenEndpoint, OAuthProxyBaseUrl)),
+                RequestUri = new Uri(OAuthProxyTokenUrl),
                 Content = new FormUrlEncodedContent(data)
             };
             requestMessage.Headers.Add("service_name", Service);
@@ -94,16 +94,6 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
 
             return "Error: " + errorDto.ErrorDescription;
-        }
-
-        public string RefreshAccessToken()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> RefreshAccessTokenAsync()
-        {
-            throw new NotImplementedException();
         }
     }
 }

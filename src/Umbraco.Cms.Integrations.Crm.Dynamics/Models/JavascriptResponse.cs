@@ -32,8 +32,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models
             ScriptBuilder = new StringBuilder();
             ScriptBuilder.AppendLine("<script>");
             ScriptBuilder.AppendLine(success
-                ? "window.opener.postMessage({ type: 'hubspot:oauth:success', url: location.href, code: '" + data + "' }, '*');"
-                : "window.opener.postMessage({ type: 'hubspot:oauth:error', url: location.href, response: '" + error + "' }, '*');");
+                ? "window.opener.postMessage({ type: 'dynamics:oauth:success', url: location.href, code: '" + data + "' }, '*');"
+                : "window.opener.postMessage({ type: 'dynamics:oauth:error', url: location.href, response: '" + error + "' }, '*');");
             ScriptBuilder.AppendLine("window.close();");
             ScriptBuilder.AppendLine("</script>");
         }

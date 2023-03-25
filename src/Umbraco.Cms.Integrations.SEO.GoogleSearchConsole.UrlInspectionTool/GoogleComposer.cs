@@ -31,9 +31,9 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool
 
             builder.Services.AddSingleton<ITokenService, TokenService>();
 
-            builder.Services.AddTransient<UmbracoAuthorizationService>();
-            builder.Services.AddTransient<AuthorizationService>();
-            builder.Services.AddTransient<AuthorizationImplementationFactory>(f => useUmbracoAuthorization =>
+            builder.Services.AddSingleton<UmbracoAuthorizationService>();
+            builder.Services.AddSingleton<AuthorizationService>();
+            builder.Services.AddSingleton<AuthorizationImplementationFactory>(f => useUmbracoAuthorization =>
             {
                 return useUmbracoAuthorization switch
                 {
@@ -49,15 +49,15 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool
 
             composition.Register<ITokenService, TokenService>(Lifetime.Singleton);
 
-            composition.Register<UmbracoAuthorizationService>(Lifetime.Transient);
-            composition.Register<AuthorizationService>(Lifetime.Transient);
+            composition.Register<UmbracoAuthorizationService>(Lifetime.Singleton);
+            composition.Register<AuthorizationService>(Lifetime.Singleton);
             composition.Register<AuthorizationImplementationFactory>(f => (useUmbracoAuthorization) =>
             {
                 if (useUmbracoAuthorization)
                     return f.GetInstance<UmbracoAuthorizationService>();
 
                 return f.GetInstance<AuthorizationService>();
-            }, Lifetime.Transient);
+            }, Lifetime.Singleton);
         }
 #endif
 

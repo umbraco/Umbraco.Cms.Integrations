@@ -83,15 +83,5 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             return "Error: " + errorDto.ErrorDescription;
         }
-
-        public string RefreshAccessToken()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> RefreshAccessTokenAsync()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
