@@ -12,9 +12,30 @@ namespace Umbraco.Cms.Integrations.DAM.Aprimo.Models.ViewModels
         /// </summary>
         /// <param name="name"></param>
         /// <returns>Crop URL</returns>
-        public string GetImageUrl(string name)
+        public string GetCropUrl(string name)
         {
             var crop = Crops.FirstOrDefault(p => p.Name == name);
+            if (crop != null)
+                return crop.Url;
+
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Get image URL by size
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>Crop URL</returns>
+        public string GetCropUrl(int? width, int? height)
+        {
+            if (!width.HasValue && !height.HasValue)
+                throw new ArgumentException("Width and height cannot be both NULL.");
+
+            var crop = width.HasValue && height.HasValue 
+                ? Crops.FirstOrDefault(p => p.ResizeWidth == width && p.ResizeHeight == height)
+                : (width.HasValue 
+                    ? Crops.FirstOrDefault(p => p.ResizeWidth == width)
+                    : Crops.FirstOrDefault(p => p.ResizeHeight == height));
             if (crop != null)
                 return crop.Url;
 

@@ -77,3 +77,11 @@ Properties available from the strongly-typed model:
 - Thumbnail
 - Crops
 - Asset fields
+
+### Working with Crops
+For the selected media asset you can retrieve the crops details using the `MediaWithCrops` object.
+ 
+It contains the details of the original asset, the list of available crops and a method to retrieve the crop URL based on name and width/height.
+
+### Working with fields
+The asset's fields are grouped in an object containing their label and a dictionary of values based on the available cultures for that asset.
