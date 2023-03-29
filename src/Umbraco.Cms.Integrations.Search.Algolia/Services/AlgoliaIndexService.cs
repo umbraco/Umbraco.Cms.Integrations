@@ -27,18 +27,18 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
                 await index.SaveObjectsAsync(payload != null
                     ? payload
-                    : new List<Record> { 
-                        new Record { 
-                            ObjectID = Guid.NewGuid().ToString(), 
-                            Data = new Dictionary<string, string>()} 
-                    },  autoGenerateObjectId: false);
+                    : new List<Record> {
+                        new Record {
+                            ObjectID = Guid.NewGuid().ToString(),
+                            Data = new Dictionary<string, string>()}
+                    }, autoGenerateObjectId: false);
 
                 if (payload == null)
                     await index.ClearObjectsAsync();
 
                 return Result.Ok();
             }
-            catch(AlgoliaException ex)
+            catch (AlgoliaException ex)
             {
                 return Result.Fail(ex.Message);
             }
@@ -57,7 +57,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
                     await index.PartialUpdateObjectAsync(record);
                 else
                     await index.SaveObjectAsync(record, autoGenerateObjectId: false);
-                
+
                 return Result.Ok();
             }
             catch (AlgoliaException ex)
@@ -100,6 +100,15 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
             {
                 return Result.Fail(ex.Message);
             }
+        }
+
+        public async Task<bool> IndexExists(string name)
+        {
+            var client = new SearchClient(_settings.ApplicationId, _settings.AdminApiKey);
+
+            var indices = await client.ListIndicesAsync();
+
+            return indices.Items.Any(p => p.Name == name);
         }
     }
 }

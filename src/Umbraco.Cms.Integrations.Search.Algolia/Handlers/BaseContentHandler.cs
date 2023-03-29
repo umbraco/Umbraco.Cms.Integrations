@@ -20,6 +20,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 
         protected readonly IAlgoliaIndexService IndexService;
 
+        protected readonly IUserService UserService;
+
         protected readonly IPublishedUrlProvider UrlProvider;
 
         protected readonly IAlgoliaSearchPropertyIndexValueFactory AlgoliaSearchPropertyIndexValueFactory;
@@ -27,6 +29,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
         public BaseContentHandler(ILogger<BaseContentHandler> logger,
             IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
             IAlgoliaIndexService indexService,
+            IUserService userService,
             IPublishedUrlProvider urlProvider,
             IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory)
         {
@@ -36,12 +39,14 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 
             IndexService = indexService;
 
+            UserService = userService;
+
             UrlProvider = urlProvider;
 
             AlgoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
         }
 
-        protected async Task RebuildIndex(IEnumerable<IContent> entities, bool deleteIndexData = false)
+        protected async Task RebuildIndex(IEnumerable<IContent> entities)
         {
             try
             {
@@ -55,11 +60,11 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
                             .FirstOrDefault(p => p.ContentType.Alias == entity.ContentType.Alias);
                         if (indexConfiguration == null || indexConfiguration.ContentType.Alias != entity.ContentType.Alias) continue;
 
-                        var record = new ContentRecordBuilder(UrlProvider, AlgoliaSearchPropertyIndexValueFactory)
+                        var record = new ContentRecordBuilder(UserService, UrlProvider, AlgoliaSearchPropertyIndexValueFactory)
                            .BuildFromContent(entity, (p) => indexConfiguration.Properties.Any(q => q.Alias == p.Alias))
                            .Build();
 
-                        var result = deleteIndexData
+                        var result = entity.Trashed || !entity.Published
                          ? await IndexService.DeleteData(index.Name, entity.Key.ToString())
                          : await IndexService.UpdateData(index.Name, record);
 

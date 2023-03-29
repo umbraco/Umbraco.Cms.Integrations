@@ -11,5 +11,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
         Task<Result> DeleteData(string name, string objectId);
 
         Task<Result> DeleteIndex(string name);
+
+        Task<bool> IndexExists(string name);
     }
 }
