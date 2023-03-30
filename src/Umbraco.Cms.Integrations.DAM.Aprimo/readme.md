@@ -1,4 +1,4 @@
-﻿# Umbraco.Cms.Integrations.DAM.Aprimo
+# Umbraco.Cms.Integrations.DAM.Aprimo
 
 This integration provides a custom media picker for digital assets managed in an Aprimo workspace. It can be used as a property editor for content with a value converter providing a strongly typed model for rendering, as well as a sample rendering component.
 
@@ -85,3 +85,5 @@ It contains the details of the original asset, the list of available crops and a
 
 ### Working with fields
 The asset's fields are grouped in an object containing their label and a dictionary of values based on the available cultures for that asset.
+### Version history
+- 1.0.0 - Initial release
