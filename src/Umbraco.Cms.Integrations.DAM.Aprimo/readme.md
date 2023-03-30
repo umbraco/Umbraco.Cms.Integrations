@@ -1,4 +1,4 @@
-﻿# Umbraco.Cms.Integrations.DAM.Aprimo
+# Umbraco.Cms.Integrations.DAM.Aprimo
 
 This integration provides a custom media picker for digital assets managed in an Aprimo workspace. It can be used as a property editor for content with a value converter providing a strongly typed model for rendering, as well as a sample rendering component.
 
@@ -77,6 +77,27 @@ Properties available from the strongly-typed model:
 - Thumbnail
 - Crops
 - Asset fields
+
+### Working with Crops
+For the selected media asset you can retrieve the crops details using the `MediaWithCrops` object.
+ 
+It contains the details of the original asset, the list of available crops and a method to retrieve the crop URL based on name and width/height.
+
+For example:
+- get URL for crop item with the name _Social_: `@Model.MediaWithCrops.GetCropUrl("Social")`
+- get URL for crop item with height _1080_: `@Model.MediaWithCrops.GetCropUrl(null, 1080)`
+
+### Working with fields
+The asset's fields are grouped in an object containing their label and a dictionary of values based on the available cultures for that asset.
+
+For example:
+- get values for a field with label _Display Title_: 
+```
+var displayTitle = @Model.Fields.FirstOrDefault(p => p.Label == "Display Title");
+var values = displayTitle != null
+                ? displayTitle.Values 
+                : default(Dictionary<string, string>());
+``` 
 
 ### Version history
 - 1.0.0 - Initial release
