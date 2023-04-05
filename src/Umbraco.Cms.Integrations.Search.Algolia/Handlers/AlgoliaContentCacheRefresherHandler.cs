@@ -8,15 +8,34 @@ using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Services;
-using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Integrations.Search.Algolia.Builders;
+using System.Text.Json;
+using Umbraco.Cms.Integrations.Search.Algolia.Models;
+using Umbraco.Cms.Core.Sync;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 {
-    public class AlgoliaContentCacheRefresherHandler : BaseContentHandler, INotificationAsyncHandler<ContentCacheRefresherNotification>
+    public class AlgoliaContentCacheRefresherHandler : INotificationAsyncHandler<ContentCacheRefresherNotification>
     {
+        private readonly IServerRoleAccessor _serverRoleAccessor;
+
         private readonly IContentService _contentService;
 
+        private readonly ILogger _logger;
+
+        private readonly IAlgoliaIndexDefinitionStorage<AlgoliaIndex> _indexStorage;
+
+        private readonly IAlgoliaIndexService _indexService;
+
+        private readonly IUserService _userService;
+
+        private readonly IPublishedUrlProvider _urlProvider;
+
+        private readonly IAlgoliaSearchPropertyIndexValueFactory _algoliaSearchPropertyIndexValueFactory;
+
         public AlgoliaContentCacheRefresherHandler(
+            IServerRoleAccessor serverRoleAccessor,
             ILogger<AlgoliaContentCacheRefresherHandler> logger,
             IContentService contentService,
             IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
@@ -24,9 +43,15 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             IUserService userService,
             IPublishedUrlProvider urlProvider,
             IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory)
-            : base(logger, indexStorage, indexService, userService, urlProvider, algoliaSearchPropertyIndexValueFactory)
         {
+            _serverRoleAccessor = serverRoleAccessor;
             _contentService = contentService;
+            _logger = logger;   
+            _indexStorage = indexStorage;
+            _indexService = indexService;
+            _userService = userService;
+            _urlProvider = urlProvider;
+            _algoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
         }
 
         public async Task HandleAsync(ContentCacheRefresherNotification notification, CancellationToken cancellationToken)
@@ -34,6 +59,20 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             if (notification.MessageObject is not ContentCacheRefresher.JsonPayload[] payloads)
             {
                 return;
+            }
+
+            switch (_serverRoleAccessor.CurrentServerRole)
+            {
+                case ServerRole.Subscriber:
+                    _logger.LogDebug("Umbraco Forms scheduled record deletion task will not run on subscriber servers.");
+                    return;
+                case ServerRole.Unknown:
+                    _logger.LogDebug("Umbraco Forms scheduled record deletion task will not run on servers with unknown role.");
+                    return;
+                case ServerRole.Single:
+                case ServerRole.SchedulingPublisher:
+                default:
+                    break;
             }
 
             var refreshedContent = _contentService
@@ -45,26 +84,36 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             await RebuildIndex(refreshedContent);
         }
 
-        public void Handle(ContentCacheRefresherNotification notification)
+        protected async Task RebuildIndex(IEnumerable<IContent> entities)
         {
-            if (notification.MessageObject is not ContentCacheRefresher.JsonPayload[] payloads)
+            try
             {
-                return;
-            }
+                var indices = _indexStorage.Get();
 
-            foreach (ContentCacheRefresher.JsonPayload payload in payloads)
-            {
-                if (payload.ChangeTypes != TreeChangeTypes.RefreshNode 
-                    && payload.ChangeTypes != TreeChangeTypes.RefreshBranch)
+                foreach (var entity in entities)
                 {
-                    return;
+                    foreach (var index in indices)
+                    {
+                        var indexConfiguration = JsonSerializer.Deserialize<List<ContentData>>(index.SerializedData)
+                            .FirstOrDefault(p => p.ContentType.Alias == entity.ContentType.Alias);
+                        if (indexConfiguration == null || indexConfiguration.ContentType.Alias != entity.ContentType.Alias) continue;
+
+                        var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory)
+                           .BuildFromContent(entity, (p) => indexConfiguration.Properties.Any(q => q.Alias == p.Alias))
+                           .Build();
+
+                        var result = entity.Trashed || !entity.Published
+                         ? await _indexService.DeleteData(index.Name, entity.Key.ToString())
+                         : await _indexService.UpdateData(index.Name, record);
+
+                        if (result.Failure)
+                            _logger.LogError($"Failed to update data for Algolia index: {result}");
+                    }
                 }
-
-                var x = _contentService.GetById(1205);
-                var y = x.Published;
-
-                // You can do stuff with the ID of the refreshed content, for instance getting it from the content service.
-                var refeshedContent = _contentService.GetById(payload.Id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed to update data for Algolia index: {ex.Message}");
             }
         }
     }
