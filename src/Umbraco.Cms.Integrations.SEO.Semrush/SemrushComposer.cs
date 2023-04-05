@@ -31,7 +31,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush
             builder.Services.AddSingleton<ISemrushTokenService, SemrushTokenService>();
             builder.Services.AddSingleton<ICacheHelper, CacheHelper>();
 
-            builder.Services.AddScoped<TokenBuilder>();
+            builder.Services.AddSingleton<TokenBuilder>();
 
             builder.Services.AddSingleton<UmbracoAuthorizationService>();
             builder.Services.AddSingleton<AuthorizationService>();

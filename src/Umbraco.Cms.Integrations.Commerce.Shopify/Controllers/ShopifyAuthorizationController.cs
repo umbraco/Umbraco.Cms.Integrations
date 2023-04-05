@@ -1,4 +1,4 @@
-﻿using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
+﻿using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
 
 #if NETCOREAPP
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +11,9 @@ using System.Configuration;
 using Umbraco.Web.WebApi;
 #endif
 
-namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Controllers
 {
-    public class DynamicsAuthorizationController : UmbracoApiController
+    public class ShopifyAuthorizationController : UmbracoApiController
     {
         [HttpGet]
 #if NETCOREAPP
@@ -21,7 +21,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
 #else
         public ActionResult OAuth(string code)
 #endif
-        { 
+        {
             return new ContentResult
             {
                 Content = string.IsNullOrEmpty(code)

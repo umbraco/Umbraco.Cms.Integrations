@@ -26,7 +26,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
     {
         private readonly JsonSerializerSettings _serializerSettings;
 
-        private ShopifySettings Options;
+        private readonly ShopifySettings _settings;
+
+        private readonly ShopifyOAuthSettings _oauthSettings;
 
 #if NETCOREAPP
         private readonly ILogger<ShopifyService> _umbCoreLogger;
@@ -43,7 +45,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
         public static Func<HttpClient> ClientFactory = () => Client;
 
 #if NETCOREAPP
-        public ShopifyService(ILogger<ShopifyService> logger, IOptions<ShopifySettings> options, ITokenService tokenService)
+        public ShopifyService(ILogger<ShopifyService> logger, 
+            IOptions<ShopifySettings> options, IOptions<ShopifyOAuthSettings> oauthOptions, 
+            ITokenService tokenService)
         {
             var resolver = new JsonPropertyRenameContractResolver();
             resolver.RenameProperty(typeof(ResponseDto<ProductsListDto>), "Result", "products");
@@ -53,7 +57,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
                 ContractResolver = resolver
             };
 
-            Options = options.Value;
+            _settings = options.Value;
+            _oauthSettings = oauthOptions.Value;
 
             _umbCoreLogger = logger;
 
@@ -70,7 +75,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
                 ContractResolver = resolver
             };
 
-            Options = new ShopifySettings(ConfigurationManager.AppSettings);
+            _settings = new ShopifySettings(ConfigurationManager.AppSettings);
+            _oauthSettings = new ShopifyOAuthSettings(ConfigurationManager.AppSettings);
 
             _umbCoreLogger = logger;
 
@@ -80,71 +86,29 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 
         public EditorSettings GetApiConfiguration()
         {
-            if (string.IsNullOrEmpty(Options.Shop)
-                || string.IsNullOrEmpty(Options.ApiVersion))
+            if (string.IsNullOrEmpty(_settings.Shop)
+                || string.IsNullOrEmpty(_settings.ApiVersion))
                 return new EditorSettings();
 
-            return
-                !string.IsNullOrEmpty(Options.AccessToken)
-                    ? new EditorSettings { IsValid = true, Type = ConfigurationType.Api }
-                    : !string.IsNullOrEmpty(SettingsService.OAuthClientId)
-                      && !string.IsNullOrEmpty(SettingsService.OAuthProxyBaseUrl)
-                      && !string.IsNullOrEmpty(SettingsService.OAuthProxyEndpoint)
+            // validate API configuration
+            if (!string.IsNullOrEmpty(_settings.AccessToken))
+                return new EditorSettings { IsValid = true, Type = ConfigurationType.Api };
+
+            // validate OAuth configuration if AuthorizationService is used.
+            // if authorization is managed through UmbracoAuthorizationService, the properties client ID and proxy URL are set correctly.
+            if (_settings.UseUmbracoAuthorization)
+                return new EditorSettings { IsValid = true, Type = ConfigurationType.OAuth };
+            else
+                return !string.IsNullOrEmpty(_oauthSettings.ClientId)
+                        && !string.IsNullOrEmpty(_oauthSettings.ClientSecret)
+                        && !string.IsNullOrEmpty(_oauthSettings.RedirectUri)
                         ? new EditorSettings { IsValid = true, Type = ConfigurationType.OAuth }
                         : new EditorSettings();
         }
 
-        public string GetAuthorizationUrl()
-        {
-            return
-                string.Format(SettingsService.AuthorizationUrl,
-                    Options.Shop, SettingsService.OAuthClientId, SettingsService.ShopifyOAuthProxyUrl);
-        }
-
-        public async Task<string> GetAccessToken(OAuthRequestDto request)
-        {
-            var data = new Dictionary<string, string>
-            {
-                { "client_id", SettingsService.OAuthClientId },
-                { "redirect_uri", string.Format(SettingsService.ShopifyOAuthProxyUrl, SettingsService.OAuthProxyBaseUrl) },
-                { "code", request.Code }
-            };
-
-            var requestMessage = new HttpRequestMessage
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(string.Format(SettingsService.OAuthProxyEndpoint, SettingsService.OAuthProxyBaseUrl)),
-                Content = new FormUrlEncodedContent(data)
-            };
-            requestMessage.Headers.Add("service_name", SettingsService.ServiceName);
-            requestMessage.Headers.Add(SettingsService.ServiceAddressReplace, Options.Shop);
-
-            var response = await ClientFactory().SendAsync(requestMessage);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadAsStringAsync();
-
-                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
-
-                _tokenService.SaveParameters(SettingsService.AccessTokenDbKey, tokenDto.AccessToken);
-
-                return result;
-            }
-
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                var errorResult = await response.Content.ReadAsStringAsync();
-                var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
-
-                return "Error: " + errorDto.Message;
-            }
-
-            return "Error: An unexpected error occurred.";
-        }
-
         public async Task<ResponseDto<ProductsListDto>> ValidateAccessToken()
         {
-            _tokenService.TryGetParameters(SettingsService.AccessTokenDbKey, out string accessToken);
+            _tokenService.TryGetParameters(Constants.AccessTokenDbKey, out string accessToken);
 
             if (string.IsNullOrEmpty(accessToken))
             {
@@ -160,9 +124,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(string.Format(SettingsService.ProductsApiEndpoint,
-                    Options.Shop,
-                    Options.ApiVersion))
+                RequestUri = new Uri(string.Format(Constants.ProductsApiEndpoint,
+                    _settings.Shop,
+                    _settings.ApiVersion))
             };
             requestMessage.Headers.Add("X-Shopify-Access-Token", accessToken);
 
@@ -177,17 +141,17 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 
         public void RevokeAccessToken()
         {
-            _tokenService.RemoveParameters(Constants.UmbracoCmsIntegrationsCommerceShopifyAccessToken);
+            _tokenService.RemoveParameters(Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyAccessToken);
         }
 
         public async Task<ResponseDto<ProductsListDto>> GetResults()
         {
             string accessToken;
             if (GetApiConfiguration().Type.Value == ConfigurationType.OAuth.Value)
-                _tokenService.TryGetParameters(SettingsService.AccessTokenDbKey, out accessToken);
+                _tokenService.TryGetParameters(Constants.AccessTokenDbKey, out accessToken);
             else
             {
-                accessToken = Options.AccessToken;
+                accessToken = _settings.AccessToken;
             }
 
             if (string.IsNullOrEmpty(accessToken))
@@ -204,9 +168,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(string.Format(SettingsService.ProductsApiEndpoint,
-                    Options.Shop,
-                    Options.ApiVersion))
+                RequestUri = new Uri(string.Format(Constants.ProductsApiEndpoint,
+                    _settings.Shop,
+                    _settings.ApiVersion))
             };
             requestMessage.Headers.Add("X-Shopify-Access-Token", accessToken);
 
