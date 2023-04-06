@@ -29,6 +29,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
         private readonly UmbracoHelper _umbracoHelper;
 
+        private readonly IUserService _userService;
+
         private readonly IPublishedUrlProvider _urlProvider;
 
         private readonly IContentService _contentService;
@@ -40,6 +42,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             IAlgoliaSearchService<SearchResponse<Record>> searchService, 
             IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
             UmbracoHelper umbracoHelper, 
+            IUserService userService,
             IPublishedUrlProvider urlProvider,
             IContentService contentService,
             IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory)
@@ -51,6 +54,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             _indexStorage = indexStorage;
 
             _umbracoHelper = umbracoHelper;
+
+            _userService = userService;
 
             _urlProvider = urlProvider;
 
@@ -86,7 +91,9 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
                     Date = DateTime.Now
                 });
 
-                var result = await _indexService.PushData(index.Name);
+                var result = await _indexService.IndexExists(index.Name)
+                    ? Result.Ok()
+                    : await _indexService.PushData(index.Name);
 
                 return new JsonResult(result);
             }
@@ -113,7 +120,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
                     foreach (var contentItem in contentItems)
                     {
-                        var record = new ContentRecordBuilder(_urlProvider, _algoliaSearchPropertyIndexValueFactory)
+                        var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory)
                             .BuildFromContent(_contentService.GetById(contentItem.Id), (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
                             .Build();
 

@@ -20,11 +20,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
         {
             builder.AddNotificationHandler<UmbracoApplicationStartingNotification, RunAlgoliaIndicesMigration>();
 
-            builder.AddNotificationAsyncHandler<ContentPublishedNotification, ContentPublishedHandler>();
-
-            builder.AddNotificationAsyncHandler<ContentDeletedNotification, ContentDeletedHandler>();
-
-            builder.AddNotificationAsyncHandler<ContentUnpublishedNotification, ContentUnpublishedHandler>();
+            builder.AddNotificationAsyncHandler<ContentCacheRefresherNotification, AlgoliaContentCacheRefresherHandler>();
 
             var options = builder.Services.AddOptions<AlgoliaSettings>()
                 .Bind(builder.Config.GetSection(Constants.SettingsPath));
