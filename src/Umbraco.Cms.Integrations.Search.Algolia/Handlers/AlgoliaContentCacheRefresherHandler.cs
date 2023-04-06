@@ -64,10 +64,10 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             switch (_serverRoleAccessor.CurrentServerRole)
             {
                 case ServerRole.Subscriber:
-                    _logger.LogDebug("Umbraco Forms scheduled record deletion task will not run on subscriber servers.");
+                    _logger.LogDebug("Algolia indexing task will not run on subscriber servers.");
                     return;
                 case ServerRole.Unknown:
-                    _logger.LogDebug("Umbraco Forms scheduled record deletion task will not run on servers with unknown role.");
+                    _logger.LogDebug("Algolia indexing task will not run on servers with unknown role.");
                     return;
                 case ServerRole.Single:
                 case ServerRole.SchedulingPublisher:
