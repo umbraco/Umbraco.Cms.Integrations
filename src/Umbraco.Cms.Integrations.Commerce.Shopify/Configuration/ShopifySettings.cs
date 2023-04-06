@@ -11,9 +11,12 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Configuration
 
         public ShopifySettings(NameValueCollection appSettings)
         {
-            ApiVersion = appSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyApiVersion];
-            Shop = appSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyShop];
-            AccessToken = appSettings[Constants.UmbracoCmsIntegrationsCommerceShopifyAccessToken];
+            ApiVersion = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyApiVersion];
+            Shop = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyShop];
+            AccessToken = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyAccessToken];
+            UseUmbracoAuthorization = bool.TryParse(appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyUseUmbracoAuthorizationKey], out var key)
+               ? key
+               : true;
         }
 
         public string ApiVersion { get; set; }
@@ -21,5 +24,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Configuration
         public string Shop { get; set; }
 
         public string AccessToken { get; set; }
+
+        public bool UseUmbracoAuthorization { get; set; }
     }
 }

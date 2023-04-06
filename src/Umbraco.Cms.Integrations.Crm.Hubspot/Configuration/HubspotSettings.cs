@@ -11,12 +11,18 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Configuration
 
         public HubspotSettings(NameValueCollection appSettings)
         {
-            ApiKey = appSettings[Constants.UmbracoCmsIntegrationsCrmHubspotApiKey];
-            Region = appSettings[Constants.UmbracoCmsIntegrationsCrmHubspotRegion];
+            ApiKey = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmHubspotApiKey];
+            Region = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmHubspotRegion];
+            UseUmbracoAuthorization = 
+                bool.TryParse(appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmHubspotUseUmbracoAuthorizationKey], out var key)
+                    ? key
+                    : true;
         }
 
         public string ApiKey { get; set; }
 
         public string Region { get; set; }
+
+        public bool UseUmbracoAuthorization { get; set; } = true;
     }
 }

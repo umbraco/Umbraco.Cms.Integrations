@@ -13,6 +13,7 @@ using Umbraco.Cms.Integrations.Crm.Hubspot.Controllers;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
 using Umbraco.Core.Composing;
+using static Umbraco.Cms.Integrations.Crm.Hubspot.HubspotComposer;
 using ILogger = Umbraco.Core.Logging.ILogger;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
@@ -56,7 +57,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         [Test]
         public void CheckApiConfiguration_WithApiConfig_ShouldReturnValidConfigurationResponseObjectWithType()
         {
-            var sut = new FormsController(Mock.Of<ITokenService>(), Mock.Of<ILogger>())
+            var sut = new FormsController(Mock.Of<ITokenService>(), Mock.Of<ILogger>(), Mock.Of<AuthorizationImplementationFactory>())
             {
                 Options = MockedAppSettingsApiSetup
             };
@@ -70,7 +71,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         [Test]
         public void CheckOAuthConfiguration_WithOAuthConfigAndNoApiConfig_ShouldReturnValidConfigurationResponseObjectWithType()
         {
-            var sut = new FormsController(Mock.Of<ITokenService>(), Mock.Of<ILogger>())
+            var sut = new FormsController(Mock.Of<ITokenService>(), Mock.Of<ILogger>(), Mock.Of<AuthorizationImplementationFactory>())
             {
                 Options = MockedAppSettingsOAuthSetup
             };
@@ -88,7 +89,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         [Test]
         public async Task GetAll_WithoutApiKey_ShouldReturnInvalidResponseObjectWithLoggedInfo()
         {
-            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object)
+            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>())
             {
                 Options = MockedAppSettingsNoSetup
             };
@@ -104,7 +105,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         [Test]
         public async Task GetAll_WithUnauthorizedRequest_ShouldReturnExpiredResponseObjectWithLoggedError()
         {
-            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object);
+            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
             sut.Options = MockedAppSettingsApiSetup;
 
             var httpClient = CreateMockedHttpClient(HttpStatusCode.Unauthorized, InvalidApiKey);
@@ -121,7 +122,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         [Test]
         public async Task GetAll_WithSuccessfulRequest_ShouldReturnResponseObjectWithFormsCollection()
         {
-            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object);
+            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
             sut.Options = MockedAppSettingsApiSetup;
 
             var response = File.ReadAllText(TestContext.CurrentContext.TestDirectory + "\\Data\\mockResponseApiSetup.json");
@@ -139,7 +140,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         [Test]
         public async Task GetAll_WithFailedRequest_ShouldReturnDefaultResponseObjectWithLoggedError()
         {
-            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object);
+            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
             sut.Options = MockedAppSettingsApiSetup;
 
             var response = File.ReadAllText(TestContext.CurrentContext.TestDirectory + "\\Data\\mockResponseApiSetup.json");
@@ -165,7 +166,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         {
             var mockedTokenService = CreateMockedTokenService(false);
 
-            var sut = new FormsController(mockedTokenService.Object, MockedLogger.Object);
+            var sut = new FormsController(mockedTokenService.Object, MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
 
             var result = await sut.GetAllOAuth();
 
@@ -180,7 +181,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         {
             var mockedTokenService = CreateMockedTokenService(true);
 
-            var sut = new FormsController(mockedTokenService.Object, MockedLogger.Object);
+            var sut = new FormsController(mockedTokenService.Object, MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
 
             var httpClient = CreateMockedHttpClient(HttpStatusCode.Unauthorized);
             FormsController.ClientFactory = () => httpClient;
@@ -198,7 +199,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         {
             var mockedTokenService = CreateMockedTokenService(true);
 
-            var sut = new FormsController(mockedTokenService.Object, MockedLogger.Object);
+            var sut = new FormsController(mockedTokenService.Object, MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
 
             var response = File.ReadAllText(TestContext.CurrentContext.TestDirectory + "\\Data\\mockResponseOAuthSetup.json");
 
@@ -217,7 +218,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         {
             var mockedTokenService = CreateMockedTokenService(true);
 
-            var sut = new FormsController(mockedTokenService.Object, MockedLogger.Object);
+            var sut = new FormsController(mockedTokenService.Object, MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
 
             var response = File.ReadAllText(TestContext.CurrentContext.TestDirectory + "\\Data\\mockResponseApiSetup.json");
 
@@ -238,7 +239,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
         private static HubspotSettings CreateMockedAppSettings(bool includeApiKeySettings = false)
         {
             return includeApiKeySettings
-                ? new HubspotSettings {ApiKey = "test-api-key", Region = "eu1"}
+                ? new HubspotSettings {ApiKey = "test-api-key", Region = "eu1" }
                 : new HubspotSettings { Region = "eu1" };
         }
 

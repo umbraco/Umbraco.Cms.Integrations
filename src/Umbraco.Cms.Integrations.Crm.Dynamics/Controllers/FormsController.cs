@@ -23,6 +23,7 @@ using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
 using System.Linq;
+using static Umbraco.Cms.Integrations.Crm.Dynamics.DynamicsComposer;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
 {
@@ -37,33 +38,36 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
 
         private readonly DynamicsSettings _settings;
 
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IDynamicsAuthorizationService _authorizationService;
 
         private readonly DynamicsService _dynamicsService;
 
         private readonly DynamicsConfigurationService _dynamicsConfigurationService;
 
 #if NETCOREAPP
-        public FormsController(IOptions<DynamicsSettings> options, IAuthorizationService authorizationService, 
+        public FormsController(IOptions<DynamicsSettings> options,
             DynamicsService dynamicsService, 
-            DynamicsConfigurationService dynamicsConfigurationService)
+            DynamicsConfigurationService dynamicsConfigurationService,
+            AuthorizationImplementationFactory authorizationImplementationFactory)
 #else
-        public FormsController(IAuthorizationService authorizationService,
+        public FormsController(
             DynamicsService dynamicsService,
-            DynamicsConfigurationService dynamicsConfigurationService)
+            DynamicsConfigurationService dynamicsConfigurationService,
+            AuthorizationImplementationFactory authorizationImplementationFactory)
 #endif
         {
-            _authorizationService = authorizationService;
-
-            _dynamicsService = dynamicsService;
-
-            _dynamicsConfigurationService = dynamicsConfigurationService;
 
 #if NETCOREAPP
             _settings = options.Value;
 #else
             _settings = new DynamicsSettings(ConfigurationManager.AppSettings);
 #endif
+
+            _authorizationService = authorizationImplementationFactory(_settings.UseUmbracoAuthorization);
+
+            _dynamicsService = dynamicsService;
+
+            _dynamicsConfigurationService = dynamicsConfigurationService;
         }
 
         [HttpGet]
@@ -78,54 +82,16 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
 
             var identity = await _dynamicsService.GetIdentity(oauthConfiguration.AccessToken);
 
-            if (!identity.IsAuthorized) return new OAuthConfigurationDto { Message = identity.Error?.Message };
+            if (!identity.IsAuthorized) return new OAuthConfigurationDto { Message = identity.Error != null ? identity.Error.Message : string.Empty };
 
             oauthConfiguration.IsAuthorized = true;
 
             return oauthConfiguration;
-        } 
+        }
 
         [HttpPost]
-        public async Task<string> GetAccessToken([FromBody] OAuthRequestDto authRequestDto)
-        {
-            var data = new Dictionary<string, string>
-            {
-                { "grant_type", "authorization_code" },
-                { "client_id", AuthorizationService.ClientId },
-                { "redirect_uri", AuthorizationService.RedirectUri },
-                { "code", authRequestDto.Code } 
-            };
-
-            var requestMessage = new HttpRequestMessage
-            {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(string.Format(AuthorizationService.OAuthProxyTokenEndpoint, AuthorizationService.OAuthProxyBaseUrl)),
-                Content = new FormUrlEncodedContent(data)
-            };
-            requestMessage.Headers.Add("service_name", AuthorizationService.Service);
-
-            var response = await ClientFactory().SendAsync(requestMessage);
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadAsStringAsync();
-
-                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
-
-                var identity = await _dynamicsService.GetIdentity(tokenDto.AccessToken);
-
-                if (identity.IsAuthorized)
-                    _dynamicsConfigurationService.AddorUpdateOAuthConfiguration(tokenDto.AccessToken, identity.UserId, identity.FullName);
-                else
-                    return "Error: " + identity.Error.Message;
-
-                return result;
-            }
-
-            var errorResult = await response.Content.ReadAsStringAsync();
-            var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
-
-            return "Error: " + errorDto.ErrorDescription;
-        }
+        public async Task<string> GetAccessToken([FromBody] OAuthRequestDto authRequestDto) =>
+            await _authorizationService.GetAccessTokenAsync(authRequestDto.Code);
 
         [HttpGet]
         public async Task<ResponseDto<FormDto>> GetForms()

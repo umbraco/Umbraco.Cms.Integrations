@@ -9,10 +9,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
     {
         EditorSettings GetApiConfiguration();
 
-        string GetAuthorizationUrl();
-
-        Task<string> GetAccessToken(OAuthRequestDto request);
-
         Task<ResponseDto<ProductsListDto>> ValidateAccessToken();
 
         void RevokeAccessToken();

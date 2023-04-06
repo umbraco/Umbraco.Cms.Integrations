@@ -43,7 +43,7 @@
     }
 
     function getAccessToken(event) {
-        if (event.data.type === "hubspot:oauth:success") {
+        if (event.data.type === "dynamics:oauth:success") {
             umbracoCmsIntegrationsCrmDynamicsResource.getAccessToken(event.data.code).then(function (response) {
                 if (response.startsWith("Error:")) {
 

@@ -16,17 +16,32 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify
 {
     public class ShopifyComposer : IComposer
     {
+        public delegate IShopifyAuthorizationService AuthorizationImplementationFactory(bool useUmbracoAuthorization);
+
 #if NETCOREAPP
         public void Compose(IUmbracoBuilder builder)
         {
             var options = builder.Services.AddOptions<ShopifySettings>()
                 .Bind(builder.Config.GetSection(Constants.Configuration.Settings));
+            var oauthOptions = builder.Services.AddOptions<ShopifyOAuthSettings>()
+                .Bind(builder.Config.GetSection(Constants.Configuration.OAuthSettings));
 
             builder.Services.AddSingleton<ITokenService, TokenService>();
 
             builder.Services.AddSingleton<ICacheHelper, CacheHelper>();
 
             builder.Services.AddSingleton<IShopifyService, ShopifyService>();
+
+            builder.Services.AddSingleton<UmbracoAuthorizationService>();
+            builder.Services.AddSingleton<AuthorizationService>();
+            builder.Services.AddSingleton<AuthorizationImplementationFactory>(f => useUmbracoAuthorization =>
+            {
+                return useUmbracoAuthorization switch
+                {
+                    true => f.GetService<UmbracoAuthorizationService>(),
+                    _ => f.GetService<AuthorizationService>()
+                };
+            });
         }
 #else
         public void Compose(Composition composition)
@@ -36,6 +51,16 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify
             composition.Register<ICacheHelper, CacheHelper>(Lifetime.Singleton);
 
             composition.Register<IShopifyService, ShopifyService>(Lifetime.Singleton);
+
+            composition.Register<UmbracoAuthorizationService>(Lifetime.Singleton);
+            composition.Register<AuthorizationService>(Lifetime.Singleton);
+            composition.Register<AuthorizationImplementationFactory>(f => (useUmbracoAuthorization) =>
+            {
+                if (useUmbracoAuthorization)
+                    return f.GetInstance<UmbracoAuthorizationService>();
+
+                return f.GetInstance<AuthorizationService>();
+            }, Lifetime.Singleton);
         }
 #endif
     }

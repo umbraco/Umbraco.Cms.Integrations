@@ -16,6 +16,20 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
             };
         }
 
+        public TokenBuilder WithClientId(string clientId)
+        {
+            _requestData["client_id"] = clientId;
+            
+            return this;
+        }
+
+        public TokenBuilder WithClientSecret(string clientSecret)
+        {
+            _requestData.Add("client_secret", clientSecret);
+
+            return this;
+        }
+
         public TokenBuilder ForAccessToken(string code)
         {
             Initialize();
