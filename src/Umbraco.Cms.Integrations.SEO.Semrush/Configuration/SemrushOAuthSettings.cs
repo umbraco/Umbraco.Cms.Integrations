@@ -20,8 +20,6 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Configuration
 
             Scopes = appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoSemrushScopesKey];
 
-            AuthorizationEndpoint = appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoSemrushAuthorizationEndpointKey];
-
             TokenEndpoint = appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoSemrushTokenEndpointKey];
         }
 
@@ -34,8 +32,6 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Configuration
         public string RedirectUri { get; set; }
 
         public string Scopes { get; set; }
-
-        public string AuthorizationEndpoint { get; set; }
 
         public string TokenEndpoint { get; set; }
     }

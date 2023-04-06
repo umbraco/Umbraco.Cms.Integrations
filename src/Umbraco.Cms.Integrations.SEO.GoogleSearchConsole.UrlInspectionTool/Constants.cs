@@ -27,8 +27,6 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool
 
             public const string UmbracoCmsIntegrationsSeoGoogleSearchConsoleScopesKey = "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.Scopes";
 
-            public const string UmbracoCmsIntegrationsSeoGoogleSearchConsoleAuthorizationEndpointKey = "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.AuthorizationEndpoint";
-
             public const string UmbracoCmsIntegrationsSeoGoogleSearchConsoleTokenEndpointKey = "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.TokenEndpoint";
         }
     }

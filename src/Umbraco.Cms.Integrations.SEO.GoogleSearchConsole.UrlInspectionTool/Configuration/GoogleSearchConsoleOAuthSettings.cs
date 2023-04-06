@@ -16,8 +16,6 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Con
 
             Scopes = appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoGoogleSearchConsoleScopesKey];
 
-            AuthorizationEndpoint = appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoGoogleSearchConsoleAuthorizationEndpointKey];
-
             TokenEndpoint = appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoGoogleSearchConsoleTokenEndpointKey];
         }
 
@@ -28,8 +26,6 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Con
         public string RedirectUri { get; set; }
 
         public string Scopes { get; set; }
-
-        public string AuthorizationEndpoint { get; set; }
 
         public string TokenEndpoint { get; set; }
     }

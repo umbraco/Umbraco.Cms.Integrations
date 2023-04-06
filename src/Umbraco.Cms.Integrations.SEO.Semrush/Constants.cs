@@ -33,8 +33,6 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush
 
             public const string UmbracoCmsIntegrationsSeoSemrushScopesKey = "Umbraco.Cms.Integrations.SEO.Semrush.Scopes";
 
-            public const string UmbracoCmsIntegrationsSeoSemrushAuthorizationEndpointKey = "Umbraco.Cms.Integrations.SEO.Semrush.AuthorizationEndpoint";
-
             public const string UmbracoCmsIntegrationsSeoSemrushTokenEndpointKey = "Umbraco.Cms.Integrations.SEO.Semrush.TokenEndpoint";
         }
     }

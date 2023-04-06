@@ -33,8 +33,6 @@
 
             public const string UmbracoCmsIntegrationsCrmHubspotScopesKey = "Umbraco.Cms.Integrations.Crm.Hubspot.Scopes";
 
-            public const string UmbracoCmsIntegrationsCrmHubspotAuthorizationEndpointKey = "Umbraco.Cms.Integrations.Crm.Hubspot.AuthorizationEndpoint";
-
             public const string UmbracoCmsIntegrationsCrmHubspotTokenEndpointKey = "Umbraco.Cms.Integrations.Crm.Hubspot.TokenEndpoint";
         }
 

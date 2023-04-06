@@ -16,8 +16,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Configuration
 
             Scopes = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyScopesKey];
 
-            //AuthorizationEndpoint = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyAuthorizationEndpointKey];
-
             TokenEndpoint = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyTokenEndpointKey];
         }
 
@@ -28,8 +26,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Configuration
         public string RedirectUri { get; set; }
 
         public string Scopes { get; set; }
-
-        //public string AuthorizationEndpoint { get; set; }
 
         public string TokenEndpoint { get; set; }
     }

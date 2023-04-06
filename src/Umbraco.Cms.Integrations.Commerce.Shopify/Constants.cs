@@ -42,8 +42,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify
 
             public const string UmbracoCmsIntegrationsCommerceShopifyScopesKey = "Umbraco.Cms.Integrations.Commerce.Shopify.Scopes";
 
-            public const string UmbracoCmsIntegrationsCommerceShopifyAuthorizationEndpointKey = "Umbraco.Cms.Integrations.Commerce.Shopify.AuthorizationEndpoint";
-
             public const string UmbracoCmsIntegrationsCommerceShopifyTokenEndpointKey = "Umbraco.Cms.Integrations.Commerce.Shopify.TokenEndpoint";
         }
 

@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 using Umbraco.Cms.Web.Common.Controllers;
 #else
-using System.Web.Mvc;
+using System.Web.Http;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 using Umbraco.Web.WebApi;
 #endif
@@ -17,9 +19,6 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Con
         [HttpGet]
 #if NETCOREAPP
         public IActionResult OAuth(string code)
-#else
-        public ActionResult OAuth(string code)
-#endif
         {
             return new ContentResult
             {
@@ -29,5 +28,16 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Con
                 ContentType = "text/html"
             };
         }
+#else
+        public HttpResponseMessage OAuth(string code)
+        {
+            var response = new HttpResponseMessage();
+            response.Content = new StringContent(string.IsNullOrEmpty(code)
+                ? JavascriptResponse.Fail("Authorization process failed.")
+                : JavascriptResponse.Ok(code));
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/html");
+            return response;
+         }
+#endif
     }
 }

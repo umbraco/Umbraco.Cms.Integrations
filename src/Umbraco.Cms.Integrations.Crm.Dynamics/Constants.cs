@@ -54,8 +54,6 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
 
             public const string UmbracoCmsIntegrationsCrmDynamicsScopesKey = "Umbraco.Cms.Integrations.Crm.Dynamics.Scopes";
 
-            public const string UmbracoCmsIntegrationsCrmDynamicsAuthorizationEndpointKey = "Umbraco.Cms.Integrations.Crm.Dynamics.AuthorizationEndpoint";
-
             public const string UmbracoCmsIntegrationsCrmDynamicsTokenEndpointKey = "Umbraco.Cms.Integrations.Crm.Dynamics.TokenEndpoint";
         }
     }

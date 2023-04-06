@@ -16,8 +16,6 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Configuration
 
             Scopes = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmHubspotScopesKey];
 
-            AuthorizationEndpoint = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmHubspotAuthorizationEndpointKey];
-
             TokenEndpoint = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmHubspotTokenEndpointKey];
         }
 
@@ -28,8 +26,6 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Configuration
         public string RedirectUri { get; set; }
 
         public string Scopes { get; set; }
-
-        public string AuthorizationEndpoint { get; set; }
 
         public string TokenEndpoint { get; set; }
     }

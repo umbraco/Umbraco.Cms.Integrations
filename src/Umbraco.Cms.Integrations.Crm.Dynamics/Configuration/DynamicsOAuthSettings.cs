@@ -17,8 +17,6 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Configuration
 
             Scopes = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsScopesKey];
 
-            AuthorizationEndpoint = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsAuthorizationEndpointKey];
-
             TokenEndpoint = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsTokenEndpointKey];
         }
 
@@ -29,8 +27,6 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Configuration
         public string RedirectUri { get; set; }
 
         public string Scopes { get; set; }
-
-        public string AuthorizationEndpoint { get; set; }
 
         public string TokenEndpoint { get; set; }
     }
