@@ -25,6 +25,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Configuration
 
         public string AccessToken { get; set; }
 
-        public bool UseUmbracoAuthorization { get; set; }
+        public bool UseUmbracoAuthorization { get; set; } = true;
     }
 }
