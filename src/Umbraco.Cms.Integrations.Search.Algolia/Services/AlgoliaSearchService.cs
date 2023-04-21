@@ -19,7 +19,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
         public SearchResponse<Record> Search(string indexName, string query)
         {
-            var client = new SearchClient(_settings.ApplicationId, _settings.AdminApiKey);
+            var client = new SearchClient(_settings.ApplicationId, _settings.SearchApiKey);
             
             var index = client.InitIndex(indexName);
             
