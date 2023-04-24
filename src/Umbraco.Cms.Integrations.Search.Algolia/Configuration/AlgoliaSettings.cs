@@ -7,6 +7,6 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Configuration
 
         public string AdminApiKey { get; set; }
 
-        public string ApiKey { get; set; }
+        public string SearchApiKey { get; set; }
     }
 }
