@@ -1,0 +1,29 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<AprimoPropertyEditorFilesPath>
+			$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\DAM\Aprimo\**\*.*
+		</AprimoPropertyEditorFilesPath>
+	</PropertyGroup>
+	<Target Name="CopyAprimoPropertyEditorAssets" BeforeTargets="Build">
+		<ItemGroup>
+			<AprimoPropertyEditorFiles Include="$(AprimoPropertyEditorFilesPath)" />
+		</ItemGroup>
+		<Message
+			Text="Copying Aprimo Property Editor files: $(AprimoPropertyEditorFilesPath) - #@(AprimoPropertyEditorFiles->Count()) files"
+			Importance="high" />
+		<Copy SourceFiles="@(AprimoPropertyEditorFiles)"
+		      DestinationFiles="@(AprimoPropertyEditorFiles->'$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\DAM\Aprimo\%(RecursiveDir)%(Filename)%(Extension)')"
+		      SkipUnchangedFiles="true" />
+
+	</Target>
+
+	<Target Name="ClearAprimoPropertyEditorAssets" BeforeTargets="Clean">
+		<ItemGroup>
+			<AprimoPropertyEditorDir
+				Include="$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms\DAM\Aprimo\" />
+		</ItemGroup>
+		<Message Text="Clear old Aprimo Property Editor data"  Importance="high" />
+		<RemoveDir Directories="@(AprimoPropertyEditorDir)"  />
+	</Target>
+
+</Project>
