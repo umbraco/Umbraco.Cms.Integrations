@@ -56,6 +56,10 @@
 		</Content>
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
 		<ItemGroup>
 			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
