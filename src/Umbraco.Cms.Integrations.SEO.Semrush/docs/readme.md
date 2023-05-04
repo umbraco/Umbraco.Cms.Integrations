@@ -12,14 +12,14 @@ The integration comes with search tool filters with helpful information into the
 
 If you want to see the details on how the integration to Semrush is made or just follow the example of extending Umbraco with a third-party system you can take a look at the blog post supplementing this integration:
 
-![contentapp](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/961af9c8c516dea4d10045158f358ea39e5d1c5c/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/contentapp.png)
+![contentapp](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/contentapp.png)
 
-![property-selector](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/961af9c8c516dea4d10045158f358ea39e5d1c5c/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/keyword-search-database.png)
+![property-selector](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/keyword-search-database.png)
 
-![keyword-search](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/961af9c8c516dea4d10045158f358ea39e5d1c5c/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/keyword-search.png)
+![keyword-search](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/keyword-search.png)
 
-![keyword-search-database](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/961af9c8c516dea4d10045158f358ea39e5d1c5c/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/keyword-search-database.png)
+![keyword-search-database](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/keyword-search-database.png)
 
-![keyword-search-method](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/961af9c8c516dea4d10045158f358ea39e5d1c5c/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/keyword-search-method.png)
+![keyword-search-method](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/keyword-search-method.png)
 
-![results](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/961af9c8c516dea4d10045158f358ea39e5d1c5c/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/results.png)
+![results](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/results.png)
