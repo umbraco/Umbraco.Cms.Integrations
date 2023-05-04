@@ -9,10 +9,10 @@ When the automatic workflow is activated (content gets published) the subscripti
 
 If you want to see the details on how the integration to Zapier is made for Umbraco CMS or just follow the example of extending Umbraco with a third-party system you can take a look at the [blog post](https://umbraco.com/blog/integrating-umbraco-with-zapier/) supplementing this integration. 
 
-![trigger](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/c3fec02dba5dcc68ee3587b6acc0d567a80c2f62/src/Umbraco.Cms.Integrations.Automation.Zapier/docs/images/trigger.png)
+![trigger](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Automation.Zapier/docs/images/trigger.png)
 
-![zap](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/c3fec02dba5dcc68ee3587b6acc0d567a80c2f62/src/Umbraco.Cms.Integrations.Automation.Zapier/docs/images/zap.png)
+![zap](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Automation.Zapier/docs/images/zap.png)
 
-![action](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/c3fec02dba5dcc68ee3587b6acc0d567a80c2f62/src/Umbraco.Cms.Integrations.Automation.Zapier/docs/images/action.png)
+![action](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Automation.Zapier/docs/images/action.png)
 
-![dashboard](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/c3fec02dba5dcc68ee3587b6acc0d567a80c2f62/src/Umbraco.Cms.Integrations.Automation.Zapier/docs/images/dashboard.png)
+![dashboard](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Automation.Zapier/docs/images/dashboard.png)
