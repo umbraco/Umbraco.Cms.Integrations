@@ -8,10 +8,10 @@ Once the integration is installed you can register the Shopify Product Picker as
 **Want to know more about this integration?**
 If you want to see the details on how the integration to Shopity is made or just follow the example of extending Umbraco with a third-party system you can take a look at the [blog post](https://umbraco.com/blog/integrating-umbraco-cms-with-shopify/) supplementing this integration:
 
-![data-type1](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/data-type1.png)
+![data-type1](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/data-type1.png)
 
-![data-type2](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/data-type2.png)
+![data-type2](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/data-type2.png)
 
-![editors](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/editors.png)
+![editors](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/editors.png)
 
-![products](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/products.png)
+![products](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/products.png)

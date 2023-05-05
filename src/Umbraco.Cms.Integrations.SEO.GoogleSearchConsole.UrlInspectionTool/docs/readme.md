@@ -34,12 +34,12 @@ You can define cultures and hostnames, this will reflect in the type of field fo
 
 If you want to see the details on how the integration to Google Search Console - URL Inspection Tool is made or just follow the example of extending Umbraco with a third-party system you can take a look at the [blog post](https://umbraco.com/blog/integrating-umbraco-cms-with-google-search-console-url-inspection-tool/) supplementing this integration.
 
-![content-app](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool/docs/images/content-app.png)
+![content-app](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool/docs/images/content-app.png)
 
-![connect](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool/docs/images/connect.png)
+![connect](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool/docs/images/connect.png)
 
-![inspect](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool/docs/images/inspect.png)
+![inspect](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool/docs/images/inspect.png)
 
-![cultures](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool/docs/images/cultures.png)
+![cultures](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool/docs/images/cultures.png)
 
-![links](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool/docs/images/links.png)
+![links](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool/docs/images/links.png)
