@@ -9,14 +9,14 @@ A rendering component is available for displaying the selected assets using a st
 
 If you want to see the details on how the integration to Aprimo is made or just follow the example of extending Umbraco with a third-party system you can take a look at the [blog post](https://umbraco.com/blog/integrating-aprimo-dam-with-umbraco-cms/) supplementing this integration. 
 
-![workspace](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/workspace.png)
+![workspace](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/workspace.png)
 
-![data-type](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/data-type.png)
+![data-type](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/data-type.png)
 
-![selector](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/selector.png)
+![selector](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/selector.png)
 
-![content-selector](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/content-selector.png)
+![content-selector](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/content-selector.png)
 
-![filtering](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/filtering.png)
+![filtering](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/filtering.png)
 
-![render](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/render.png)
+![render](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/render.png)

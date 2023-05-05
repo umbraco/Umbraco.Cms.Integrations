@@ -9,10 +9,10 @@ The current integration provides a custom dashboard called _Algolia Search Manag
 
 If you want to see the details on how the integration to Algolia is made or just follow the example of extending Umbraco with a third-party system you can take a look at the [blog post](https://umbraco.com/blog/integrating-umbraco-cms-with-algolia/) supplementing this integration.
 
-![dashboard](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Search.Algolia/docs/images/dashboard.png)
+![dashboard](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Search.Algolia/docs/images/dashboard.png)
 
-![details](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Search.Algolia/docs/images/details.png)
+![details](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Search.Algolia/docs/images/details.png)
 
-![search](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Search.Algolia/docs/images/search.png)
+![search](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Search.Algolia/docs/images/search.png)
 
-![algolia](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Search.Algolia/docs/images/algolia.png)
+![algolia](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Search.Algolia/docs/images/algolia.png)

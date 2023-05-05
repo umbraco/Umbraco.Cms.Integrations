@@ -10,12 +10,12 @@ Specifically, you can select the inriver property editor on a data type. In the 
 
 If you want to see the details on how the integration to inriver is made or just follow the example of extending Umbraco with a third-party system you can take a look at the [blog post](https://umbraco.com/blog/integrating-umbraco-cms-with-inriver/) supplementing this integration.
 
-![picker](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/picker.png)
+![picker](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/picker.png)
 
-![data-type](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/data-type.png)
+![data-type](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/data-type.png)
 
-![control-center](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/control-center.png)
+![control-center](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/control-center.png)
 
-![products](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/products.png)
+![products](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/products.png)
 
-![render](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/render.png)
+![render](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/render.png)

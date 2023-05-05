@@ -10,10 +10,10 @@ After connecting with your account, the list of forms from Dynamic 365 will be p
 **Want to know more about how the integration works?**
 If you want to see the details on how the integration to Microsoft Dynamics 365 - Marketing Forms is made or want to follow the example of extending Umbraco with a third-party system you can take a look at the [blog post](https://umbraco.com/blog/integrating-umbraco-cms-with-microsoft-dynamics-365-marketing-forms/) supplementing this integration.
 
-![picker](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Crm.Dynamics/docs/images/picker.png)
+![picker](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Crm.Dynamics/docs/images/picker.png)
 
-![data-type](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Crm.Dynamics/docs/images/data-type.png)
+![data-type](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Crm.Dynamics/docs/images/data-type.png)
 
-![authorize](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Crm.Dynamics/docs/images/authorize.png)
+![authorize](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Crm.Dynamics/docs/images/authorize.png)
 
-![forms](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Crm.Dynamics/docs/images/forms.png)
+![forms](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Crm.Dynamics/docs/images/forms.png)

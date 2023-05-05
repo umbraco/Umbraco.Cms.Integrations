@@ -9,8 +9,8 @@ A property value converter converts the identifier into a strongly typed model, 
 
 If you want to see the details on how the integration to CommerceTool is made or just follow the example of extending Umbraco with a third-party system you can take a look at the [blog post](https://umbraco.com/blog/integrating-umbraco-cms-with-commercetools/) supplementing this integration. 
 
-![workflow](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Commerce.CommerceTools/docs/images/workflow.png)
+![workflow](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Commerce.CommerceTools/docs/images/workflow.png)
 
-![overlay](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Commerce.CommerceTools/docs/images/overlay.png)
+![overlay](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Commerce.CommerceTools/docs/images/overlay.png)
 
-![property-editor](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/docs/integrations-readmes/src/Umbraco.Cms.Integrations.Commerce.CommerceTools/docs/images/property-editor.png)
+![property-editor](https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Commerce.CommerceTools/docs/images/property-editor.png)
