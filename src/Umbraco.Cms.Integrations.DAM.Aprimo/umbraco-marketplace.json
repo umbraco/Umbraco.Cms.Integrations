@@ -51,6 +51,32 @@
       "Description": "A dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published."
     }
   ],
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/workspace.png",
+      "Caption": "workspace"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/data-type.png",
+      "Caption": "data type"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/selector.png",
+      "Caption": "selector"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/content-selector.png",
+      "Caption": "content selector"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/filtering.png",
+      "Caption": "filtering"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.DAM.Aprimo/docs/images/render.png",
+      "Caption": "render"
+    }
+  ],
   "Tags": [],
   "Title": "Aprimo"
 }

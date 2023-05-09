@@ -51,6 +51,24 @@
       "Description": "A dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published."
     }
   ],
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Search.Algolia/docs/images/dashboard.png",
+      "Caption": "dashboard"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Search.Algolia/docs/images/details.png",
+      "Caption": "details"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Search.Algolia/docs/images/search.png",
+      "Caption": "search"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Search.Algolia/docs/images/algolia.png",
+      "Caption": "algolia"
+    }
+  ],
   "Tags": [],
   "Title": "Algolia"
 }

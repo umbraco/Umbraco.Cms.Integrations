@@ -46,6 +46,24 @@
       "Description": "A dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published."
     }
   ],
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Crm.Dynamics/docs/images/picker.png",
+      "Caption": "picker"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Crm.Dynamics/docs/images/data-type.png",
+      "Caption": "data type"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Crm.Dynamics/docs/images/authorize.png",
+      "Caption": "authorize"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Crm.Dynamics/docs/images/forms.png",
+      "Caption": "forms"
+    }
+  ],
   "Tags": [],
   "Title": "Microsoft Dynamics CRM"
 }

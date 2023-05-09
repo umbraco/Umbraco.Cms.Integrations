@@ -46,6 +46,24 @@
       "Description": "A dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published."
     }
   ],
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/data-type1.png",
+      "Caption": "data type 1"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/data-type2.png",
+      "Caption": "data type 2"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/editors.png",
+      "Caption": "editors"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/products.png",
+      "Caption": "products"
+    }
+  ],
   "Tags": [],
   "Title": "Shopify"
 }

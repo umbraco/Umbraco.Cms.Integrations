@@ -46,6 +46,24 @@
       "Description": "A form picker and rendering component for ActiveCampaign forms."
     }
   ],
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Automation.Zapier/docs/images/trigger.png",
+      "Caption": "trigger"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Automation.Zapier/docs/images/zap.png",
+      "Caption": "zap"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Automation.Zapier/docs/images/action.png",
+      "Caption": "action"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Automation.Zapier/docs/images/dashboard.png",
+      "Caption": "dashboard"
+    }
+  ],
   "Tags": [],
   "Title": "Zapier"
 }
