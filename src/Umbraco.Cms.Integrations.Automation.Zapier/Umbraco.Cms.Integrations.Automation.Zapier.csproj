@@ -9,7 +9,7 @@
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Automation.Zapier</PackageProjectUrl>
 		<Product>Umbraco.Cms.Integrations.Automation.Zapier</Product>
-		<Version>1.1.1</Version>
+		<Version>1.1.2</Version>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
 		<PackageIcon>zapier.png</PackageIcon>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
