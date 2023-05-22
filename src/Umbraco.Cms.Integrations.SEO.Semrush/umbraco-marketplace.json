@@ -52,10 +52,6 @@
       "Caption": "content app"
     },
     {
-      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/keyword-search-database.png",
-      "Caption": "property selector"
-    },
-    {
       "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.SEO.Semrush/docs/images/keyword-search.png",
       "Caption": "keyword search"
     },
