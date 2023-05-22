@@ -46,6 +46,16 @@
       "Description": "A dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published."
     }
   ],
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Crm.ActiveCampaign/docs/images/property-editor.png",
+      "Caption": "property editor"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Crm.ActiveCampaign/docs/images/render.png",
+      "Caption": "render"
+    }
+  ],
   "Tags": [],
   "Title": "ActiveCampaign"
 }

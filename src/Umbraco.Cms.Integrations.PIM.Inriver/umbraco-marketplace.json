@@ -51,6 +51,28 @@
       "Description": "A dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published."
     }
   ],
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/picker.png",
+      "Caption": "picker"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/data-type.png",
+      "Caption": "data type"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/control-center.png",
+      "Caption": "control center"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/products.png",
+      "Caption": "products"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.PIM.Inriver/docs/images/render.png",
+      "Caption": "render"
+    }
+  ],
   "Tags": [],
   "Title": "inriver"
 }

@@ -46,6 +46,20 @@
       "Description": "A dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published."
     }
   ],
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.CommerceTools/docs/images/workflow.png",
+      "Caption": "workflow"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.CommerceTools/docs/images/overlay.png",
+      "Caption": "overlay"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.CommerceTools/docs/images/property-editor.png",
+      "Caption": "property-editor"
+    }
+  ],
   "Tags": [],
   "Title": "CommerceTools"
 }
