@@ -138,6 +138,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
                     ? entities.Select(p => new SubscriptionDto { HookUrl = p.HookUrl })
                     : null;
 
+                scope.Complete();
                 return entities.Any();
             }
         }
