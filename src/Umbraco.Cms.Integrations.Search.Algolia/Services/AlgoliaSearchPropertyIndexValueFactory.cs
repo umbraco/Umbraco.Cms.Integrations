@@ -36,7 +36,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
             if (indexValues == null || !indexValues.Any()) return new KeyValuePair<string, string>(property.Alias, string.Empty);
 
-            var indexValue = indexValues.FirstOrDefault();
+            var indexValue = indexValues.First();
 
             if (Converters.ContainsKey(property.PropertyType.PropertyEditorAlias))
             {
