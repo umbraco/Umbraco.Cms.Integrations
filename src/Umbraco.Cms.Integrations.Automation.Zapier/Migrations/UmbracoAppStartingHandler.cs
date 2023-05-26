@@ -6,7 +6,6 @@ using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Infrastructure.Migrations.Upgrade;
-using Umbraco.Cms.Integrations.Automation.Zapier.Helpers;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 {
@@ -14,17 +13,29 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
     {
         private readonly IMigrationPlanExecutor _migrationPlanExecutor;
 
+#if NET5_0
         private readonly IScopeProvider _scopeProvider;
+#else
+        private readonly ICoreScopeProvider _scopeProvider;
+#endif
 
         private readonly IKeyValueService _keyValueService;
 
         private readonly IRuntimeState _runtimeState;
 
+#if NET5_0
         public UmbracoAppStartingHandler(
             IScopeProvider scopeProvider,
             IMigrationPlanExecutor migrationPlanExecutor,
             IKeyValueService keyValueService,
             IRuntimeState runtimeState)
+#else
+        public UmbracoAppStartingHandler(
+            ICoreScopeProvider scopeProvider,
+            IMigrationPlanExecutor migrationPlanExecutor,
+            IKeyValueService keyValueService,
+            IRuntimeState runtimeState)
+#endif
         {
             _migrationPlanExecutor = migrationPlanExecutor;
 

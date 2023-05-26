@@ -1,0 +1,66 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\css\zapier.css">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\dashboard.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\js\zapier.controller.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\js\zapier.resource.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\lang\en-US.xml">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\package.manifest">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Umbraco.Cms" Version="12.0.0-rc2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Opt-in to app-local ICU to ensure consistent globalization APIs across different platforms -->
+    <PackageReference Include="Microsoft.ICU.ICU4C.Runtime" Version="68.2.0.9" />
+    <PackageReference Include="Umbraco.Cms.Integrations.Analytics.Cookiebot" Version="1.0.1" />
+    <PackageReference Include="Umbraco.Cms.Integrations.Commerce.Shopify" Version="1.1.0" />
+    <PackageReference Include="Umbraco.Cms.Integrations.Crm.ActiveCampaign" Version="2.0.0" />
+    <PackageReference Include="Umbraco.Cms.Integrations.Crm.Hubspot" Version="2.1.0" />
+    <PackageReference Include="Umbraco.Cms.Integrations.DAM.Aprimo" Version="1.0.1" />
+    <PackageReference Include="Umbraco.Cms.Integrations.PIM.Inriver" Version="1.0.0" />
+    <PackageReference Include="Umbraco.Cms.Integrations.Search.Algolia" Version="1.3.2" />
+    <PackageReference Include="Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool" Version="1.1.0" />
+    <PackageReference Include="Umbraco.Cms.Integrations.SEO.Semrush" Version="1.2.0" />
+    <ProjectReference Include="..\Umbraco.Cms.Integrations.Automation.Zapier\Umbraco.Cms.Integrations.Automation.Zapier.csproj" />
+    <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="68.2.0.9" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Razor files are needed for the backoffice to work correctly -->
+    <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Remove RazorCompileOnBuild and RazorCompileOnPublish when not using ModelsMode InMemoryAuto -->
+    <RazorCompileOnBuild>false</RazorCompileOnBuild>
+    <RazorCompileOnPublish>false</RazorCompileOnPublish>
+  </PropertyGroup>
+
+  
+</Project>
