@@ -334,3 +334,8 @@ src/Umbraco.Cms.Integrations.SEO.Semrush.Testsite.V8/App_Data/
 src/Umbraco.Cms.Integrations.SEO.Semrush.Testsite.V8/App_Plugins/
 
 appsettings.Local.json
+src/Umbraco.Cms.Integrations.Testsite.V11/App_Plugins/
+src/Umbraco.Cms.Integrations.Testsite.V11/Views/
+src/Umbraco.Cms.Integrations.Testsite.V12/App_Plugins/
+src/Umbraco.Cms.Integrations.Testsite.V12/Views/_ViewImports.cshtml
+src/Umbraco.Cms.Integrations.Testsite.V12/Views/

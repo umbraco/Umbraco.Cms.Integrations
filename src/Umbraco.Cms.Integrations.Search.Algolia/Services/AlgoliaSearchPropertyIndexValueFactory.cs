@@ -34,9 +34,9 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
             var indexValues = dataType.Editor.PropertyIndexValueFactory.GetIndexValues(property, culture, string.Empty, true);
 
-            if(indexValues == null) return default;
+            if (indexValues == null || !indexValues.Any()) return new KeyValuePair<string, string>(property.Alias, string.Empty);
 
-            var indexValue = indexValues.FirstOrDefault();
+            var indexValue = indexValues.First();
 
             if (Converters.ContainsKey(property.PropertyType.PropertyEditorAlias))
             {
@@ -67,7 +67,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
             var parsedIndexValue = ParseIndexValue(indexValue.Value);
 
-            if(string.IsNullOrEmpty(parsedIndexValue)) return string.Empty;
+            if (string.IsNullOrEmpty(parsedIndexValue)) return string.Empty;
 
             var inputMedia = JsonSerializer.Deserialize<IEnumerable<MediaItem>>(parsedIndexValue);
 
