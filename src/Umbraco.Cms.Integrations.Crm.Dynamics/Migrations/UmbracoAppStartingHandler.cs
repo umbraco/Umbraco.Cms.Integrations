@@ -3,9 +3,14 @@ using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Migrations;
 using Umbraco.Cms.Core.Notifications;
-using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Infrastructure.Migrations.Upgrade;
+
+#if NET5_0
+using Umbraco.Cms.Core.Scoping;
+#else
+using Umbraco.Cms.Infrastructure.Scoping;
+#endif
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
 {
@@ -13,29 +18,17 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
     {
         private readonly IMigrationPlanExecutor _migrationPlanExecutor;
 
-#if NET5_0
         private readonly IScopeProvider _scopeProvider;
-#else
-        private readonly ICoreScopeProvider _scopeProvider;
-#endif
 
         private readonly IKeyValueService _keyValueService;
 
         private readonly IRuntimeState _runtimeState;
 
-#if NET5_0
         public UmbracoAppStartingHandler(
             IScopeProvider scopeProvider,
             IMigrationPlanExecutor migrationPlanExecutor,
             IKeyValueService keyValueService,
             IRuntimeState runtimeState)
-#else
-        public UmbracoAppStartingHandler(
-            ICoreScopeProvider scopeProvider,
-            IMigrationPlanExecutor migrationPlanExecutor,
-            IKeyValueService keyValueService,
-            IRuntimeState runtimeState)
-#endif
         {
             _migrationPlanExecutor = migrationPlanExecutor;
 
