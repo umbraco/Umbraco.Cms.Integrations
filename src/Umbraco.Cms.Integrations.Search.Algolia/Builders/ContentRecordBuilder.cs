@@ -4,6 +4,7 @@ using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Integrations.Search.Algolia.Services;
+using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
 {
@@ -60,7 +61,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
             {
                 if (!_record.Data.ContainsKey(property.Alias))
                 {
-                    if (content.PublishedCultures.Count() > 0)
+                   
+                    if (property.PropertyType.VariesByCulture())
                     {
                         foreach (var culture in content.PublishedCultures)
                         {
