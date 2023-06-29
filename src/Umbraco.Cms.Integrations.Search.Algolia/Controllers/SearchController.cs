@@ -7,6 +7,7 @@ using System.Text.Json;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Services.Implement;
+using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Integrations.Search.Algolia.Builders;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
@@ -37,6 +38,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
         private readonly IAlgoliaSearchPropertyIndexValueFactory _algoliaSearchPropertyIndexValueFactory;
 
+        private readonly IUmbracoContextFactory _umbracoContextFactory;
+
         public SearchController(
             IAlgoliaIndexService indexService, 
             IAlgoliaSearchService<SearchResponse<Record>> searchService, 
@@ -45,7 +48,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             IUserService userService,
             IPublishedUrlProvider urlProvider,
             IContentService contentService,
-            IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory)
+            IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory,
+            IUmbracoContextFactory umbracoContextFactory)
         {
             _indexService = indexService;
             
@@ -62,6 +66,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             _contentService = contentService;
 
             _algoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
+
+            _umbracoContextFactory = umbracoContextFactory;
         }
 
         [HttpGet]
@@ -116,7 +122,9 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
                 foreach (var contentDataItem in indexContentData)
                 {
-                    var contentItems = _umbracoHelper.ContentAtXPath($"//{contentDataItem.ContentType.Alias}");
+                    using var ctx = _umbracoContextFactory.EnsureUmbracoContext();
+                    var contentType = ctx.UmbracoContext.Content.GetContentType(contentDataItem.ContentType.Alias);
+                    var contentItems = ctx.UmbracoContext.Content.GetByContentType(contentType);
 
                     foreach (var contentItem in contentItems)
                     {
