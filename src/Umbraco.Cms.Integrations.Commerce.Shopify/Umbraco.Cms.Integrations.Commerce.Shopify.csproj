@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net472;net50</TargetFrameworks>
+		<TargetFrameworks>net472;net50;net60;net70</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -10,7 +10,7 @@
 		<PackageIconUrl></PackageIconUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Commerce.Shopify</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>1.1.0</Version>
+		<Version>1.1.1</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
@@ -23,8 +23,18 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="9.0.1" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="9.0.1" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[9.0.1,10)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[9.0.1,10)" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net60'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[10.0.0,11)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[10.0.0,11)" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net70'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,12)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,12)" />
 	</ItemGroup>
 
 	<ItemGroup>
