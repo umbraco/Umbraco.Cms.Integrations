@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Umbraco.Cms" Version="12.0.0-rc2" />
+    <PackageReference Include="Umbraco.Cms" Version="12.0.0" />
   </ItemGroup>
 
   <ItemGroup>
