@@ -7,11 +7,10 @@
     vm.selectedForm = {};
     vm.iframeEmbedded = false;
     vm.isConnected = false;
+    vm.formsLoading = true;
 
     umbracoCmsIntegrationsCrmDynamicsResource.checkOAuthConfiguration().then(function (response) {
-        if (response.isAuthorized) {
-            loadForms();
-        } else {
+        if (!response.isAuthorized) {
             let error = "Unable to connect to Dynamics. Please review the settings of the form picker property's data type.";
             notificationsService.error("Dynamics API", error);
             vm.error = error;
@@ -67,6 +66,7 @@
 
     function loadForms() {
         vm.loading = true;
+        vm.formsLoading = true;
         umbracoCmsIntegrationsCrmDynamicsResource.getForms().then(function (response) {
             vm.dynamicsFormsList = [];
             if (response) {
@@ -79,7 +79,10 @@
                     });
                 });
             }
+
+        }).finally(function () {
             vm.loading = false;
+            vm.formsLoading = false;
         });
     }
 

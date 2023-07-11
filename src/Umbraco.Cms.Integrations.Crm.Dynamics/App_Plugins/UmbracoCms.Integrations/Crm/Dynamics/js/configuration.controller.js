@@ -1,5 +1,6 @@
 ﻿function configurationController($scope, notificationsService, umbracoCmsIntegrationsCrmDynamicsResource) {
     var vm = this;
+    vm.oauthInitialized = false;
 
     vm.oauthConfig = {};
 
@@ -14,6 +15,8 @@
             if (typeof $scope.connected === "undefined")
                 notificationsService.error("Dynamics Configuration", response.message);
         }
+    }).finally(function () {
+        vm.oauthInitialized = true;
     });
 
     vm.onConnectClick = function () {

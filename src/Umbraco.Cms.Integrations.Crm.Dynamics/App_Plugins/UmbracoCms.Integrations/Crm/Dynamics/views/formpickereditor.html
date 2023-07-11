@@ -3,7 +3,13 @@
         <umb-editor-container>
             <umb-box>
                 <umb-box-header title="{{ model.title }}" description="{{ model.subtitle }}"></umb-box-header>
-                <umb-box-content>
+
+                <umb-box-content style="height: 50px; position: relative;" ng-if="vm.formsLoading && !vm.isConnected">
+                    <umb-load-indicator />
+                </umb-box-content>
+
+                <umb-box-content ng-if="!vm.formsLoading">
+
                     <div class="dynOverlayGroup" ng-if="vm.isConnected">
                         <div class="form-search">
                             <i class="icon-search"></i>
