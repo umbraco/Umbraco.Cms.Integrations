@@ -22,14 +22,21 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 
         private readonly ZapierSettings _zapierSettings;
 
+        private readonly ZapierFormsSettings _zapierFormsSettings;
+
 #if NETCOREAPP
         private readonly IBackOfficeUserManager _backOfficeUserManager;
 
-        public UserValidationService(IOptions<ZapierSettings> options, IBackOfficeUserManager backOfficeUserManager)
+        public UserValidationService(
+            IOptions<ZapierSettings> options, 
+            IOptions<ZapierFormsSettings> zapierFormsSettings,
+            IBackOfficeUserManager backOfficeUserManager)
         {
             _backOfficeUserManager = backOfficeUserManager;
 
             _zapierSettings = options.Value;
+
+            _zapierFormsSettings = zapierFormsSettings.Value;
         }
 #else
         public UserValidationService(IUserService userService)
@@ -37,6 +44,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
             _userService = userService;
 
             _zapierSettings = new ZapierSettings(ConfigurationManager.AppSettings);
+
+            _zapierSettings = new ZapierFormsSettings(ConfigurationManager.AppSettings);
         }
 #endif
 
@@ -50,8 +59,38 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
         public async Task<bool> Validate(string username, string password, string apiKey)
         {
             if (!string.IsNullOrEmpty(apiKey))
-                return apiKey == _zapierSettings.ApiKey;
+            {
+                return ValidateByApiKey(apiKey);
+            }
 
+            return await ValidateByCredentials(username, password);
+        }
+
+        /// <summary>
+        /// Validates user based on provided API key. 
+        /// When both CMS and Forms packages are installed, both settings (CMS/Forms) will be compared.
+        /// </summary>
+        /// <param name="apiKey">Provided API key in the Zap authentication.</param>
+        /// <returns></returns>
+        private bool ValidateByApiKey(string apiKey)
+        {
+            // Check API key from CMS settings, if none, check Forms settings
+            if (!string.IsNullOrEmpty(_zapierSettings.ApiKey))
+                return apiKey == _zapierSettings.ApiKey;
+            else if (!string.IsNullOrEmpty(_zapierFormsSettings.ApiKey))
+                return apiKey == _zapierFormsSettings.ApiKey;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Validates user based on provided credentials.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        private async Task<bool> ValidateByCredentials(string username, string password)
+        {
 #if NETCOREAPP
             var isUserValid =
                 await _backOfficeUserManager.ValidateCredentialsAsync(username, password);

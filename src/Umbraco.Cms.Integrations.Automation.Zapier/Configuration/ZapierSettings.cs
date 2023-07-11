@@ -2,7 +2,7 @@
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Configuration
 {
-    public class ZapierSettings
+    public class ZapierSettings : AppSettings
     {
         public ZapierSettings()
         {
@@ -15,9 +15,5 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Configuration
 
             ApiKey = appSettings[Constants.UmbracoCmsIntegrationsAutomationZapierApiKey];
         }
-
-        public string UserGroupAlias { get; set; }
-
-        public string ApiKey { get; set; }
     }
 }

@@ -28,6 +28,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> ValidateUser([FromBody] UserModel userModel) => await _userValidationService.Validate(userModel.Username, userModel.Password, userModel.ApiKey);
+        public async Task<bool> ValidateUser([FromBody] UserModel userModel) => 
+            await _userValidationService.Validate(userModel.Username, userModel.Password, userModel.ApiKey);
     }
 }

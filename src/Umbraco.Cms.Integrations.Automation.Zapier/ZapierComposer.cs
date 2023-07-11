@@ -21,9 +21,12 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 #if NETCOREAPP
         public void Compose(IUmbracoBuilder builder)
         {
-            var options = builder.Services
+            builder.Services
                 .AddOptions<ZapierSettings>()
                 .Bind(builder.Config.GetSection(Constants.Configuration.Settings));
+            builder.Services
+                .AddOptions<ZapierFormsSettings>()
+                .Bind(builder.Config.GetSection(Constants.Configuration.FormsSettings));
 
             builder
                 .AddNotificationHandler<UmbracoApplicationStartingNotification, UmbracoAppStartingHandler>();
