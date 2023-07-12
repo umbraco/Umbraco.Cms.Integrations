@@ -1,11 +1,5 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Core;
-using Umbraco.Cms.Core.IO;
+﻿using Umbraco.Cms.Core.IO;
 using Umbraco.Cms.Core.PropertyEditors;
-#else
-using Umbraco.Core.Logging;
-using Umbraco.Core.PropertyEditors;
-#endif
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot
 {
@@ -18,8 +12,6 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot
         )]
     public class HubspotFormPickerPropertyEditor: DataEditor
     {
-#if NETCOREAPP
-
         private IIOHelper _ioHelper;
 
         public HubspotFormPickerPropertyEditor(IDataValueEditorFactory dataValueEditorFactory, IIOHelper ioHelper) : base(dataValueEditorFactory)
@@ -31,15 +23,5 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot
         {
             return new HubspotFormPickerConfigurationEditor(_ioHelper);
         }
-#else
-        public HubspotFormPickerPropertyEditor(ILogger logger) : base(logger)
-        {
-        }
-
-        protected override IConfigurationEditor CreateConfigurationEditor()
-        {
-            return new HubspotFormPickerConfigurationEditor();
-        }
-#endif
     }
 }

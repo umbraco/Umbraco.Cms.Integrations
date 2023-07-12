@@ -9,11 +9,7 @@ using Umbraco.Cms.Integrations.Crm.Hubspot.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models.Dtos;
 using System.Net;
 
-#if NETCOREAPP
 using Microsoft.Extensions.Options;
-#else
-using System.Configuration;
-#endif
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Services
 {
@@ -21,20 +17,12 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Services
     {
         private readonly HubspotOAuthSettings _oauthSettings;
 
-#if NETCOREAPP
         public AuthorizationService(IOptions<HubspotOAuthSettings> oauthOptions, ITokenService tokenService)
             : base(tokenService)
 
         {
             _oauthSettings = oauthOptions.Value;
         }
-#else
-        public AuthorizationService(ITokenService tokenService)
-            : base(tokenService)
-        {
-            _oauthSettings = new HubspotOAuthSettings(ConfigurationManager.AppSettings);
-        }
-#endif
 
         public string GetAuthorizationUrl() => string.Format(HubspotAuthorizationUrl,
             _oauthSettings.ClientId,

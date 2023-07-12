@@ -4,8 +4,6 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Commerce.CommerceTools", "Umbraco.Cms.Integrations.Commerce.CommerceTools\Umbraco.Cms.Integrations.Commerce.CommerceTools.csproj", "{85A73911-0146-409F-9488-33EA5750A07C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Testsite.V8", "Umbraco.Cms.Integrations.Testsite.V8\Umbraco.Cms.Integrations.Testsite.V8.csproj", "{4C4A15B6-6B1D-4B8C-B070-FF614A22D694}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commerce", "Commerce", "{82B16D39-675A-4D40-808D-C6DDFDA37C20}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommerceTools", "CommerceTools", "{374203EC-D774-443A-9AFF-559D2C1D9E76}"
@@ -85,7 +83,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analytics", "Analytics", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Analytics.Cookiebot", "Umbraco.Cms.Integrations.Analytics.Cookiebot\Umbraco.Cms.Integrations.Analytics.Cookiebot.csproj", "{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Testsite.V12", "Umbraco.Cms.Integrations.Testsite.V12\Umbraco.Cms.Integrations.Testsite.V12.csproj", "{D1577F08-1D33-466B-9019-8133FB51BE06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Testsite.V12", "Umbraco.Cms.Integrations.Testsite.V12\Umbraco.Cms.Integrations.Testsite.V12.csproj", "{D1577F08-1D33-466B-9019-8133FB51BE06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,10 +95,6 @@ Global
 		{85A73911-0146-409F-9488-33EA5750A07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85A73911-0146-409F-9488-33EA5750A07C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85A73911-0146-409F-9488-33EA5750A07C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C4A15B6-6B1D-4B8C-B070-FF614A22D694}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C4A15B6-6B1D-4B8C-B070-FF614A22D694}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C4A15B6-6B1D-4B8C-B070-FF614A22D694}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C4A15B6-6B1D-4B8C-B070-FF614A22D694}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BB272CE8-C6D3-4529-81F5-EBEBCAB11219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BB272CE8-C6D3-4529-81F5-EBEBCAB11219}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB272CE8-C6D3-4529-81F5-EBEBCAB11219}.Release|Any CPU.ActiveCfg = Release|Any CPU
