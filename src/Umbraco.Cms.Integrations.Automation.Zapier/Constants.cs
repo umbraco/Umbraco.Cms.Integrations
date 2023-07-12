@@ -13,6 +13,10 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
         public const string UmbracoCmsIntegrationsAutomationZapierApiKey = "Umbraco.Cms.Integrations.Automation.Zapier.ApiKey";
 
+        public const string UmbracoFormsIntegrationsAutomationZapierUserGroupAlias = "Umbraco.Forms.Integrations.Automation.Zapier.UserGroupAlias";
+
+        public const string UmbracoFormsIntegrationsAutomationZapierApiKey = "Umbraco.Forms.Integrations.Automation.Zapier.ApiKey";
+
         public static class ZapierAppConfiguration
         {
             public const string UsernameHeaderKey = "X-USERNAME";
@@ -25,6 +29,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
         public static class Configuration
         {
             public const string Settings = "Umbraco:Cms:Integrations:Automation:Zapier:Settings";
+
+            public const string FormsSettings = "Umbraco:Forms:Integrations:Automation:Zapier:Settings";
         }
 
         public static class ContentProperties
