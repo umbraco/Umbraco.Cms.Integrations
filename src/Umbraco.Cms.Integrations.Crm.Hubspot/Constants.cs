@@ -14,10 +14,6 @@
 
         public static class Configuration
         {
-            public const string Settings = "Umbraco:Cms:Integrations:Crm:Hubspot:Settings";
-
-            public const string OAuthSettings = "Umbraco:Cms:Integrations:Crm:Hubspot:OAuthSettings";
-
             public const string UmbracoCmsIntegrationsCrmHubspotApiKey = "Umbraco.Cms.Integrations.Crm.Hubspot.ApiKey";
 
             public const string UmbracoCmsIntegrationsCrmHubspotRegion = "Umbraco.Cms.Integrations.Crm.Hubspot.Region";

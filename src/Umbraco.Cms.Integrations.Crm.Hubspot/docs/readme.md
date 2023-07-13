@@ -21,12 +21,12 @@ Popular features of HubSpot forms include:
 **Want to know more about how the integration is made?**
 If you want to see the details on how the integration to HubSpot Forms is made or just follow the example of extending Umbraco with a third-party system you can take a look at the [blog post](https://umbraco.com/blog/integrating-umbraco-cms-with-hubspot-forms/) supplementing this integration.
 
-![render](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Crm.Hubspot/docs/images/render.png)
+![render](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main-v8/src/Umbraco.Cms.Integrations.Crm.Hubspot/docs/images/render.png)
 
-![data-type](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Crm.Hubspot/docs/images/data-type.png)
+![data-type](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main-v8/src/Umbraco.Cms.Integrations.Crm.Hubspot/docs/images/data-type.png)
 
-![pickers](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Crm.Hubspot/docs/images/pickers.png)
+![pickers](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main-v8/src/Umbraco.Cms.Integrations.Crm.Hubspot/docs/images/pickers.png)
 
-![auth](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Crm.Hubspot/docs/images/auth.png)
+![auth](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main-v8/src/Umbraco.Cms.Integrations.Crm.Hubspot/docs/images/auth.png)
 
-![forms](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Crm.Hubspot/docs/images/forms.png)
+![forms](https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main-v8/src/Umbraco.Cms.Integrations.Crm.Hubspot/docs/images/forms.png)
