@@ -12,271 +12,317 @@ using Umbraco.Cms.Integrations.Crm.Hubspot.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Controllers;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
-using Umbraco.Core.Composing;
 using static Umbraco.Cms.Integrations.Crm.Hubspot.HubspotComposer;
-using ILogger = Umbraco.Core.Logging.ILogger;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Tests.Controllers
 {
-    [TestFixture]
-    public class FormsControllerTests
-    {
-        private readonly string InvalidApiKey = @"{
+	[TestFixture]
+	public class FormsControllerTests
+	{
+		private readonly string InvalidApiKey = @"{
             ""status"": ""error"",
             ""message"": ""This hapikey doesn't exist."",
             ""correlationId"": ""73f4a25b-7b0a-4537-a490-e5c226619d59""
         }";
 
-        private HubspotSettings MockedAppSettingsApiSetup;
+		private IOptions<HubspotSettings> MockedOptionsApiSetup;
 
-        private HubspotSettings MockedAppSettingsOAuthSetup;
+		private IOptions<HubspotSettings> MockedOptionsOAuthSetup;
 
-        private HubspotSettings MockedAppSettingsNoSetup;
+		private IOptions<HubspotSettings> MockedOptionsNoSetup;
 
-        private Mock<ILogger> MockedLogger;
+		private IOptions<HubspotOAuthSettings> MockedOAuthOptionsSetup;
 
-        public FormsControllerTests()
-        {
-            Current.Factory = new Mock<IFactory>().Object;
-        }
+		private Mock<ILogger<FormsController>> MockedLogger;
 
-        [SetUp]
-        public void Init()
-        {
-            MockedAppSettingsApiSetup = CreateMockedAppSettings(true);
+		public FormsControllerTests()
+		{
+		}
 
-            MockedAppSettingsOAuthSetup = CreateMockedAppSettings();
+		[SetUp]
+		public void Init()
+		{
+			MockedOptionsApiSetup = Options.Create(CreateMockedAppSettings(true));
 
-            MockedAppSettingsNoSetup = CreateMockedAppSettings();
+			MockedOptionsOAuthSetup = Options.Create(CreateMockedAppSettings());
 
-            MockedLogger = new Mock<ILogger>();
-        }
+			MockedOptionsNoSetup = Options.Create(CreateMockedAppSettings());
 
-        #region CheckConfiguration
+			MockedOAuthOptionsSetup = Options.Create(new HubspotOAuthSettings());
 
-        [Test]
-        public void CheckApiConfiguration_WithApiConfig_ShouldReturnValidConfigurationResponseObjectWithType()
-        {
-            var sut = new FormsController(Mock.Of<ITokenService>(), Mock.Of<ILogger>(), Mock.Of<AuthorizationImplementationFactory>())
-            {
-                Options = MockedAppSettingsApiSetup
-            };
+			MockedLogger = new Mock<ILogger<FormsController>>();
+		}
 
-            var result = sut.CheckConfiguration();
+		#region CheckConfiguration
 
-            Assert.That(result.IsValid, Is.True);
-            Assert.AreEqual(result.Type.Value, ConfigurationType.Api.Value);
-        }
+		[Test]
+		public void CheckApiConfiguration_WithApiConfig_ShouldReturnValidConfigurationResponseObjectWithType()
+		{
+			var sut = new FormsController(MockedOptionsApiSetup, MockedOAuthOptionsSetup,
+				Mock.Of<ITokenService>(), Mock.Of<ILogger<FormsController>>(), Mock.Of<AuthorizationImplementationFactory>());
 
-        [Test]
-        public void CheckOAuthConfiguration_WithOAuthConfigAndNoApiConfig_ShouldReturnValidConfigurationResponseObjectWithType()
-        {
-            var sut = new FormsController(Mock.Of<ITokenService>(), Mock.Of<ILogger>(), Mock.Of<AuthorizationImplementationFactory>())
-            {
-                Options = MockedAppSettingsOAuthSetup
-            };
+			var result = sut.CheckConfiguration();
 
-            var result = sut.CheckConfiguration();
+			Assert.That(result.IsValid, Is.True);
+			Assert.AreEqual(result.Type.Value, ConfigurationType.Api.Value);
+		}
 
-            Assert.That(result.IsValid, Is.True);
-            Assert.AreEqual(result.Type.Value, ConfigurationType.OAuth.Value);
-        }
+		[Test]
+		public void CheckOAuthConfiguration_WithOAuthConfigAndNoApiConfig_ShouldReturnValidConfigurationResponseObjectWithType()
+		{
+			var sut = new FormsController(MockedOptionsOAuthSetup, MockedOAuthOptionsSetup,
+				Mock.Of<ITokenService>(), Mock.Of<ILogger<FormsController>>(), Mock.Of<AuthorizationImplementationFactory>());
 
-        #endregion
+			var result = sut.CheckConfiguration();
 
-        #region GetAllUsingApiKey
+			Assert.That(result.IsValid, Is.True);
+			Assert.AreEqual(result.Type.Value, ConfigurationType.OAuth.Value);
+		}
 
-        [Test]
-        public async Task GetAll_WithoutApiKey_ShouldReturnInvalidResponseObjectWithLoggedInfo()
-        {
-            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>())
-            {
-                Options = MockedAppSettingsNoSetup
-            };
+		#endregion
 
-            var result = await sut.GetAll();
+		#region GetAllUsingApiKey
 
-            MockedLogger.Verify(x => x.Info(It.Is<Type>(y => y == typeof(FormsController)), It.IsAny<string>()), Times.Once);
+		[Test]
+		public async Task GetAll_WithoutApiKey_ShouldReturnInvalidResponseObjectWithLoggedInfo()
+		{
+			IOptions<HubspotSettings> options = Options.Create(new HubspotSettings());
+			IOptions<HubspotOAuthSettings> oauthOptions = Options.Create(new HubspotOAuthSettings());
 
-            Assert.That(result.IsValid, Is.False);
-            Assert.That(result.IsExpired, Is.False);
-        }
+			var sut = new FormsController(options, oauthOptions, Mock.Of<ITokenService>(),
+				MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
 
-        [Test]
-        public async Task GetAll_WithUnauthorizedRequest_ShouldReturnExpiredResponseObjectWithLoggedError()
-        {
-            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
-            sut.Options = MockedAppSettingsApiSetup;
+			var result = await sut.GetAll();
 
-            var httpClient = CreateMockedHttpClient(HttpStatusCode.Unauthorized, InvalidApiKey);
-            FormsController.ClientFactory = () => httpClient;
+			MockedLogger.Verify(x => x.Log(
+			   LogLevel.Information,
+			   It.IsAny<EventId>(),
+			   It.IsAny<It.IsAnyType>(),
+			   It.IsAny<Exception>(),
+			   (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
 
-            var result = await sut.GetAll();
+			Assert.That(result.IsValid, Is.False);
+			Assert.That(result.IsExpired, Is.False);
+		}
 
-            MockedLogger.Verify(x => x.Error(It.Is<Type>(y => y == typeof(FormsController)), It.IsAny<string>()), Times.Once);
+		[Test]
+		public async Task GetAll_WithUnauthorizedRequest_ShouldReturnExpiredResponseObjectWithLoggedError()
+		{
+			var sut = new FormsController(MockedOptionsApiSetup, MockedOAuthOptionsSetup, 
+				Mock.Of<ITokenService>(), MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
 
-            Assert.That(result.IsValid, Is.False);
-            Assert.That(result.IsExpired, Is.True);
-        }
+			var httpClient = CreateMockedHttpClient(HttpStatusCode.Unauthorized, InvalidApiKey);
+			FormsController.ClientFactory = () => httpClient;
 
-        [Test]
-        public async Task GetAll_WithSuccessfulRequest_ShouldReturnResponseObjectWithFormsCollection()
-        {
-            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
-            sut.Options = MockedAppSettingsApiSetup;
+			var result = await sut.GetAll();
 
-            var response = File.ReadAllText(TestContext.CurrentContext.TestDirectory + "\\Data\\mockResponseApiSetup.json");
+			MockedLogger.Verify(x => x.Log(
+			   LogLevel.Error,
+			   It.IsAny<EventId>(),
+			   It.IsAny<It.IsAnyType>(),
+			   It.IsAny<Exception>(),
+			   (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once);
 
-            var httpClient = CreateMockedHttpClient(HttpStatusCode.OK, response);
-            FormsController.ClientFactory = () => httpClient;
+			Assert.That(result.IsValid, Is.False);
+			Assert.That(result.IsExpired, Is.True);
+		}
 
-            var result = await sut.GetAll();
+		[Test]
+		public async Task GetAll_WithSuccessfulRequest_ShouldReturnResponseObjectWithFormsCollection()
+		{
+			var sut = new FormsController(MockedOptionsApiSetup, MockedOAuthOptionsSetup, Mock.Of<ITokenService>(),
+				MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
 
-            Assert.That(result.IsValid, Is.True);
-            Assert.That(result.IsExpired, Is.False);
-            Assert.AreEqual(1, result.Forms.Count);
-        }
+			var response = File.ReadAllText(TestContext.CurrentContext.TestDirectory + "\\Data\\mockResponseApiSetup.json");
 
-        [Test]
-        public async Task GetAll_WithFailedRequest_ShouldReturnDefaultResponseObjectWithLoggedError()
-        {
-            var sut = new FormsController(Mock.Of<ITokenService>(), MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
-            sut.Options = MockedAppSettingsApiSetup;
+			var httpClient = CreateMockedHttpClient(HttpStatusCode.OK, response);
+			FormsController.ClientFactory = () => httpClient;
 
-            var response = File.ReadAllText(TestContext.CurrentContext.TestDirectory + "\\Data\\mockResponseApiSetup.json");
+			var result = await sut.GetAll();
 
-            var httpClient = CreateMockedHttpClient(HttpStatusCode.InternalServerError, response);
-            FormsController.ClientFactory = () => httpClient;
+			Assert.That(result.IsValid, Is.True);
+			Assert.That(result.IsExpired, Is.False);
+			Assert.AreEqual(1, result.Forms.Count);
+		}
 
-            var result = await sut.GetAll();
+		[Test]
+		public async Task GetAll_WithFailedRequest_ShouldReturnDefaultResponseObjectWithLoggedError()
+		{
+			var sut = new FormsController(MockedOptionsApiSetup, MockedOAuthOptionsSetup, 
+				Mock.Of<ITokenService>(), MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
 
-            MockedLogger.Verify(x => x.Error(It.Is<Type>(y => y == typeof(FormsController)), It.IsAny<string>()), Times.Once);
+			var response = File.ReadAllText(TestContext.CurrentContext.TestDirectory + "\\Data\\mockResponseApiSetup.json");
 
-            Assert.That(result.IsExpired, Is.False);
-            Assert.That(result.IsValid, Is.False);
-            Assert.That(result.Forms, Is.Empty);
-        }
+			var httpClient = CreateMockedHttpClient(HttpStatusCode.InternalServerError, response);
+			FormsController.ClientFactory = () => httpClient;
 
-        #endregion
+			var result = await sut.GetAll();
 
-        #region GetAllUsingOAuth
+			MockedLogger.Verify(x =>
+				 x.Log(LogLevel.Error,
+					 It.IsAny<EventId>(),
+					 It.IsAny<It.IsAnyType>(),
+					 It.IsAny<Exception>(),
+					 It.IsAny<Func<It.IsAnyType, Exception, string>>()
+				 ), Times.Once);
 
-        [Test]
-        public async Task GetAllOAuth_WithoutAccessToken_ShouldReturnInvalidResponseObjectWithLoggedInfo()
-        {
-            var mockedTokenService = CreateMockedTokenService(false);
+			Assert.That(result.IsExpired, Is.False);
+			Assert.That(result.IsValid, Is.False);
+			Assert.That(result.Forms, Is.Empty);
+		}
 
-            var sut = new FormsController(mockedTokenService.Object, MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
+		#endregion
 
-            var result = await sut.GetAllOAuth();
+		#region GetAllUsingOAuth
 
-            MockedLogger.Verify(x => x.Info(It.Is<Type>(y => y == typeof(FormsController)), It.IsAny<string>()), Times.Once);
+		[Test]
+		public async Task GetAllOAuth_WithoutAccessToken_ShouldReturnInvalidResponseObjectWithLoggedInfo()
+		{
+			IOptions<HubspotSettings> options = Options.Create(new HubspotSettings());
+			IOptions<HubspotOAuthSettings> oauthOptions = Options.Create(new HubspotOAuthSettings());
 
-            Assert.That(result.IsValid, Is.False);
-            Assert.That(result.IsExpired, Is.False);
-        }
+			var mockedTokenService = CreateMockedTokenService(false);
 
-        [Test]
-        public async Task GetAllOAuth_WithUnauthorizedRequest_ShouldReturnExpiredResponseObjectWithLoggedError()
-        {
-            var mockedTokenService = CreateMockedTokenService(true);
+			var sut = new FormsController(options, oauthOptions, mockedTokenService.Object, MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
 
-            var sut = new FormsController(mockedTokenService.Object, MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
+			var result = await sut.GetAllOAuth();
 
-            var httpClient = CreateMockedHttpClient(HttpStatusCode.Unauthorized);
-            FormsController.ClientFactory = () => httpClient;
+			MockedLogger.Verify(x =>
+				 x.Log(LogLevel.Information,
+					 It.IsAny<EventId>(),
+					 It.IsAny<It.IsAnyType>(),
+					 It.IsAny<Exception>(),
+					 It.IsAny<Func<It.IsAnyType, Exception, string>>()
+				 ), Times.Once);
 
-            var result = await sut.GetAllOAuth();
+			Assert.That(result.IsValid, Is.False);
+			Assert.That(result.IsExpired, Is.False);
+		}
 
-            MockedLogger.Verify(x => x.Error(It.Is<Type>(y => y == typeof(FormsController)), It.IsAny<string>()), Times.Once);
+		[Test]
+		public async Task GetAllOAuth_WithUnauthorizedRequest_ShouldReturnExpiredResponseObjectWithLoggedError()
+		{
+			IOptions<HubspotSettings> options = Options.Create(new HubspotSettings());
+			IOptions<HubspotOAuthSettings> oauthOptions = Options.Create(new HubspotOAuthSettings());
 
-            Assert.That(result.IsValid, Is.False);
-            Assert.That(result.IsExpired, Is.True);
-        }
+			var mockedTokenService = CreateMockedTokenService(true);
 
-        [Test]
-        public async Task GetAllOAuth_WithSuccessfulRequest_ShouldReturnResponseObjectWithFormsCollection()
-        {
-            var mockedTokenService = CreateMockedTokenService(true);
+			var sut = new FormsController(options, oauthOptions, mockedTokenService.Object, MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
 
-            var sut = new FormsController(mockedTokenService.Object, MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
+			var httpClient = CreateMockedHttpClient(HttpStatusCode.Unauthorized);
+			FormsController.ClientFactory = () => httpClient;
 
-            var response = File.ReadAllText(TestContext.CurrentContext.TestDirectory + "\\Data\\mockResponseOAuthSetup.json");
+			var result = await sut.GetAllOAuth();
 
-            var httpClient = CreateMockedHttpClient(HttpStatusCode.OK, response);
-            FormsController.ClientFactory = () => httpClient;
+			MockedLogger.Verify(x =>
+				 x.Log(LogLevel.Error,
+					 It.IsAny<EventId>(),
+					 It.IsAny<It.IsAnyType>(),
+					 It.IsAny<Exception>(),
+					 It.IsAny<Func<It.IsAnyType, Exception, string>>()
+				 ), Times.Once);
 
-            var result = await sut.GetAllOAuth();
+			Assert.That(result.IsValid, Is.False);
+			Assert.That(result.IsExpired, Is.True);
+		}
 
-            Assert.That(result.IsValid, Is.True);
-            Assert.That(result.IsExpired, Is.False);
-            Assert.AreEqual(1, result.Forms.Count);
-        }
+		[Test]
+		public async Task GetAllOAuth_WithSuccessfulRequest_ShouldReturnResponseObjectWithFormsCollection()
+		{
+			IOptions<HubspotSettings> options = Options.Create(new HubspotSettings());
+			IOptions<HubspotOAuthSettings> oauthOptions = Options.Create(new HubspotOAuthSettings());
 
-        [Test]
-        public async Task GetAllOAuth_WithFailedRequest_ShouldReturnDefaultResponseObjectWithLoggedError()
-        {
-            var mockedTokenService = CreateMockedTokenService(true);
+			var mockedTokenService = CreateMockedTokenService(true);
 
-            var sut = new FormsController(mockedTokenService.Object, MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
+			var sut = new FormsController(options, oauthOptions, mockedTokenService.Object, MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
 
-            var response = File.ReadAllText(TestContext.CurrentContext.TestDirectory + "\\Data\\mockResponseApiSetup.json");
+			var response = File.ReadAllText(TestContext.CurrentContext.TestDirectory + "\\Data\\mockResponseOAuthSetup.json");
 
-            var httpClient = CreateMockedHttpClient(HttpStatusCode.InternalServerError, response);
-            FormsController.ClientFactory = () => httpClient;
+			var httpClient = CreateMockedHttpClient(HttpStatusCode.OK, response);
+			FormsController.ClientFactory = () => httpClient;
 
-            var result = await sut.GetAllOAuth();
+			var result = await sut.GetAllOAuth();
 
-            MockedLogger.Verify(x => x.Error(It.Is<Type>(y => y == typeof(FormsController)), It.IsAny<string>()), Times.Once);
+			Assert.That(result.IsValid, Is.True);
+			Assert.That(result.IsExpired, Is.False);
+			Assert.AreEqual(1, result.Forms.Count);
+		}
 
-            Assert.That(result.IsExpired, Is.False);
-            Assert.That(result.IsValid, Is.False);
-            Assert.That(result.Forms, Is.Empty);
-        }
+		[Test]
+		public async Task GetAllOAuth_WithFailedRequest_ShouldReturnDefaultResponseObjectWithLoggedError()
+		{
+			IOptions<HubspotSettings> options = Options.Create(new HubspotSettings());
+			IOptions<HubspotOAuthSettings> oauthOptions = Options.Create(new HubspotOAuthSettings());
 
-        #endregion
+			var mockedTokenService = CreateMockedTokenService(true);
 
-        private static HubspotSettings CreateMockedAppSettings(bool includeApiKeySettings = false)
-        {
-            return includeApiKeySettings
-                ? new HubspotSettings {ApiKey = "test-api-key", Region = "eu1" }
-                : new HubspotSettings { Region = "eu1" };
-        }
+			var sut = new FormsController(options, oauthOptions, mockedTokenService.Object, MockedLogger.Object, Mock.Of<AuthorizationImplementationFactory>());
 
-        private static Mock<ITokenService> CreateMockedTokenService(bool includeAccessToken)
-        {
-            var mockedTokenService = new Mock<ITokenService>();
+			var response = File.ReadAllText(TestContext.CurrentContext.TestDirectory + "\\Data\\mockResponseApiSetup.json");
 
-            if (includeAccessToken)
-            {
-                string key = "Umbraco.Cms.Integrations.Hubspot.AccessTokenDbKey";
-                string expectedValue = "CNzV5ansLxICBAMY7N6UDCDJ3LYNKNuEJjIUnFi8abi-btslTeL14maOJ3J7CK86KABAIEEAAAAAAAAwAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCFEZUslFv3AAjejJzrxfHYDNIvbcnSgNldTFSAFoA";
+			var httpClient = CreateMockedHttpClient(HttpStatusCode.InternalServerError, response);
+			FormsController.ClientFactory = () => httpClient;
 
-                mockedTokenService.Setup(x => x.TryGetParameters(key, out expectedValue)).Returns(true);
-            }
+			var result = await sut.GetAllOAuth();
 
-            return mockedTokenService;
-        }
+			MockedLogger.Verify(x =>
+				 x.Log(LogLevel.Error,
+					 It.IsAny<EventId>(),
+					 It.IsAny<It.IsAnyType>(),
+					 It.IsAny<Exception>(),
+					 It.IsAny<Func<It.IsAnyType, Exception, string>>()
+				 ), Times.Once);
 
+			Assert.That(result.IsExpired, Is.False);
+			Assert.That(result.IsValid, Is.False);
+			Assert.That(result.Forms, Is.Empty);
+		}
 
-        private static HttpClient CreateMockedHttpClient(HttpStatusCode statusCode, string responseContent = "")
-        {
-            var handlerMock = new Mock<HttpMessageHandler>();
-            handlerMock
-                .Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.IsAny<HttpRequestMessage>(),
-                    ItExpr.IsAny<CancellationToken>())
-                .ReturnsAsync(new HttpResponseMessage()
-                {
-                    StatusCode = statusCode,
-                    Content = new StringContent(responseContent)
-                });
+		#endregion
 
-            var httpClient = new HttpClient(handlerMock.Object);
+		private static HubspotSettings CreateMockedAppSettings(bool includeApiKeySettings = false)
+		{
+			return includeApiKeySettings
+				? new HubspotSettings { ApiKey = "test-api-key", Region = "eu1" }
+				: new HubspotSettings { Region = "eu1" };
+		}
 
-            return httpClient;
-        }
-    }
+		private static Mock<ITokenService> CreateMockedTokenService(bool includeAccessToken)
+		{
+			var mockedTokenService = new Mock<ITokenService>();
+
+			if (includeAccessToken)
+			{
+				string key = "Umbraco.Cms.Integrations.Hubspot.AccessTokenDbKey";
+				string expectedValue = "CNzV5ansLxICBAMY7N6UDCDJ3LYNKNuEJjIUnFi8abi-btslTeL14maOJ3J7CK86KABAIEEAAAAAAAAwAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFCFEZUslFv3AAjejJzrxfHYDNIvbcnSgNldTFSAFoA";
+
+				mockedTokenService.Setup(x => x.TryGetParameters(key, out expectedValue)).Returns(true);
+			}
+
+			return mockedTokenService;
+		}
+
+
+		private static HttpClient CreateMockedHttpClient(HttpStatusCode statusCode, string responseContent = "")
+		{
+			var handlerMock = new Mock<HttpMessageHandler>();
+			handlerMock
+				.Protected()
+				.Setup<Task<HttpResponseMessage>>(
+					"SendAsync",
+					ItExpr.IsAny<HttpRequestMessage>(),
+					ItExpr.IsAny<CancellationToken>())
+				.ReturnsAsync(new HttpResponseMessage()
+				{
+					StatusCode = statusCode,
+					Content = new StringContent(responseContent)
+				});
+
+			var httpClient = new HttpClient(handlerMock.Object);
+
+			return httpClient;
+		}
+	}
 }

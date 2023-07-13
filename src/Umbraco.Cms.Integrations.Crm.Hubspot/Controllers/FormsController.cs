@@ -6,23 +6,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-#if NETCOREAPP
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
-#else
-using System.Web.Http;
-using System.Configuration;
-
-using Umbraco.Core.Logging;
-using Umbraco.Web.Mvc;
-using Umbraco.Web.WebApi;
-#endif
-
-using Newtonsoft.Json;
-
 using Umbraco.Cms.Integrations.Crm.Hubspot.Resources;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models;
@@ -53,13 +42,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
 
         private const string HubspotFormsApiEndpoint = "https://api.hubapi.com/forms/v2/forms";
 
-#if NETCOREAPP
         private readonly ILogger<FormsController> _logger;
-#else
-        private readonly ILogger _logger;
-#endif
 
-#if NETCOREAPP
         public FormsController(
             IOptions<HubspotSettings> options,
             IOptions<HubspotOAuthSettings> oauthOptions,
@@ -77,20 +61,6 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
 
             _authorizationService = authorizationImplementationFactory(Options.UseUmbracoAuthorization);
         }
-#else
-        public FormsController(ITokenService tokenService, ILogger logger, AuthorizationImplementationFactory authorizationImplementationFactory)
-        {
-            Options = new HubspotSettings(ConfigurationManager.AppSettings);
-
-            OAuthOptions = new HubspotOAuthSettings(ConfigurationManager.AppSettings);
-
-            _tokenService = tokenService;
-
-            _logger = logger;
-
-            _authorizationService = authorizationImplementationFactory(Options.UseUmbracoAuthorization);
-        }
-#endif
 
         public async Task<ResponseDto> GetAll()
         {
@@ -98,11 +68,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
 
             if (string.IsNullOrEmpty(hubspotApiKey))
             {
-#if NETCOREAPP
                 _logger.LogInformation(message: Constants.ErrorMessages.ApiKeyMissing);
-#else
-                _logger.Info<FormsController>(message: Constants.ErrorMessages.ApiKeyMissing);
-#endif
 
                 return new ResponseDto { IsValid = false, Error = Constants.ErrorMessages.ApiKeyMissing };
             }
@@ -128,30 +94,19 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             }
             catch (HttpRequestException ex) when (ex.Message.Contains(HttpStatusCode.Forbidden.ToString()))
             {
-#if NETCOREAPP
                 _logger.LogError(string.Format(LoggingResources.ApiFetchFormsFailed, responseContent));
-#else
-                _logger.Error<FormsController>(string.Format(LoggingResources.ApiFetchFormsFailed, responseContent));
-#endif
+
                 return new ResponseDto { IsValid = false, Error = Constants.ErrorMessages.TokenPermissions };
             }
             catch (HttpRequestException ex) when (ex.Message.Contains(HttpStatusCode.Unauthorized.ToString()))
             {
-#if NETCOREAPP
                 _logger.LogError(string.Format(LoggingResources.ApiFetchFormsFailed, responseContent));
-#else
-                _logger.Error<FormsController>(string.Format(LoggingResources.ApiFetchFormsFailed, responseContent));
-#endif
 
                 return new ResponseDto { IsExpired = true, Error = Constants.ErrorMessages.InvalidApiKey };
             }
             catch
             {
-#if NETCOREAPP
                 _logger.LogError(string.Format(LoggingResources.ApiFetchFormsFailed, responseContent));
-#else
-                _logger.Error<FormsController>(string.Format(LoggingResources.ApiFetchFormsFailed, responseContent));
-#endif
 
                 return new ResponseDto();
             }
@@ -162,11 +117,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             _tokenService.TryGetParameters(Constants.AccessTokenDbKey, out string accessToken);
             if (string.IsNullOrEmpty(accessToken))
             {
-#if NETCOREAPP
                 _logger.LogInformation(Constants.ErrorMessages.AccessTokenMissing);
-#else
-                _logger.Info<FormsController>(Constants.ErrorMessages.AccessTokenMissing);
-#endif
 
                 return new ResponseDto 
                 { 
@@ -196,20 +147,13 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Controllers
             }
             catch(HttpRequestException ex) when (ex.Message.Contains(HttpStatusCode.Unauthorized.ToString()))
             {
-#if NETCOREAPP
                 _logger.LogError(string.Format(LoggingResources.OAuthFetchFormsFailed, responseContent));
-#else
-                _logger.Error<FormsController>(string.Format(LoggingResources.OAuthFetchFormsFailed, responseContent));
-#endif   
+
                 return new ResponseDto { IsExpired = true, Error = Constants.ErrorMessages.InvalidApiKey };
             }
             catch
             {
-#if NETCOREAPP
                 _logger.LogError(string.Format(LoggingResources.OAuthFetchFormsFailed, responseContent));
-#else
-                _logger.Error<FormsController>(string.Format(LoggingResources.OAuthFetchFormsFailed, responseContent));
-#endif
 
                 return new ResponseDto();
             }

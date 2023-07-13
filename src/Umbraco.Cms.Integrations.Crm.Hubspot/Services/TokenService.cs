@@ -1,10 +1,4 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Core.Services;
-#else
-using Umbraco.Cms.Integrations.Crm.Hubspot.Models.Dtos;
-using Umbraco.Core.Services;
-#endif
-
+﻿using Umbraco.Cms.Core.Services;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Services
 {

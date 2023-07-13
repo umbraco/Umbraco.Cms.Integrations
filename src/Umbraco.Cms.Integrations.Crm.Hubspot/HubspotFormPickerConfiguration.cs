@@ -1,10 +1,5 @@
 ﻿using Umbraco.Cms.Integrations.Crm.Hubspot.Models;
-
-#if NETCOREAPP
 using Umbraco.Cms.Core.PropertyEditors;
-#else
-using Umbraco.Core.PropertyEditors;
-#endif
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot
 {
