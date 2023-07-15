@@ -13,7 +13,7 @@
 		<PackageIconUrl></PackageIconUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main/src/Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>2.0.1</Version>
+		<Version>2.0.2</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 	</PropertyGroup>
@@ -25,9 +25,9 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net70'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,12]" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,12]" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="[11.0.0,12]" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" version="[11.0.0,)" />
 	</ItemGroup>
 
 </Project>
