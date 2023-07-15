@@ -22,9 +22,14 @@
 		<ApplicationManifest>App_Plugins\UmbracoCms.Integrations\DAM\Aprimo\package.manifest</ApplicationManifest>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[10.3.0,)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[10.3.0,)" />
+	<ItemGroup Condition="'$(TargetFramework)' == 'net60'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[10.3.0,11)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[10.3.0,11)" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net70'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,)" />
 	</ItemGroup>
 
 	<ItemGroup>
