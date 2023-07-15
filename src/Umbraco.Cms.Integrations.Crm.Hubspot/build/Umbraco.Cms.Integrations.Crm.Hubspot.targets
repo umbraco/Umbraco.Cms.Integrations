@@ -15,13 +15,6 @@
 		      DestinationFiles="@(HubspotPropertyEditorFiles->'$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\%(RecursiveDir)%(Filename)%(Extension)')"
 		      SkipUnchangedFiles="true" />
 	</Target>
-	
-	<Target Name="ClearHubspotRenderingView" 
-			Condition="'$(TargetFramework)' == 'net5.0' or '$(TargetFramework)' == 'net6.0' or '$(TargetFramework)' == 'net7.0'" BeforeTargets="Build">
-		<Message Text="Delete Umbraco 8 rendering view" Importance="high" />
-		<Delete Files="$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\Render\HubspotForm.cshtml"/>
-	</Target>
-
 	<Target Name="ClearHubspotPropertyEditorAssets" BeforeTargets="Clean">
 		<ItemGroup>
 			<HubspotPropertyEditorDir
