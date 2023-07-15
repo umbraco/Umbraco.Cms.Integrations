@@ -10,7 +10,7 @@
 		<PackageIconUrl></PackageIconUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>1.1.1</Version>
+		<Version>1.1.2</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
@@ -33,8 +33,8 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net70'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,12]" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,12]" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,)" />
 	</ItemGroup>
 
 	<ItemGroup>
