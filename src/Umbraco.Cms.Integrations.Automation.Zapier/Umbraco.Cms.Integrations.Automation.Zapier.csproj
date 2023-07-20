@@ -32,9 +32,9 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net70'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,12]" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,12]" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="[11.0.0,12]" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" version="[11.0.0,)" />
 	</ItemGroup>
 
 	<ItemGroup>
