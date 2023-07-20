@@ -45,7 +45,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 
             _zapierSettings = new ZapierSettings(ConfigurationManager.AppSettings);
 
-            _zapierSettings = new ZapierFormsSettings(ConfigurationManager.AppSettings);
+            _zapierFormsSettings = new ZapierFormsSettings(ConfigurationManager.AppSettings);
         }
 #endif
 
