@@ -2,6 +2,7 @@
 
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 {
@@ -11,11 +12,15 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
         private readonly IMediaService _mediaService;
 
-        public AlgoliaSearchPropertyIndexValueFactory(IDataTypeService dataTypeService, IMediaService mediaService)
+        private readonly IEnumerable<string> _availableLanguages;
+
+        public AlgoliaSearchPropertyIndexValueFactory(IDataTypeService dataTypeService, IMediaService mediaService, ILocalizationService localizationService)
         {
             _dataTypeService = dataTypeService;
 
             _mediaService = mediaService;
+
+            _availableLanguages = localizationService.GetAllLanguages().Select(p => p.IsoCode);
 
             Converters = new Dictionary<string, Func<KeyValuePair<string, IEnumerable<object>>, string>>
             {
@@ -29,11 +34,11 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
         {
             var dataType = _dataTypeService.GetByEditorAlias(property.PropertyType.PropertyEditorAlias)
                 .FirstOrDefault(p => p.Id == property.PropertyType.DataTypeId);
-
+         
             if (dataType == null) return default;
 
-            var indexValues = dataType.Editor.PropertyIndexValueFactory.GetIndexValues(property, culture, string.Empty, true);
-
+            var indexValues = dataType.Editor.PropertyIndexValueFactory.GetIndexValues(property, culture, string.Empty, true, _availableLanguages);
+            
             if (indexValues == null || !indexValues.Any()) return new KeyValuePair<string, string>(property.Alias, string.Empty);
 
             var indexValue = indexValues.First();
