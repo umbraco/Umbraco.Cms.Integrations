@@ -1,5 +1,4 @@
 ﻿using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
@@ -65,13 +64,13 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
                     {
                         foreach (var culture in content.PublishedCultures)
                         {
-                            var indexValue = _algoliaSearchPropertyIndexValueFactory.GetValue(property, culture);
+                            var indexValue = _algoliaSearchPropertyIndexValueFactory.GetValue(property, culture, content.AvailableCultures);
                             _record.Data.Add($"{indexValue.Key}-{culture}", indexValue.Value);
                         }
                     }
                     else
                     {
-                        var indexValue = _algoliaSearchPropertyIndexValueFactory.GetValue(property, string.Empty);
+                        var indexValue = _algoliaSearchPropertyIndexValueFactory.GetValue(property, string.Empty, Enumerable.Empty<string>());
                         _record.Data.Add(indexValue.Key, indexValue.Value);
                     }
 

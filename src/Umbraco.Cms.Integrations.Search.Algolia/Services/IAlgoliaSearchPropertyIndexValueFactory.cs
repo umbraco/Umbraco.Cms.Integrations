@@ -11,7 +11,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
         /// </summary>
         /// <param name="property"></param>
         /// <param name="culture"></param>
+        /// <param name="availableCultures"></param>
         /// <returns>[alias, value] pair</returns>
-        KeyValuePair<string, string> GetValue(IProperty property, string culture);
+        KeyValuePair<string, string> GetValue(IProperty property, string culture, IEnumerable<string> availableCultures);
     }
 }
