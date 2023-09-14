@@ -95,7 +95,7 @@
                             <uui-label slot="label">Document Types</uui-label>
                             <span class="alg-description" slot="description">Please select the document types you would like to index, and choose the fields to include.</span>
                             <uui-icon-registry-essential>
-                                <uui-ref-node id="{{ contentType.alias }}"
+                                <uui-ref-node id="dc_{{ contentType.alias }}_{{contentType.id}}"
                                               ng-attr-selected="{{contentType.selected || undefined}}"
                                               ng-repeat="contentType in vm.manageIndex.contentTypesList"
                                               ng-on-open="vm.manageIndex.showProperties(contentType)"
