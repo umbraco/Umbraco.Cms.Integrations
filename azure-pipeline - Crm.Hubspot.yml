@@ -48,6 +48,14 @@ steps:
     packagesToPack: '$(project)'
     versioningScheme: 'off'
 
+- task: DotNetCoreCLI@2
+  displayName: 'Create Core NuGet Package'
+  inputs:
+    command: 'pack'
+    arguments: '--configuration $(buildConfiguration)'
+    packagesToPack: '$(coreProject)'
+    versioningScheme: 'off'
+
 - task: CmdLine@2
   displayName: 'Create Umbraco Package'
   inputs:
