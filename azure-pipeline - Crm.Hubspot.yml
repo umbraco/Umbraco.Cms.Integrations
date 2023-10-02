@@ -6,7 +6,9 @@ pool:
 
 variables:
   projectName: 'Umbraco.Cms.Integrations.Crm.Hubspot'
+  coreProjectName: 'Umbraco.Cms.Integrations.Crm.Hubspot.Core'
   project: 'src/$(projectName)/$(projectName).csproj'
+  coreProject: 'src/$(coreProjectName)/$(coreProjectName).csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -21,6 +23,14 @@ steps:
     feedsToUse: 'select'
     projects: '$(project)'
     includeNuGetOrg: true
+
+- task: VSBuild@1
+  displayName: 'Build Core Project'
+  inputs:
+    solution: '$(coreProject)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
 
 - task: VSBuild@1
   displayName: 'Build Project'
