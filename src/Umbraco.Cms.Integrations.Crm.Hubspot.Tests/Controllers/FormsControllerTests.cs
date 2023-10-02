@@ -8,11 +8,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Umbraco.Cms.Integrations.Crm.Hubspot.Configuration;
-using Umbraco.Cms.Integrations.Crm.Hubspot.Controllers;
-using Umbraco.Cms.Integrations.Crm.Hubspot.Models;
-using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
-using static Umbraco.Cms.Integrations.Crm.Hubspot.HubspotComposer;
+using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Configuration;
+using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Controllers;
+using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models;
+using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Services;
+using static Umbraco.Cms.Integrations.Crm.Hubspot.Core.HubspotComposer;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 
