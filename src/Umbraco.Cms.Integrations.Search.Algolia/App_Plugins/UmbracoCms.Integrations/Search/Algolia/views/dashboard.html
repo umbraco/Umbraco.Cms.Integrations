@@ -1,8 +1,8 @@
 ﻿<div ng-controller="Umbraco.Cms.Integrations.Search.Algolia.DashboardController as vm">
 
-    <div ng-show="vm.loading">
-        <umb-loading-indicator></umb-loading-indicator>
-    </div>
+  <div ng-show="vm.loading">
+    <umb-loading-indicator>Loading...</umb-loading-indicator>
+  </div>
 
     <uui-box headline="Algolia Indices" ng-if="vm.viewState == 'list'">
         <div>
@@ -55,7 +55,7 @@
                                 <uui-button label="edit" look="default" color="default" ng-click="vm.viewIndex(index)">
                                     <uui-icon name="edit"></uui-icon>
                                 </uui-button>
-                                <uui-button label="build" look="default" color="danger" ng-click="vm.buildIndexConfirm(index)">
+                                <uui-button label="build" look="default" color="danger" ng-click="vm.buildIndexConfirm(index)" ng-disabled="vm.loading">
                                     <uui-icon name="sync"></uui-icon>
                                 </uui-button>
                                 <uui-button label="search" look="default" color="positive" ng-click="vm.searchIndex(index)">
