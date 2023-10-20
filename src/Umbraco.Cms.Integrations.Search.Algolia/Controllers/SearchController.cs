@@ -1,9 +1,10 @@
-﻿using Algolia.Search.Models.Search;
+﻿using System.Diagnostics;
+using Algolia.Search.Models.Search;
 
 using Microsoft.AspNetCore.Mvc;
 
 using System.Text.Json;
-
+using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Services.Implement;
@@ -40,6 +41,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
         private readonly IUmbracoContextFactory _umbracoContextFactory;
 
+        private readonly ILogger<SearchController> _logger;
+
         public SearchController(
             IAlgoliaIndexService indexService, 
             IAlgoliaSearchService<SearchResponse<Record>> searchService, 
@@ -49,7 +52,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             IPublishedUrlProvider urlProvider,
             IContentService contentService,
             IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory,
-            IUmbracoContextFactory umbracoContextFactory)
+            IUmbracoContextFactory umbracoContextFactory, 
+            ILogger<SearchController> logger)
         {
             _indexService = indexService;
             
@@ -68,6 +72,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             _algoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
 
             _umbracoContextFactory = umbracoContextFactory;
+            
+            _logger = logger;
         }
 
         [HttpGet]
@@ -122,18 +128,27 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
                 foreach (var contentDataItem in indexContentData)
                 {
+                    var sw = new Stopwatch();
+                    sw.Start();
+                    
                     using var ctx = _umbracoContextFactory.EnsureUmbracoContext();
                     var contentType = ctx.UmbracoContext.Content.GetContentType(contentDataItem.ContentType.Alias);
                     var contentItems = ctx.UmbracoContext.Content.GetByContentType(contentType);
 
+                    _logger.LogInformation("Building index for {ContentType} with {Count} items", contentDataItem.ContentType.Alias, contentItems.Count());
+
                     foreach (var contentItem in contentItems)
                     {
                         var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory)
-                            .BuildFromContent(_contentService.GetById(contentItem.Id), (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
+                            .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
                             .Build();
 
                         payload.Add(record);
                     }
+
+                    sw.Stop();
+
+                    _logger.LogInformation("Finished building index for {ContentType} in {Elapsed} ms", contentDataItem.ContentType.Alias, sw.ElapsedMilliseconds);
                 }
 
                 var result = await _indexService.PushData(index.Name, payload);

@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 
 using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Services;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Services
@@ -41,6 +42,21 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
             if (Converters.ContainsKey(property.PropertyType.PropertyEditorAlias))
             {
                 var result = Converters[property.PropertyType.PropertyEditorAlias].Invoke(indexValue);
+                return new KeyValuePair<string, string>(property.Alias, result);
+            }
+
+            return new KeyValuePair<string, string>(indexValue.Key, ParseIndexValue(indexValue.Value));
+        }
+        public virtual KeyValuePair<string, string> GetValue(IPublishedProperty property, string culture)
+        {
+
+            var listOfObjects = new List<object> { property.GetSourceValue(culture) };
+
+            var indexValue = new KeyValuePair<string, IEnumerable<object>>(property.Alias, listOfObjects);
+            
+            if (Converters.ContainsKey(property.PropertyType.EditorAlias))
+            {
+                var result = Converters[property.PropertyType.EditorAlias].Invoke(indexValue);
                 return new KeyValuePair<string, string>(property.Alias, result);
             }
 
