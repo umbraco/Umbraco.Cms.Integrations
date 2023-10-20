@@ -1,12 +1,15 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<List<Umbraco.Cms.Integrations.Commerce.Shopify.Models.ViewModels.ProductViewModel>>
 
-<dl class="products-list">
-    @foreach (var product in Model)
-    {
-        <dt class="product-title">@product.Title</dt>
-        <dd class="product-body">@Html.Raw(product.Body)</dd>
-        <img class="product-image" src="@product.Image" alt="@product.Title" />
-    }
-</dl>
+@if (Model != null)
+{
+    <dl class="products-list">
+        @foreach (var product in Model)
+        {
+            <dt class="product-title">@product.Title</dt>
+            <dd class="product-body">@Html.Raw(product.Body)</dd>
+            <img class="product-image" src="@product.Image" alt="@product.Title" />
+        }
+    </dl>
+}
 
 
