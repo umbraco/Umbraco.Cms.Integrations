@@ -128,9 +128,6 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
                 foreach (var contentDataItem in indexContentData)
                 {
-                    var sw = new Stopwatch();
-                    sw.Start();
-                    
                     using var ctx = _umbracoContextFactory.EnsureUmbracoContext();
                     var contentType = ctx.UmbracoContext.Content.GetContentType(contentDataItem.ContentType.Alias);
                     var contentItems = ctx.UmbracoContext.Content.GetByContentType(contentType);
@@ -145,10 +142,6 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
                         payload.Add(record);
                     }
-
-                    sw.Stop();
-
-                    _logger.LogInformation("Finished building index for {ContentType} in {Elapsed} ms", contentDataItem.ContentType.Alias, sw.ElapsedMilliseconds);
                 }
 
                 var result = await _indexService.PushData(index.Name, payload);
