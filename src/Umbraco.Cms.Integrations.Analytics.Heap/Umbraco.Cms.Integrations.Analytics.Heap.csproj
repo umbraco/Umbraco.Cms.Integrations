@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="App_Plugins\UmbracoCms.Integrations\Analytics\Heap\config\lang\en-US.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="App_Plugins\UmbracoCms.Integrations\Analytics\Heap\config\lang\en-US.xml">
+	    <PackagePath>App_Plugins\UmbracoCms.Integrations\Search\Algolia\</PackagePath>
+	    <Pack>true</Pack>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0, 13)" />
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="set AppPluginsPath=App_Plugins\UmbracoCms.Integrations\Analytics\Heap&#xD;&#xA;set TestsitePath=$(SolutionDir)\Umbraco.Cms.Integrations.Testsite.V10&#xD;&#xA;set IntegrationDir=%25TestsitePath%25\%25AppPluginsPath%25&#xD;&#xA;if not exist %25IntegrationDir%25 mkdir -p %25IntegrationDir%25&#xD;&#xA;xcopy &quot;$(ProjectDir)%25AppPluginsPath%25&quot; &quot;%25IntegrationDir%25&quot; /e /y" />
+	</Target>
+
+</Project>

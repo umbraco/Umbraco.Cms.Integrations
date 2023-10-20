@@ -1,0 +1,22 @@
+﻿@using Umbraco.Cms.Integrations.Analytics.Heap.Services;
+@inject IHeapIdentifyService IdentifyService;
+
+@{
+    var user = await IdentifyService.Identify();
+}
+
+<script type="text/javascript">
+    if (typeof heap !== 'undefined') {
+
+        var userId = heap.userId;
+        var identity = heap.identity;
+
+        @if (user is not null)
+        {
+            <text>
+                heap.identify('@user.Id');
+                heap.addUserProperties({ Name: '@user.Name', Email: '@user.Email', Roles: '@user.Roles'});
+            </text>
+        }
+    }
+</script>
