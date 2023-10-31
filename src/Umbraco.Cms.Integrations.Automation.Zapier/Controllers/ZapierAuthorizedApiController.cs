@@ -66,10 +66,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
 
             if (string.IsNullOrEmpty(apiKey) && (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))) return false;
 
-            if (!string.IsNullOrEmpty(apiKey))
-                return apiKey == Options.ApiKey;
-
-            var isAuthorized = _userValidationService.Validate(username, password, Options.ApiKey).GetAwaiter()
+            var isAuthorized = _userValidationService.Validate(username, password, apiKey).GetAwaiter()
                 .GetResult();
             if (!isAuthorized) return false;
 
