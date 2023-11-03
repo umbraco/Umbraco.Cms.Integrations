@@ -72,16 +72,10 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
         /// </summary>
         /// <param name="apiKey">Provided API key in the Zap authentication.</param>
         /// <returns></returns>
-        private bool ValidateByApiKey(string apiKey)
-        {
-            // Check API key from CMS settings, if none, check Forms settings
-            if (!string.IsNullOrEmpty(_zapierSettings.ApiKey))
-                return apiKey == _zapierSettings.ApiKey;
-            else if (!string.IsNullOrEmpty(_zapierFormsSettings.ApiKey))
-                return apiKey == _zapierFormsSettings.ApiKey;
-
-            return false;
-        }
+        private bool ValidateByApiKey(string apiKey) =>
+            // Check API key from CMS and Forms settings. 
+            (!string.IsNullOrEmpty(_zapierSettings.ApiKey) && _zapierSettings.ApiKey == apiKey)
+                || (!string.IsNullOrEmpty(_zapierFormsSettings.ApiKey) && _zapierFormsSettings.ApiKey == apiKey);
 
         /// <summary>
         /// Validates user based on provided credentials.
