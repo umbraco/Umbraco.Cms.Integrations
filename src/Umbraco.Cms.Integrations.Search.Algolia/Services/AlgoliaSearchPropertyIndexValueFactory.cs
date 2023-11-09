@@ -18,15 +18,15 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
             _mediaService = mediaService;
 
-            Converters = new Dictionary<string, Func<KeyValuePair<string, IEnumerable<object>>, string>>
+            Converters = new Dictionary<string, Func<KeyValuePair<string, IEnumerable<object>>, object>>
             {
                 {  Core.Constants.PropertyEditors.Aliases.MediaPicker3, ConvertMediaPicker }
             };
         }
 
-        public Dictionary<string, Func<KeyValuePair<string, IEnumerable<object>>, string>> Converters { get; set; }
+        public Dictionary<string, Func<KeyValuePair<string, IEnumerable<object>>, object>> Converters { get; set; }
 
-        public virtual KeyValuePair<string, string> GetValue(IProperty property, string culture)
+        public virtual KeyValuePair<string, object> GetValue(IProperty property, string culture)
         {
             var dataType = _dataTypeService.GetByEditorAlias(property.PropertyType.PropertyEditorAlias)
                 .FirstOrDefault(p => p.Id == property.PropertyType.DataTypeId);
@@ -35,19 +35,19 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
             var indexValues = dataType.Editor.PropertyIndexValueFactory.GetIndexValues(property, culture, string.Empty, true);
 
-            if (indexValues == null || !indexValues.Any()) return new KeyValuePair<string, string>(property.Alias, string.Empty);
+            if (indexValues == null || !indexValues.Any()) return new KeyValuePair<string, object>(property.Alias, string.Empty);
 
             var indexValue = indexValues.First();
 
             if (Converters.ContainsKey(property.PropertyType.PropertyEditorAlias))
             {
                 var result = Converters[property.PropertyType.PropertyEditorAlias].Invoke(indexValue);
-                return new KeyValuePair<string, string>(property.Alias, result);
+                return new KeyValuePair<string, object>(property.Alias, result);
             }
 
-            return new KeyValuePair<string, string>(indexValue.Key, ParseIndexValue(indexValue.Value));
+            return new KeyValuePair<string, object>(indexValue.Key, ParseIndexValue(indexValue.Value));
         }
-        public virtual KeyValuePair<string, string> GetValue(IPublishedProperty property, string culture)
+        public virtual KeyValuePair<string, object> GetValue(IPublishedProperty property, string culture)
         {
 
             var listOfObjects = new List<object> { property.GetSourceValue(culture) };
@@ -57,10 +57,10 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
             if (Converters.ContainsKey(property.PropertyType.EditorAlias))
             {
                 var result = Converters[property.PropertyType.EditorAlias].Invoke(indexValue);
-                return new KeyValuePair<string, string>(property.Alias, result);
+                return new KeyValuePair<string, object>(property.Alias, result);
             }
 
-            return new KeyValuePair<string, string>(indexValue.Key, ParseIndexValue(indexValue.Value));
+            return new KeyValuePair<string, object>(indexValue.Key, ParseIndexValue(indexValue.Value));
         }
 
         public string ParseIndexValue(IEnumerable<object> values)
@@ -77,7 +77,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
             return string.Empty;
         }
 
-        private string ConvertMediaPicker(KeyValuePair<string, IEnumerable<object>> indexValue)
+        private object ConvertMediaPicker(KeyValuePair<string, IEnumerable<object>> indexValue)
         {
             var list = new List<string>();
 

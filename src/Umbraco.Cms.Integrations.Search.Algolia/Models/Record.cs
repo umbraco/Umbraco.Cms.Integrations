@@ -6,7 +6,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Models
     {
         public Record()
         {
-            Data = new Dictionary<string, string>();
+            Data = new Dictionary<string, object>();
         }
 
         public string ObjectID { get; set; }
@@ -33,6 +33,6 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Models
 
         public string Url { get; set; }
 
-        public Dictionary<string, string> Data { get; set; }
+        public Dictionary<string, object> Data { get; set; }
     }
 }

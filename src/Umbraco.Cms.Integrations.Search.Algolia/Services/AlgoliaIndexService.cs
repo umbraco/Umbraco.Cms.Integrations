@@ -30,7 +30,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
                     : new List<Record> {
                         new Record {
                             ObjectID = Guid.NewGuid().ToString(),
-                            Data = new Dictionary<string, string>()}
+                            Data = new Dictionary<string, object>()}
                     }, autoGenerateObjectId: false);
 
                 if (payload == null)
