@@ -1,22 +1,18 @@
-﻿using System.Diagnostics;
-using Algolia.Search.Models.Search;
+﻿using Algolia.Search.Models.Search;
 
 using Microsoft.AspNetCore.Mvc;
 
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using Umbraco.Cms.Core.Routing;
-using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Core.Services.Implement;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Integrations.Search.Algolia.Builders;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Integrations.Search.Algolia.Services;
 using Umbraco.Cms.Web.BackOffice.Controllers;
-using Umbraco.Cms.Web.Common;
 using Umbraco.Cms.Web.Common.Attributes;
-using Umbraco.Extensions;
+using Umbraco.Cms.Core.Routing;
+using Umbraco.Cms.Core.Services;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 {
@@ -28,8 +24,6 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
         private readonly IAlgoliaSearchService<SearchResponse<Record>> _searchService;
 
         private readonly IAlgoliaIndexDefinitionStorage<AlgoliaIndex> _indexStorage;
-
-        private readonly UmbracoHelper _umbracoHelper;
 
         private readonly IUserService _userService;
 
@@ -47,7 +41,6 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             IAlgoliaIndexService indexService, 
             IAlgoliaSearchService<SearchResponse<Record>> searchService, 
             IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
-            UmbracoHelper umbracoHelper, 
             IUserService userService,
             IPublishedUrlProvider urlProvider,
             IContentService contentService,
@@ -60,8 +53,6 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             _searchService = searchService;
 
             _indexStorage = indexStorage;
-
-            _umbracoHelper = umbracoHelper;
 
             _userService = userService;
 
@@ -130,7 +121,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
                 {
                     using var ctx = _umbracoContextFactory.EnsureUmbracoContext();
                     var contentType = ctx.UmbracoContext.Content.GetContentType(contentDataItem.ContentType.Alias);
-                    var contentItems = ctx.UmbracoContext.Content.GetByContentType(contentType);
+
+                    var contentItems = _contentService.GetPagedOfType(contentType.Id, 0, int.MaxValue, out _, null);
 
                     _logger.LogInformation("Building index for {ContentType} with {Count} items", contentDataItem.ContentType.Alias, contentItems.Count());
 

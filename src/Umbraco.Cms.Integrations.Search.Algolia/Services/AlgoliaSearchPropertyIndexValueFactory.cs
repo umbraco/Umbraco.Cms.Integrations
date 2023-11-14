@@ -1,20 +1,19 @@
 ﻿using System.Text.Json;
 
 using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Services;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 {
     public class AlgoliaSearchPropertyIndexValueFactory : IAlgoliaSearchPropertyIndexValueFactory
     {
-        private readonly IDataTypeService _dataTypeService;
-
+        private readonly PropertyEditorCollection _propertyEditors;
         private readonly IMediaService _mediaService;
 
-        public AlgoliaSearchPropertyIndexValueFactory(IDataTypeService dataTypeService, IMediaService mediaService)
+        public AlgoliaSearchPropertyIndexValueFactory(IMediaService mediaService, PropertyEditorCollection propertyEditors)
         {
-            _dataTypeService = dataTypeService;
+            _propertyEditors = propertyEditors;
 
             _mediaService = mediaService;
 
@@ -28,12 +27,13 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 
         public virtual KeyValuePair<string, string> GetValue(IProperty property, string culture)
         {
-            var dataType = _dataTypeService.GetByEditorAlias(property.PropertyType.PropertyEditorAlias)
-                .FirstOrDefault(p => p.Id == property.PropertyType.DataTypeId);
+            var propertyEditor = _propertyEditors[property.PropertyType.PropertyEditorAlias];
+            if (propertyEditor == null)
+            {
+                return default;
+            }
 
-            if (dataType == null) return default;
-
-            var indexValues = dataType.Editor.PropertyIndexValueFactory.GetIndexValues(property, culture, string.Empty, true);
+            var indexValues = propertyEditor.PropertyIndexValueFactory.GetIndexValues(property, culture, string.Empty, true);
 
             if (indexValues == null || !indexValues.Any()) return new KeyValuePair<string, string>(property.Alias, string.Empty);
 
@@ -42,21 +42,6 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
             if (Converters.ContainsKey(property.PropertyType.PropertyEditorAlias))
             {
                 var result = Converters[property.PropertyType.PropertyEditorAlias].Invoke(indexValue);
-                return new KeyValuePair<string, string>(property.Alias, result);
-            }
-
-            return new KeyValuePair<string, string>(indexValue.Key, ParseIndexValue(indexValue.Value));
-        }
-        public virtual KeyValuePair<string, string> GetValue(IPublishedProperty property, string culture)
-        {
-
-            var listOfObjects = new List<object> { property.GetSourceValue(culture) };
-
-            var indexValue = new KeyValuePair<string, IEnumerable<object>>(property.Alias, listOfObjects);
-            
-            if (Converters.ContainsKey(property.PropertyType.EditorAlias))
-            {
-                var result = Converters[property.PropertyType.EditorAlias].Invoke(indexValue);
                 return new KeyValuePair<string, string>(property.Alias, result);
             }
 
