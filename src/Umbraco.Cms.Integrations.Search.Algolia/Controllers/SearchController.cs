@@ -130,7 +130,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
                 {
                     using var ctx = _umbracoContextFactory.EnsureUmbracoContext();
                     var contentType = ctx.UmbracoContext.Content.GetContentType(contentDataItem.ContentType.Alias);
-                    var contentItems = ctx.UmbracoContext.Content.GetByContentType(contentType);
+                    var contentItems = _contentService.GetPagedOfType(contentType.Id, 0, int.MaxValue, out _, null);
 
                     _logger.LogInformation("Building index for {ContentType} with {Count} items", contentDataItem.ContentType.Alias, contentItems.Count());
 

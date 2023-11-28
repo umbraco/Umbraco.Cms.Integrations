@@ -26,56 +26,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
 
             _algoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
         }
-        public ContentRecordBuilder BuildFromContent(IPublishedContent content, Func<IPublishedProperty, bool> filter = null)
-        {
-            _record.ObjectID = content.Key.ToString();
 
-            _record.Id = content.Id;
-            _record.Name = content.Name;
-
-            _record.CreateDate = content.CreateDate.ToString();
-            _record.CreatorName = content.CreatorName();
-            _record.UpdateDate = content.UpdateDate.ToString();
-            _record.WriterName = content.WriterName();
-
-            _record.TemplateId = content.TemplateId.HasValue ? content.TemplateId.Value : -1;
-            _record.Level = content.Level;
-            _record.Path = content.Path;
-            _record.ContentTypeAlias = content.ContentType.Alias;
-            _record.Url = _urlProvider.GetUrl(content.Id);
-
-            if (content.Cultures.Any())
-            {
-                foreach (var culture in content.Cultures)
-                {
-                    _record.Data.Add($"name{(!string.IsNullOrEmpty(culture.Value.Culture) ? "-" + culture.Value.Culture : "")}", culture.Value.Name);
-                    _record.Data.Add($"url{(!string.IsNullOrEmpty(culture.Value.Culture) ? "-" + culture.Value.Culture : "")}", content.Url(culture.Value.Culture));
-                }
-            }
-
-            foreach (var property in content.Properties.Where(filter ?? (p => true)))
-            {
-                if (!_record.Data.ContainsKey(property.Alias))
-                {
-                    if (property.PropertyType.VariesByCulture())
-                    {
-                        foreach (var culture in content.Cultures)
-                        {
-                            var indexValue = _algoliaSearchPropertyIndexValueFactory.GetValue(property, culture.Value.Culture);
-                            _record.Data.Add($"{indexValue.Key}-{culture.Value.Culture}", indexValue.Value);
-                        }
-                    }
-                    else
-                    {
-                        var indexValue = _algoliaSearchPropertyIndexValueFactory.GetValue(property, string.Empty);
-                        _record.Data.Add(indexValue.Key, indexValue.Value);
-                    }
-
-                }
-            }
-
-            return this;
-        }
         public ContentRecordBuilder BuildFromContent(IContent content, Func<IProperty, bool> filter = null)
         {
             _record.ObjectID = content.Key.ToString();

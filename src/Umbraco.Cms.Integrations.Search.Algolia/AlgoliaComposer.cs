@@ -7,6 +7,7 @@ using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Integrations.Search.Algolia;
 using Umbraco.Cms.Integrations.Search.Algolia.Configuration;
+using Umbraco.Cms.Integrations.Search.Algolia.Extensions;
 using Umbraco.Cms.Integrations.Search.Algolia.Handlers;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
@@ -21,8 +22,8 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
             builder.AddNotificationHandler<UmbracoApplicationStartingNotification, RunAlgoliaIndicesMigration>();
 
             builder.AddNotificationAsyncHandler<ContentCacheRefresherNotification, AlgoliaContentCacheRefresherHandler>();
-
-            var options = builder.Services.AddOptions<AlgoliaSettings>()
+            
+            _ = builder.Services.AddOptions<AlgoliaSettings>()
                 .Bind(builder.Config.GetSection(Constants.SettingsPath));
 
             builder.Services.AddSingleton<IAlgoliaIndexService, AlgoliaIndexService>();
@@ -32,6 +33,8 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
             builder.Services.AddScoped<IAlgoliaIndexDefinitionStorage<AlgoliaIndex>, AlgoliaIndexDefinitionStorage>();
 
             builder.Services.AddScoped<IAlgoliaSearchPropertyIndexValueFactory, AlgoliaSearchPropertyIndexValueFactory>();
+
+            builder.AddAlgoliaConverters();
         }
 
     }
