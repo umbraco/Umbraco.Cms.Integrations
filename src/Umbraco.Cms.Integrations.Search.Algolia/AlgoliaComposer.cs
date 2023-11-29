@@ -23,7 +23,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
 
             builder.AddNotificationAsyncHandler<ContentCacheRefresherNotification, AlgoliaContentCacheRefresherHandler>();
             
-            _ = builder.Services.AddOptions<AlgoliaSettings>()
+           builder.Services.AddOptions<AlgoliaSettings>()
                 .Bind(builder.Config.GetSection(Constants.SettingsPath));
 
             builder.Services.AddSingleton<IAlgoliaIndexService, AlgoliaIndexService>();
