@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines a custom index converter.
     /// </summary>
-    public interface IConverter
+    public interface IAlgoliaIndexValueConverter
     {
         /// <summary>
         /// Gets the name of the converter.
@@ -11,8 +11,8 @@
         string Name { get; }
 
         /// <summary>
-        /// Parses the index value.
+        /// Parses the index values.
         /// </summary>
-        object ParseIndexValue(KeyValuePair<string, IEnumerable<object>> indexValue);
+        object ParseIndexValues(IEnumerable<object> indexValues);
     }
 }

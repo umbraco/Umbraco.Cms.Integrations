@@ -37,11 +37,11 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
             var converter = _converterCollection.FirstOrDefault(p => p.Name == property.PropertyType.PropertyEditorAlias);
             if (converter != null)
             {
-                var result = converter.ParseIndexValue(indexValue);
+                var result = converter.ParseIndexValues(indexValue.Value);
                 return new KeyValuePair<string, object>(property.Alias, result);
             }
 
-            return new KeyValuePair<string, object>(indexValue.Key, indexValue.Value);
+            return new KeyValuePair<string, object>(property.Alias, indexValue.Value);
         }
     }
 }

@@ -2,15 +2,15 @@
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 {
-    public class UmbracoTagsConverter : IConverter
+    public class UmbracoTagsConverter : IAlgoliaIndexValueConverter
     {
         public string Name => Core.Constants.PropertyEditors.Aliases.Tags;
 
-        public object ParseIndexValue(KeyValuePair<string, IEnumerable<object>> indexValue)
+        public object ParseIndexValues(IEnumerable<object> indexValues)
         {
-            if (indexValue.Value != null && indexValue.Value.Any())
+            if (indexValues != null && indexValues.Any())
             {
-                return indexValue.Value;
+                return indexValues;
             }
 
             return Enumerable.Empty<string>();

@@ -3,7 +3,7 @@ using Umbraco.Cms.Core.Services;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 {
-    public class UmbracoMediaPickerConverter : IConverter
+    public class UmbracoMediaPickerConverter : IAlgoliaIndexValueConverter
     {
         private readonly IMediaService _mediaService;
 
@@ -11,11 +11,11 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 
         public string Name => Core.Constants.PropertyEditors.Aliases.MediaPicker3;
 
-        public object ParseIndexValue(KeyValuePair<string, IEnumerable<object>> indexValue)
+        public object ParseIndexValues(IEnumerable<object> indexValues)
         {
             var list = new List<string>();
 
-            var parsedIndexValue = ParseIndexValue(indexValue.Value);
+            var parsedIndexValue = ParseIndexValue(indexValues);
 
             if (string.IsNullOrEmpty(parsedIndexValue)) return list;
 

@@ -1,16 +1,14 @@
-﻿using System.Windows.Markup;
-
-namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
+﻿namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 {
-    public class UmbracoIntegerConverter : IConverter
+    public class UmbracoIntegerConverter : IAlgoliaIndexValueConverter
     {
         public string Name => Core.Constants.PropertyEditors.Aliases.Integer;
 
-        public object ParseIndexValue(KeyValuePair<string, IEnumerable<object>> indexValue)
+        public object ParseIndexValues(IEnumerable<object> indexValues)
         {
-            if (indexValue.Value != null && indexValue.Value.Any())
+            if (indexValues != null && indexValues.Any())
             {
-                var value = indexValue.Value.FirstOrDefault();
+                var value = indexValues.FirstOrDefault();
 
                 return value ?? default(int);
             }
