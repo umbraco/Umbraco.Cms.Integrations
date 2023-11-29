@@ -1,0 +1,19 @@
+﻿namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
+{
+    public class UmbracoIntegerConverter : IAlgoliaIndexValueConverter
+    {
+        public string Name => Core.Constants.PropertyEditors.Aliases.Integer;
+
+        public object ParseIndexValues(IEnumerable<object> indexValues)
+        {
+            if (indexValues != null && indexValues.Any())
+            {
+                var value = indexValues.FirstOrDefault();
+
+                return value ?? default(int);
+            }
+
+            return default(int);
+        }
+    }
+}
