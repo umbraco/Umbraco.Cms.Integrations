@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net472;net50;net60;net70</TargetFrameworks>
+		<TargetFrameworks>net472;net50;net60;net70;net80</TargetFrameworks>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<Title>Umbraco CMS Integrations: Automation - Zapier</Title>
@@ -9,7 +9,7 @@
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Automation.Zapier</PackageProjectUrl>
 		<Product>Umbraco.Cms.Integrations.Automation.Zapier</Product>
-		<Version>1.2.1</Version>
+		<Version>1.2.2</Version>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
 		<PackageIcon>zapier.png</PackageIcon>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
@@ -32,9 +32,15 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net70'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="[11.0.0,)" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,13)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,13)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" version="[11.0.0,13)" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net80'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[13.0.0,14)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[13.0.0,14)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" version="[13.0.0,14)" />
 	</ItemGroup>
 
 	<ItemGroup>

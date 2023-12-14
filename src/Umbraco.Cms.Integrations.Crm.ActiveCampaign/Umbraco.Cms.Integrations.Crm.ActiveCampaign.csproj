@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net60;net70</TargetFrameworks>
+		<TargetFrameworks>net60;net70;net80</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<WarningsAsErrors>Nullable</WarningsAsErrors>
 	</PropertyGroup>
@@ -13,7 +13,7 @@
 		<PackageIconUrl></PackageIconUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main/src/Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>2.0.2</Version>
+		<Version>2.0.3</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
