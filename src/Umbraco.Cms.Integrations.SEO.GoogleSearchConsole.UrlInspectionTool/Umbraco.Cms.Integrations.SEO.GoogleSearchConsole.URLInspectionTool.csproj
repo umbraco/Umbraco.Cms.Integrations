@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net472;net50;net60;net70</TargetFrameworks>
+		<TargetFrameworks>net472;net50;net60;net70;net80</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -10,7 +10,7 @@
 		<PackageIconUrl></PackageIconUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>1.1.2</Version>
+		<Version>1.1.3</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
@@ -33,8 +33,13 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net70'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,)" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,13)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,13)" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net80'">
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[13.0.0,14)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[13.0.0,14)" />
 	</ItemGroup>
 
 	<ItemGroup>
