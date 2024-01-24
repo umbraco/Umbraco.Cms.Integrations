@@ -1,5 +1,4 @@
 ﻿using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
@@ -10,7 +9,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
 {
     public class ContentRecordBuilder
     {
-        private readonly Record _record = new();
+        private Record _record = new();
 
         private readonly IUserService _userService;
 
@@ -18,13 +17,17 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
 
         private readonly IAlgoliaSearchPropertyIndexValueFactory _algoliaSearchPropertyIndexValueFactory;
 
-        public ContentRecordBuilder(IUserService userService, IPublishedUrlProvider urlProvider, IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory)
+        private readonly IRecordBuilderFactory _recordBuilderFactory;
+
+        public ContentRecordBuilder(IUserService userService, IPublishedUrlProvider urlProvider, IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory, IRecordBuilderFactory recordBuilderFactory)
         {
             _userService = userService;
 
             _urlProvider = urlProvider;
 
             _algoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
+
+            _recordBuilderFactory = recordBuilderFactory;
         }
 
         public ContentRecordBuilder BuildFromContent(IContent content, Func<IProperty, bool> filter = null)
@@ -47,6 +50,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
             _record.Path = content.Path;
             _record.ContentTypeAlias = content.ContentType.Alias;
             _record.Url = _urlProvider.GetUrl(content.Id);
+            _record.Data = new();
 
             if (content.PublishedCultures.Count() > 0)
             {
@@ -79,9 +83,28 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
                 }
             }
 
+            AddCustomValues(_record, content);
+
             return this;
         }
 
         public Record Build() => _record;
+
+        protected void SetRecord(Record record)
+        {
+            _record = record;
+        }
+
+        protected virtual ContentRecordBuilder AddCustomValues(Record record, IContent content) 
+        {
+            var recordBuilderService = _recordBuilderFactory.GetRecordBuilderService(content);
+            if (recordBuilderService == null)
+            {
+                return this;
+            }
+
+            _record = recordBuilderService.GetRecord(content, record);
+            return this;
+        }
     }
 }

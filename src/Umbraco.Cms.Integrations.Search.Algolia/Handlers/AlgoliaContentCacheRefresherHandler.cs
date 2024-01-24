@@ -13,6 +13,7 @@ using Umbraco.Cms.Integrations.Search.Algolia.Builders;
 using System.Text.Json;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Core.Sync;
+using Umbraco.Cms.Core.Web;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 {
@@ -34,6 +35,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 
         private readonly IAlgoliaSearchPropertyIndexValueFactory _algoliaSearchPropertyIndexValueFactory;
 
+        private readonly IRecordBuilderFactory _recordBuilderFactory;
+
         public AlgoliaContentCacheRefresherHandler(
             IServerRoleAccessor serverRoleAccessor,
             ILogger<AlgoliaContentCacheRefresherHandler> logger,
@@ -42,7 +45,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             IAlgoliaIndexService indexService,
             IUserService userService,
             IPublishedUrlProvider urlProvider,
-            IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory)
+            IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory, 
+            IRecordBuilderFactory recordBuilderFactory)
         {
             _serverRoleAccessor = serverRoleAccessor;
             _contentService = contentService;
@@ -52,6 +56,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             _userService = userService;
             _urlProvider = urlProvider;
             _algoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
+            _recordBuilderFactory = recordBuilderFactory;
         }
 
         public async Task HandleAsync(ContentCacheRefresherNotification notification, CancellationToken cancellationToken)
@@ -98,7 +103,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
                             .FirstOrDefault(p => p.ContentType.Alias == entity.ContentType.Alias);
                         if (indexConfiguration == null || indexConfiguration.ContentType.Alias != entity.ContentType.Alias) continue;
 
-                        var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory)
+                        var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory, _recordBuilderFactory)
                            .BuildFromContent(entity, (p) => indexConfiguration.Properties.Any(q => q.Alias == p.Alias))
                            .Build();
 
