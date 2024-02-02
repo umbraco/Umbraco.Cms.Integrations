@@ -9,6 +9,10 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify
 
         public const string ProductsApiEndpoint = "https://{0}.myshopify.com/admin/api/{1}/products.json";
 
+        public const string ProductsCountApiEndpoint = "https://{0}.myshopify.com/admin/api/{1}/products/count.json";
+
+        public const int DEFAULT_PAGE_SIZE = 10;
+
         public static class RenderingComponent
         {
             public const string DefaultV8ViewPath = AppPluginFolderPath + "/Render/Products.cshtml";

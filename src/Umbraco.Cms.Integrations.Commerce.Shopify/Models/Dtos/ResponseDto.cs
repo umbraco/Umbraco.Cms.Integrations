@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
 {
@@ -9,6 +7,12 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
     {
         [JsonProperty("isValid")]
         public bool IsValid { get; set; }
+
+        [JsonProperty("nextPageInfo")]
+        public string NextPageInfo { get; set; }
+
+        [JsonProperty("previousPageInfo")]
+        public string PreviousPageInfo { get; set; }
 
         [JsonProperty("isExpired")]
         public bool IsExpired { get; set; }

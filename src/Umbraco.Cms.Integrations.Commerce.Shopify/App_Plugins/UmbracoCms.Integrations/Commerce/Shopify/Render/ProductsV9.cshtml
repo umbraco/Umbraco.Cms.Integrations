@@ -7,10 +7,10 @@
         {
             <dt class="product-title">@product.Title</dt>
             <dd class="product-body">@Html.Raw(product.Body)</dd>
-            <img class="product-image" src="@product.Image" alt="@product.Title" />
+            @if (!string.IsNullOrEmpty(product.Image))
+            {
+                <img class="product-image" src="@product.Image" alt="@product.Title" />
+            }
         }
     </dl>
 }
-
-
-

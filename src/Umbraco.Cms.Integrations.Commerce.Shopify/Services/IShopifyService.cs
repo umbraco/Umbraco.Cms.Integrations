@@ -13,6 +13,10 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 
         void RevokeAccessToken();
 
-        Task<ResponseDto<ProductsListDto>> GetResults();
+        Task<ResponseDto<ProductsListDto>> GetResults(string pageInfo);
+
+        Task<ResponseDto<ProductsListDto>> GetProductsByIds(long[] ids);
+
+        Task<int> GetCount();
     }
 }

@@ -48,21 +48,20 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
         {
             if (inter == null) return null;
 
-            var ids = (long[]) inter;
+            var ids = (long[])inter;
 
-            var t = Task.Run(async () => await _apiService.GetResults());
+            var t = Task.Run(async () => await _apiService.GetProductsByIds(ids));
 
             var result = t.Result;
 
             var products = from p in result.Result.Products
-                where ids.Contains(p.Id)
-                select new ProductViewModel
-                {
-                    Id = p.Id,
-                    Title = p.Title,
-                    Body = p.Body,
-                    Image = p.Image.Src
-                };
+                           select new ProductViewModel
+                           {
+                               Id = p.Id,
+                               Title = p.Title,
+                               Body = p.Body,
+                               Image = p.Image?.Src
+                           };
 
             return products.ToList();
         }
