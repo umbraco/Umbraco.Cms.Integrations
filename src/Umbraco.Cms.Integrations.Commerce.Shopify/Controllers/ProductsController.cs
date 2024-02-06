@@ -6,6 +6,8 @@ using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
 
 using static Umbraco.Cms.Integrations.Commerce.Shopify.ShopifyComposer;
+using System.Linq;
+
 
 #if NETCOREAPP
 using Microsoft.Extensions.Options;
@@ -63,6 +65,17 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Controllers
         [HttpPost]
         public void RevokeAccessToken() => _apiService.RevokeAccessToken();
 
-        public async Task<ResponseDto<ProductsListDto>> GetList() => await _apiService.GetResults();
+        public async Task<ResponseDto<ProductsListDto>> GetList(string pageInfo) => await _apiService.GetResults(pageInfo);
+
+        public async Task<ResponseDto<ProductsListDto>> GetListByIds([FromBody] RequestDto dto) => 
+            await _apiService.GetProductsByIds(dto.Ids.Select(p => (long.Parse(p))).ToArray());
+
+        [HttpGet]
+        public async Task<int> GetTotalPages()
+        {
+            var productsCount = await _apiService.GetCount();
+
+            return productsCount / Constants.DEFAULT_PAGE_SIZE + 1;
+        }
     }
 }

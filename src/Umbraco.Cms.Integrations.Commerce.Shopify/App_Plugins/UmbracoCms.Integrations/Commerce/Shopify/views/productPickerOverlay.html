@@ -76,6 +76,16 @@
                                      position="center">
                         <localize key="content_listViewNoItems">There are no products in the list.</localize>
                     </umb-empty-state>
+                    <!-- Pagination -->
+                    <div class="shopify-pagination flex justify-center" ng-show="!vm.loading">
+                        <umb-pagination page-number="vm.pagination.pageNumber"
+                                        total-pages="vm.pagination.totalPages"
+                                        on-next="vm.nextPage"
+                                        on-prev="vm.prevPage"
+                                        on-change="vm.changePage"
+                                        on-go-to-page="vm.goToPage">
+                        </umb-pagination>
+                    </div>
 
                     <!-- Min Max help messages-->
                     <div class="umb-contentpicker__min-max-help" ng-if="(model.config.validationLimit.max > 1 || model.config.validationLimit.min > 0)">

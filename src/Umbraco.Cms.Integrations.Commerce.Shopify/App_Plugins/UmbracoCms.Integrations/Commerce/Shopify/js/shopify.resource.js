@@ -29,9 +29,17 @@
                         $http.get(`${apiEndpoint}/ValidateAccessToken`),
                         "Failed");
                 },
-                getProductsList: function() {
+                getProductsList: function(pageInfo) {
                     return umbRequestHelper.resourcePromise(
-                        $http.get(`${apiEndpoint}/GetList`), "Failed to get resource");
+                        $http.get(`${apiEndpoint}/GetList?pageInfo=${pageInfo}`), "Failed to get resource");
+                },
+                getProductsByIds: function (ids) {
+                    return umbRequestHelper.resourcePromise(
+                        $http.post(`${apiEndpoint}/GetListByIds`, { ids: ids }), "Failed to get resource");
+                },
+                getTotalPages: function () {
+                    return umbRequestHelper.resourcePromise(
+                        $http.get(`${apiEndpoint}/GetTotalPages`), "Failed to get resource");
                 }
             };
         });

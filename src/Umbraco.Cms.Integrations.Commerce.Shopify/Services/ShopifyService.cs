@@ -10,19 +10,28 @@ using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Resolvers;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Resources;
+using Newtonsoft.Json.Linq;
+using System.Linq;
+using System.Web;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Helpers;
+
+
+
+
 
 #if NETCOREAPP
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-
+using ShopifyLogLevel = Umbraco.Cms.Core.Logging.LogLevel;
 #else
 using System.Configuration;
 using Umbraco.Core.Logging;
+using ShopifyLogLevel = Umbraco.Core.Logging.LogLevel;
 #endif
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
-    public class ShopifyService: IShopifyService
+    public class ShopifyService : IShopifyService
     {
         private readonly JsonSerializerSettings _serializerSettings;
 
@@ -45,8 +54,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
         public static Func<HttpClient> ClientFactory = () => Client;
 
 #if NETCOREAPP
-        public ShopifyService(ILogger<ShopifyService> logger, 
-            IOptions<ShopifySettings> options, IOptions<ShopifyOAuthSettings> oauthOptions, 
+        public ShopifyService(ILogger<ShopifyService> logger,
+            IOptions<ShopifySettings> options, IOptions<ShopifyOAuthSettings> oauthOptions,
             ITokenService tokenService)
         {
             var resolver = new JsonPropertyRenameContractResolver();
@@ -112,11 +121,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 
             if (string.IsNullOrEmpty(accessToken))
             {
-#if NETCOREAPP
-                _umbCoreLogger.LogInformation(LoggingResources.AccessTokenMissing);
-#else
-                _umbCoreLogger.Info<ShopifyService>(message: LoggingResources.AccessTokenMissing);
-#endif
+                Log(ShopifyLogLevel.Information, LoggingResources.AccessTokenMissing);
 
                 return new ResponseDto<ProductsListDto>();
             }
@@ -144,7 +149,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             _tokenService.RemoveParameters(Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyAccessToken);
         }
 
-        public async Task<ResponseDto<ProductsListDto>> GetResults()
+        public async Task<ResponseDto<ProductsListDto>> GetResults(string pageInfo)
         {
             string accessToken;
             if (GetApiConfiguration().Type.Value == ConfigurationType.OAuth.Value)
@@ -156,32 +161,29 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 
             if (string.IsNullOrEmpty(accessToken))
             {
-#if NETCOREAPP
-                _umbCoreLogger.LogInformation(LoggingResources.AccessTokenMissing);
-#else
-                _umbCoreLogger.Info<ShopifyService>(message: LoggingResources.AccessTokenMissing);
-#endif
+                Log(ShopifyLogLevel.Information, LoggingResources.AccessTokenMissing);
 
                 return new ResponseDto<ProductsListDto>();
             }
 
+            var requestUrl = string.IsNullOrEmpty(pageInfo)
+                ? string.Format(Constants.ProductsApiEndpoint,
+                    _settings.Shop,
+                    _settings.ApiVersion) + "?limit=" + Constants.DEFAULT_PAGE_SIZE
+                : string.Format(Constants.ProductsApiEndpoint,
+                    _settings.Shop,
+                    _settings.ApiVersion) + "?page_info=" + pageInfo + "&limit=" + Constants.DEFAULT_PAGE_SIZE;
             var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(string.Format(Constants.ProductsApiEndpoint,
-                    _settings.Shop,
-                    _settings.ApiVersion))
+                RequestUri = new Uri(requestUrl)
             };
             requestMessage.Headers.Add("X-Shopify-Access-Token", accessToken);
 
             var response = await ClientFactory().SendAsync(requestMessage);
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-#if NETCOREAPP
-                _umbCoreLogger.LogError(string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
-#else
-                _umbCoreLogger.Error<ShopifyService>(string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
-#endif
+                Log(ShopifyLogLevel.Error, string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
 
                 return new ResponseDto<ProductsListDto> { Message = response.ReasonPhrase };
             }
@@ -189,14 +191,130 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
-                return new ResponseDto<ProductsListDto>
+                var responseDto = new ResponseDto<ProductsListDto>
                 {
                     IsValid = true,
                     Result = JsonConvert.DeserializeObject<ProductsListDto>(result, _serializerSettings)
                 };
+
+                var pageInfoDetails = response.GetPageInfo();
+                responseDto.PreviousPageInfo = pageInfoDetails.Item1;
+                responseDto.NextPageInfo = pageInfoDetails.Item2;
+
+                return responseDto;
             }
 
             return new ResponseDto<ProductsListDto>();
+        }
+
+        public async Task<ResponseDto<ProductsListDto>> GetProductsByIds(long[] ids)
+        {
+            string accessToken;
+            if (GetApiConfiguration().Type.Value == ConfigurationType.OAuth.Value)
+                _tokenService.TryGetParameters(Constants.AccessTokenDbKey, out accessToken);
+            else
+            {
+                accessToken = _settings.AccessToken;
+            }
+
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                Log(ShopifyLogLevel.Information, LoggingResources.AccessTokenMissing);
+
+                return new ResponseDto<ProductsListDto>();
+            }
+
+            var requestUrl = string.Format(Constants.ProductsApiEndpoint,
+                    _settings.Shop,
+                    _settings.ApiVersion) + "?ids=" + string.Join(",", ids);
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(requestUrl)
+            };
+            requestMessage.Headers.Add("X-Shopify-Access-Token", accessToken);
+
+            var response = await ClientFactory().SendAsync(requestMessage);
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                Log(ShopifyLogLevel.Error, string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
+
+                return new ResponseDto<ProductsListDto> { Message = response.ReasonPhrase };
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                var responseDto = new ResponseDto<ProductsListDto>
+                {
+                    IsValid = true,
+                    Result = JsonConvert.DeserializeObject<ProductsListDto>(result, _serializerSettings)
+                };
+
+                return responseDto;
+            }
+
+            return new ResponseDto<ProductsListDto>();
+        }
+
+        public async Task<int> GetCount()
+        {
+            string accessToken;
+            if (GetApiConfiguration().Type.Value == ConfigurationType.OAuth.Value)
+                _tokenService.TryGetParameters(Constants.AccessTokenDbKey, out accessToken);
+            else
+            {
+                accessToken = _settings.AccessToken;
+            }
+
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                Log(ShopifyLogLevel.Information, LoggingResources.AccessTokenMissing);
+
+                return 0;
+            }
+
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(string.Format(Constants.ProductsCountApiEndpoint,
+                    _settings.Shop,
+                    _settings.ApiVersion))
+            };
+            requestMessage.Headers.Add("X-Shopify-Access-Token", accessToken);
+
+            var response = await ClientFactory().SendAsync(requestMessage);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                Log(ShopifyLogLevel.Information, responseContent);
+
+                return 0;
+            }
+
+            var result = await response.Content.ReadAsStringAsync();
+            return ((JObject)JsonConvert.DeserializeObject(result)).Value<int>("count");
+        }
+
+        private void Log(ShopifyLogLevel logLevel, string message)
+        {
+            if (logLevel == ShopifyLogLevel.Error)
+            {
+#if NETCOREAPP
+                _umbCoreLogger.LogError(message);
+#else
+                _umbCoreLogger.Error<ShopifyService>(message);
+#endif
+            }
+            else if (logLevel == ShopifyLogLevel.Information)
+            {
+#if NETCOREAPP
+                _umbCoreLogger.LogInformation(message);
+#else
+                _umbCoreLogger.Info<ShopifyService>(message: message);
+#endif
+            }
         }
     }
 }

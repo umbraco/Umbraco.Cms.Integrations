@@ -14,18 +14,43 @@
         }
     }
 
+    // pagination
+    vm.pagination = {
+        pageNumber: 1,
+        totalPages: 1,
+        previousPageInfo: '',
+        nextPageInfo: ''
+    };
+    vm.nextPage = nextPage;
+    vm.prevPage = prevPage;
+    vm.changePage = togglePage;
+    vm.goToPage = togglePage;
+
     // step 1. check configuration
     checkConfiguration(function () {
-        // step 2. get products
-        getProducts();
+        // step 2.1 get total pages
+        getTotalPages();
+        // step 2.2 get products
+        getProducts('');
     });
 
-    function getProducts() {
+    function getTotalPages() {
+        umbracoCmsIntegrationsCommerceShopifyResource.getTotalPages().then(function (response) {
+            vm.pagination.totalPages = response;
+        });
+    }
+
+    function getProducts(pageInfo) {
         vm.loading = true;
 
-        umbracoCmsIntegrationsCommerceShopifyResource.getProductsList().then(function (response) {
+        umbracoCmsIntegrationsCommerceShopifyResource.getProductsList(pageInfo).then(function (response) {
             if (response.isValid) {
-
+                if (response.previousPageInfo) {
+                    vm.pagination.previousPageInfo = response.previousPageInfo;
+                }
+                if (response.nextPageInfo) {
+                    vm.pagination.nextPageInfo = response.nextPageInfo;
+                }
                 vm.productsList = response.result.products;
 
                 if ($scope.model.value != undefined && $scope.model.value.length > 0) {
@@ -86,8 +111,9 @@
     }
 
     vm.remove = function (node) {
-        vm.submit(vm.selectedProducts.filter(el => el.id != node.alias));
-        loadProductsPreview();
+        vm.previewNodes = vm.previewNodes.filter(el => el.alias != node.alias);
+        vm.selectedProducts = vm.selectedProducts.filter(el => el.id != node.alias);
+        vm.submit(vm.previewNodes.length == 0 ? [] : vm.selectedProducts.filter(el => el.id != node.alias));
     }
 
     function checkConfiguration(callback) {
@@ -114,19 +140,17 @@
         vm.previewNodes = [];
 
         var ids = $scope.model.value.split(",");
-
-        var list = vm.productsList.filter(el => {
-            var id = ids.find(e => e == el.id);
-            return id !== undefined ? el : null;
-        });
-        vm.selectedProducts = list;
-
-        list.forEach(el => {
-            vm.previewNodes.push({
-                icon: "icon-shopping-basket",
-                name: el.title,
-                alias: el.id
-            });
+        umbracoCmsIntegrationsCommerceShopifyResource.getProductsByIds(ids).then(function (response) {
+            if (response.isValid) {
+                response.result.products.forEach(el => {
+                    vm.selectedProducts.push(el);
+                    vm.previewNodes.push({
+                        icon: "icon-shopping-basket",
+                        name: el.title,
+                        alias: el.id
+                    });
+                })
+            }
         });
     }
 
@@ -145,6 +169,28 @@
 
         if (vm.config.validationLimit.max != null)
             return vm.config.validationLimit.max >= updatedCount;
+    }
+
+    // pagination events
+    function nextPage(pageNumber) {
+        getProducts(vm.pagination.nextPageInfo);
+    }
+
+    function prevPage(pageNumber) {
+        getProducts(vm.pagination.previousPageInfo);
+    }
+
+    function togglePage(pageNumber) {
+        if (pageNumber > vm.pagination.pageNumber) {
+            // go to next
+            getProducts(vm.pagination.nextPageInfo);
+            vm.pagination.pageNumber = vm.pagination.pageNumber + 1;
+        }
+        else {
+            // go to previous
+            getProducts(vm.pagination.previousPageInfo);
+            vm.pagination.pageNumber = vm.pagination.pageNumber - 1;
+        }
     }
 }
 
