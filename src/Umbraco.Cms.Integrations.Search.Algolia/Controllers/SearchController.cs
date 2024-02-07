@@ -29,8 +29,6 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
         private readonly IAlgoliaIndexDefinitionStorage<AlgoliaIndex> _indexStorage;
 
-        private readonly UmbracoHelper _umbracoHelper;
-
         private readonly IUserService _userService;
 
         private readonly IPublishedUrlProvider _urlProvider;
@@ -43,25 +41,25 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
         private readonly ILogger<SearchController> _logger;
 
+        private readonly IRecordBuilderFactory _recordBuilderFactory;
+
         public SearchController(
             IAlgoliaIndexService indexService, 
             IAlgoliaSearchService<SearchResponse<Record>> searchService, 
             IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
-            UmbracoHelper umbracoHelper, 
             IUserService userService,
             IPublishedUrlProvider urlProvider,
             IContentService contentService,
             IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory,
             IUmbracoContextFactory umbracoContextFactory, 
-            ILogger<SearchController> logger)
+            ILogger<SearchController> logger, 
+            IRecordBuilderFactory recordBuilderFactory)
         {
             _indexService = indexService;
             
             _searchService = searchService;
 
             _indexStorage = indexStorage;
-
-            _umbracoHelper = umbracoHelper;
 
             _userService = userService;
 
@@ -74,6 +72,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             _umbracoContextFactory = umbracoContextFactory;
             
             _logger = logger;
+
+            _recordBuilderFactory = recordBuilderFactory;
         }
 
         [HttpGet]
@@ -136,7 +136,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
                     foreach (var contentItem in contentItems.Where(p => !p.Trashed))
                     {
-                        var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory)
+                        var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory, _recordBuilderFactory)
                             .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
                             .Build();
 

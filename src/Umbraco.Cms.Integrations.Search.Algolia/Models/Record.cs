@@ -1,12 +1,27 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Umbraco.Cms.Integrations.Search.Algolia.Models
+﻿namespace Umbraco.Cms.Integrations.Search.Algolia.Models
 {
     public class Record
     {
         public Record()
         {
             Data = new Dictionary<string, object>();
+        }
+
+        public Record(Record record)
+        {
+            ContentTypeAlias = record.ContentTypeAlias;
+            ObjectID = record.ObjectID;
+            Id = record.Id;
+            Name = record.Name;
+            CreateDate = record.CreateDate;
+            CreatorName = record.CreatorName;
+            UpdateDate = record.UpdateDate;
+            WriterName = record.WriterName;
+            TemplateId = record.TemplateId;
+            Level = record.Level;
+            Path = record.Path;
+            Url = record.Url;
+            Data = record.Data;
         }
 
         public string ObjectID { get; set; }
