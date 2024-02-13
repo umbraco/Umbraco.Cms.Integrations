@@ -11,7 +11,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
         public DynamicsMigrationPlan() : base(Constants.MigrationPlanName)
         {
             From(string.Empty)
-                .To<DynamicsMigration>(Constants.TargetStateName);
+                .To<DynamicsMigration>(Constants.TargetStateName)
+                .To<AlterAccessTokenColumnLength>(Constants.AlterAccessTokenColumnLengthTargetStateName);
         }
     }
 }
