@@ -7,7 +7,7 @@
 	<PropertyGroup>
 		<PackageId>Umbraco.Cms.Integrations.Crm.Hubspot.Core</PackageId>
 		<Title>Umbraco CMS Integrations: CRM - Hubspot.Core</Title>
-		<Description>Core package for Umbraco CMS integration with Hubspot.</Description>
+		<Description>Core package for Umbraco CMS integration with HubSpot.</Description>
 		<PackageIconUrl></PackageIconUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main/src/Umbraco.Cms.Integrations.Crm.Hubspot</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
