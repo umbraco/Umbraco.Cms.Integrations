@@ -9,7 +9,9 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
 
         public const string TargetStateName = "dynamicsOAuthConfiguration-db";
 
-        
+        public const string AlterAccessTokenColumnLengthTargetStateName = "dynamicsOAuthConfiguration-alter-access-token-column-length-db";
+
+        public const int AccessTokenFieldSize = 4000;
 
         public const string AppPluginFolderPath = "~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics";
 

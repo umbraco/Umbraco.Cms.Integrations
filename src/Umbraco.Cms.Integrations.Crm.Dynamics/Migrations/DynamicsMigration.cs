@@ -62,7 +62,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
         public int Id { get; set; }
 
         [Column("AccessToken")]
-        [Length(2048)]
+        [Length(Constants.AccessTokenFieldSize)]
         public string AccessToken { get; set; }
 
         [Column("UserId")]
