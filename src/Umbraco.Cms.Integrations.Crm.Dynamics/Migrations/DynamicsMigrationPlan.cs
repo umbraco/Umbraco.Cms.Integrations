@@ -12,7 +12,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
         {
             From(string.Empty)
                 .To<DynamicsMigration>(Constants.TargetStateName)
-                .To<AlterAccessTokenColumnLength>(Constants.AlterAccessTokenColumnLengthTargetStateName);
+                .To<EnsureAccessTokenColumnLength>(Constants.AlterAccessTokenColumnLengthTargetStateName);
         }
     }
 }

@@ -9,9 +9,9 @@ using Umbraco.Core.Migrations;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
 {
-    public class AlterAccessTokenColumnLength : MigrationBase
+    public class EnsureAccessTokenColumnLength : MigrationBase
     {
-        public AlterAccessTokenColumnLength(IMigrationContext context) : base(context)
+        public EnsureAccessTokenColumnLength(IMigrationContext context) : base(context)
         {
         }
 
@@ -22,15 +22,15 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
 #endif
         {
 #if NETCOREAPP
-            Logger.LogDebug("Running migration {0}", nameof(AlterAccessTokenColumnLength));
+            Logger.LogDebug("Running migration {0}", nameof(EnsureAccessTokenColumnLength));
 
 #else
-            Logger.Debug<AlterAccessTokenColumnLength>("Running migration {0}", nameof(AlterAccessTokenColumnLength));
+            Logger.Debug<EnsureAccessTokenColumnLength>("Running migration {0}", nameof(EnsureAccessTokenColumnLength));
 #endif
 
             Alter.Table(Constants.DynamicsOAuthConfigurationTable)
                 .AlterColumn(nameof(DynamicsOAuthConfigurationTable.AccessToken))
-                .AsString(4000)
+                .AsString(Constants.AccessTokenFieldSize)
                 .NotNullable()
                 .Do();
             
