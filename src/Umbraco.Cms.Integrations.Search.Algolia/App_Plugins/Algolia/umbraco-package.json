@@ -1,0 +1,25 @@
+{
+    "$schema": "../../umbraco-package-schema.json",
+    "name": "Algolia Search Management",
+    "version": "0.1.0",
+    "extensions": [
+        {
+            "type": "dashboard",
+            "alias": "Algolia.Dashboard",
+            "name": "Algolia Search Management",
+            "js": "/App_Plugins/Algolia/dist/algolia.js",
+            "elementName": "algolia-dashboard-overview",
+            "weight": -1,
+            "meta": {
+                "label": "Algolia Search Management",
+                "pathname": "algolia-search-management"
+            },
+            "conditions": [
+                {
+                    "alias": "Umb.Condition.SectionAlias",
+                    "match": "Umb.Section.Settings"
+                }
+            ]
+        }
+    ]
+}

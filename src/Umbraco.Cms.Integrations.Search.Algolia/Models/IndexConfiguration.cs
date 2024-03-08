@@ -1,4 +1,6 @@
-﻿namespace Umbraco.Cms.Integrations.Search.Algolia.Models
+﻿using Umbraco.Cms.Integrations.Search.Algolia.Models.ContentTypeDtos;
+
+namespace Umbraco.Cms.Integrations.Search.Algolia.Models
 {
     public class IndexConfiguration
     {
@@ -6,6 +8,6 @@
 
         public string Name { get; set; }
 
-        public List<ContentData> ContentData { get; set; }
+        public IEnumerable<ContentTypeDto> ContentData { get; set; }
     }
 }
