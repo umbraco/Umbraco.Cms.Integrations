@@ -21,5 +21,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels
 
         [JsonProperty("hostname")]
         public string Hostname { get; set; }
+
+        public string RawHtml { get; set; }
     }
 }

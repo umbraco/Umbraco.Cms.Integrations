@@ -6,20 +6,27 @@
     var id = Guid.NewGuid();
 }
 
-@if (Model.IframeEmbedded)
+@if (string.IsNullOrEmpty(Model.RawHtml))
 {
-    <iframe frameBorder="0" style="width:100%;height:100%;" id=@id></iframe>
-    <script>
-        var sandboxSrc = "https://@(Model.Hostname)/t/formsandbox/@(Model.WebsiteId)/@(Model.FormBlockId)?ad="
-            + encodeURIComponent(document.location.toString()); document.getElementById('@id').setAttribute('src', sandboxSrc);
-    </script>
+    @if (Model.IframeEmbedded)
+    {
+        <iframe frameBorder="0" style="width:100%;height:100%;" id=@id></iframe>
+        <script>
+            var sandboxSrc = "https://@(Model.Hostname)/t/formsandbox/@(Model.WebsiteId)/@(Model.FormBlockId)?ad="
+                + encodeURIComponent(document.location.toString()); document.getElementById('@id').setAttribute('src', sandboxSrc);
+        </script>
+    }
+    else
+    {
+        <div data-form-block-id="@Model.FormBlockId"></div>
+        <script src="https://mktdplp102cdn.azureedge.net/public/latest/js/form-loader.js?v=1.84.2007"></script>
+        <div id="@Model.ContainerId"></div>
+        <script src="https://mktdplp102cdn.azureedge.net/public/latest/js/ws-tracking.js?v=1.84.2007"></script>
+        <div class="@Model.ContainerClass" style="display:none"
+             data-website-id="@Model.WebsiteId" data-hostname="@Model.Hostname"></div>
+    }
 }
 else
 {
-    <div data-form-block-id="@Model.FormBlockId"></div>
-    <script src="https://mktdplp102cdn.azureedge.net/public/latest/js/form-loader.js?v=1.84.2007"></script>
-    <div id="@Model.ContainerId"></div>
-    <script src="https://mktdplp102cdn.azureedge.net/public/latest/js/ws-tracking.js?v=1.84.2007"></script>
-    <div class="@Model.ContainerClass" style="display:none" 
-        data-website-id="@Model.WebsiteId" data-hostname="@Model.Hostname"></div>
+    @Html.Raw(Model.RawHtml)
 }

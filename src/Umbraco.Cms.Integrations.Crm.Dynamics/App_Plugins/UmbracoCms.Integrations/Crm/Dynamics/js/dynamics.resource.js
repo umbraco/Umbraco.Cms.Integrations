@@ -24,9 +24,9 @@
                     $http.get(`${apiEndpoint}/GetSystemUserFullName`),
                     "Failed");
             },
-            getForms: function () {
+            getForms: function (module) {
                 return umbRequestHelper.resourcePromise(
-                    $http.get(`${apiEndpoint}/GetForms`),
+                    $http.get(`${apiEndpoint}/GetForms?module=${module}`),
                     "Failed");
             },
             getEmbedCode: function (formId) {

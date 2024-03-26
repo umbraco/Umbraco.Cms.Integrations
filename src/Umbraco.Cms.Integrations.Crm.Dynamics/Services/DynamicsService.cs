@@ -11,6 +11,8 @@ using Newtonsoft.Json.Linq;
 
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
+
 
 #if NETCOREAPP
 using Microsoft.Extensions.Options;
@@ -90,7 +92,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             var result = await response.Content.ReadAsStringAsync();
 
-            var embedCode = JsonConvert.DeserializeObject<ResponseDto<FormDto>>(result);
+            var embedCode = JsonConvert.DeserializeObject<ResponseDto<OutboundFormDto>>(result);
 
             return embedCode.Value.FirstOrDefault() != null ? embedCode.Value.First().EmbedCode : string.Empty;
         }
@@ -110,7 +112,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             if (!response.IsSuccessStatusCode)
             {
-                return !string.IsNullOrEmpty(result) 
+                return !string.IsNullOrEmpty(result)
                     ? JsonConvert.DeserializeObject<IdentityDto>(result)
                     : new IdentityDto { IsAuthorized = false };
             }
@@ -120,6 +122,72 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
                 IsAuthorized = true,
                 UserId = JObject.Parse(result)["UserId"].ToString()
             };
+        }
+
+        public async Task<IEnumerable<FormDto>> GetForms(DynamicsModule module)
+        {
+            var list = new List<FormDto>();
+
+            var oauthConfiguration = _dynamicsConfigurationService.GetOAuthConfiguration();
+
+            if (module == DynamicsModule.Outbound || module == DynamicsModule.Both)
+            {
+                var forms = await Get<OutboundFormDto>(oauthConfiguration.AccessToken, Constants.Modules.OutboundPath);
+                list.AddRange(forms.Value.Select(p => new FormDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Module = DynamicsModule.Outbound
+                }));
+            }
+
+            if (module == DynamicsModule.RealTime || module == DynamicsModule.Both)
+            {
+                var forms = await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath);
+                list.AddRange(forms.Value.Select(p => new FormDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Module = DynamicsModule.RealTime
+                }));
+            }
+
+            return list;
+        }
+
+        public async Task<FormDto> GetRealTimeForm(string id)
+        {
+            var oauthConfiguration = _dynamicsConfigurationService.GetOAuthConfiguration();
+
+            var forms = await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath);
+
+            if (!forms.Value.Any(p => p.Id == id)) return null;
+
+            var form = forms.Value.First(p => p.Id == id);
+            return new FormDto
+            {
+                RawHtml = form.FormHtml
+            };
+        }
+
+        private async Task<ResponseDto<T>> Get<T>(string accessToken, string modulePath)
+            where T: class
+        {
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri($"{_settings.HostUrl}{_settings.ApiPath}{modulePath}")
+            };
+            requestMessage.Headers.Authorization =
+                new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await ClientFactory().SendAsync(requestMessage);
+
+            if (!response.IsSuccessStatusCode) return null;
+
+            var result = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<ResponseDto<T>>(result);
         }
     }
 }
