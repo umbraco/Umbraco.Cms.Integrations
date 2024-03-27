@@ -41,29 +41,33 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
 
             var jObject = JObject.Parse(source.ToString());
 
-            var vm = new FormViewModel();
+            var vm = new FormViewModel
+            {
+                IframeEmbedded = (bool)jObject["iframeEmbedded"]
+            };
 
             var module = (DynamicsModule)Enum.Parse(typeof(DynamicsModule), jObject["module"].ToString());
+
+            vm.Module = module;
+
             if (module == DynamicsModule.Outbound)
             {
 
                 var embedCode = jObject["embedCode"].ToString();
-                var iframeEmbedd = (bool)jObject["iframeEmbedded"];
 
-                vm = new FormViewModel
-                {
-                    IframeEmbedded = iframeEmbedd,
-                    FormBlockId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataFormBlockId),
-                    ContainerId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.ContainerId),
-                    ContainerClass = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.ContainerClass),
-                    WebsiteId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataWebsiteId),
-                    Hostname = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataHostname)
-                };
+                vm.FormBlockId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataFormBlockId);
+                vm.ContainerId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.ContainerId);
+                vm.ContainerClass = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.ContainerClass);
+                vm.WebsiteId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataWebsiteId);
+                vm.Hostname = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataHostname);
             }
             else
             {
                 var form = _dynamicsService.GetRealTimeForm(jObject["id"].ToString()).ConfigureAwait(false).GetAwaiter().GetResult();
-                vm.RawHtml = form.RawHtml;
+                if (form != null)
+                {
+                    vm.Html = form.StandaloneHtml;
+                }
             }
 
             return vm;

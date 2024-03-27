@@ -6,7 +6,7 @@
     var id = Guid.NewGuid();
 }
 
-@if (string.IsNullOrEmpty(Model.RawHtml))
+@if (Model.Module == Umbraco.Cms.Integrations.Crm.Dynamics.Models.DynamicsModule.Outbound)
 {
     @if (Model.IframeEmbedded)
     {
@@ -28,5 +28,12 @@
 }
 else
 {
-    @Html.Raw(Model.RawHtml)
+    @if (Model.IframeEmbedded)
+    {
+        <iframe frameBorder="0" style="width:100%;height:100%;" id=@id src="@Model.StandaloneUrl"></iframe>
+    }
+    else
+    {
+        @Html.Raw(Model.Html)
+    }
 }

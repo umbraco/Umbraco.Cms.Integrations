@@ -12,5 +12,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos
 
         [JsonProperty("msdynmkt_formhtml")]
         public string FormHtml { get; set; }
+
+        [JsonProperty("msdynmkt_standalonehtml")]
+        public string StandaloneHtml { get; set; }
     }
 }

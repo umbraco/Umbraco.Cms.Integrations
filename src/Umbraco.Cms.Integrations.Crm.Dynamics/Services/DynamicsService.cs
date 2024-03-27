@@ -161,12 +161,13 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             var forms = await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath);
 
-            if (!forms.Value.Any(p => p.Id == id)) return null;
+            if (forms == null || !forms.Value.Any(p => p.Id == id)) return null;
 
             var form = forms.Value.First(p => p.Id == id);
             return new FormDto
             {
-                RawHtml = form.FormHtml
+                RawHtml = form.FormHtml,
+                StandaloneHtml = form.StandaloneHtml
             };
         }
 

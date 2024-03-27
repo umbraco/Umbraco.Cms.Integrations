@@ -13,6 +13,9 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos
         [JsonProperty("rawHtml")]
         public string RawHtml { get; set; }
 
+        [JsonProperty("standaloneHtml")]
+        public string StandaloneHtml { get; set; }
+
         [JsonProperty("module")]
         public DynamicsModule Module { get; set; }
     }
