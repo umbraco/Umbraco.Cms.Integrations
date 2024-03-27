@@ -76,7 +76,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
                     }
                     else
                     {
-                        var indexValue = _algoliaSearchPropertyIndexValueFactory.GetValue(property, string.Empty);
+                        var indexValue = _algoliaSearchPropertyIndexValueFactory.GetValue(property, null);
                         _record.Data.Add(indexValue.Key, indexValue.Value);
                     }
 
