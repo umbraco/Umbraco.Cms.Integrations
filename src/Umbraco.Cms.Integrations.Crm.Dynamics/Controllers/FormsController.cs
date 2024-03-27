@@ -12,18 +12,15 @@ using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
 #endif
 using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
-using System.Linq;
 using static Umbraco.Cms.Integrations.Crm.Dynamics.DynamicsComposer;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
 {
@@ -94,26 +91,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
             await _authorizationService.GetAccessTokenAsync(authRequestDto.Code);
 
         [HttpGet]
-        public async Task<ResponseDto<FormDto>> GetForms()
-        {
-            var oauthConfiguration = _dynamicsConfigurationService.GetOAuthConfiguration();
-
-            var requestMessage = new HttpRequestMessage
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri($"{_settings.HostUrl}{_settings.ApiPath}msdyncrm_marketingforms")
-            };
-            requestMessage.Headers.Authorization =
-                new AuthenticationHeaderValue("Bearer", oauthConfiguration.AccessToken);
-
-            var response = await ClientFactory().SendAsync(requestMessage);
-
-            if (!response.IsSuccessStatusCode) return null;
-
-            var result = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<ResponseDto<FormDto>>(result);
-        }
+        public async Task<IEnumerable<FormDto>> GetForms(string module) =>
+            await _dynamicsService.GetForms((DynamicsModule)Enum.Parse(typeof(DynamicsModule), module));
 
         [HttpGet]
         public async Task<string> GetEmbedCode(string formId) => await _dynamicsService.GetEmbedCode(formId);
