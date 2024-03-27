@@ -1,12 +1,13 @@
 ﻿@using Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels;
+@using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
 
-@inherits Umbraco.Web.Mvc.UmbracoViewPage<FormViewModel>
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<FormViewModel>
 
 @{
     var id = Guid.NewGuid();
 }
 
-@if (Model.Module == Umbraco.Cms.Integrations.Crm.Dynamics.Models.DynamicsModule.Outbound)
+@if (Model.Module == DynamicsModule.Outbound)
 {
     @if (Model.IframeEmbedded)
     {
