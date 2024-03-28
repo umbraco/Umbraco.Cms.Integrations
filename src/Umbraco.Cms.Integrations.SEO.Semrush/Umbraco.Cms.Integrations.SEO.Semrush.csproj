@@ -62,10 +62,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Remove="SemrushComponent.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Content Include="semrush.png">
 			<Pack>true</Pack>
 			<PackagePath>\</PackagePath>
