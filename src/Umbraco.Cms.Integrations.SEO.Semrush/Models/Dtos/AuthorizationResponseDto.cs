@@ -5,8 +5,8 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos
 {
     public class AuthorizationResponseDto
     {
-        [JsonProperty("isExpired")]
-        public bool IsExpired { get; set; }
+        [JsonProperty("isAuthorized")]
+        public bool IsAuthorized { get; set; }
 
         [JsonProperty("isValid")]
         public bool IsValid { get; set; }

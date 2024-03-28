@@ -4,7 +4,7 @@
         <umb-editor-container>
             <umb-box>
                 <umb-box-content>
-                    <p><b>Connected:</b> {{ vm.isAccessTokenAvailable }}</p>
+                    <p><b>Connected:</b> {{ vm.isAccessTokenAvailable && vm.isAuthorized }}</p>
                     <p><b>Account:</b> {{ vm.isFreeAccount }}</p>
                     <p ng-if="vm.isAccessTokenAvailable"><b>Access Token:</b> {{ vm.AccessToken }}</p>
                     <umb-button action="vm.onRevokeToken()"
