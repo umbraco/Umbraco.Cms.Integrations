@@ -50,7 +50,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
 
             vm.Module = module;
 
-            if (module == DynamicsModule.Outbound)
+            if (module.HasFlag(DynamicsModule.Outbound))
             {
 
                 var embedCode = jObject["embedCode"].ToString();

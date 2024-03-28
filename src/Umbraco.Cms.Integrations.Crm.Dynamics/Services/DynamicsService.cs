@@ -130,7 +130,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             var oauthConfiguration = _dynamicsConfigurationService.GetOAuthConfiguration();
 
-            if (module == DynamicsModule.Outbound || module == DynamicsModule.Both)
+            if (module.HasFlag(DynamicsModule.Outbound))
             {
                 var forms = await Get<OutboundFormDto>(oauthConfiguration.AccessToken, Constants.Modules.OutboundPath);
                 list.AddRange(forms.Value.Select(p => new FormDto
@@ -141,7 +141,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
                 }));
             }
 
-            if (module == DynamicsModule.RealTime || module == DynamicsModule.Both)
+            if (module.HasFlag(DynamicsModule.RealTime))
             {
                 var forms = await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath);
                 list.AddRange(forms.Value.Select(p => new FormDto

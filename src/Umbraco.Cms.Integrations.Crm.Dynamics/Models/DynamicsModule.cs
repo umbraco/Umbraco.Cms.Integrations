@@ -1,9 +1,12 @@
-﻿namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models
+﻿using System;
+
+namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models
 {
+    [Flags]
     public enum DynamicsModule
     {
-        Outbound,
-        RealTime,
-        Both
+        Outbound = 1,
+        RealTime = 2,
+        Both = Outbound | RealTime
     }
 }

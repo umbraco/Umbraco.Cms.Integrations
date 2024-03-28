@@ -19,7 +19,7 @@
 
     vm.saveForm = function (form) {
 
-        if (form.iframeEmbedded) {
+        if (form.iframeEmbedded && form.module === "Outbound") {
             umbracoCmsIntegrationsCrmDynamicsResource.getEmbedCode(form.id).then(function (response) {
 
                 if (response.length == 0) {
