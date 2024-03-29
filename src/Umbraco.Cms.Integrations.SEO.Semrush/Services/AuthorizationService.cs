@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
 using System.Net.Http;
 using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
+using Newtonsoft.Json.Linq;
+
+using Newtonsoft.Json;
+
 
 #if NETCOREAPP
 using Microsoft.Extensions.Options;
@@ -96,6 +100,16 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
                 SemrushTokenService.SaveParameters(Constants.TokenDbKey, result);
 
                 return result;
+            }
+            else
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                var statusObject = (JObject)JsonConvert.DeserializeObject(responseContent);
+                if (statusObject.ContainsKey("status") && statusObject["status"].ToString() == Constants.BadRefreshToken)
+                {
+                    SemrushTokenService.RemoveParameters(Constants.TokenDbKey);
+                }
             }
 
             return "error";
