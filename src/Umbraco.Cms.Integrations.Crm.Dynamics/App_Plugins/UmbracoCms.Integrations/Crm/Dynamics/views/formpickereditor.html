@@ -18,11 +18,11 @@
                     </div>
                     <div class="dynOverlayGroup" ng-if="vm.isConnected">
                         <ul class="dynFormsList">
-                            <li ng-repeat="form in vm.dynamicsFormsList | orderBy:'name' | filter:vm.searchTerm" ng-click="vm.selectedForm = form"
+                            <li ng-repeat="form in vm.dynamicsFormsList | orderBy:'module' | filter:vm.searchTerm" ng-click="vm.selectedForm = form"
                                 ng-class="{ 'dynFormSelected': vm.selectedForm == form }" role="button" tabindex="0">
                                 <a href="" ng-attr-title="form.name">
                                     <i class="icon-umb-contour"></i>
-                                    <span class="formLine">{{form.name}}</span>
+                                    <span class="formLine">{{form.name}} - {{form.module}}</span>
                                 </a>
                             </li>
                         </ul>

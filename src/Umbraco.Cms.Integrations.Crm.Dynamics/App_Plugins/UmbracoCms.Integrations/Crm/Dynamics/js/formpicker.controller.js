@@ -19,16 +19,18 @@
 
     vm.saveForm = function (form) {
 
-        umbracoCmsIntegrationsCrmDynamicsResource.getEmbedCode(form.id).then(function (response) {
+        if (form.iframeEmbedded && form.module === "Outbound") {
+            umbracoCmsIntegrationsCrmDynamicsResource.getEmbedCode(form.id).then(function (response) {
 
-            if (response.length == 0) {
-                notificationsService.warning("Dynamics API", "Unable to embed selected form. Please check if it is live.");
-            }
+                if (response.length == 0) {
+                    notificationsService.warning("Dynamics API", "Unable to embed selected form. Please check if it is live.");
+                }
 
-            form.embedCode = response;
+                form.embedCode = response;
+            });
+        }
 
-            $scope.model.value = form;
-        });
+        $scope.model.value = form;
     }
 
     vm.removeForm = function () {
@@ -41,13 +43,16 @@
 
     vm.openDynamicsFormPickerOverlay = function () {
 
+        var module = $scope.model.config.module === "Both"
+            ? "Outbound | Real-Time"
+            : $scope.model.config.module;
         var options = {
-            title: "Dynamics - Marketing Forms",
+            title: `Dynamics - ${module} Marketing Forms`,
             subtitle: "Select a form",
+            module: $scope.model.config.module,
             view: "/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics/views/formpickereditor.html",
             size: "medium",
             selectForm: function (form, iframeEmbedded) {
-
                 if (form.id !== undefined) {
                     form.iframeEmbedded = iframeEmbedded;
 
@@ -67,15 +72,14 @@
     function loadForms() {
         vm.loading = true;
         vm.formsLoading = true;
-        umbracoCmsIntegrationsCrmDynamicsResource.getForms().then(function (response) {
+        umbracoCmsIntegrationsCrmDynamicsResource.getForms($scope.model.module).then(function (response) {
             vm.dynamicsFormsList = [];
-            if (response) {
-                response.value.forEach(item => {
+            if (response && response.length > 0) {
+                response.forEach(item => {
                     vm.dynamicsFormsList.push({
-                        id: item.msdyncrm_marketingformid,
-                        name: item.msdyncrm_name,
-                        embedCode: "",
-                        iframeEmbedded: vm.iframeEmbedded
+                        id: item.id,
+                        name: item.name,
+                        module: item.module
                     });
                 });
             }
