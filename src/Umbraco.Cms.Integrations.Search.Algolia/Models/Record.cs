@@ -42,7 +42,7 @@
 
         public int Level { get; set; }
 
-        public string Path { get; set; }
+        public List<string> Path { get; set; }
 
         public string ContentTypeAlias { get; set; }
 

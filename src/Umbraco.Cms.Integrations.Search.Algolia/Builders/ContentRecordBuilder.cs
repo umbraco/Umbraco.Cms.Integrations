@@ -47,7 +47,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
 
             _record.TemplateId = content.TemplateId.HasValue ? content.TemplateId.Value : -1;
             _record.Level = content.Level;
-            _record.Path = content.Path;
+            _record.Path = content.Path.Split(',').ToList();
             _record.ContentTypeAlias = content.ContentType.Alias;
             _record.Url = _urlProvider.GetUrl(content.Id);
             _record.Data = new();
