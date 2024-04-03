@@ -21,6 +21,8 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Controllers
 
         private readonly IHttpClientFactory _httpClientFactory;
 
+        private const string ApiPath = "/api/3/forms";
+
         public FormsController(IOptions<ActiveCampaignSettings> options, IHttpClientFactory httpClientFactory)
         {
             _settings = options.Value;
@@ -32,11 +34,20 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Controllers
         public IActionResult CheckApiAccess() => new JsonResult(new ApiAccessDto(_settings.BaseUrl, _settings.ApiKey));
 
         [HttpGet]
-        public async Task<IActionResult> GetForms()
+        public async Task<IActionResult> GetForms(int page = 1)
         {
             var client = _httpClientFactory.CreateClient(Constants.FormsHttpClient);
 
-            var response = await client.SendAsync(new HttpRequestMessage { Method = HttpMethod.Get });
+            var requestUriString = page == 1
+                ? $"{client.BaseAddress}{ApiPath}&limit={Constants.DEFAULT_PAGE_SIZE}"
+                : $"{client.BaseAddress}{ApiPath}&limit={Constants.DEFAULT_PAGE_SIZE}&offset={(page - 1) * Constants.DEFAULT_PAGE_SIZE}";
+
+            var requestMessage = new HttpRequestMessage { 
+                RequestUri = new Uri(requestUriString),
+                Method = HttpMethod.Get 
+            };
+
+            var response = await client.SendAsync(requestMessage);
 
             var content = await response.Content.ReadAsStringAsync();
 
@@ -61,7 +72,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Controllers
                 new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(client.BaseAddress + "/" + id)
+                    RequestUri = new Uri($"{client.BaseAddress}{ApiPath}/{id}")
                 });
 
             var content = await response.Content.ReadAsStringAsync();

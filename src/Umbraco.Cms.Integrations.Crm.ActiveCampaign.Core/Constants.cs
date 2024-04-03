@@ -9,6 +9,8 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core
 
         public const string FormsHttpClient = "FormsClient";
 
+        public const int DEFAULT_PAGE_SIZE = 10;
+
         public class Resources
         {
             public const string AuthorizationFailed = "ActiveCampaign authorization failed.";
