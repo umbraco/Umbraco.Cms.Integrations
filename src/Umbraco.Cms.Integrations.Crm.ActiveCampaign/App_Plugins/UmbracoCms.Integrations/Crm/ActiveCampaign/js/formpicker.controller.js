@@ -9,6 +9,16 @@
 
     vm.status = "";
 
+    // pagination
+    vm.pagination = {
+        pageNumber: 1,
+        totalPages: 1
+    };
+    vm.nextPage = goToPage;
+    vm.prevPage = goToPage;
+    vm.changePage = goToPage;
+    vm.goToPage = goToPage;
+
     umbracoCmsIntegrationsCrmActiveCampaignResource.checkApiAccess().then(function (response) {
         vm.isApiConfigurationValid = response.isApiConfigurationValid;
         if (response.isApiConfigurationValid) {
@@ -69,12 +79,16 @@
         });
     }
 
-    function loadForms() {
+    function loadForms(page) {
         vm.loading = true;
-        umbracoCmsIntegrationsCrmActiveCampaignResource.getForms().then(function (response) {
+        umbracoCmsIntegrationsCrmActiveCampaignResource.getForms(page).then(function (response) {
+
             vm.formsList = [];
 
             if (response.forms != null) {
+
+                vm.pagination.totalPages = response.meta.totalPages;
+
                 response.forms.forEach(item => {
                     vm.formsList.push({
                         id: item.id,
@@ -86,6 +100,11 @@
 
             vm.loading = false;
         });
+    }
+
+    // pagination events
+    function goToPage(page) {
+        loadForms(page);
     }
 }
 
