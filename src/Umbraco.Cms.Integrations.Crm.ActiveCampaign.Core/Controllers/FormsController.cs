@@ -39,8 +39,8 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Controllers
             var client = _httpClientFactory.CreateClient(Constants.FormsHttpClient);
 
             var requestUriString = page == 1
-                ? $"{client.BaseAddress}{ApiPath}&limit={Constants.DEFAULT_PAGE_SIZE}"
-                : $"{client.BaseAddress}{ApiPath}&limit={Constants.DEFAULT_PAGE_SIZE}&offset={(page - 1) * Constants.DEFAULT_PAGE_SIZE}";
+                ? $"{client.BaseAddress}{ApiPath}&limit={Constants.DefaultPageSize}"
+                : $"{client.BaseAddress}{ApiPath}&limit={Constants.DefaultPageSize}&offset={(page - 1) * Constants.DefaultPageSize}";
 
             var requestMessage = new HttpRequestMessage { 
                 RequestUri = new Uri(requestUriString),
