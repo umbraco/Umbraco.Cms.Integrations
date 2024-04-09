@@ -1,19 +1,17 @@
 ﻿using Microsoft.Extensions.Logging;
-
+using System.Text.Json;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Events;
-using Umbraco.Cms.Core.Notifications;
-using Umbraco.Cms.Core.Services.Changes;
-using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Core.Routing;
-using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
-using Umbraco.Cms.Integrations.Search.Algolia.Services;
 using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Integrations.Search.Algolia.Builders;
-using System.Text.Json;
-using Umbraco.Cms.Integrations.Search.Algolia.Models;
+using Umbraco.Cms.Core.Notifications;
+using Umbraco.Cms.Core.Routing;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Services.Changes;
 using Umbraco.Cms.Core.Sync;
-using Umbraco.Cms.Core.Web;
+using Umbraco.Cms.Integrations.Search.Algolia.Builders;
+using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
+using Umbraco.Cms.Integrations.Search.Algolia.Models;
+using Umbraco.Cms.Integrations.Search.Algolia.Services;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 {
