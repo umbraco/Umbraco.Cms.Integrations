@@ -34,6 +34,13 @@
             public const string OAuthFetchFormsConfigurationFailed = "Unable to retrieve the list of forms from HubSpot. Please review the settings of the form picker property's data type.";
         }
 
+        public static class ManagementApiConfiguration
+        {
+            public const string RootPath = "/umbraco/management/api";
+
+            public const string ApiName = "hubspot-management";
+        }
+
         internal static readonly JsonSerializerSettings SerializationSettings = new JsonSerializerSettings
         {
             MetadataPropertyHandling = MetadataPropertyHandling.Ignore,

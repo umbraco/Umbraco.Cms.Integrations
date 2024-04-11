@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net50;net60;net70;net80</TargetFrameworks>
+		<TargetFrameworks>net80</TargetFrameworks>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -18,28 +18,11 @@
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[9.0.1,10)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[9.0.1,10)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="[9.0.1,10)" />
-	</ItemGroup>
-	
-	<ItemGroup Condition="'$(TargetFramework)' == 'net60'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[10.0.0,11)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[10.0.0,11)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="[10.0.0,11)" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net70'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,13)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,13)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="[11.0.0,13)" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net80'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[13.0.0,14)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[13.0.0,14)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="[13.0.0,14)" />
+	<ItemGroup>
+		<PackageReference Include="Umbraco.Cms.Web.Website" version="[14.0.0--beta001, 15)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[14.0.0--beta001, 15)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" version="[14.0.0--beta001, 15)" />
+		<PackageReference Include="Umbraco.Cms.Api.Common" version="[14.0.0--beta001, 15)" />
 	</ItemGroup>
 
 	<ItemGroup>
