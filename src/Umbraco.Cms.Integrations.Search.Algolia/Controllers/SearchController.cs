@@ -1,20 +1,15 @@
-﻿using System.Diagnostics;
-using Algolia.Search.Models.Search;
-
+﻿using Algolia.Search.Models.Search;
 using Microsoft.AspNetCore.Mvc;
-
-using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Core.Services.Implement;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Integrations.Search.Algolia.Builders;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Integrations.Search.Algolia.Services;
 using Umbraco.Cms.Web.BackOffice.Controllers;
-using Umbraco.Cms.Web.Common;
 using Umbraco.Cms.Web.Common.Attributes;
 using Umbraco.Extensions;
 
@@ -136,7 +131,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
                     foreach (var contentItem in contentItems.Where(p => !p.Trashed))
                     {
-                        var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory, _recordBuilderFactory)
+                        var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory, _recordBuilderFactory, _umbracoContextFactory)
                             .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
                             .Build();
 
