@@ -1,6 +1,7 @@
 ﻿using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Integrations.Search.Algolia.Services;
 using Umbraco.Extensions;
@@ -19,7 +20,12 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
 
         private readonly IRecordBuilderFactory _recordBuilderFactory;
 
-        public ContentRecordBuilder(IUserService userService, IPublishedUrlProvider urlProvider, IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory, IRecordBuilderFactory recordBuilderFactory)
+        private readonly IUmbracoContextFactory _umbracoContextFactory;
+
+        public ContentRecordBuilder(IUserService userService, IPublishedUrlProvider urlProvider, 
+            IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory, 
+            IRecordBuilderFactory recordBuilderFactory,
+            IUmbracoContextFactory umbracoContextFactory)
         {
             _userService = userService;
 
@@ -28,10 +34,14 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
             _algoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
 
             _recordBuilderFactory = recordBuilderFactory;
+
+            _umbracoContextFactory = umbracoContextFactory;
         }
 
         public ContentRecordBuilder BuildFromContent(IContent content, Func<IProperty, bool> filter = null)
         {
+            using var contextReference = _umbracoContextFactory.EnsureUmbracoContext();
+
             _record.ObjectID = content.Key.ToString();
 
             var creator = _userService.GetProfileById(content.CreatorId);
