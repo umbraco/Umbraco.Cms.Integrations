@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Web;
+
+
 
 #if NETCOREAPP
 using Umbraco.Cms.Core.Models;
@@ -35,10 +40,15 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
 
                 var contentProperty = content.Properties.First(p => p.Alias == propertyType.Alias);
 
-                if(IsMedia(contentProperty, out string url))
+                if (IsList(contentProperty, out string value))
+                {
+                    contentDict.Add(propertyType.Alias, value);
+                } else if (IsMedia(contentProperty, out string url))
+                {
                     contentDict.Add(propertyType.Alias, url);
+                }
                 else
-                    contentDict.Add(propertyType.Alias, contentProperty.GetValue().ToString());
+                    contentDict.Add(propertyType.Alias, contentProperty.GetValue()?.ToString());
             }
 
             return contentDict;
@@ -67,16 +77,77 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
             {
                 case Core.Constants.PropertyEditors.Aliases.MediaPicker:
                     var mediaPickerValue = contentProperty.GetValue() as IPublishedContent;
-                    url = mediaPickerValue.Url();
+                    url = mediaPickerValue != null ? mediaPickerValue.Url() : string.Empty;
                     return true;
                 case Core.Constants.PropertyEditors.Aliases.MediaPicker3:
                     var mediaPicker3Value = contentProperty.GetValue() as MediaWithCrops;
-                    url = mediaPicker3Value.LocalCrops.Src;
+                    url = mediaPicker3Value != null ? mediaPicker3Value.LocalCrops.Src : string.Empty;
                     return true;
                 default:
                     url = string.Empty;
                     return false;
             }
+        }
+
+        private static bool IsList(IPublishedProperty contentProperty, out string value)
+        {
+            List<string> items = new List<string>();
+            value = string.Empty;
+            bool isList = false;
+
+            if (contentProperty.GetValue() == null) { return false; }
+
+            var type = contentProperty.GetValue().GetType();
+            if (type == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+
+            if (typeof(IList).IsAssignableFrom(type))
+            {
+                isList = true;
+            }
+
+            foreach (var item in type.GetInterfaces())
+            {
+                if (item.IsGenericType && typeof(IList<>) == item.GetGenericTypeDefinition())
+                {
+                    isList = true;
+                }
+            }
+
+            if (isList)
+            {
+                var contentPropertyValue = contentProperty.GetValue();
+                var contentPropertyValueType = contentPropertyValue.GetType();
+
+                if (contentPropertyValueType.GetProperties().Count(p => p.Name == "Item") == 1)
+                {
+                    var count = contentPropertyValueType.GetProperty("Count").GetValue(contentPropertyValue);
+                    PropertyInfo indexer = contentPropertyValueType.GetProperty("Item");
+
+                    for (int i = 0; i < (int)count; i++)
+                    {
+                        object item = indexer.GetValue(contentProperty.GetValue(), new object[] { i });
+                        var val = item.GetType().GetProperty("Name").GetValue(item).ToString();
+
+                        items.Add(val);
+                    }
+
+                    value = string.Join(", ", items.ToArray());
+                } else
+                {
+                    // is array
+                    foreach (var item in contentPropertyValue as Array)
+                    {
+                        items.Add(item.ToString());
+                    }
+
+                    value = string.Join(", ", items.ToArray());
+                }
+            }
+
+            return isList;
         }
     }
 }
