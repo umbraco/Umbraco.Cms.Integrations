@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
-using Umbraco.Cms.Integrations.Automation.Zapier.Extensions;
 using Umbraco.Cms.Integrations.Automation.Zapier.Helpers;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 
@@ -15,13 +14,21 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
 
         private readonly ZapierService _zapierService;
 
+        private readonly IZapierContentService _zapierContentService;
+
         private readonly ILogger<NewContentPublishedNotification> _logger;
 
-        public NewContentPublishedNotification(ZapierSubscriptionHookService zapierSubscriptionHookService, ZapierService zapierService, ILogger<NewContentPublishedNotification> logger)
+        public NewContentPublishedNotification(
+            ZapierSubscriptionHookService zapierSubscriptionHookService, 
+            ZapierService zapierService, 
+            IZapierContentService zapierContentService,
+            ILogger<NewContentPublishedNotification> logger)
         {
             _zapierSubscriptionHookService = zapierSubscriptionHookService;
 
             _zapierService = zapierService;
+
+            _zapierContentService = zapierContentService;
 
             _logger = logger;
         }
@@ -34,7 +41,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
             {
                 if (_zapierSubscriptionHookService.TryGetByAlias(node.ContentType.Alias, out var zapContentConfigList))
                 {
-                    var content = node.ToContentDictionary();
+                    var content = _zapierContentService.GetContentDictionary(node);
 
                     foreach (var zapContentConfig in zapContentConfigList)
                     {
