@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 
+
 #if NETCOREAPP
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Extensions;
 #else
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Web;
 #endif
 
-namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
+namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 {
-    public static class ContentExtensions
+    public class ZapierContentService : IZapierContentService
     {
-        public static Dictionary<string, string> ToContentTypeDictionary(this IContentType contentType, IPublishedContent content)
+        private readonly IZapierContentFactory _zapierContentFactory;
+
+        public ZapierContentService(IZapierContentFactory zapierContentFactory) =>
+            _zapierContentFactory = zapierContentFactory;
+
+        public Dictionary<string, string> GetContentTypeDictionary(IContentType contentType, IPublishedContent content)
         {
             var contentDict = new Dictionary<string, string>
             {
@@ -35,16 +39,15 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
 
                 var contentProperty = content.Properties.First(p => p.Alias == propertyType.Alias);
 
-                if(IsMedia(contentProperty, out string url))
-                    contentDict.Add(propertyType.Alias, url);
-                else
-                    contentDict.Add(propertyType.Alias, contentProperty.GetValue().ToString());
+                var parser = _zapierContentFactory.Create(contentProperty.PropertyType.EditorAlias);
+
+                contentDict.Add(propertyType.Alias, parser.GetValue(contentProperty));
             }
 
             return contentDict;
         }
 
-        public static Dictionary<string, string> ToContentDictionary(this IContent contentNode)
+        public Dictionary<string, string> GetContentDictionary(IContent contentNode)
         {
             var contentDict = new Dictionary<string, string>
             {
@@ -59,24 +62,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Extensions
             }
 
             return contentDict;
-        }
-
-        private static bool IsMedia(IPublishedProperty contentProperty, out string url)
-        {
-            switch (contentProperty.PropertyType.EditorAlias)
-            {
-                case Core.Constants.PropertyEditors.Aliases.MediaPicker:
-                    var mediaPickerValue = contentProperty.GetValue() as IPublishedContent;
-                    url = mediaPickerValue.Url();
-                    return true;
-                case Core.Constants.PropertyEditors.Aliases.MediaPicker3:
-                    var mediaPicker3Value = contentProperty.GetValue() as MediaWithCrops;
-                    url = mediaPicker3Value.LocalCrops.Src;
-                    return true;
-                default:
-                    url = string.Empty;
-                    return false;
-            }
         }
     }
 }

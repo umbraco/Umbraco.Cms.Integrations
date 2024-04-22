@@ -7,7 +7,6 @@ using Umbraco.Core.Events;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Services;
 using Umbraco.Core.Services.Implement;
-using Umbraco.Cms.Integrations.Automation.Zapier.Extensions;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
 {
@@ -22,13 +21,21 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
 
         private readonly ZapierService _zapierService;
 
+        private readonly IZapierContentService _zapierContentService;
+
         private readonly ILogger _logger;
 
-        public NewContentPublishedComponent(ZapierSubscriptionHookService zapierSubscriptionHookService, ZapierService zapierService, ILogger logger)
+        public NewContentPublishedComponent(
+            ZapierSubscriptionHookService zapierSubscriptionHookService, 
+            ZapierService zapierService, 
+            IZapierContentService zapierContentService,
+            ILogger logger)
         {
             _zapierSubscriptionHookService = zapierSubscriptionHookService;
 
             _zapierService = zapierService;
+
+            _zapierContentService = zapierContentService;
 
             _logger = logger;
         }
@@ -51,7 +58,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Components
             {
                 if (_zapierSubscriptionHookService.TryGetByAlias(node.ContentType.Alias, out var zapContentConfigList))
                 {
-                    var content = node.ToContentDictionary();
+                    var content = _zapierContentService.GetContentDictionary(node);
 
                     foreach (var zapContentConfig in zapContentConfigList)
                     {
