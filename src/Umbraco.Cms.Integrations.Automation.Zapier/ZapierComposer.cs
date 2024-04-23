@@ -50,9 +50,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
             composition.Register<IUserValidationService, UserValidationService>(Lifetime.Scope);
 
-            composition.Register<IZapierContentService, ZapierContentService>(Lifetime.Scope);
+            composition.Register<IZapierContentService, ZapierContentService>(Lifetime.Transient);
 
-            composition.Register<IZapierContentFactory, ZapierContentFactory>(Lifetime.Scope);
+            composition.Register<IZapierContentFactory, ZapierContentFactory>(Lifetime.Transient);
         }
 #endif
 
