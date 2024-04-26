@@ -1,4 +1,6 @@
-﻿namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
+﻿using Umbraco.Cms.Core.Models;
+
+namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 {
     /// <summary>
     /// Defines a custom index converter.
@@ -13,6 +15,6 @@
         /// <summary>
         /// Parses the index values.
         /// </summary>
-        object ParseIndexValues(IEnumerable<object> indexValues);
+        object ParseIndexValues(IProperty property, IEnumerable<object> indexValues);
     }
 }
