@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net60;net70;net80</TargetFrameworks>
+	<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -22,17 +22,17 @@
 		<ApplicationManifest>App_Plugins\UmbracoCms.Integrations\DAM\Aprimo\package.manifest</ApplicationManifest>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net60'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
 		<PackageReference Include="Umbraco.Cms.Web.Website" version="[10.3.0,11)" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[10.3.0,11)" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net70'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
 		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,13)" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,13)" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net80'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
 		<PackageReference Include="Umbraco.Cms.Web.Website" version="[13.0.0,14)" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[13.0.0,14)" />
 	</ItemGroup>
