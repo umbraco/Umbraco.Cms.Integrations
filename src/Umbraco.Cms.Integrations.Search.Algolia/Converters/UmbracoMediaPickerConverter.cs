@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Integrations.Search.Algolia.Extensions;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 {
@@ -12,15 +13,16 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 
         public string Name => Core.Constants.PropertyEditors.Aliases.MediaPicker3;
 
-        public object ParseIndexValues(IProperty property, IEnumerable<object> indexValues)
+        public object ParseIndexValues(IProperty property)
         {
             var list = new List<string>();
 
-            var parsedIndexValue = ParseIndexValue(indexValues);
+            if (!property.TryGetPropertyIndexValue(out string value))
+            {
+                return list;
+            }
 
-            if (string.IsNullOrEmpty(parsedIndexValue)) return list;
-
-            var inputMedia = JsonSerializer.Deserialize<IEnumerable<MediaItem>>(parsedIndexValue);
+            var inputMedia = JsonSerializer.Deserialize<IEnumerable<MediaItem>>(value);
 
             if (inputMedia == null) return string.Empty;
 

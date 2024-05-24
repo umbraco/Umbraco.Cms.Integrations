@@ -13,8 +13,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
         string Name { get; }
 
         /// <summary>
-        /// Parses the index values.
+        /// Parses the property's index values.
         /// </summary>
-        object ParseIndexValues(IProperty property, IEnumerable<object> indexValues);
+        object ParseIndexValues(IProperty property);
     }
 }
