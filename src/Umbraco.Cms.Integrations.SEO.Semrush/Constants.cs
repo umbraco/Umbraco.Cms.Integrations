@@ -11,6 +11,8 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush
 
         public const string SemrushKeywordsEndpoint = "{0}api/v1/keywords/{1}?access_token={2}&phrase={3}&database={4}";
 
+        public const string BadRefreshToken = "BAD_REFRESH_TOKEN";
+
         public static class Configuration
         {
             public const string Settings = "Umbraco:Cms:Integrations:SEO:Semrush:Settings";

@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿using Umbraco.Cms.Core.Models;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 {
@@ -6,7 +6,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
     {
         public string Name => Core.Constants.PropertyEditors.Aliases.Tags;
 
-        public object ParseIndexValues(IEnumerable<object> indexValues)
+        public object ParseIndexValues(IProperty property, IEnumerable<object> indexValues)
         {
             if (indexValues != null && indexValues.Any())
             {

@@ -15,9 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Search", "Search", "{F56605
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Algolia", "Algolia", "{F2CAA1F7-9BED-4EB6-8875-D176B92D393A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Search.Algolia", "Umbraco.Cms.Integrations.Search.Algolia\Umbraco.Cms.Integrations.Search.Algolia.csproj", "{54A624E5-5321-4CC8-B74B-11ABF3605242}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Search.Algolia", "Umbraco.Cms.Integrations.Search.Algolia\Umbraco.Cms.Integrations.Search.Algolia.csproj", "{434608E7-143B-4761-A7E9-328DF0CFAB89}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Testsite.V14", "Umbraco.Cms.Integrations.Testsite.V14\Umbraco.Cms.Integrations.Testsite.V14.csproj", "{2FB01607-6B05-4285-8807-F8028210589A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Testsite.V14", "Umbraco.Cms.Integrations.Testsite.V14\Umbraco.Cms.Integrations.Testsite.V14.csproj", "{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,21 +25,21 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2FB01607-6B05-4285-8807-F8028210589A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2FB01607-6B05-4285-8807-F8028210589A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2FB01607-6B05-4285-8807-F8028210589A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2FB01607-6B05-4285-8807-F8028210589A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{434608E7-143B-4761-A7E9-328DF0CFAB89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{434608E7-143B-4761-A7E9-328DF0CFAB89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{434608E7-143B-4761-A7E9-328DF0CFAB89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{434608E7-143B-4761-A7E9-328DF0CFAB89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F2CAA1F7-9BED-4EB6-8875-D176B92D393A} = {F56605AE-2258-4F61-B454-4247334DFC26}
-		{54A624E5-5321-4CC8-B74B-11ABF3605242} = {F2CAA1F7-9BED-4EB6-8875-D176B92D393A}
+		{434608E7-143B-4761-A7E9-328DF0CFAB89} = {F2CAA1F7-9BED-4EB6-8875-D176B92D393A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FB51E08-A3C8-4DFF-B3CB-E99C2ED021D5}

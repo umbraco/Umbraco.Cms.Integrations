@@ -1,5 +1,4 @@
 ﻿using Algolia.Search.Models.Search;
-
 using Microsoft.Extensions.DependencyInjection;
 
 using Umbraco.Cms.Core.Composing;
@@ -23,9 +22,9 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
             builder.AddNotificationHandler<UmbracoApplicationStartingNotification, RunAlgoliaIndicesMigration>();
 
             builder.AddNotificationAsyncHandler<ContentCacheRefresherNotification, AlgoliaContentCacheRefresherHandler>();
-            
-           builder.Services.AddOptions<AlgoliaSettings>()
-                .Bind(builder.Config.GetSection(Constants.SettingsPath));
+
+            builder.Services.AddOptions<AlgoliaSettings>()
+                 .Bind(builder.Config.GetSection(Constants.SettingsPath));
 
             builder.Services.AddSingleton<IAlgoliaIndexService, AlgoliaIndexService>();
 

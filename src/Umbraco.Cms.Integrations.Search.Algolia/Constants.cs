@@ -9,11 +9,13 @@ namespace Umbraco.Cms.Integrations.Search.Algolia
 
         public static class ManagementApi
         {
-            public const string RootPath = "/umbraco/algolia-search/management/api";
+            public const string RootPath = "algolia-search/management/api";
 
             public const string ApiTitle = "Algolia Search Management API";
 
             public const string ApiName = "algolia-search-management";
+
+            public const string GroupName = "AlgoliaSearch";
         }
     }
 }
