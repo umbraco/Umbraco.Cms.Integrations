@@ -12,7 +12,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "watch": "vite build --watch",
-    "generate:api": "openapi-ts --input https://localhost:44340/umbraco/swagger/AlgoliaSearch/swagger.json --output src/generated --debug true --enums typescript --lint true --schemas false"
+    "generate:api": "openapi-ts --input https://localhost:44340/umbraco/swagger/AlgoliaSearch/swagger.json --output Client/src/api --debug true --enums typescript --lint true --schemas false"
   },
   "dependencies": {
     "lit": "^3.1.2"
