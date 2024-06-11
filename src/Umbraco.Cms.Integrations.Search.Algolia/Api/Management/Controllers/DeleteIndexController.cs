@@ -41,21 +41,13 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
         [HttpDelete("index/{id:int}")]
         public async Task<IActionResult> DeleteIndex(int id)
         {
-            try
-            {
-                var indexName = IndexStorage.GetById(id).Name;
+            var indexName = IndexStorage.GetById(id).Name;
 
-                IndexStorage.Delete(id);
+            IndexStorage.Delete(id);
 
-                await IndexService.DeleteIndex(indexName);
+            await IndexService.DeleteIndex(indexName);
 
-                return Ok(Result.Ok());
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, ex.Message);
-                throw;
-            }
+            return Ok(Result.Ok());
         }
 
     }

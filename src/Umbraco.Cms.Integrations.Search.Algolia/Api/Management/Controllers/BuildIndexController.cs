@@ -43,41 +43,33 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
         [HttpPost("index/build")]
         public async Task<IActionResult> BuildIndex([FromBody] IndexConfiguration indexConfiguration)
         {
-            try
+            var index = IndexStorage.GetById(indexConfiguration.Id);
+
+            var payload = new List<Record>();
+
+            var indexContentData = JsonSerializer.Deserialize<IEnumerable<ContentTypeDto>>(index.SerializedData);
+
+            foreach (var contentDataItem in indexContentData)
             {
-                var index = IndexStorage.GetById(indexConfiguration.Id);
+                using var ctx = UmbracoContextFactory.EnsureUmbracoContext();
+                var contentType = ctx.UmbracoContext.Content.GetContentType(contentDataItem.Alias);
+                var contentItems = ContentService.GetPagedOfType(contentType.Id, 0, int.MaxValue, out _, null);
 
-                var payload = new List<Record>();
+                Logger.LogInformation("Building index for {ContentType} with {Count} items", contentDataItem.Alias, contentItems.Count());
 
-                var indexContentData = JsonSerializer.Deserialize<IEnumerable<ContentTypeDto>>(index.SerializedData);
-
-                foreach (var contentDataItem in indexContentData)
+                foreach (var contentItem in contentItems.Where(p => !p.Trashed))
                 {
-                    using var ctx = UmbracoContextFactory.EnsureUmbracoContext();
-                    var contentType = ctx.UmbracoContext.Content.GetContentType(contentDataItem.Alias);
-                    var contentItems = ContentService.GetPagedOfType(contentType.Id, 0, int.MaxValue, out _, null);
+                    var record = new ContentRecordBuilder(UserService, UrlProvider, AlgoliaSearchPropertyIndexValueFactory, RecordBuilderFactory, UmbracoContextFactory)
+                        .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
+                        .Build();
 
-                    Logger.LogInformation("Building index for {ContentType} with {Count} items", contentDataItem.Alias, contentItems.Count());
-
-                    foreach (var contentItem in contentItems.Where(p => !p.Trashed))
-                    {
-                        var record = new ContentRecordBuilder(UserService, UrlProvider, AlgoliaSearchPropertyIndexValueFactory, RecordBuilderFactory, UmbracoContextFactory)
-                            .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
-                            .Build();
-
-                        payload.Add(record);
-                    }
+                    payload.Add(record);
                 }
-
-                var result = await IndexService.PushData(index.Name, payload);
-
-                return Ok(result);
             }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, ex.Message);
-                throw;
-            }
+
+            var result = await IndexService.PushData(index.Name, payload);
+
+            return Ok(result);
         }
     }
 }

@@ -43,28 +43,20 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
         [HttpPost("index")]
         public async Task<IActionResult> SaveIndex([FromBody] IndexConfiguration index)
         {
-            try
+            IndexStorage.AddOrUpdate(new AlgoliaIndex
             {
-                IndexStorage.AddOrUpdate(new AlgoliaIndex
-                {
-                    Id = index.Id,
-                    Name = index.Name,
-                    SerializedData = JsonSerializer.Serialize(index.ContentData
+                Id = index.Id,
+                Name = index.Name,
+                SerializedData = JsonSerializer.Serialize(index.ContentData
                         .Where(p => p.Selected && p.Properties.Any(q => q.Selected))),
-                    Date = DateTime.Now
-                });
+                Date = DateTime.Now
+            });
 
-                var result = await IndexService.IndexExists(index.Name)
-                    ? Result.Ok()
-                    : await IndexService.PushData(index.Name);
+            var result = await IndexService.IndexExists(index.Name)
+                ? Result.Ok()
+                : await IndexService.PushData(index.Name);
 
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, ex.Message);
-                throw;
-            }
+            return Ok(result);
         }
     }
 }
