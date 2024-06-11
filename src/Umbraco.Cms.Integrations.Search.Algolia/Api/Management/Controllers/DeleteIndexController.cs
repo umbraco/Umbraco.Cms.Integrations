@@ -1,4 +1,5 @@
 ﻿using Algolia.Search.Models.Search;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Routing;
@@ -11,6 +12,7 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
 {
+    [ApiVersion("1.0")]
     public class DeleteIndexController : SearchControllerBase
     {
         public DeleteIndexController(
@@ -47,11 +49,12 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
 
                 await IndexService.DeleteIndex(indexName);
 
-                return new JsonResult(Result.Ok());
+                return Ok(Result.Ok());
             }
             catch (Exception ex)
             {
-                return new JsonResult(Result.Fail(ex.Message));
+                Logger.LogError(ex, ex.Message);
+                throw;
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using Algolia.Search.Models.Search;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Routing;
@@ -11,6 +12,7 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
 {
+    [ApiVersion("1.0")]
     public class SearchIndexController : SearchControllerBase
     {
         public SearchIndexController(
@@ -51,7 +53,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
                 Hits = searchResults.Hits.Select(p => p.Data.ToDictionary(x => x.Key, y => y.Value.ToString())).ToList()
             };
 
-            return new JsonResult(response);
+            return Ok(response);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
     [BackOfficeRoute($"{Constants.ManagementApi.RootPath}/v{{version:apiVersion}}/search")]
     [Authorize(Policy = AuthorizationPolicies.BackOfficeAccess)]
     [MapToApi(Constants.ManagementApi.GroupName)]
-    public abstract class SearchControllerBase 
+    public abstract class SearchControllerBase : Controller
     {
         protected IAlgoliaIndexService IndexService { get; }
 

@@ -17,7 +17,6 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
 {
     [ApiVersion("1.0")]
-    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
     public class GetIndicesController : SearchControllerBase
     {
         public GetIndicesController(
@@ -46,14 +45,16 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
 
         [HttpGet("index")]
         [ProducesResponseType(typeof(IEnumerable<IndexConfiguration>), StatusCodes.Status200OK)]
-        public IEnumerable<IndexConfiguration> GetIndices()
+        public IActionResult GetIndices()
         {
-            return IndexStorage.Get().Select(p => new IndexConfiguration
+            var indices = IndexStorage.Get().Select(p => new IndexConfiguration
             {
                 Id = p.Id,
                 Name = p.Name,
                 ContentData = JsonSerializer.Deserialize<IEnumerable<ContentTypeDto>>(p.SerializedData)
             });
+
+            return Ok(indices);
         }
     }
 }

@@ -17,7 +17,6 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
 {
     [ApiVersion("1.0")]
-    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
     public class GetContentTypesController : SearchControllerBase
     {
         private readonly IContentTypeService _contentTypeService;
@@ -106,7 +105,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
                 });
             }
 
-            return new JsonResult(list);    
+            return Ok(list);    
         }
 
     }

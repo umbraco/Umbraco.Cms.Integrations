@@ -1,6 +1,7 @@
 ﻿using Algolia.Search.Models.Search;
 using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
@@ -37,6 +38,19 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
             builder.Services.AddScoped<IAlgoliaSearchPropertyIndexValueFactory, AlgoliaSearchPropertyIndexValueFactory>();
 
             builder.AddAlgoliaConverters();
+
+            // Generate Swagger documentation for Algolia Search API
+            builder.Services.Configure<SwaggerGenOptions>(options =>
+            {
+                options.SwaggerDoc(
+                    Constants.ManagementApi.GroupName,
+                    new OpenApiInfo
+                    {
+                        Title = Constants.ManagementApi.ApiTitle,
+                        Version = "Latest",
+                        Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling indices."
+                    });
+            });
         }
 
     }

@@ -3,15 +3,22 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20.9 <21",
+    "npm": ">=10.1 < 11"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "watch": "vite build --watch",
+    "generate:api": "openapi-ts --input https://localhost:44340/umbraco/swagger/AlgoliaSearch/swagger.json --output src/generated --debug true --enums typescript --lint true --schemas false"
   },
   "dependencies": {
     "lit": "^3.1.2"
   },
   "devDependencies": {
+    "@hey-api/openapi-ts": "^0.37.3",
     "@umbraco-cms/backoffice": "^14.0.0",
     "eslint": "^9.4.0",
     "typescript": "^5.2.2",

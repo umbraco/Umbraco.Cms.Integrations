@@ -1,4 +1,5 @@
 ﻿using Algolia.Search.Models.Search;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -12,6 +13,7 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
 {
+    [ApiVersion("1.0")]
     public class SaveIndexController : SearchControllerBase
     {
         public SaveIndexController(
@@ -56,11 +58,12 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
                     ? Result.Ok()
                     : await IndexService.PushData(index.Name);
 
-                return new JsonResult(result);
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                return new JsonResult(Result.Fail(ex.Message));
+                Logger.LogError(ex, ex.Message);
+                throw;
             }
         }
     }
