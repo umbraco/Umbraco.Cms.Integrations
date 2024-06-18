@@ -1,5 +1,6 @@
 ﻿using Algolia.Search.Models.Search;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -15,6 +16,7 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
 {
     [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
     public class GetIndexByIdController : SearchControllerBase
     {
         public GetIndexByIdController(
@@ -42,6 +44,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
         }
 
         [HttpGet("index/{id:int}")]
+        [ProducesResponseType(typeof(IndexConfiguration), StatusCodes.Status200OK)]
         public IActionResult GetIndexById(int id)
         {
             var index = IndexStorage.GetById(id);

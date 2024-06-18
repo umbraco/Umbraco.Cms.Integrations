@@ -17,6 +17,7 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
 {
     [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
     public class GetContentTypesController : SearchControllerBase
     {
         private readonly IContentTypeService _contentTypeService;
@@ -47,9 +48,14 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
         }
 
         [HttpGet("content-type")]
+        [ProducesResponseType(typeof(List<ContentTypeDto>), StatusCodes.Status200OK)]
+        public IActionResult GetContentTypes() => Ok(GetContentTypes());
+
         [HttpGet("content-type/index/{id:int}")]
         [ProducesResponseType(typeof(List<ContentTypeDto>), StatusCodes.Status200OK)]
-        public IActionResult GetContentTypes(int? id)
+        public IActionResult GetContentTypesByIndexId(int id) => Ok(GetContentTypes(id));
+
+        private List<ContentTypeDto> GetContentTypes(int? id)
         {
             IndexConfiguration indexConfiguration = new IndexConfiguration();
             var list = new List<ContentTypeDto>();
@@ -98,15 +104,14 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
                     Icon = contentType.Icon,
                     Alias = contentType.Alias,
                     Name = contentType.Name,
-                    Selected = indexConfiguration != null 
-                                    && indexConfiguration.ContentData != null    
+                    Selected = indexConfiguration != null
+                                    && indexConfiguration.ContentData != null
                                     && indexConfiguration.ContentData.Any(p => p.Alias == contentType.Alias),
                     Properties = properties.AsEnumerable()
                 });
             }
 
-            return Ok(list);    
+            return list;
         }
-
     }
 }

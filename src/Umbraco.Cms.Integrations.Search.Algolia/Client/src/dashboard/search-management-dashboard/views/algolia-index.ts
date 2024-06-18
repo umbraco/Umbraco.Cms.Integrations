@@ -14,10 +14,11 @@ import {
 } from "@umbraco-cms/backoffice/notification";
 
 import AlgoliaIndexContext, { ALGOLIA_CONTEXT_TOKEN } from "../../../context/algolia-index.context";
-
-import { AlgoliaIndexConfigurationModel } from "../../../models/AlgoliaIndexConfigurationModel";
-import type { AlgoliaContentTypeModel } from "../../../models/AlgoliaContentTypeModel";
-import { AlgoliaResultModel } from "../../../models/AlgoliaResultModel";
+import {
+    IndexConfigurationModel,
+    ContentTypeDtoModel,
+    ResultModel
+} from "../../../api/models";
 
 @customElement("algolia-index")
 export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
@@ -31,13 +32,14 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
     indexName!: string;
 
     @state()
-    private _model: AlgoliaIndexConfigurationModel = {
+    private _model: IndexConfigurationModel = {
+        id: 0,
         name: '',
         contentData: []
     };
 
     @state()
-    private _contentTypes: Array<AlgoliaContentTypeModel> = [];
+    private _contentTypes: Array<ContentTypeDtoModel> = [];
 
     @state()
     private _showContentTypeProperties: boolean;
@@ -106,7 +108,7 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
 
         await this.#algoliaIndexContext?.getContentTypes()
             .then(response => {
-                this._contentTypes = response as Array<AlgoliaContentTypeModel>;
+                this._contentTypes = response as Array<ContentTypeDtoModel>;
             })
             .catch(error => this._showError(error.message));
     }
@@ -114,7 +116,7 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
     private async _getContentTypesWithIndex() {
         await this.#algoliaIndexContext?.getContentTypesWithIndex(Number(this.indexId))
             .then(response => {
-                var result = response as Array<AlgoliaContentTypeModel>;
+                var result = response as Array<ContentTypeDtoModel>;
                 this._contentTypes = result;
             })
             .catch((error) => this._showError(error.message));
@@ -123,7 +125,7 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
     private async _getIndex() {
         await this.#algoliaIndexContext?.getIndexById(Number(this.indexId))
             .then(response => {
-                var result = response as AlgoliaIndexConfigurationModel;
+                var result = response as IndexConfigurationModel;
                 this._model = result;
                 this.indexName = result.name;
             })
@@ -202,7 +204,7 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
         });
         this._showContentTypeProperties = false;
     }
-    private async _contentTypePropertySelected(contentType: AlgoliaContentTypeModel | undefined, id: number) {
+    private async _contentTypePropertySelected(contentType: ContentTypeDtoModel | undefined, id: number) {
         if (contentType === undefined) return;
 
         this._contentTypes = this._contentTypes.map((ctObj) => {
@@ -218,7 +220,7 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
             return ctObj;
         });
     }
-    private async _contentTypePropertyDeselected(contentType: AlgoliaContentTypeModel | undefined, id: number) {
+    private async _contentTypePropertyDeselected(contentType: ContentTypeDtoModel | undefined, id: number) {
         if (contentType == undefined) return;
         this._contentTypes = this._contentTypes.map((ctObj) => {
             if (ctObj.id != contentType.id) return ctObj;
@@ -249,7 +251,12 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
             return;
         }
 
-        var indexConfiguration = new AlgoliaIndexConfigurationModel(indexName);
+        var indexConfiguration: IndexConfigurationModel = {
+            id: 0,
+            name: indexName,
+            contentData: []
+        };
+
         if (this.indexId.length > 0) {
             indexConfiguration.id = Number(this.indexId);
         }
@@ -257,7 +264,7 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
 
         await this.#algoliaIndexContext?.saveIndex(indexConfiguration)
             .then(response => {
-                var resultModel = response as AlgoliaResultModel;
+                var resultModel = response as ResultModel;
                 if (resultModel.success) {
                     this._showSuccess("Index saved.");
 

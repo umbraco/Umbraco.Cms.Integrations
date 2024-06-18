@@ -2,7 +2,7 @@
 import { AlgoliaIndexRepository } from "../repository/algolia-index.repository";
 import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
-import { AlgoliaIndexConfigurationModel } from "../models/AlgoliaIndexConfigurationModel";
+import { IndexConfigurationModel } from "../api/models";
 
 export class AlgoliaIndexContext extends UmbControllerBase {
 
@@ -19,7 +19,7 @@ export class AlgoliaIndexContext extends UmbControllerBase {
         return await this.#repository.getIndices();
     }
 
-    async getIndexById(id: Number) {
+    async getIndexById(id: number) {
         return this.#repository.getIndexById(id);
     }
 
@@ -27,15 +27,15 @@ export class AlgoliaIndexContext extends UmbControllerBase {
         return await this.#repository.getContentTypes();
     }
 
-    async getContentTypesWithIndex(id: Number) {
+    async getContentTypesWithIndex(id: number) {
         return this.#repository.getContentTypesWithIndex(id);
     }
 
-    async saveIndex(indexConfiguration: AlgoliaIndexConfigurationModel) {
+    async saveIndex(indexConfiguration: IndexConfigurationModel) {
         return await this.#repository.saveIndex(indexConfiguration);
     }
 
-    async buildIndex(indexConfiguration: AlgoliaIndexConfigurationModel) {
+    async buildIndex(indexConfiguration: IndexConfigurationModel) {
         return this.#repository.buildIndex(indexConfiguration);
     }
 
@@ -43,7 +43,7 @@ export class AlgoliaIndexContext extends UmbControllerBase {
         return await this.#repository.deleteIndex(id);
     }
 
-    async searchIndex(id: Number, query: string) {
+    async searchIndex(id: number, query: string) {
         return this.#repository.searchIndex(id, query);
     }
 }

@@ -17,6 +17,7 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
 {
     [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
     public class GetIndicesController : SearchControllerBase
     {
         public GetIndicesController(

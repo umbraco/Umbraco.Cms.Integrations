@@ -1,5 +1,6 @@
 ﻿using Algolia.Search.Models.Search;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -14,6 +15,7 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
 {
     [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
     public class SaveIndexController : SearchControllerBase
     {
         public SaveIndexController(
@@ -41,6 +43,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
         }
 
         [HttpPost("index")]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
         public async Task<IActionResult> SaveIndex([FromBody] IndexConfiguration index)
         {
             IndexStorage.AddOrUpdate(new AlgoliaIndex

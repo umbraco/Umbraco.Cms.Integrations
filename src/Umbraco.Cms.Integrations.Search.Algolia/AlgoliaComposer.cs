@@ -50,6 +50,8 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
                         Version = "Latest",
                         Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling indices."
                     });
+
+                options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
             });
         }
 

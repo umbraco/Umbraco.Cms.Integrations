@@ -13,8 +13,7 @@ import {
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
 
-import type { AlgoliaIndexConfigurationModel } from "../../../models/AlgoliaIndexConfigurationModel";
-import type { AlgoliaSearchResultModel } from "../../../models/AlgoliaSearchResultModel";
+import { IndexConfigurationModel, ResponseModel } from "../../../api/models";
 import AlgoliaIndexContext, { ALGOLIA_CONTEXT_TOKEN } from "../../../context/algolia-index.context";
 
 @customElement("algolia-search")
@@ -29,14 +28,14 @@ export class AlgoliaSearchElement extends UmbElementMixin(LitElement) {
     private _searchInput!: HTMLInputElement;
 
     @state()
-    index: AlgoliaIndexConfigurationModel = {
+    index: IndexConfigurationModel = {
         id: Number(this.indexId),
         name: "",
         contentData: []
     };
 
     @state()
-    indexSearchResult: AlgoliaSearchResultModel = {
+    indexSearchResult: ResponseModel = {
         itemsCount: 0,
         pagesCount: 0,
         itemsPerPage: 0,
@@ -97,7 +96,7 @@ export class AlgoliaSearchElement extends UmbElementMixin(LitElement) {
 
     private async _getIndex() {
         await this.#algoliaIndexContext?.getIndexById(Number(this.indexId))
-            .then(response => this.index = response as AlgoliaIndexConfigurationModel)
+            .then(response => this.index = response as IndexConfigurationModel)
             .catch(error => this._showError(error.message));
     }
 
@@ -110,7 +109,7 @@ export class AlgoliaSearchElement extends UmbElementMixin(LitElement) {
 
         await this.#algoliaIndexContext?.searchIndex(Number(this.indexId), this._searchInput.value)
             .then(response => {
-                this.indexSearchResult = response as AlgoliaSearchResultModel;
+                this.indexSearchResult = response as ResponseModel;
             })
             .catch((error) => this._showError(error));
     }

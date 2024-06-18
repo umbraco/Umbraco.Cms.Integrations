@@ -15,10 +15,11 @@ import {
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
 
-import type { AlgoliaIndexConfigurationModel } from "../../../models/AlgoliaIndexConfigurationModel";
-
+import {
+    IndexConfigurationModel,
+    ResultModel
+} from "../../../api/models";
 import AlgoliaIndexContext, { ALGOLIA_CONTEXT_TOKEN } from "../../../context/algolia-index.context";
-import { AlgoliaResultModel } from "../../../models/AlgoliaResultModel";
 
 @customElement("algolia-dashboard-overview")
 export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement) {
@@ -30,7 +31,7 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
     private _loading = false;
 
     @state()
-    private _indices: Array<AlgoliaIndexConfigurationModel> = [];
+    private _indices: Array<IndexConfigurationModel> = [];
 
     constructor() {
         super();
@@ -56,7 +57,7 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
 
         await this.#algoliaIndexContext?.getIndices()
             .then(response => {
-                this._indices = response as Array<AlgoliaIndexConfigurationModel>;
+                this._indices = response as Array<IndexConfigurationModel>;
                 this._loading = false;
             })
             .catch(error => this._showError(error.message));
@@ -152,7 +153,7 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
         `;
     }
 
-    private async _onBuildIndex(index: AlgoliaIndexConfigurationModel) {
+    private async _onBuildIndex(index: IndexConfigurationModel) {
         const modalContext = this.#modalManagerContext?.open(
             this, UMB_CONFIRM_MODAL,
             {
@@ -176,7 +177,7 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
 
                 await this.#algoliaIndexContext?.buildIndex(index)
                     .then(response => {
-                        var result = response as AlgoliaResultModel;
+                        var result = response as ResultModel;
                         if (result.success) {
                             this._showSuccess("Index built.");
                         }
@@ -190,7 +191,7 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
             });
     }
 
-    private async _onDeleteIndex(index: AlgoliaIndexConfigurationModel) {
+    private async _onDeleteIndex(index: IndexConfigurationModel) {
         const modalContext = this.#modalManagerContext?.open(
             this, UMB_CONFIRM_MODAL,
             {
@@ -213,7 +214,7 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
 
                 await this.#algoliaIndexContext?.deleteIndex(index.id)
                     .then(response => {
-                        var result = response as AlgoliaResultModel;
+                        var result = response as ResultModel;
 
                         if (result.success) {
                             this._getIndices();

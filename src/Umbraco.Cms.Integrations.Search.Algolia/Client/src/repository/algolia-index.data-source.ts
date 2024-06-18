@@ -1,7 +1,8 @@
 ﻿import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
-import { AlgoliaIndexService } from "../api/services";
-import { AlgoliaIndexConfigurationModel } from "../models/AlgoliaIndexConfigurationModel";
+import { AlgoliaSearchService } from "../api/services";
+import { IndexConfigurationModel } from "../api/models";
+/*import { AlgoliaIndexConfigurationModel } from "../models/AlgoliaIndexConfigurationModel";*/
 
 export class AlgoliaIndexDataSource {
 
@@ -13,7 +14,7 @@ export class AlgoliaIndexDataSource {
 
     async getIndices() {
 
-        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaIndexService.getIndices());
+        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaSearchService.getIndices());
 
         if (data) {
             return data;
@@ -22,9 +23,11 @@ export class AlgoliaIndexDataSource {
         return { error };
     }
 
-    async getIndexById(id: Number) {
+    async getIndexById(id: number) {
 
-        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaIndexService.getIndexById(id));
+        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaSearchService.getIndexById({
+            id: id
+        }));
 
         if (data) {
             return data;
@@ -35,7 +38,7 @@ export class AlgoliaIndexDataSource {
 
     async getContentTypes() {
 
-        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaIndexService.getContentTypes());
+        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaSearchService.getContentTypes());
 
         if (data) {
             return data;
@@ -44,8 +47,10 @@ export class AlgoliaIndexDataSource {
         return { error };
     }
 
-    async getContentTypesWithIndex(id: Number) {
-        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaIndexService.getContentTypesWithIndex(id));
+    async getContentTypesWithIndex(id: number) {
+        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaSearchService.getContentTypesByIndexId({
+            id: id
+        }));
 
         if (data) {
             return data;
@@ -54,8 +59,10 @@ export class AlgoliaIndexDataSource {
         return { error };
     }
 
-    async saveIndex(indexConfiguration: AlgoliaIndexConfigurationModel) {
-        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaIndexService.saveIndex(indexConfiguration));
+    async saveIndex(indexConfiguration: IndexConfigurationModel) {
+        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaSearchService.saveIndex({
+            requestBody: indexConfiguration
+        }));
 
         if (data) {
             return data;
@@ -64,8 +71,10 @@ export class AlgoliaIndexDataSource {
         return { error };
     }
 
-    async buildIndex(indexConfiguration: AlgoliaIndexConfigurationModel) {
-        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaIndexService.buildIndex(indexConfiguration));
+    async buildIndex(indexConfiguration: IndexConfigurationModel) {
+        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaSearchService.buildIndex({
+            requestBody: indexConfiguration
+        }));
 
         if (data) {
             return data;
@@ -74,8 +83,10 @@ export class AlgoliaIndexDataSource {
         return { error };
     }
 
-    async deleteIndex(id: Number) {
-        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaIndexService.deleteIndex(id));
+    async deleteIndex(id: number) {
+        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaSearchService.deleteIndex({
+            id: id
+        }));
 
         if (data) {
             return data;
@@ -84,8 +95,11 @@ export class AlgoliaIndexDataSource {
         return { error };
     }
 
-    async searchIndex(id: Number, query: string) {
-        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaIndexService.searchIndex(id, query));
+    async searchIndex(id: number, query: string) {
+        const { data, error } = await tryExecuteAndNotify(this.#host, AlgoliaSearchService.search({
+            indexId: id,
+            query: query
+        }));
 
         if (data) {
             return data;
