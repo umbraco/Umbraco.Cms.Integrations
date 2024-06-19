@@ -18,7 +18,7 @@ import {
     IndexConfigurationModel,
     ContentTypeDtoModel,
     ResultModel
-} from "../../../api/models";
+} from "@umbraco-integrations/algolia/generated";
 
 @customElement("algolia-index")
 export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
@@ -144,7 +144,7 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
                                 @selected=${() => this._contentTypeSelected(contentType.id)}
                                 @deselected=${() => this._contentTypeDeselected(contentType.id)}>
                         <uui-icon slot="icon" name=${contentType.icon}></uui-icon>
-                        ${contentType.selected ? html`<uui-tag size="s" slot="tag" color="primary">Selected</uui-tag>` : ''}
+                        ${contentType.selected ? html`<uui-tag size="s" slot="tag" color="positive">Selected</uui-tag>` : ''}
                         <uui-action-bar slot="actions">
                             <uui-button label="Remove" color="danger">
                                 <uui-icon name="delete"></uui-icon>
@@ -165,7 +165,6 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
         return html`
             <uui-form-layout-item>
                 <uui-label slot="label">${selectedContentType.name} Properties</uui-label>
-                <uui-icon-registry-essential>
                     <div class="alg-col-3">
                         ${selectedContentType.properties.map((property) => {
                             return html`
@@ -173,7 +172,7 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
                                             @selected=${() => this._contentTypePropertySelected(selectedContentType, property.id)}
                                             @deselected=${() => this._contentTypePropertyDeselected(selectedContentType, property.id)}
                                             name=${property.name}>
-                                    ${property.selected ? html`<uui-tag size="s" slot="tag" color="primary">Selected</uui-tag>` : ''}
+                                    ${property.selected ? html`<uui-tag size="s" slot="tag" color="positive">Selected</uui-tag>` : ''}
                                     <ul style="list-style: none; padding-inline-start: 0px; margin: 0;">
                                         <li><span style="font-weight: 700">Group: </span> ${property.group}</li>
                                     </ul>
@@ -181,7 +180,6 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
                             `;
                         })}
                     </div>
-                </uui-icon-registry-essential>
             </uui-form-layout-item>
         `;
     }
