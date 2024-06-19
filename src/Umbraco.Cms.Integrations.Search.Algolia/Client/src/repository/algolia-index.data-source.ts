@@ -1,8 +1,6 @@
 ﻿import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
-import { AlgoliaSearchService } from "../api/services";
-import { IndexConfigurationModel } from "../api/models";
-/*import { AlgoliaIndexConfigurationModel } from "../models/AlgoliaIndexConfigurationModel";*/
+import { AlgoliaSearchService, IndexConfigurationModel } from "@umbraco-integrations/algolia/generated";
 
 export class AlgoliaIndexDataSource {
 

@@ -13,7 +13,7 @@ import {
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
 
-import { IndexConfigurationModel, ResponseModel } from "../../../api/models";
+import { IndexConfigurationModel, ResponseModel } from "@umbraco-integrations/algolia/generated";
 import AlgoliaIndexContext, { ALGOLIA_CONTEXT_TOKEN } from "../../../context/algolia-index.context";
 
 @customElement("algolia-search")

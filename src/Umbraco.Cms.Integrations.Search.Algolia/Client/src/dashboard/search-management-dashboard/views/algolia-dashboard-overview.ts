@@ -18,7 +18,7 @@ import {
 import {
     IndexConfigurationModel,
     ResultModel
-} from "../../../api/models";
+} from "@umbraco-integrations/algolia/generated";
 import AlgoliaIndexContext, { ALGOLIA_CONTEXT_TOKEN } from "../../../context/algolia-index.context";
 
 @customElement("algolia-dashboard-overview")

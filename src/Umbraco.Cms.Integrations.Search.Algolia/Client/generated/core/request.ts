@@ -42,7 +42,9 @@ export const getQueryString = (params: Record<string, unknown>): string => {
 			return;
 		}
 
-		if (Array.isArray(value)) {
+		if (value instanceof Date) {
+			append(key, value.toISOString());
+		} else if (Array.isArray(value)) {
 			value.forEach(v => encodePair(key, v));
 		} else if (typeof value === 'object') {
 			Object.entries(value).forEach(([k, v]) => encodePair(`${key}[${k}]`, v));
@@ -154,7 +156,7 @@ export const getHeaders = async (config: OpenAPIConfig, options: ApiRequestOptio
 export const getRequestBody = (options: ApiRequestOptions): unknown => {
 	if (options.body !== undefined) {
 		if (options.mediaType?.includes('application/json') || options.mediaType?.includes('+json')) {
-			return JSON.stringify(options.body)
+			return JSON.stringify(options.body);
 		} else if (isString(options.body) || isBlob(options.body) || isFormData(options.body)) {
 			return options.body;
 		} else {
@@ -187,7 +189,7 @@ export const sendRequest = async (
 	}
 
 	for (const fn of config.interceptors.request._fns) {
-		request = await fn(request)
+		request = await fn(request);
 	}
 
 	onCancel(() => controller.abort());
@@ -314,7 +316,7 @@ export const request = <T>(config: OpenAPIConfig, options: ApiRequestOptions): C
 				let response = await sendRequest(config, options, url, body, formData, headers, onCancel);
 
 				for (const fn of config.interceptors.response._fns) {
-					response = await fn(response)
+					response = await fn(response);
 				}
 
 				const responseBody = await getResponseBody(response);
