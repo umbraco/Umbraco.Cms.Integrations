@@ -42,7 +42,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia
             builder.Services.Configure<SwaggerGenOptions>(options =>
             {
                 options.SwaggerDoc(
-                    Constants.ManagementApi.GroupName,
+                    Constants.ManagementApi.ApiName,
                     new OpenApiInfo
                     {
                         Title = Constants.ManagementApi.ApiTitle,
