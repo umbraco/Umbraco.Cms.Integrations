@@ -49,13 +49,13 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
 
         [HttpGet("content-type")]
         [ProducesResponseType(typeof(List<ContentTypeDto>), StatusCodes.Status200OK)]
-        public IActionResult GetContentTypes() => Ok(GetContentTypes());
-
+        public IActionResult Get() => Ok(GetContentTypes());
+        
         [HttpGet("content-type/index/{id:int}")]
         [ProducesResponseType(typeof(List<ContentTypeDto>), StatusCodes.Status200OK)]
-        public IActionResult GetContentTypesByIndexId(int id) => Ok(GetContentTypes(id));
+        public IActionResult GetByIndexId(int id) => Ok(GetContentTypes(id));
 
-        private List<ContentTypeDto> GetContentTypes(int? id)
+        private List<ContentTypeDto> GetContentTypes(int? id = null)
         {
             IndexConfiguration indexConfiguration = new IndexConfiguration();
             var list = new List<ContentTypeDto>();
