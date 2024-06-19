@@ -1,61 +1,34 @@
-﻿using Algolia.Search.Models.Search;
-using Asp.Versioning;
+﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Net;
 using System.Text.Json;
-using Umbraco.Cms.Core.Routing;
-using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Core.Web;
-using Umbraco.Cms.Integrations.Search.Algolia.Builders;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Integrations.Search.Algolia.Models.ContentTypeDtos;
 using Umbraco.Cms.Integrations.Search.Algolia.Services;
 
-namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
+namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers;
+
+[ApiVersion("1.0")]
+[ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
+public class GetIndicesController : SearchControllerBase
 {
-    [ApiVersion("1.0")]
-    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
-    public class GetIndicesController : SearchControllerBase
+    private readonly IAlgoliaIndexDefinitionStorage<AlgoliaIndex> _indexStorage;
+
+    public GetIndicesController(
+        IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage) => _indexStorage = indexStorage;
+
+    [HttpGet("index")]
+    [ProducesResponseType(typeof(IEnumerable<IndexConfiguration>), StatusCodes.Status200OK)]
+    public IActionResult GetIndices()
     {
-        public GetIndicesController(
-            IAlgoliaIndexService indexService,
-            IAlgoliaSearchService<SearchResponse<Record>> searchService,
-            IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
-            IUserService userService, 
-            IPublishedUrlProvider urlProvider,
-            IContentService contentService,
-            IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory,
-            IUmbracoContextFactory umbracoContextFactory,
-            ILogger<GetIndicesController> logger,
-            IRecordBuilderFactory recordBuilderFactory)
-            : base(indexService,
-                  searchService,
-                  indexStorage,
-                  userService,
-                  urlProvider,
-                  contentService,
-                  algoliaSearchPropertyIndexValueFactory,
-                  umbracoContextFactory,
-                  logger,
-                  recordBuilderFactory)
+        var indices = _indexStorage.Get().Select(p => new IndexConfiguration
         {
-        }
+            Id = p.Id,
+            Name = p.Name,
+            ContentData = JsonSerializer.Deserialize<IEnumerable<ContentTypeDto>>(p.SerializedData) ?? []
+        });
 
-        [HttpGet("index")]
-        [ProducesResponseType(typeof(IEnumerable<IndexConfiguration>), StatusCodes.Status200OK)]
-        public IActionResult GetIndices()
-        {
-            var indices = IndexStorage.Get().Select(p => new IndexConfiguration
-            {
-                Id = p.Id,
-                Name = p.Name,
-                ContentData = JsonSerializer.Deserialize<IEnumerable<ContentTypeDto>>(p.SerializedData)
-            });
-
-            return Ok(indices);
-        }
+        return Ok(indices);
     }
 }
