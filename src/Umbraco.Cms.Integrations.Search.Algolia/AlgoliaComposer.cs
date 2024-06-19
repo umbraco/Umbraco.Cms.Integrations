@@ -5,7 +5,6 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
-using Umbraco.Cms.Integrations.Search.Algolia;
 using Umbraco.Cms.Integrations.Search.Algolia.Builders;
 using Umbraco.Cms.Integrations.Search.Algolia.Configuration;
 using Umbraco.Cms.Integrations.Search.Algolia.Extensions;
@@ -14,7 +13,7 @@ using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Integrations.Search.Algolia.Services;
 
-namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
+namespace Umbraco.Cms.Integrations.Search.Algolia
 {
     public class AlgoliaComposer : IComposer
     {
