@@ -23,6 +23,9 @@
     "paths": {
       "@umbraco-integrations/algolia/generated": [
         "./generated/index.ts"
+      ],
+      "@umbraco-integrations/algolia/context": [
+        "./src/context/index.ts"
       ]
     }
   },
