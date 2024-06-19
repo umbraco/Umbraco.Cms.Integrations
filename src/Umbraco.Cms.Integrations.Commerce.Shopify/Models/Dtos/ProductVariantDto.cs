@@ -18,5 +18,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
 
         [JsonProperty("inventory_quantity")]
         public int InventoryQuantity { get; set; }
+
+        [JsonProperty("taxable")]
+        public bool Taxable { get; set; }
+
     }
 }
