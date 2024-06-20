@@ -16,8 +16,7 @@ import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '@umbraco-integr
 
 import type {
     IndexConfigurationModel,
-    ContentTypeDtoModel,
-    ResultModel
+    ContentTypeDtoModel
 } from "@umbraco-integrations/algolia/generated";
 
 const elementName = "algolia-index";
@@ -65,27 +64,18 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
     }
     
     async #getContentTypes() {
-        await this.#algoliaIndexContext?.getContentTypes()
-            .then(response => {
-                this._contentTypes = response as Array<ContentTypeDtoModel>;
-            })
-            .catch(error => this.#showError(error.message));
+        var response = await this.#algoliaIndexContext?.getContentTypes();
+        this._contentTypes = response?.data as Array<ContentTypeDtoModel>;
     }
 
     async #getContentTypesWithIndex() {
-        await this.#algoliaIndexContext?.getContentTypesWithIndex(Number(this.indexId))
-            .then(response => {
-                this._contentTypes = response as Array<ContentTypeDtoModel>;
-            })
-            .catch((error) => this.#showError(error.message));
+        var response = await this.#algoliaIndexContext?.getContentTypesWithIndex(Number(this.indexId));
+        this._contentTypes = response?.data as Array<ContentTypeDtoModel>;
     }
 
     async #getIndex() {
-        await this.#algoliaIndexContext?.getIndexById(Number(this.indexId))
-            .then(response => {
-                this._model = response as IndexConfigurationModel;
-            })
-            .catch(error => this.#showError(error.message));
+        var response = await this.#algoliaIndexContext?.getIndexById(Number(this.indexId));
+        this._model = response?.data as IndexConfigurationModel;
     }    
 
     async #contentTypeSelected(id: number) {
@@ -167,32 +157,10 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
         }
         indexConfiguration.contentData = this._contentTypes;
 
-        await this.#algoliaIndexContext?.saveIndex(indexConfiguration)
-            .then(response => {
-                const resultModel = response as ResultModel;
-                if (resultModel.success) {
-                    this.#showSuccess("Index saved.");
-
-                    const redirectPath = this.indexId.length > 0
-                        ? window.location.href.replace(`/index/${this.indexId}`, '')
-                        : window.location.href.replace('/index', '');
-
-                    window.history.pushState({}, '', redirectPath);
-                } else {
-                    this.#showError(resultModel.error);
-                }
-            })
-            .catch((error) => this.#showError(error.message));
+        await this.#algoliaIndexContext?.saveIndex(indexConfiguration);
     }
 
     // notifications
-    async #showSuccess(message: string) {
-        const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
-        notificationContext?.peek("positive", {
-            data: { message: message },
-        });
-    }
-
     async #showError(message: string) {
         const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
         notificationContext?.peek("danger", {

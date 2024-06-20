@@ -8,13 +8,9 @@
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import { UMB_MODAL_MANAGER_CONTEXT, UMB_CONFIRM_MODAL } from "@umbraco-cms/backoffice/modal";
-import {    
-    UMB_NOTIFICATION_CONTEXT,
-} from "@umbraco-cms/backoffice/notification";
 import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '@umbraco-integrations/algolia/context';
 import type {
-    IndexConfigurationModel,
-    ResultModel
+    IndexConfigurationModel
 } from "@umbraco-integrations/algolia/generated";
 
 const elementName = "algolia-dashboard-overview";
@@ -45,17 +41,15 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
     async #getIndices() {
         this._loading = true;
 
-        await this.#algoliaIndexContext?.getIndices()
-            .then(response => {
-                this._indices = response as Array<IndexConfigurationModel>;
-                this._loading = false;
-            })
-            .catch(error => this.#showError(error.message));
+        var response = await this.#algoliaIndexContext?.getIndices();
+        this._indices = response?.data as IndexConfigurationModel[];
+
+        this._loading = false;
     }  
 
     async #onBuildIndex(index: IndexConfigurationModel) {
-        const modalManager = await this.getContext(UMB_MODAL_MANAGER_CONTEXT);
-        const modalContext = modalManager.open(
+        const modalManagerContext = await this.getContext(UMB_MODAL_MANAGER_CONTEXT);
+        const modalContext = modalManagerContext.open(
             this, UMB_CONFIRM_MODAL,
             {
                 data: {
@@ -72,28 +66,19 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
                 }
             }
         );
-        await modalContext.onSubmit().catch(() => undefined);
-
-        this._loading = true;
-
-        await this.#algoliaIndexContext?.buildIndex(index)
-            .then(response => {
-                const result = response as ResultModel;
-                if (result.success) {
-                    this.#showSuccess("Index built.");
-                }
-                else {
-                    this.#showError(result.error);
-                }
+        await modalContext
+            ?.onSubmit()
+            .then(async () => {
+                this._loading = true;
+                await this.#algoliaIndexContext?.buildIndex(index);
+                this._loading = false;
             })
-            .catch(error => this.#showError(error));
-
-        this._loading = false;
+            .catch(() => undefined);
     }
 
     async #onDeleteIndex(index: IndexConfigurationModel) {
-        const modalManager = await this.getContext(UMB_MODAL_MANAGER_CONTEXT);
-        const modalContext = modalManager.open(
+        const modalManagerContext = await this.getContext(UMB_MODAL_MANAGER_CONTEXT);
+        const modalContext = modalManagerContext.open(
             this, UMB_CONFIRM_MODAL,
             {
                 data: {
@@ -107,44 +92,15 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
                 }
             }
         );
-        modalContext?.onSubmit().catch((error) => this.#showError(error.message));
-
-        if (index == undefined || index.id == undefined) return;
-
-        this._loading = true;
-
-        await this.#algoliaIndexContext?.deleteIndex(index.id)
-            .then(response => {
-                const result = response as ResultModel;
-
-                if (result.success) {
-                    this.#getIndices();
-                    this.#showSuccess("Index deleted");
-                }
-                else {
-                    this.#showError(result.error);
-                }
-
+        modalContext
+            ?.onSubmit()
+            .then(async () => {
+                this._loading = true;
+                await this.#algoliaIndexContext?.deleteIndex(index.id);
+                this.#getIndices();
+                this._loading = false;
             })
-            .catch(error => this.#showError(error));
-
-        this._loading = false;
-            
-    }
-
-    // notifications
-    async #showSuccess(message: string) {
-        const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
-        notificationContext?.peek("positive", {
-            data: { message: message },
-        });
-    }
-
-    async #showError(message: string) {
-        const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
-        notificationContext?.peek("danger", {
-            data: { message: message },
-        });
+            .catch(() => undefined);
     }
 
     #renderIndicesList() {

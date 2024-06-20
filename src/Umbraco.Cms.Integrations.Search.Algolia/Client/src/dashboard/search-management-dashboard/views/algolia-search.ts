@@ -8,7 +8,6 @@
     query
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
-import { UMB_NOTIFICATION_CONTEXT } from "@umbraco-cms/backoffice/notification";
 import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '@umbraco-integrations/algolia/context';
 import type { IndexConfigurationModel, ResponseModel } from "@umbraco-integrations/algolia/generated";
 
@@ -53,9 +52,8 @@ export class AlgoliaSearchElement extends UmbElementMixin(LitElement) {
     }    
 
     async #getIndex() {
-        await this.#algoliaIndexContext?.getIndexById(Number(this.indexId))
-            .then(response => this.index = response as IndexConfigurationModel)
-            .catch(error => this.#showError(error.message));
+        var response = await this.#algoliaIndexContext?.getIndexById(Number(this.indexId));
+        this.index = response?.data as IndexConfigurationModel;
     }
 
     #onKeyPress(e: KeyboardEvent) {
@@ -65,19 +63,8 @@ export class AlgoliaSearchElement extends UmbElementMixin(LitElement) {
     async #onSearch() {
         if (!this._searchInput.value.length) return;
 
-        await this.#algoliaIndexContext?.searchIndex(Number(this.indexId), this._searchInput.value)
-            .then(response => {
-                this.indexSearchResult = response as ResponseModel;
-            })
-            .catch((error) => this.#showError(error));
-    }
-
-    // notifications
-    async #showError(message: string) {
-        const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
-        notificationContext?.peek("danger", {
-            data: { message: message },
-        });
+        var response = await this.#algoliaIndexContext?.searchIndex(Number(this.indexId), this._searchInput.value);
+        this.indexSearchResult = response?.data as ResponseModel;
     }
 
     render() {

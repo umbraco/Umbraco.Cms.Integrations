@@ -1,49 +1,128 @@
 ﻿import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
+import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
+import {
+    UMB_NOTIFICATION_CONTEXT,
+} from "@umbraco-cms/backoffice/notification";
 
-import { AlgoliaIndexDataSource } from './algolia-index.data-source.js';
-import type { IndexConfigurationModel } from "@umbraco-integrations/algolia/generated";
+import { IndexConfigurationModel, AlgoliaSearchService } from "@umbraco-integrations/algolia/generated";
 
 export class AlgoliaIndexRepository extends UmbControllerBase {
 
-    #algoliaIndexDataSource: AlgoliaIndexDataSource;
-
     constructor(host: UmbControllerHost) {
         super(host);
-
-        this.#algoliaIndexDataSource = new AlgoliaIndexDataSource(this);
     }
 
     async getIndices() {
-        return this.#algoliaIndexDataSource.getIndices();
+        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.getIndices());
+
+        if (error || !data) {
+            return { error }
+        }
+
+        return { data }
     }
 
     async getIndexById(id: number) {
-        return this.#algoliaIndexDataSource.getIndexById(id);
+        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.getIndexById({
+            id: id
+        }));
+
+        if (error || !data) {
+            return { error };
+        }
+
+        return { data };
     }
 
     async getContentTypes() {
-        return this.#algoliaIndexDataSource.getContentTypes();
+        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.getContentTypes());
+
+        if (error || !data) {
+            return { error };
+        }
+
+        return { data };
     }
 
     async getContentTypesWithIndex(id: number) {
-        return this.#algoliaIndexDataSource.getContentTypesWithIndex(id);
+        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.getContentTypesByIndexId({
+            id: id
+        }));
+
+        if (error || !data) {
+            return { error };
+        }
+
+        return { data };
     }
 
     async saveIndex(indexConfiguration: IndexConfigurationModel) {
-        return this.#algoliaIndexDataSource.saveIndex(indexConfiguration);
+        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.saveIndex({
+            requestBody: indexConfiguration
+        }));
+
+        if (error || !data) {
+            return { error };
+        }
+
+        this.#showSuccess("Index saved.");
+
+        const redirectPath = indexConfiguration.id != 0
+            ? window.location.href.replace(`/index/${indexConfiguration.id}`, '')
+            : window.location.href.replace('/index', '');
+
+        window.history.pushState({}, '', redirectPath);
+
+        return { data };
     }
 
     async buildIndex(indexConfiguration: IndexConfigurationModel) {
-        return this.#algoliaIndexDataSource.buildIndex(indexConfiguration);
+        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.buildIndex({
+            requestBody: indexConfiguration
+        }));
+
+        if (error || !data) {
+            return { error };
+        }
+
+        this.#showSuccess("Index built.");
+
+        return { data };
     }
 
     async deleteIndex(id: number) {
-        return this.#algoliaIndexDataSource.deleteIndex(id);
+        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.deleteIndex({
+            id: id
+        }));
+
+        if (error || !data) {
+            return { error };
+        }
+
+        this.#showSuccess("Index deleted");
+
+        return { data };
     }
 
     async searchIndex(id: number, query: string) {
-        return this.#algoliaIndexDataSource.searchIndex(id, query);
+        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.search({
+            indexId: id,
+            query: query
+        }));
+
+        if (error || !data) {
+            return { error };
+        }
+
+        return { data };
     }
 
+    // notifications
+    async #showSuccess(message: string) {
+        const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
+        notificationContext?.peek("positive", {
+            data: { message: message },
+        });
+    }
 }
