@@ -93,7 +93,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
         }
 #endif
 
-        public EditorSettings GetApiConfiguration()
+        public async Task<EditorSettings> GetApiConfiguration()
         {
             if (string.IsNullOrEmpty(_settings.Shop)
                 || string.IsNullOrEmpty(_settings.ApiVersion))
@@ -105,11 +105,12 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 
             // validate OAuth configuration if AuthorizationService is used.
             // if authorization is managed through UmbracoAuthorizationService, the properties client ID and proxy URL are set correctly.
+            var accessTokenValidationResponse = await ValidateAccessToken();
             if (_settings.UseUmbracoAuthorization)
             {
                 var editorSettings = new EditorSettings { IsValid = true, Type = ConfigurationType.OAuth };
 
-                editorSettings.IsConnected = ValidateAccessToken().ConfigureAwait(false).GetAwaiter().GetResult().IsValid;
+                editorSettings.IsConnected = accessTokenValidationResponse.IsValid;
 
                 return editorSettings;
             }
@@ -120,7 +121,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
                         && !string.IsNullOrEmpty(_oauthSettings.RedirectUri)
                         ? new EditorSettings { 
                             IsValid = true,
-                            IsConnected = ValidateAccessToken().ConfigureAwait(false).GetAwaiter().GetResult().IsValid, 
+                            IsConnected = accessTokenValidationResponse.IsValid, 
                             Type = ConfigurationType.OAuth 
                         }
                         : new EditorSettings();
@@ -164,7 +165,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
         public async Task<ResponseDto<ProductsListDto>> GetResults(string pageInfo)
         {
             string accessToken;
-            if (GetApiConfiguration().Type.Value == ConfigurationType.OAuth.Value)
+
+            var apiConfiguration = await GetApiConfiguration();
+            if (apiConfiguration.Type.Value == ConfigurationType.OAuth.Value)
                 _tokenService.TryGetParameters(Constants.AccessTokenDbKey, out accessToken);
             else
             {
@@ -222,7 +225,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
         public async Task<ResponseDto<ProductsListDto>> GetProductsByIds(long[] ids)
         {
             string accessToken;
-            if (GetApiConfiguration().Type.Value == ConfigurationType.OAuth.Value)
+            var apiConfiguration = await GetApiConfiguration();
+            if (apiConfiguration.Type.Value == ConfigurationType.OAuth.Value)
                 _tokenService.TryGetParameters(Constants.AccessTokenDbKey, out accessToken);
             else
             {
@@ -272,7 +276,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
         public async Task<int> GetCount()
         {
             string accessToken;
-            if (GetApiConfiguration().Type.Value == ConfigurationType.OAuth.Value)
+            var apiConfiguration = await GetApiConfiguration();
+            if (apiConfiguration.Type.Value == ConfigurationType.OAuth.Value)
                 _tokenService.TryGetParameters(Constants.AccessTokenDbKey, out accessToken);
             else
             {
