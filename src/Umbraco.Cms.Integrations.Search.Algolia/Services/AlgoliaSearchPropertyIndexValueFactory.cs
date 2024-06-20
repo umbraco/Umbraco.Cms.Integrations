@@ -28,18 +28,18 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
                 return default;
             }
 
-            var indexValues = propertyEditor.PropertyIndexValueFactory.GetIndexValues(property, culture, null, true);
+            var converter = _converterCollection.FirstOrDefault(p => p.Name == property.PropertyType.PropertyEditorAlias);
+            if (converter != null)
+            {
+                var result = converter.ParseIndexValues(property);
+                return new KeyValuePair<string, object>(property.Alias, result);
+            }
+
+            IEnumerable<KeyValuePair<string, IEnumerable<object>>> indexValues = propertyEditor.PropertyIndexValueFactory.GetIndexValues(property, culture, null, true);
 
             if (indexValues == null || !indexValues.Any()) return new KeyValuePair<string, object>(property.Alias, string.Empty);
 
             var indexValue = indexValues.First();
-
-            var converter = _converterCollection.FirstOrDefault(p => p.Name == property.PropertyType.PropertyEditorAlias);
-            if (converter != null)
-            {
-                var result = converter.ParseIndexValues(property, indexValue.Value);
-                return new KeyValuePair<string, object>(property.Alias, result);
-            }
 
             return new KeyValuePair<string, object>(property.Alias, indexValue.Value);
         }
