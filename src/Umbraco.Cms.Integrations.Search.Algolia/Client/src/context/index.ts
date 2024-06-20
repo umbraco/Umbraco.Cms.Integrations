@@ -1,1 +1,1 @@
-export * from "./algolia-index.context";
+export * from './algolia-index.context.js';

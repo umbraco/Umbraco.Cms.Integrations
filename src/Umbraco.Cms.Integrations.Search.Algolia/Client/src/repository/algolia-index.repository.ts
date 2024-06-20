@@ -1,8 +1,8 @@
 ﻿import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
-import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
+import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 
-import { AlgoliaIndexDataSource } from "./algolia-index.data-source";
-import { IndexConfigurationModel } from "@umbraco-integrations/algolia/generated";
+import { AlgoliaIndexDataSource } from './algolia-index.data-source.js';
+import type { IndexConfigurationModel } from "@umbraco-integrations/algolia/generated";
 
 export class AlgoliaIndexRepository extends UmbControllerBase {
 

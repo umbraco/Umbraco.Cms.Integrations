@@ -13,11 +13,12 @@ import {
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
 
-import {
+import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '../../../context/algolia-index.context.js';
+
+import type {
     IndexConfigurationModel,
     ResultModel
 } from "@umbraco-integrations/algolia/generated";
-import AlgoliaIndexContext, { ALGOLIA_CONTEXT_TOKEN } from "../../../context/algolia-index.context";
 
 const elementName = "algolia-dashboard-overview";
 
@@ -80,7 +81,7 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
 
         await this.#algoliaIndexContext?.buildIndex(index)
             .then(response => {
-                var result = response as ResultModel;
+                const result = response as ResultModel;
                 if (result.success) {
                     this.#showSuccess("Index built.");
                 }
@@ -117,7 +118,7 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
 
         await this.#algoliaIndexContext?.deleteIndex(index.id)
             .then(response => {
-                var result = response as ResultModel;
+                const result = response as ResultModel;
 
                 if (result.success) {
                     this.#getIndices();

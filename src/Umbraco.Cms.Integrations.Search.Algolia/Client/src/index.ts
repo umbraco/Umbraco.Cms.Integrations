@@ -1,9 +1,9 @@
-﻿import { UmbEntryPointOnInit } from "@umbraco-cms/backoffice/extension-api";
+﻿import type { UmbEntryPointOnInit } from "@umbraco-cms/backoffice/extension-api";
 import { UMB_AUTH_CONTEXT } from "@umbraco-cms/backoffice/auth";
-import { OpenAPI } from "@umbraco-integrations/algolia/generated";
 
-import { manifest as algoliaDashboardManifest } from "./dashboard/manifest.ts";
-import { manifest as algoliaContextManifest } from "./context/manifest.ts";
+import { manifest as algoliaDashboardManifest } from './dashboard/manifest.js';
+import { manifest as algoliaContextManifest } from './context/manifest.js';
+import { OpenAPI } from "@umbraco-integrations/algolia/generated";
 
 export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
 

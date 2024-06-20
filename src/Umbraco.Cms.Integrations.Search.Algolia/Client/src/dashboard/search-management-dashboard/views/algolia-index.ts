@@ -12,8 +12,9 @@ import {
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
 
-import AlgoliaIndexContext, { ALGOLIA_CONTEXT_TOKEN } from "../../../context/algolia-index.context";
-import {
+import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '../../../context/algolia-index.context.js';
+
+import type {
     IndexConfigurationModel,
     ContentTypeDtoModel,
     ResultModel
@@ -146,7 +147,7 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
         const form = e.target as HTMLFormElement;
         const formData = new FormData(form);
 
-        var indexName = this.indexId.length > 0
+        const indexName = this.indexId.length > 0
             ? this._model.name
             : formData.get("indexName") as string;
 
@@ -155,7 +156,7 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
             return;
         }
 
-        var indexConfiguration: IndexConfigurationModel = {
+        const indexConfiguration: IndexConfigurationModel = {
             id: 0,
             name: indexName,
             contentData: []
@@ -168,7 +169,7 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
 
         await this.#algoliaIndexContext?.saveIndex(indexConfiguration)
             .then(response => {
-                var resultModel = response as ResultModel;
+                const resultModel = response as ResultModel;
                 if (resultModel.success) {
                     this.#showSuccess("Index saved.");
 
@@ -226,7 +227,7 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
     private renderContentTypeProperties() {
         if (this._showContentTypeProperties === false) return nothing;
 
-        var selectedContentType = this._contentTypes.find((obj) => obj.selected == true);
+        const selectedContentType = this._contentTypes.find((obj) => obj.selected == true);
 
         if (selectedContentType === undefined) return nothing;
 
