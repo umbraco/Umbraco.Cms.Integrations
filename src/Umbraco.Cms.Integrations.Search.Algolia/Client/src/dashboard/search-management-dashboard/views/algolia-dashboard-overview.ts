@@ -8,10 +8,8 @@
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 
-import type { UmbModalManagerContext } from "@umbraco-cms/backoffice/modal";
 import { UMB_MODAL_MANAGER_CONTEXT, UMB_CONFIRM_MODAL } from "@umbraco-cms/backoffice/modal";
-import {
-    UmbNotificationContext,
+import {    
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
 
@@ -23,8 +21,6 @@ import AlgoliaIndexContext, { ALGOLIA_CONTEXT_TOKEN } from "../../../context/alg
 
 @customElement("algolia-dashboard-overview")
 export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement) {
-    #modalManagerContext?: UmbModalManagerContext;
-    #notificationContext?: UmbNotificationContext;
     #algoliaIndexContext?: AlgoliaIndexContext;
 
     @state()
@@ -36,12 +32,6 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
     constructor() {
         super();
 
-        this.consumeContext(UMB_MODAL_MANAGER_CONTEXT, (instance) => {
-            this.#modalManagerContext = instance;
-        });
-        this.consumeContext(UMB_NOTIFICATION_CONTEXT, (_instance) => {
-            this.#notificationContext = _instance;
-        });
         this.consumeContext(ALGOLIA_CONTEXT_TOKEN, (_instance) => {
             this.#algoliaIndexContext = _instance;
         });
@@ -49,10 +39,10 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
 
     connectedCallback() {
         super.connectedCallback();
-        this._getIndices();
+        this.#getIndices();
     }
 
-    private async _getIndices() {
+    async #getIndices() {
         this._loading = true;
 
         await this.#algoliaIndexContext?.getIndices()
@@ -60,7 +50,155 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
                 this._indices = response as Array<IndexConfigurationModel>;
                 this._loading = false;
             })
-            .catch(error => this._showError(error.message));
+            .catch(error => this.#showError(error.message));
+    }  
+
+    async #onBuildIndex(index: IndexConfigurationModel) {
+        const modalManager = await this.getContext(UMB_MODAL_MANAGER_CONTEXT);
+        const modalContext = modalManager.open(
+            this, UMB_CONFIRM_MODAL,
+            {
+                data: {
+                    headline: `Build Index : ${index.name}`,
+                    content: html`
+                      <p class="umb-alert umb-alert--warning mb2">
+                        This will cause the index to be built.<br />
+                        Depending on how much content there is in your site this could take a while.<br />
+                        It is not recommended to rebuild an index during times of high website traffic
+                        or when editors are editing content.
+                      </p>`,
+                    color: "danger",
+                    confirmLabel: "Ok",
+                }
+            }
+        );
+        await modalContext.onSubmit().catch(() => undefined);
+
+        this._loading = true;
+
+        await this.#algoliaIndexContext?.buildIndex(index)
+            .then(response => {
+                var result = response as ResultModel;
+                if (result.success) {
+                    this.#showSuccess("Index built.");
+                }
+                else {
+                    this.#showError(result.error);
+                }
+            })
+            .catch(error => this.#showError(error));
+
+        this._loading = false;
+    }
+
+    async #onDeleteIndex(index: IndexConfigurationModel) {
+        const modalManager = await this.getContext(UMB_MODAL_MANAGER_CONTEXT);
+        const modalContext = modalManager.open(
+            this, UMB_CONFIRM_MODAL,
+            {
+                data: {
+                    headline: `Delete Index`,
+                    content: html`
+                      <p class="umb-alert umb-alert--warning mb2">
+                        Are you sure you want to delete index <b>${index.name}</b>?
+                      </p>`,
+                    color: "danger",
+                    confirmLabel: "Ok",
+                }
+            }
+        );
+        modalContext?.onSubmit().catch((error) => this.#showError(error.message));
+
+        if (index == undefined || index.id == undefined) return;
+
+        this._loading = true;
+
+        await this.#algoliaIndexContext?.deleteIndex(index.id)
+            .then(response => {
+                var result = response as ResultModel;
+
+                if (result.success) {
+                    this.#getIndices();
+                    this.#showSuccess("Index deleted");
+                }
+                else {
+                    this.#showError(result.error);
+                }
+
+            })
+            .catch(error => this.#showError(error));
+
+        this._loading = false;
+            
+    }
+
+    // notifications
+    async #showSuccess(message: string) {
+        const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
+        notificationContext?.peek("positive", {
+            data: { message: message },
+        });
+    }
+
+    async #showError(message: string) {
+        const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
+        notificationContext?.peek("danger", {
+            data: { message: message },
+        });
+    }
+
+    #renderIndicesList() {
+        if (this._indices.length == 0) return nothing;
+
+        return html`
+          <uui-table aria-label="Indices Table" style="width: 70%">
+            <uui-table-column style="width: 20%;"></uui-table-column>
+            <uui-table-column style="width: 60%;"></uui-table-column>
+            <uui-table-column style="width: 20%;"></uui-table-column>
+
+            <uui-table-head>
+                <uui-table-head-cell>Name</uui-table-head-cell>
+                <uui-table-head-cell>Definition</uui-table-head-cell>
+                <uui-table-head-cell></uui-table-head-cell>
+            </uui-table-head>
+            ${this._indices.map((index) => {
+                return html`
+                <uui-table-row>
+                  <uui-table-cell>${index.name}</uui-table-cell>
+                  <uui-table-cell>
+                        ${index.contentData.map((contentData) => {
+                            return html`
+                                <uui-ref-node name=${contentData.name}
+                                            detail=${contentData.properties.map(obj => obj.name).join(', ')}>
+                                    <uui-icon slot="icon" name=${contentData.icon}></uui-icon>
+                                </uui-ref-node>
+                                `;
+                })}
+                    
+                </uui-table-cell>
+                <uui-table-cell>
+                    <uui-action-bar>
+                        <uui-button label="edit" look="default" color="default"
+                            @click="${() => window.history.pushState({}, '', window.location.href.replace(/\/+$/, '') + '/index/' + index.id)}">
+                            <uui-icon name="edit"></uui-icon>
+                        </uui-button>
+                        <uui-button label="build" look="default" color="danger" @click="${() => this.#onBuildIndex(index)}">
+                            <uui-icon name="sync"></uui-icon>
+                        </uui-button>
+                        <uui-button label="search" look="default" color="positive" 
+                            @click="${() => window.history.pushState({}, '', window.location.href.replace(/\/+$/, '') + '/search/' + index.id)}">
+                            <uui-icon name="search"></uui-icon>
+                        </uui-button>
+                        <uui-button label="delete" look="default" color="default" @click="${() => this.#onDeleteIndex(index)}">
+                            <uui-icon name="delete"></uui-icon>
+                        </uui-button>
+                    </uui-action-bar>
+                </uui-table-cell>
+                </uui-table-row>
+              `;
+            })}
+            </uui-table>
+        `;
     }
 
     render() {
@@ -90,161 +228,9 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
                 @click="${() => window.history.pushState({}, '', window.location.href.replace(/\/+$/, '') + '/index')}"></uui-button>
             </div>
             ${this._loading ? html`<div class="center"><uui-loader></uui-loader></div>` : ''}
-            ${this.renderIndicesList()}
+            ${this.#renderIndicesList()}
             </uui-box>
         `;
-    }
-
-    private renderIndicesList() {
-        if (this._indices.length == 0) return nothing;
-
-        return html`
-          <uui-table aria-label="Indices Table" style="width: 70%">
-            <uui-table-column style="width: 20%;"></uui-table-column>
-            <uui-table-column style="width: 60%;"></uui-table-column>
-            <uui-table-column style="width: 20%;"></uui-table-column>
-
-            <uui-table-head>
-                <uui-table-head-cell>Name</uui-table-head-cell>
-                <uui-table-head-cell>Definition</uui-table-head-cell>
-                <uui-table-head-cell></uui-table-head-cell>
-            </uui-table-head>
-            ${this._indices.map((index) => {
-                return html`
-                <uui-table-row>
-                  <uui-table-cell>${index.name}</uui-table-cell>
-                  <uui-table-cell>
-                    <uui-icon-registry-essential>
-                        ${index.contentData.map((contentData) => {
-                    return html`
-                            <uui-ref-node name=${contentData.name}
-                                      detail=${contentData.properties.map(obj => obj.name).join(', ')}>
-                              <uui-icon slot="icon" name=${contentData.icon}></uui-icon>
-                            </uui-ref-node>
-                          `;
-                })}
-                    
-                    </uui-icon-registry-essential>
-                </uui-table-cell>
-                <uui-table-cell>
-                    <uui-icon-registry-essential>
-                        <uui-action-bar>
-                            <uui-button label="edit" look="default" color="default"
-                                @click="${() => window.history.pushState({}, '', window.location.href.replace(/\/+$/, '') + '/index/' + index.id)}">
-                                <uui-icon name="edit"></uui-icon>
-                            </uui-button>
-                            <uui-button label="build" look="default" color="danger" @click="${() => this._onBuildIndex(index)}">
-                                <uui-icon name="sync"></uui-icon>
-                            </uui-button>
-                            <uui-button label="search" look="default" color="positive" 
-                                @click="${() => window.history.pushState({}, '', window.location.href.replace(/\/+$/, '') + '/search/' + index.id)}">
-                                <uui-icon name="search"></uui-icon>
-                            </uui-button>
-                            <uui-button label="delete" look="default" color="default" @click="${() => this._onDeleteIndex(index)}">
-                                <uui-icon name="delete"></uui-icon>
-                            </uui-button>
-                        </uui-action-bar>
-                    </uui-icon-registry-essential>
-                </uui-table-cell>
-                </uui-table-row>
-              `;
-            })}
-            </uui-table>
-        `;
-    }
-
-    private async _onBuildIndex(index: IndexConfigurationModel) {
-        const modalContext = this.#modalManagerContext?.open(
-            this, UMB_CONFIRM_MODAL,
-            {
-                data: {
-                    headline: `Build Index : ${index.name}`,
-                    content: html`
-                      <p class="umb-alert umb-alert--warning mb2">
-                        This will cause the index to be built.<br />
-                        Depending on how much content there is in your site this could take a while.<br />
-                        It is not recommended to rebuild an index during times of high website traffic
-                        or when editors are editing content.
-                      </p>`,
-                    color: "danger",
-                    confirmLabel: "Ok",
-                }
-            }
-        );
-        modalContext?.onSubmit()
-            .then(async () => {
-                this._loading = true;
-
-                await this.#algoliaIndexContext?.buildIndex(index)
-                    .then(response => {
-                        var result = response as ResultModel;
-                        if (result.success) {
-                            this._showSuccess("Index built.");
-                        }
-                        else {
-                            this._showError(result.error);
-                        }
-                    })
-                    .catch(error => this._showError(error));
-
-                this._loading = false;
-            });
-    }
-
-    private async _onDeleteIndex(index: IndexConfigurationModel) {
-        const modalContext = this.#modalManagerContext?.open(
-            this, UMB_CONFIRM_MODAL,
-            {
-                data: {
-                    headline: `Delete Index`,
-                    content: html`
-                      <p class="umb-alert umb-alert--warning mb2">
-                        Are you sure you want to delete index <b>${index.name}</b>?
-                      </p>`,
-                    color: "danger",
-                    confirmLabel: "Ok",
-                }
-            }
-        );
-        modalContext?.onSubmit()
-            .then(async () => {
-                if (index == undefined || index.id == undefined) return;
-
-                this._loading = true;
-
-                await this.#algoliaIndexContext?.deleteIndex(index.id)
-                    .then(response => {
-                        var result = response as ResultModel;
-
-                        if (result.success) {
-                            this._getIndices();
-                            this._showSuccess("Index deleted");
-                        }
-                        else {
-                            this._showError(result.error);
-                        }
-
-                    })
-                    .catch(error => this._showError(error));
-
-                this._loading = false;
-            })
-            .catch((error) => {
-                this._showError(error.message);
-            });
-    }
-
-    // notifications
-    private _showSuccess(message: string) {
-        this.#notificationContext?.peek("positive", {
-            data: { message: message },
-        });
-    }
-
-    private _showError(message: string) {
-        this.#notificationContext?.peek("danger", {
-            data: { message: message },
-        });
     }
 
     static styles = [
