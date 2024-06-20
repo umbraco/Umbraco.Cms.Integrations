@@ -12,7 +12,7 @@ import {
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
 
-import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '../../../context/algolia-index.context.js';
+import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '@umbraco-integrations/algolia/context';
 
 import type {
     IndexConfigurationModel,

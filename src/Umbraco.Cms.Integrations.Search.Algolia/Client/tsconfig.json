@@ -25,7 +25,7 @@
         "./generated/index.ts"
       ],
       "@umbraco-integrations/algolia/context": [
-        "./src/context/index.ts"
+        "./src/context/algolia-index.context.ts"
       ]
     }
   },

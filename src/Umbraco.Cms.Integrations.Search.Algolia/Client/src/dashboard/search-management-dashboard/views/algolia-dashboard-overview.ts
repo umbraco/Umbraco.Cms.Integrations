@@ -7,14 +7,11 @@
     nothing
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
-
 import { UMB_MODAL_MANAGER_CONTEXT, UMB_CONFIRM_MODAL } from "@umbraco-cms/backoffice/modal";
 import {    
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
-
-import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '../../../context/algolia-index.context.js';
-
+import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '@umbraco-integrations/algolia/context';
 import type {
     IndexConfigurationModel,
     ResultModel

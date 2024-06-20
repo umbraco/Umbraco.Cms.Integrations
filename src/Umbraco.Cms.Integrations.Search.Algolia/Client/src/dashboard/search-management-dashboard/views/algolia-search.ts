@@ -9,8 +9,7 @@
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import { UMB_NOTIFICATION_CONTEXT } from "@umbraco-cms/backoffice/notification";
-import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '../../../context/algolia-index.context.js';
-
+import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '@umbraco-integrations/algolia/context';
 import type { IndexConfigurationModel, ResponseModel } from "@umbraco-integrations/algolia/generated";
 
 const elementName = "algolia-search";
