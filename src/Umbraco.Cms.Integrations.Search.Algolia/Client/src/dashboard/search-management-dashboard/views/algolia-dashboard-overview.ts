@@ -19,7 +19,9 @@ import {
 } from "@umbraco-integrations/algolia/generated";
 import AlgoliaIndexContext, { ALGOLIA_CONTEXT_TOKEN } from "../../../context/algolia-index.context";
 
-@customElement("algolia-dashboard-overview")
+const elementName = "algolia-dashboard-overview";
+
+@customElement(elementName)
 export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement) {
     #algoliaIndexContext?: AlgoliaIndexContext;
 
@@ -250,6 +252,6 @@ export default AlgoliaDashboardOverviewElement;
 
 declare global {
     interface HTMLElementTagNameMap {
-        'algolia-dashboard-overview': AlgoliaDashboardOverviewElement
+        [elementName]: AlgoliaDashboardOverviewElement
     }
 }

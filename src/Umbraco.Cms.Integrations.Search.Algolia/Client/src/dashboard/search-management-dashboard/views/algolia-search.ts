@@ -8,17 +8,14 @@
     query
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
-import {
-    UmbNotificationContext,
-    UMB_NOTIFICATION_CONTEXT,
-} from "@umbraco-cms/backoffice/notification";
-
 import { IndexConfigurationModel, ResponseModel } from "@umbraco-integrations/algolia/generated";
 import AlgoliaIndexContext, { ALGOLIA_CONTEXT_TOKEN } from "../../../context/algolia-index.context";
+import { UMB_NOTIFICATION_CONTEXT } from "@umbraco-cms/backoffice/notification";
 
-@customElement("algolia-search")
+const elementName = "algolia-search";
+
+@customElement(elementName)
 export class AlgoliaSearchElement extends UmbElementMixin(LitElement) {
-    #notificationContext?: UmbNotificationContext;
     #algoliaIndexContext?: AlgoliaIndexContext;
 
     @property()
@@ -44,32 +41,58 @@ export class AlgoliaSearchElement extends UmbElementMixin(LitElement) {
 
     connectedCallback() {
         super.connectedCallback();
-        this._getIndex();
+        this.#getIndex();
     }
 
     constructor() {
         super();
-        this.consumeContext(UMB_NOTIFICATION_CONTEXT, (_instance) => {
-            this.#notificationContext = _instance;
-        });
+        
         this.consumeContext(ALGOLIA_CONTEXT_TOKEN, (_instance) => {
             this.#algoliaIndexContext = _instance;
+        });
+    }    
+
+    async #getIndex() {
+        await this.#algoliaIndexContext?.getIndexById(Number(this.indexId))
+            .then(response => this.index = response as IndexConfigurationModel)
+            .catch(error => this.#showError(error.message));
+    }
+
+    #onKeyPress(e: KeyboardEvent) {
+        e.key == 'Enter' ? this.#onSearch() : undefined;
+    }
+
+    async #onSearch() {
+        if (!this._searchInput.value.length) return;
+
+        await this.#algoliaIndexContext?.searchIndex(Number(this.indexId), this._searchInput.value)
+            .then(response => {
+                this.indexSearchResult = response as ResponseModel;
+            })
+            .catch((error) => this.#showError(error));
+    }
+
+    // notifications
+    async #showError(message: string) {
+        const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
+        notificationContext?.peek("danger", {
+            data: { message: message },
         });
     }
 
     render() {
         return html`
             <uui-box headline="Search">
-                <small slot="header">Please enter the query you want to search by against index <b>${this.index.name}</b></small>
+                <small slot="header">Please enter the query you want to search by against index <strong>${this.index.name}</strong></small>
                 <div class="flex">
                     <uui-input
                             type="search"
                             id="search-input"
                             placeholder="Type to filter..."
                             label="Type to filter"
-                            @keypress=${this._onKeyPress}>
+                            @keypress=${this.#onKeyPress}>
                     </uui-input>
-                    <uui-button color="positive" look="primary" label="Search" @click="${this._onSearch}"> Search </uui-button>
+                    <uui-button color="positive" look="primary" label=${this.localize.term("general_search")} @click=${this.#onSearch}></uui-button>
                 </div>
                 <!--RESULTS -->
                 <div>
@@ -82,7 +105,7 @@ export class AlgoliaSearchElement extends UmbElementMixin(LitElement) {
                                     ${Object.entries(obj).map((entry) => {
                                         return html`
                                             <p>
-                                                <b>${entry[0]}</b> : ${entry[1]}
+                                                <strong>${entry[0]}</strong> : ${entry[1]}
                                             </p>
                                         `;
                                     })}                                
@@ -92,33 +115,6 @@ export class AlgoliaSearchElement extends UmbElementMixin(LitElement) {
                 </div>
             </uui-box>
         `;
-    }
-
-    private async _getIndex() {
-        await this.#algoliaIndexContext?.getIndexById(Number(this.indexId))
-            .then(response => this.index = response as IndexConfigurationModel)
-            .catch(error => this._showError(error.message));
-    }
-
-    private _onKeyPress(e: KeyboardEvent) {
-        e.key == 'Enter' ? this._onSearch() : undefined;
-    }
-
-    private async _onSearch() {
-        if (!this._searchInput.value.length) return;
-
-        await this.#algoliaIndexContext?.searchIndex(Number(this.indexId), this._searchInput.value)
-            .then(response => {
-                this.indexSearchResult = response as ResponseModel;
-            })
-            .catch((error) => this._showError(error));
-    }
-
-    // notifications
-    private _showError(message: string) {
-        this.#notificationContext?.peek("danger", {
-            data: { message: message },
-        });
     }
 
     static styles = [
@@ -145,6 +141,6 @@ export default AlgoliaSearchElement;
 
 declare global {
     interface HTMLElementTagNameMap {
-        'algolia-search': AlgoliaSearchElement
+        [elementName]: AlgoliaSearchElement
     }
 }
