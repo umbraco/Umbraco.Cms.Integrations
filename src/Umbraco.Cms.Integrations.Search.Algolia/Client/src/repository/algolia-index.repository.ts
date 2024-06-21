@@ -5,7 +5,7 @@ import {
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
 
-import { IndexConfigurationModel, AlgoliaSearchService } from "@umbraco-integrations/algolia/generated";
+import { type IndexConfigurationModel, AlgoliaSearchService } from "@umbraco-integrations/algolia/generated";
 
 export class AlgoliaIndexRepository extends UmbControllerBase {
 

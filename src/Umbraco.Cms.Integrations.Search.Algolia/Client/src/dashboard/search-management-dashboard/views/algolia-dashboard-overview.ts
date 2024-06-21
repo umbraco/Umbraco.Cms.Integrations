@@ -8,7 +8,7 @@
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import { UMB_MODAL_MANAGER_CONTEXT, UMB_CONFIRM_MODAL } from "@umbraco-cms/backoffice/modal";
-import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '@umbraco-integrations/algolia/context';
+import { ALGOLIA_CONTEXT_TOKEN } from '@umbraco-integrations/algolia/context';
 import type {
     IndexConfigurationModel
 } from "@umbraco-integrations/algolia/generated";
@@ -17,7 +17,7 @@ const elementName = "algolia-dashboard-overview";
 
 @customElement(elementName)
 export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement) {
-    #algoliaIndexContext?: AlgoliaIndexContext;
+    #algoliaIndexContext!: typeof ALGOLIA_CONTEXT_TOKEN.TYPE;
 
     @state()
     private _loading = false;
@@ -28,8 +28,8 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
     constructor() {
         super();
 
-        this.consumeContext(ALGOLIA_CONTEXT_TOKEN, (_instance) => {
-            this.#algoliaIndexContext = _instance;
+        this.consumeContext(ALGOLIA_CONTEXT_TOKEN, (context) => {
+            this.#algoliaIndexContext = context;
         });
     }
 
@@ -41,8 +41,10 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
     async #getIndices() {
         this._loading = true;
 
-        var response = await this.#algoliaIndexContext?.getIndices();
-        this._indices = response?.data as IndexConfigurationModel[];
+        const { data } = await this.#algoliaIndexContext!.getIndices();
+        if (data) {
+            this._indices = data;
+        }
 
         this._loading = false;
     }  
@@ -66,14 +68,12 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
                 }
             }
         );
-        await modalContext
-            ?.onSubmit()
-            .then(async () => {
-                this._loading = true;
-                await this.#algoliaIndexContext?.buildIndex(index);
-                this._loading = false;
-            })
-            .catch(() => undefined);
+
+        await modalContext.onSubmit().catch(() => undefined);
+
+        this._loading = true;
+        await this.#algoliaIndexContext?.buildIndex(index);
+        this._loading = false;
     }
 
     async #onDeleteIndex(index: IndexConfigurationModel) {
@@ -92,15 +92,13 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
                 }
             }
         );
-        modalContext
-            ?.onSubmit()
-            .then(async () => {
-                this._loading = true;
-                await this.#algoliaIndexContext?.deleteIndex(index.id);
-                this.#getIndices();
-                this._loading = false;
-            })
-            .catch(() => undefined);
+
+        await modalContext.onSubmit().catch(() => undefined);
+
+        this._loading = true;
+        await this.#algoliaIndexContext?.deleteIndex(index.id);
+        this.#getIndices();
+        this._loading = false;
     }
 
     #renderIndicesList() {

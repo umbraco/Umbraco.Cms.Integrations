@@ -8,14 +8,14 @@
     query
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
-import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '@umbraco-integrations/algolia/context';
+import { ALGOLIA_CONTEXT_TOKEN } from '@umbraco-integrations/algolia/context';
 import type { IndexConfigurationModel, ResponseModel } from "@umbraco-integrations/algolia/generated";
 
 const elementName = "algolia-search";
 
 @customElement(elementName)
 export class AlgoliaSearchElement extends UmbElementMixin(LitElement) {
-    #algoliaIndexContext?: AlgoliaIndexContext;
+    #algoliaIndexContext!: typeof ALGOLIA_CONTEXT_TOKEN.TYPE;
 
     @property()
     indexId!: string;
@@ -46,14 +46,16 @@ export class AlgoliaSearchElement extends UmbElementMixin(LitElement) {
     constructor() {
         super();
         
-        this.consumeContext(ALGOLIA_CONTEXT_TOKEN, (_instance) => {
-            this.#algoliaIndexContext = _instance;
+        this.consumeContext(ALGOLIA_CONTEXT_TOKEN, (context) => {
+            this.#algoliaIndexContext = context;
         });
     }    
 
     async #getIndex() {
-        var response = await this.#algoliaIndexContext?.getIndexById(Number(this.indexId));
-        this.index = response?.data as IndexConfigurationModel;
+        const { data } = await this.#algoliaIndexContext.getIndexById(Number(this.indexId));
+        if (!data) return;
+
+        this.index = data;
     }
 
     #onKeyPress(e: KeyboardEvent) {
@@ -63,8 +65,10 @@ export class AlgoliaSearchElement extends UmbElementMixin(LitElement) {
     async #onSearch() {
         if (!this._searchInput.value.length) return;
 
-        var response = await this.#algoliaIndexContext?.searchIndex(Number(this.indexId), this._searchInput.value);
-        this.indexSearchResult = response?.data as ResponseModel;
+        const { data } = await this.#algoliaIndexContext.searchIndex(Number(this.indexId), this._searchInput.value);
+        if (!data) return;
+
+        this.indexSearchResult = data;
     }
 
     render() {

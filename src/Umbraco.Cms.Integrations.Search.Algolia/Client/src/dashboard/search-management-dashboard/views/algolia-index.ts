@@ -11,9 +11,8 @@ import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import {
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
-
-import { type AlgoliaIndexContext, ALGOLIA_CONTEXT_TOKEN } from '@umbraco-integrations/algolia/context';
-
+import type { UUIInputEvent } from "@umbraco-cms/backoffice/external/uui";
+import { ALGOLIA_CONTEXT_TOKEN } from '@umbraco-integrations/algolia/context';
 import type {
     IndexConfigurationModel,
     ContentTypeDtoModel
@@ -23,7 +22,7 @@ const elementName = "algolia-index";
 
 @customElement(elementName)
 export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
-    #algoliaIndexContext?: AlgoliaIndexContext;
+    #algoliaIndexContext!: typeof ALGOLIA_CONTEXT_TOKEN.TYPE;
 
     @property()
     indexId!: string;
@@ -39,23 +38,21 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
     private _contentTypes: Array<ContentTypeDtoModel> = [];
 
     @state()
-    private _showContentTypeProperties: boolean;
+    private _showContentTypeProperties = false;
 
     constructor() {
         super();
 
-        this.consumeContext(ALGOLIA_CONTEXT_TOKEN, (_instance) => {
-            this.#algoliaIndexContext = _instance;
+        this.consumeContext(ALGOLIA_CONTEXT_TOKEN, (context) => {
+            this.#algoliaIndexContext = context;
         });
-
-        this._showContentTypeProperties = false;
     }
 
-    connectedCallback() {
+    async connectedCallback() {
         super.connectedCallback();
 
         if (this.indexId.length > 0) {
-            this.#getContentTypesWithIndex();
+            await this.#getContentTypesWithIndex();
             this.#getIndex();
         }
         else {
@@ -64,38 +61,54 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
     }
     
     async #getContentTypes() {
-        var response = await this.#algoliaIndexContext?.getContentTypes();
-        this._contentTypes = response?.data as Array<ContentTypeDtoModel>;
+        const { data } = await this.#algoliaIndexContext.getContentTypes();
+        if (!data) return;
+
+        this._contentTypes = data;
     }
 
     async #getContentTypesWithIndex() {
-        var response = await this.#algoliaIndexContext?.getContentTypesWithIndex(Number(this.indexId));
-        this._contentTypes = response?.data as Array<ContentTypeDtoModel>;
+        const { data } = await this.#algoliaIndexContext.getContentTypesWithIndex(Number(this.indexId));
+        if (!data) return;
+
+        this._contentTypes = data;
     }
 
     async #getIndex() {
-        var response = await this.#algoliaIndexContext?.getIndexById(Number(this.indexId));
-        this._model = response?.data as IndexConfigurationModel;
+        const { data } = await this.#algoliaIndexContext.getIndexById(Number(this.indexId));
+        if (!data) return;
+
+        this._model = data;
+
+        if (this._model.contentData.length) {
+            this._showContentTypeProperties = true;
+        }
     }    
+
+    #handleNameChange(e: UUIInputEvent) {
+        this._model.name = e.target.value.toString();
+    }
 
     async #contentTypeSelected(id: number) {
         this._contentTypes = this._contentTypes.map((obj) => {
-            if (obj.id == id) {
+            if (obj.id === id) {
                 obj.selected = true;
             }
             return obj;
         });
+
         this._showContentTypeProperties = true;
     }
 
     async #contentTypeDeselected(id: number) {
         this._contentTypes = this._contentTypes.map((obj) => {
-            if (obj.id == id) {
+            if (obj.id === id) {
                 obj.selected = false;
             }
             return obj;
         });
-        this._showContentTypeProperties = false;
+
+        this._showContentTypeProperties = this._contentTypes.filter(x => x.selected).length !== 0;
     }
 
     async #contentTypePropertySelected(contentType: ContentTypeDtoModel | undefined, id: number) {
@@ -134,27 +147,21 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
     async #handleSubmit(e: SubmitEvent) {
         e.preventDefault();
 
-        const form = e.target as HTMLFormElement;
-        const formData = new FormData(form);
-
-        const indexName = this.indexId.length > 0
-            ? this._model.name
-            : formData.get("indexName") as string;
-
-        if (indexName.length == 0 || this._contentTypes === undefined || this._contentTypes.filter(obj => obj.selected).length == 0) {
+        if (this._model.name.length == 0 || this._contentTypes === undefined || this._contentTypes?.filter(obj => obj.selected).length == 0) {
             this.#showError("Index name and content schema are required.");
             return;
         }
 
         const indexConfiguration: IndexConfigurationModel = {
             id: 0,
-            name: indexName,
+            name: this._model.name,
             contentData: []
         };
 
         if (this.indexId.length > 0) {
             indexConfiguration.id = Number(this.indexId);
         }
+
         indexConfiguration.contentData = this._contentTypes;
 
         await this.#algoliaIndexContext?.saveIndex(indexConfiguration);
@@ -174,12 +181,13 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
         return html`
             ${this._contentTypes.map((contentType) => {
                 return html`
-                    <uui-ref-node id="dc_${contentType.alias}_${contentType.id}"
-                                selectable
-                                name=${contentType.name}
-                                @selected=${() => this.#contentTypeSelected(contentType.id)}
-                                @deselected=${() => this.#contentTypeDeselected(contentType.id)}>
-                        <uui-icon slot="icon" name=${contentType.icon}></uui-icon>
+                    <uui-ref-node 
+                        selectable
+                        ?selected=${contentType.selected}
+                        name=${contentType.name}
+                        @selected=${() => this.#contentTypeSelected(contentType.id)}
+                        @deselected=${() => this.#contentTypeDeselected(contentType.id)}>
+                        <umb-icon slot="icon" name=${contentType.icon}></umb-icon>
                         ${contentType.selected ? html`<uui-tag size="s" slot="tag" color="positive">Selected</uui-tag>` : ''}
                         <uui-action-bar slot="actions">
                             <uui-button label="Remove" color="danger">
@@ -195,29 +203,33 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
     private renderContentTypeProperties() {
         if (this._showContentTypeProperties === false) return nothing;
 
-        const selectedContentType = this._contentTypes.find((obj) => obj.selected == true);
+        const selectedContentTypes = this._contentTypes.filter((obj) => obj.selected == true);
 
-        if (selectedContentType === undefined) return nothing;
+        if (!selectedContentTypes?.length) return nothing;
 
         return html`
-            <uui-form-layout-item>
-                <uui-label slot="label">${selectedContentType.name} Properties</uui-label>
-                    <div class="alg-col-3">
-                        ${selectedContentType.properties.map((property) => {
-                            return html`
-                                <uui-card-content-node selectable
-                                            @selected=${() => this.#contentTypePropertySelected(selectedContentType, property.id)}
-                                            @deselected=${() => this.#contentTypePropertyDeselected(selectedContentType, property.id)}
-                                            name=${property.name}>
-                                    ${property.selected ? html`<uui-tag size="s" slot="tag" color="positive">Selected</uui-tag>` : ''}
-                                    <ul style="list-style: none; padding-inline-start: 0px; margin: 0;">
-                                        <li><span style="font-weight: 700">Group: </span> ${property.group}</li>
-                                    </ul>
-                                </uui-card-content-node>
-                            `;
-                        })}
-                    </div>
-            </uui-form-layout-item>
+            ${selectedContentTypes.map(selectedContentType => html`
+                <uui-form-layout-item>
+                    <uui-label slot="label">${selectedContentType.name} Properties</uui-label>
+                        <div id="grid">
+                            ${selectedContentType.properties.map((property) => {
+                                return html`
+                                    <uui-card-content-node 
+                                        selectable
+                                        ?selected=${property.selected}
+                                        @selected=${() => this.#contentTypePropertySelected(selectedContentType, property.id)}
+                                        @deselected=${() => this.#contentTypePropertyDeselected(selectedContentType, property.id)}
+                                        name=${property.name}>
+                                        ${property.selected ? html`<uui-tag size="s" slot="tag" color="positive">Selected</uui-tag>` : ''}
+                                        <ul style="list-style: none; padding-inline-start: 0px; margin: 0;">
+                                            <li><span style="font-weight: 700">Group: </span> ${property.group}</li>
+                                        </ul>
+                                    </uui-card-content-node>
+                                `;
+                            })}
+                        </div>
+                </uui-form-layout-item>
+            `)}
         `;
     }
 
@@ -226,22 +238,25 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
             <uui-box headline=${this.indexId.length > 0 ? "Create Index Definition" : "Edit Index Definition"}>
                 <uui-form>
                     <form id="manageIndexFrm" name="manageIndexFrm" @submit=${this.#handleSubmit}>
-                        <uui-form-layout-item>
-                            <uui-label slot="label" for="inName" required="">Name</uui-label>
-                            <span class="alg-description" slot="description">Please enter a name for the index. After save,<br /> you will not be able to change it.</span>
-                            <div>
-                                <uui-input type="text" name="indexName" label="indexName" ?disabled=${this.indexId.length > 0} .value=${this._model.name} style="width: 17%"></uui-input>                                
-                            </div>
-                        </uui-form-layout-item>
+                        <umb-property-layout 
+                            label="Name" 
+                            description="Please enter a name for the index. After save, you will not be able to change it."> 
+                            <uui-input 
+                                slot="editor" 
+                                ?disabled=${this.indexId.length > 0} 
+                                .value=${this._model.name}
+                                @change=${this.#handleNameChange}></uui-input>                                
+                        </umb-property-layout>
 
-                        <div class="alg-col-2">
-                            <uui-form-layout-item>
-                                <uui-label slot="label">Document Types</uui-label>
-                                <span class="alg-description" slot="description">Please select the document types you would like to index, and choose the fields to include.</span>
+                        <umb-property-layout 
+                            label="Document Types" 
+                            description="Please select the document types you would like to index, and choose the fields to include.">
+                            <div slot="editor">
                                 ${this.renderContentTypes()}
-                            </uui-form-layout-item>
-                            ${this.renderContentTypeProperties()}
-                        </div>
+                                ${this.renderContentTypeProperties()}
+                            </div>
+                        </umb-property-layout>                        
+          
                         <uui-button type="submit" label=${this.localize.term("buttons_save")} look="primary" color="positive"></uui-button>
                     </form>
                 </uui-form>
@@ -251,16 +266,7 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
 
     static styles = [
         css`
-          .center {
-            display: grid;
-            place-items: center;
-          }
-          .alg-col-2 {
-            display: grid;
-            grid-template-columns: 25% 60%;
-            gap: 20px;
-          }
-          .alg-col-3 {
+          #grid {
             display: grid;
             grid-template-columns: 33% 33% 33%;
             gap: 10px;
