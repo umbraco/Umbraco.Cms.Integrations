@@ -14,6 +14,7 @@ using System.Text.Json;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Core.Web;
+using Umbraco.Cms.Integrations.Search.Algolia.Models.ContentTypeDtos;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 {
@@ -103,9 +104,9 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
                 {
                     foreach (var index in indices)
                     {
-                        var indexConfiguration = JsonSerializer.Deserialize<List<ContentData>>(index.SerializedData)
-                            .FirstOrDefault(p => p.ContentType.Alias == entity.ContentType.Alias);
-                        if (indexConfiguration == null || indexConfiguration.ContentType.Alias != entity.ContentType.Alias) continue;
+                        var indexConfiguration = JsonSerializer.Deserialize<IEnumerable<ContentTypeDto>>(index.SerializedData)
+                            .FirstOrDefault(p => p.Alias == entity.ContentType.Alias);
+                        if (indexConfiguration == null || indexConfiguration.Alias != entity.ContentType.Alias) continue;
 
                         var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory, _recordBuilderFactory, _umbracoContextFactory)
                            .BuildFromContent(entity, (p) => indexConfiguration.Properties.Any(q => q.Alias == p.Alias))

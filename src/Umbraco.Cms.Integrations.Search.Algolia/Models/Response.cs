@@ -9,6 +9,6 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Models
 
         public int ItemsPerPage { get; set; }
 
-        public List<Dictionary<string, string>> Hits { get; set; }
+        public List<Dictionary<string, string?>> Hits { get; set; } = [];
     }
 }

@@ -28,7 +28,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
                 return default;
             }
 
-            var indexValues = propertyEditor.PropertyIndexValueFactory.GetIndexValues(property, culture, null, true);
+            var indexValues = propertyEditor.PropertyIndexValueFactory.GetIndexValues(property, culture, null, true, Enumerable.Empty<string>(), null);
 
             if (indexValues == null || !indexValues.Any()) return new KeyValuePair<string, object>(property.Alias, string.Empty);
 
