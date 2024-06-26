@@ -9,7 +9,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers;
 [ApiController]
 [BackOfficeRoute($"{Constants.ManagementApi.RootPath}/v{{version:apiVersion}}/search")]
 [Authorize(Policy = AuthorizationPolicies.BackOfficeAccess)]
-[MapToApi(Constants.ManagementApi.GroupName)]
+[MapToApi(Constants.ManagementApi.ApiName)]
 public abstract class SearchControllerBase : Controller
 {
     
