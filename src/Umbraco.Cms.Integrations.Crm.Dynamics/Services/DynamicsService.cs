@@ -133,23 +133,30 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             if (module.HasFlag(DynamicsModule.Outbound))
             {
                 var forms = await Get<OutboundFormDto>(oauthConfiguration.AccessToken, Constants.Modules.OutboundPath);
-                list.AddRange(forms.Value.Select(p => new FormDto
+
+                if (forms != null && forms.Value != null && forms.Value.Any())
                 {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Module = DynamicsModule.Outbound
-                }));
+                    list.AddRange(forms.Value.Select(p => new FormDto
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Module = DynamicsModule.Outbound
+                    }));
+                }
             }
 
             if (module.HasFlag(DynamicsModule.RealTime))
             {
                 var forms = await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath);
-                list.AddRange(forms.Value.Select(p => new FormDto
+                if (forms != null && forms.Value != null && forms.Value.Any())
                 {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Module = DynamicsModule.RealTime
-                }));
+                    list.AddRange(forms.Value.Select(p => new FormDto
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Module = DynamicsModule.RealTime
+                    }));
+                }
             }
 
             return list;
