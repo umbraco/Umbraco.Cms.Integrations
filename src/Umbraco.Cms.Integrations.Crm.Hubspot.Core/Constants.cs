@@ -25,9 +25,9 @@
 
             public const string InvalidApiKey = "Invalid API key.";
 
-            public const string ApiKeyMissing = "Cannot access Hubspot - API key is missing";
+            public const string ApiKeyMissing = "Cannot access HubSpot - API key is missing";
 
-            public const string AccessTokenMissing = "Cannot access Hubspot - Access Token is missing.";
+            public const string AccessTokenMissing = "Cannot access HubSpot - Access Token is missing.";
 
             public const string OAuthInvalidToken = "Unable to connect to HubSpot. Please review the settings of the form picker property's data type.";
 

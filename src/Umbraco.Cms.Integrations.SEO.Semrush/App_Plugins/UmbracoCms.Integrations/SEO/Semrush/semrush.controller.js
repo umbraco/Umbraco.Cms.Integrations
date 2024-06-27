@@ -200,7 +200,7 @@
         function validateToken() {
             umbracoCmsIntegrationsSemrushResource.validateToken().then(function (response) {
                 vm.isFreeAccount = response.isFreeAccount;
-                if (response.isExpired) {
+                if (!response.isAuthorized) {
                     vm.isConnected = false;
                 } else {
                     if (response.isValid === false) {
@@ -275,6 +275,7 @@
             var options = {
                 title: "SEMrush Authorization Details",
                 isFreeAccount: vm.isFreeAccount,
+                isAuthorized: vm.isConnected,
                 view: "/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/statusEditor.html",
                 size: "small",
                 revoke: function () {

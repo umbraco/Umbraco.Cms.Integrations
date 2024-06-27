@@ -22,7 +22,7 @@ This repository houses open-source extensions, created for Umbraco CMS, that int
 
 ### CRM
 
-[HubSpot](./src/Umbraco.Cms.Integrations.Crm.Hubspot/) - a form picker and rendering component for Hubspot forms.
+[HubSpot](./src/Umbraco.Cms.Integrations.Crm.Hubspot/) - a form picker and rendering component for HubSpot forms.
 
 [Dynamics](./src/Umbraco.Cms.Integrations.Crm.Dynamics/) - a form picker and rendering component for Dynamics 365 Marketing forms.
 

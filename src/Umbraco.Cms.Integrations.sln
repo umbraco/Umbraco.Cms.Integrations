@@ -2,12 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Commerce.CommerceTools", "Umbraco.Cms.Integrations.Commerce.CommerceTools\Umbraco.Cms.Integrations.Commerce.CommerceTools.csproj", "{85A73911-0146-409F-9488-33EA5750A07C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commerce", "Commerce", "{82B16D39-675A-4D40-808D-C6DDFDA37C20}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommerceTools", "CommerceTools", "{374203EC-D774-443A-9AFF-559D2C1D9E76}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2801CB6C-78DE-4129-B5C6-D349F47F9B5C}"
 	ProjectSection(SolutionItems) = preProject
 		..\azure-pipeline - Commerce.CommerceTools.yml = ..\azure-pipeline - Commerce.CommerceTools.yml
@@ -17,77 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Crm", "Crm", "{4BDA951C-9C9D-4231-96CB-B1D9B75AF63B}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hubspot", "Hubspot", "{F471F232-94E4-4D29-B75A-B1C61CB92584}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.Hubspot", "Umbraco.Cms.Integrations.Crm.Hubspot\Umbraco.Cms.Integrations.Crm.Hubspot.csproj", "{BB272CE8-C6D3-4529-81F5-EBEBCAB11219}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SEO", "SEO", "{5412E123-F4CD-448D-88F8-EC01403365C4}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Semrush", "Semrush", "{CA69D494-27A5-4888-B2F9-5886D735CCCC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.SEO.Semrush", "Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj", "{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shopify", "Shopify", "{D4E7EA3B-CDC4-4F87-BD06-951221CEAABD}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Commerce.Shopify", "Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj", "{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.Hubspot.Tests", "Umbraco.Cms.Integrations.Crm.Hubspot.Tests\Umbraco.Cms.Integrations.Crm.Hubspot.Tests.csproj", "{1C5F18D0-A32F-481B-AF03-D862CFB02F5F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{EBF16D40-2F6A-42CA-88CF-E314567D8163}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Shared", "Umbraco.Cms.Integrations.Shared\Umbraco.Cms.Integrations.Shared.csproj", "{E380C97F-7A0D-4819-8145-A67CE4143E31}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Testsite.V9", "Umbraco.Cms.Integrations.Testsite.V9\Umbraco.Cms.Integrations.Testsite.V9.csproj", "{178A53E1-6D56-4446-AB45-87E84ED92326}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Automation", "Automation", "{6030B626-FA48-4D48-9953-24CEAA358D5E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zapier", "Zapier", "{88BAB7E5-51EE-4D34-941A-71A8946C0E5B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Automation.Zapier", "Umbraco.Cms.Integrations.Automation.Zapier\Umbraco.Cms.Integrations.Automation.Zapier.csproj", "{4AFE0FD6-95A8-4C57-864E-0FC4EF34FA17}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GoogleSearchConsole", "GoogleSearchConsole", "{4B3C1538-84B4-4963-A8B9-DF7656900E15}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool", "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.UrlInspectionTool\Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.csproj", "{B7F4963E-81F6-4829-AF7F-59E4FFF57266}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dynamics", "Dynamics", "{8764ECBB-1B39-4D8A-A86B-ECD0D3F0F3D6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.Dynamics", "Umbraco.Cms.Integrations.Crm.Dynamics\Umbraco.Cms.Integrations.Crm.Dynamics.csproj", "{E837A4C4-8518-42AA-AC75-EA1CA0DE3EC4}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Testsite.V10", "Umbraco.Cms.Integrations.Testsite.V10\Umbraco.Cms.Integrations.Testsite.V10.csproj", "{493F2509-0CCF-4027-8ECA-B4C4D3FDA80E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ActiveCampaign", "ActiveCampaign", "{1A4D3D38-F5B2-4528-92A1-318A7D09949D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.ActiveCampaign", "Umbraco.Cms.Integrations.Crm.ActiveCampaign\Umbraco.Cms.Integrations.Crm.ActiveCampaign.csproj", "{8FC3A87F-C10E-4605-9D24-BFF46D472170}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Search", "Search", "{F56605AE-2258-4F61-B454-4247334DFC26}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Algolia", "Algolia", "{F2CAA1F7-9BED-4EB6-8875-D176B92D393A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Search.Algolia", "Umbraco.Cms.Integrations.Search.Algolia\Umbraco.Cms.Integrations.Search.Algolia.csproj", "{54A624E5-5321-4CC8-B74B-11ABF3605242}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Search.Algolia", "Umbraco.Cms.Integrations.Search.Algolia\Umbraco.Cms.Integrations.Search.Algolia.csproj", "{434608E7-143B-4761-A7E9-328DF0CFAB89}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PIM", "PIM", "{B5D14B4B-0E39-4C01-9021-D9A75F358DE1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Testsite.V11", "Umbraco.Cms.Integrations.Testsite.V11\Umbraco.Cms.Integrations.Testsite.V11.csproj", "{C3A51214-F058-4864-B0B2-4F788383A5EC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.PIM.Inriver", "Umbraco.Cms.Integrations.PIM.Inriver\Umbraco.Cms.Integrations.PIM.Inriver.csproj", "{904B3CF6-1015-465E-8244-70FC90466F22}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core", "Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core\Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.csproj", "{14303AD9-B64B-4DE1-AB4E-B0979277EAC2}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAM", "DAM", "{9115D76C-6BC3-4EAF-AB4E-96A2B7B02D13}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.DAM.Aprimo", "Umbraco.Cms.Integrations.DAM.Aprimo\Umbraco.Cms.Integrations.DAM.Aprimo.csproj", "{56717ED4-0FA7-4536-B704-22D5886DFF87}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analytics", "Analytics", "{54684516-D990-41C7-885E-96A064A55BB1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Analytics.Cookiebot", "Umbraco.Cms.Integrations.Analytics.Cookiebot\Umbraco.Cms.Integrations.Analytics.Cookiebot.csproj", "{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Testsite.V12", "Umbraco.Cms.Integrations.Testsite.V12\Umbraco.Cms.Integrations.Testsite.V12.csproj", "{D1577F08-1D33-466B-9019-8133FB51BE06}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.Hubspot.Core", "Umbraco.Cms.Integrations.Crm.Hubspot.Core\Umbraco.Cms.Integrations.Crm.Hubspot.Core.csproj", "{C6B5A14F-396D-4544-A4D2-A3A17DCBB16B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Testsite.V13", "Umbraco.Cms.Integrations.Testsite.V13\Umbraco.Cms.Integrations.Testsite.V13.csproj", "{E612C313-78FF-4CDA-B09F-385F9BFC1AF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Testsite.V14", "Umbraco.Cms.Integrations.Testsite.V14\Umbraco.Cms.Integrations.Testsite.V14.csproj", "{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,120 +25,21 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{85A73911-0146-409F-9488-33EA5750A07C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{85A73911-0146-409F-9488-33EA5750A07C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{85A73911-0146-409F-9488-33EA5750A07C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{85A73911-0146-409F-9488-33EA5750A07C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BB272CE8-C6D3-4529-81F5-EBEBCAB11219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB272CE8-C6D3-4529-81F5-EBEBCAB11219}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB272CE8-C6D3-4529-81F5-EBEBCAB11219}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB272CE8-C6D3-4529-81F5-EBEBCAB11219}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C5F18D0-A32F-481B-AF03-D862CFB02F5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C5F18D0-A32F-481B-AF03-D862CFB02F5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C5F18D0-A32F-481B-AF03-D862CFB02F5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C5F18D0-A32F-481B-AF03-D862CFB02F5F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E380C97F-7A0D-4819-8145-A67CE4143E31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E380C97F-7A0D-4819-8145-A67CE4143E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E380C97F-7A0D-4819-8145-A67CE4143E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E380C97F-7A0D-4819-8145-A67CE4143E31}.Release|Any CPU.Build.0 = Release|Any CPU
-		{178A53E1-6D56-4446-AB45-87E84ED92326}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{178A53E1-6D56-4446-AB45-87E84ED92326}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{178A53E1-6D56-4446-AB45-87E84ED92326}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{178A53E1-6D56-4446-AB45-87E84ED92326}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4AFE0FD6-95A8-4C57-864E-0FC4EF34FA17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4AFE0FD6-95A8-4C57-864E-0FC4EF34FA17}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4AFE0FD6-95A8-4C57-864E-0FC4EF34FA17}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4AFE0FD6-95A8-4C57-864E-0FC4EF34FA17}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B7F4963E-81F6-4829-AF7F-59E4FFF57266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7F4963E-81F6-4829-AF7F-59E4FFF57266}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7F4963E-81F6-4829-AF7F-59E4FFF57266}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7F4963E-81F6-4829-AF7F-59E4FFF57266}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E837A4C4-8518-42AA-AC75-EA1CA0DE3EC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E837A4C4-8518-42AA-AC75-EA1CA0DE3EC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E837A4C4-8518-42AA-AC75-EA1CA0DE3EC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E837A4C4-8518-42AA-AC75-EA1CA0DE3EC4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{493F2509-0CCF-4027-8ECA-B4C4D3FDA80E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{493F2509-0CCF-4027-8ECA-B4C4D3FDA80E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{493F2509-0CCF-4027-8ECA-B4C4D3FDA80E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{493F2509-0CCF-4027-8ECA-B4C4D3FDA80E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8FC3A87F-C10E-4605-9D24-BFF46D472170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FC3A87F-C10E-4605-9D24-BFF46D472170}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FC3A87F-C10E-4605-9D24-BFF46D472170}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FC3A87F-C10E-4605-9D24-BFF46D472170}.Release|Any CPU.Build.0 = Release|Any CPU
-		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54A624E5-5321-4CC8-B74B-11ABF3605242}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C3A51214-F058-4864-B0B2-4F788383A5EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C3A51214-F058-4864-B0B2-4F788383A5EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C3A51214-F058-4864-B0B2-4F788383A5EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C3A51214-F058-4864-B0B2-4F788383A5EC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{904B3CF6-1015-465E-8244-70FC90466F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{904B3CF6-1015-465E-8244-70FC90466F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{904B3CF6-1015-465E-8244-70FC90466F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{904B3CF6-1015-465E-8244-70FC90466F22}.Release|Any CPU.Build.0 = Release|Any CPU
-		{14303AD9-B64B-4DE1-AB4E-B0979277EAC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{14303AD9-B64B-4DE1-AB4E-B0979277EAC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{14303AD9-B64B-4DE1-AB4E-B0979277EAC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{14303AD9-B64B-4DE1-AB4E-B0979277EAC2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56717ED4-0FA7-4536-B704-22D5886DFF87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56717ED4-0FA7-4536-B704-22D5886DFF87}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56717ED4-0FA7-4536-B704-22D5886DFF87}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56717ED4-0FA7-4536-B704-22D5886DFF87}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D1577F08-1D33-466B-9019-8133FB51BE06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D1577F08-1D33-466B-9019-8133FB51BE06}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D1577F08-1D33-466B-9019-8133FB51BE06}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D1577F08-1D33-466B-9019-8133FB51BE06}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C6B5A14F-396D-4544-A4D2-A3A17DCBB16B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C6B5A14F-396D-4544-A4D2-A3A17DCBB16B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C6B5A14F-396D-4544-A4D2-A3A17DCBB16B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C6B5A14F-396D-4544-A4D2-A3A17DCBB16B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E612C313-78FF-4CDA-B09F-385F9BFC1AF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E612C313-78FF-4CDA-B09F-385F9BFC1AF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E612C313-78FF-4CDA-B09F-385F9BFC1AF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E612C313-78FF-4CDA-B09F-385F9BFC1AF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{434608E7-143B-4761-A7E9-328DF0CFAB89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{434608E7-143B-4761-A7E9-328DF0CFAB89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{434608E7-143B-4761-A7E9-328DF0CFAB89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{434608E7-143B-4761-A7E9-328DF0CFAB89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{85A73911-0146-409F-9488-33EA5750A07C} = {374203EC-D774-443A-9AFF-559D2C1D9E76}
-		{374203EC-D774-443A-9AFF-559D2C1D9E76} = {82B16D39-675A-4D40-808D-C6DDFDA37C20}
-		{F471F232-94E4-4D29-B75A-B1C61CB92584} = {4BDA951C-9C9D-4231-96CB-B1D9B75AF63B}
-		{BB272CE8-C6D3-4529-81F5-EBEBCAB11219} = {F471F232-94E4-4D29-B75A-B1C61CB92584}
-		{CA69D494-27A5-4888-B2F9-5886D735CCCC} = {5412E123-F4CD-448D-88F8-EC01403365C4}
-		{B69B18C8-6A17-4EEE-874D-DA2DA55BD3B0} = {CA69D494-27A5-4888-B2F9-5886D735CCCC}
-		{D4E7EA3B-CDC4-4F87-BD06-951221CEAABD} = {82B16D39-675A-4D40-808D-C6DDFDA37C20}
-		{D1FB84DB-F1E4-42B6-8118-8C5B8424775B} = {D4E7EA3B-CDC4-4F87-BD06-951221CEAABD}
-		{1C5F18D0-A32F-481B-AF03-D862CFB02F5F} = {F471F232-94E4-4D29-B75A-B1C61CB92584}
-		{E380C97F-7A0D-4819-8145-A67CE4143E31} = {EBF16D40-2F6A-42CA-88CF-E314567D8163}
-		{88BAB7E5-51EE-4D34-941A-71A8946C0E5B} = {6030B626-FA48-4D48-9953-24CEAA358D5E}
-		{4AFE0FD6-95A8-4C57-864E-0FC4EF34FA17} = {88BAB7E5-51EE-4D34-941A-71A8946C0E5B}
-		{4B3C1538-84B4-4963-A8B9-DF7656900E15} = {5412E123-F4CD-448D-88F8-EC01403365C4}
-		{B7F4963E-81F6-4829-AF7F-59E4FFF57266} = {4B3C1538-84B4-4963-A8B9-DF7656900E15}
-		{8764ECBB-1B39-4D8A-A86B-ECD0D3F0F3D6} = {4BDA951C-9C9D-4231-96CB-B1D9B75AF63B}
-		{E837A4C4-8518-42AA-AC75-EA1CA0DE3EC4} = {8764ECBB-1B39-4D8A-A86B-ECD0D3F0F3D6}
-		{1A4D3D38-F5B2-4528-92A1-318A7D09949D} = {4BDA951C-9C9D-4231-96CB-B1D9B75AF63B}
-		{8FC3A87F-C10E-4605-9D24-BFF46D472170} = {1A4D3D38-F5B2-4528-92A1-318A7D09949D}
 		{F2CAA1F7-9BED-4EB6-8875-D176B92D393A} = {F56605AE-2258-4F61-B454-4247334DFC26}
-		{54A624E5-5321-4CC8-B74B-11ABF3605242} = {F2CAA1F7-9BED-4EB6-8875-D176B92D393A}
-		{904B3CF6-1015-465E-8244-70FC90466F22} = {B5D14B4B-0E39-4C01-9021-D9A75F358DE1}
-		{14303AD9-B64B-4DE1-AB4E-B0979277EAC2} = {1A4D3D38-F5B2-4528-92A1-318A7D09949D}
-		{56717ED4-0FA7-4536-B704-22D5886DFF87} = {9115D76C-6BC3-4EAF-AB4E-96A2B7B02D13}
-		{5CB587DB-D6AD-4AA9-A2FE-52976C5F66C3} = {54684516-D990-41C7-885E-96A064A55BB1}
-		{C6B5A14F-396D-4544-A4D2-A3A17DCBB16B} = {F471F232-94E4-4D29-B75A-B1C61CB92584}
+		{434608E7-143B-4761-A7E9-328DF0CFAB89} = {F2CAA1F7-9BED-4EB6-8875-D176B92D393A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FB51E08-A3C8-4DFF-B3CB-E99C2ED021D5}

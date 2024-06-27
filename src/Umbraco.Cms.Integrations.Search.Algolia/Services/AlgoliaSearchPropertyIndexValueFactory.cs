@@ -28,7 +28,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
                 return default;
             }
 
-            var indexValues = propertyEditor.PropertyIndexValueFactory.GetIndexValues(property, culture, string.Empty, true);
+            var indexValues = propertyEditor.PropertyIndexValueFactory.GetIndexValues(property, culture, null, true, Enumerable.Empty<string>(), null);
 
             if (indexValues == null || !indexValues.Any()) return new KeyValuePair<string, object>(property.Alias, string.Empty);
 
@@ -37,7 +37,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
             var converter = _converterCollection.FirstOrDefault(p => p.Name == property.PropertyType.PropertyEditorAlias);
             if (converter != null)
             {
-                var result = converter.ParseIndexValues(indexValue.Value);
+                var result = converter.ParseIndexValues(property, indexValue.Value);
                 return new KeyValuePair<string, object>(property.Alias, result);
             }
 

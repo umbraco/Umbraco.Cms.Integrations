@@ -10,7 +10,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
     }
 
     public interface IRecordBuilder<in TContentType> 
-        : IRecordBuilder where TContentType : PublishedContentModel 
+        : IRecordBuilder where TContentType : IPublishedContent 
     {
     }
 }

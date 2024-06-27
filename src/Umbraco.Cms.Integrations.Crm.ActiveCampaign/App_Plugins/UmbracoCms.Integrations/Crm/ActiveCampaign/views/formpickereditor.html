@@ -24,6 +24,21 @@
                                 </a>
                             </li>
                         </ul>
+                        <!-- If list is empty, then display -->
+                        <umb-empty-state ng-if="!vm.formsList"
+                                         position="center">
+                            <localize key="content_listViewNoItems">There are no forms in the list.</localize>
+                        </umb-empty-state>
+                        <!-- Pagination -->
+                        <div class="flex justify-center" ng-show="!vm.loading">
+                            <umb-pagination page-number="vm.pagination.pageNumber"
+                                            total-pages="vm.pagination.totalPages"
+                                            on-next="vm.nextPage"
+                                            on-prev="vm.prevPage"
+                                            on-change="vm.changePage"
+                                            on-go-to-page="vm.goToPage">
+                            </umb-pagination>
+                        </div>
                     </div>
 
                     <div ng-if="vm.status" class="alert alert-warning">

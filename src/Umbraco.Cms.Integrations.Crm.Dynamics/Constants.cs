@@ -58,5 +58,12 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
 
             public const string UmbracoCmsIntegrationsCrmDynamicsTokenEndpointKey = "Umbraco.Cms.Integrations.Crm.Dynamics.TokenEndpoint";
         }
+
+        public static class Modules
+        {
+            public const string OutboundPath = "msdyncrm_marketingforms";
+
+            public const string RealTimePath = "msdynmkt_marketingforms";
+        }
     }
 }

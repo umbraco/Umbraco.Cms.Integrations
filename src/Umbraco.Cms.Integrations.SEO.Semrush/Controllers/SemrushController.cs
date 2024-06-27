@@ -113,13 +113,19 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Controllers
         {
             _semrushTokenService.TryGetParameters(Constants.TokenDbKey, out TokenDto token);
 
-            if (!token.IsAccessTokenAvailable) return new AuthorizationResponseDto { IsExpired = true };
+            if (!token.IsAccessTokenAvailable) return new AuthorizationResponseDto { IsAuthorized = false };
 
             var response = await ClientFactory()
                 .GetAsync(string.Format(Constants.SemrushKeywordsEndpoint, _settings.BaseUrl, "phrase_related", token.AccessToken, "ping", "us"));
 
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                await _authorizationService.RefreshAccessTokenAsync();
+            }
+
             return new AuthorizationResponseDto
             {
+                IsAuthorized = response.StatusCode == HttpStatusCode.OK,
                 IsValid = response.StatusCode != HttpStatusCode.Unauthorized,
                 IsFreeAccount = response.Headers.TryGetValues(Constants.AllowLimitOffsetHeaderName,
                     out IEnumerable<string> values)

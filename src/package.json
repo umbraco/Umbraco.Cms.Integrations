@@ -9,6 +9,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@umbraco-cms/backoffice": "^14.0.0--preview007",
     "copy-and-watch": "^0.1.5"
+  },
+  "dependencies": {
+    "vite": "^5.1.4"
   }
 }

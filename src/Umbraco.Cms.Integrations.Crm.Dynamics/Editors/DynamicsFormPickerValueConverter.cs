@@ -3,6 +3,10 @@ using Newtonsoft.Json.Linq;
 using System;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Helpers;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
+
+
 
 #if NETCOREAPP
 using Microsoft.Extensions.Options;
@@ -18,6 +22,13 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
 {
     public class DynamicsFormPickerValueConverter : PropertyValueConverterBase
     {
+        private readonly DynamicsService _dynamicsService;
+
+        public DynamicsFormPickerValueConverter(DynamicsService dynamicsService)
+        {
+            _dynamicsService = dynamicsService;
+        }
+
         public override bool IsConverter(IPublishedPropertyType propertyType) => propertyType.EditorAlias.Equals("Umbraco.Cms.Integrations.Crm.Dynamics.FormPicker");
 
         public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType) => PropertyCacheLevel.Snapshot;
@@ -30,18 +41,34 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
 
             var jObject = JObject.Parse(source.ToString());
 
-            var embedCode = jObject["embedCode"].ToString();
-            var iframeEmbedd = (bool)jObject["iframeEmbedded"];
-
             var vm = new FormViewModel
             {
-                IframeEmbedded = iframeEmbedd,
-                FormBlockId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataFormBlockId),
-                ContainerId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.ContainerId),
-                ContainerClass = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.ContainerClass),
-                WebsiteId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataWebsiteId),
-                Hostname = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataHostname)
+                IframeEmbedded = (bool)jObject["iframeEmbedded"]
             };
+
+            var module = (DynamicsModule)Enum.Parse(typeof(DynamicsModule), jObject["module"].ToString());
+
+            vm.Module = module;
+
+            if (module.HasFlag(DynamicsModule.Outbound))
+            {
+
+                var embedCode = jObject["embedCode"].ToString();
+
+                vm.FormBlockId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataFormBlockId);
+                vm.ContainerId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.ContainerId);
+                vm.ContainerClass = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.ContainerClass);
+                vm.WebsiteId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataWebsiteId);
+                vm.Hostname = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataHostname);
+            }
+            else
+            {
+                var form = _dynamicsService.GetRealTimeForm(jObject["id"].ToString()).ConfigureAwait(false).GetAwaiter().GetResult();
+                if (form != null)
+                {
+                    vm.Html = form.StandaloneHtml;
+                }
+            }
 
             return vm;
         }

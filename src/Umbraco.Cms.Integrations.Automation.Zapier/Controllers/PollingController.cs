@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using Umbraco.Cms.Integrations.Automation.Zapier.Extensions;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 
 #if NETCOREAPP
@@ -25,22 +24,33 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
     {
         private readonly IContentTypeService _contentTypeService;
 
+        private readonly IZapierContentService _zapierContentService;
+
 #if NETCOREAPP
         private readonly UmbracoHelper _umbracoHelper;
 
-        public PollingController(IOptions<ZapierSettings> options, IContentService contentService, IContentTypeService contentTypeService, UmbracoHelper umbracoHelper, 
-            IUserValidationService userValidationService)
+        public PollingController(
+            IOptions<ZapierSettings> options, 
+            IContentService contentService, 
+            IContentTypeService contentTypeService, 
+            UmbracoHelper umbracoHelper, 
+            IUserValidationService userValidationService,
+            IZapierContentService zapierContentService)
             : base(options, userValidationService)
 #else
-        public PollingController(IContentTypeService contentTypeService, IUserValidationService userValidationService)
+        public PollingController(
+            IContentTypeService contentTypeService, 
+            IUserValidationService userValidationService,
+            IZapierContentService zapierContentService)
             : base(userValidationService)
 #endif
         {
             _contentTypeService = contentTypeService;
 
+            _zapierContentService = zapierContentService;
+
 #if NETCOREAPP
             _umbracoHelper = umbracoHelper;
-#else
 #endif
         }
 
@@ -59,7 +69,10 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
                 .OrderByDescending(p => p.UpdateDate);
 #endif
 
-            return new List<Dictionary<string, string>> { contentType.ToContentTypeDictionary(contentItems.FirstOrDefault()) };
+            return new List<Dictionary<string, string>> 
+                { 
+                    _zapierContentService.GetContentTypeDictionary(contentType, contentItems.FirstOrDefault()) 
+                };
         }
 
         

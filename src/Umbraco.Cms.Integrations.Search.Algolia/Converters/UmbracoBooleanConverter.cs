@@ -1,10 +1,12 @@
-﻿namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
+﻿using Umbraco.Cms.Core.Models;
+
+namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 {
     public class UmbracoBooleanConverter : IAlgoliaIndexValueConverter
     {
         public string Name => Core.Constants.PropertyEditors.Aliases.Boolean;
 
-        public object ParseIndexValues(IEnumerable<object> indexValues)
+        public object ParseIndexValues(IProperty property, IEnumerable<object> indexValues)
         {
             if (indexValues != null && indexValues.Any())
             {

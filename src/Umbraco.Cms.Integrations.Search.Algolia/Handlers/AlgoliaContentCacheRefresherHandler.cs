@@ -14,6 +14,7 @@ using System.Text.Json;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Core.Web;
+using Umbraco.Cms.Integrations.Search.Algolia.Models.ContentTypeDtos;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 {
@@ -37,6 +38,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 
         private readonly IRecordBuilderFactory _recordBuilderFactory;
 
+        private readonly IUmbracoContextFactory _umbracoContextFactory;
+
         public AlgoliaContentCacheRefresherHandler(
             IServerRoleAccessor serverRoleAccessor,
             ILogger<AlgoliaContentCacheRefresherHandler> logger,
@@ -46,7 +49,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             IUserService userService,
             IPublishedUrlProvider urlProvider,
             IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory, 
-            IRecordBuilderFactory recordBuilderFactory)
+            IRecordBuilderFactory recordBuilderFactory,
+            IUmbracoContextFactory umbracoContextFactory)
         {
             _serverRoleAccessor = serverRoleAccessor;
             _contentService = contentService;
@@ -57,6 +61,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             _urlProvider = urlProvider;
             _algoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
             _recordBuilderFactory = recordBuilderFactory;
+            _umbracoContextFactory = umbracoContextFactory;
         }
 
         public async Task HandleAsync(ContentCacheRefresherNotification notification, CancellationToken cancellationToken)
@@ -99,11 +104,11 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
                 {
                     foreach (var index in indices)
                     {
-                        var indexConfiguration = JsonSerializer.Deserialize<List<ContentData>>(index.SerializedData)
-                            .FirstOrDefault(p => p.ContentType.Alias == entity.ContentType.Alias);
-                        if (indexConfiguration == null || indexConfiguration.ContentType.Alias != entity.ContentType.Alias) continue;
+                        var indexConfiguration = JsonSerializer.Deserialize<IEnumerable<ContentTypeDto>>(index.SerializedData)
+                            .FirstOrDefault(p => p.Alias == entity.ContentType.Alias);
+                        if (indexConfiguration == null || indexConfiguration.Alias != entity.ContentType.Alias) continue;
 
-                        var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory, _recordBuilderFactory)
+                        var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory, _recordBuilderFactory, _umbracoContextFactory)
                            .BuildFromContent(entity, (p) => indexConfiguration.Properties.Any(q => q.Alias == p.Alias))
                            .Build();
 
