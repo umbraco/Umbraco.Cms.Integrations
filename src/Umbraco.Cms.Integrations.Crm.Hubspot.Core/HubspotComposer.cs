@@ -3,6 +3,8 @@ using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core
 {
@@ -28,6 +30,20 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core
                     true => f.GetService<UmbracoAuthorizationService>(),
                     _ => f.GetService<AuthorizationService>()
                 };
+            });
+
+            builder.Services.Configure<SwaggerGenOptions>(options =>
+            {
+                options.SwaggerDoc(
+                    Constants.ManagementApi.ApiName,
+                    new OpenApiInfo
+                    {
+                        Title = Constants.ManagementApi.ApiTitle,
+                        Version = "Latest",
+                        Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for managing forms."
+                    });
+
+                options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
             });
         }
     }

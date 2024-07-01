@@ -6,7 +6,7 @@
 
     public static class Constants
     {
-        public const string PropertyEditorAlias = "Umbraco.Cms.Integrations.Crm.Hubspot.FormPicker";
+        public const string PropertyEditorAlias = "HubSpot.FormPicker";
 
         public const string AccessTokenDbKey = "Umbraco.Cms.Integrations.Hubspot.AccessTokenDbKey";
 
@@ -34,11 +34,15 @@
             public const string OAuthFetchFormsConfigurationFailed = "Unable to retrieve the list of forms from HubSpot. Please review the settings of the form picker property's data type.";
         }
 
-        public static class ManagementApiConfiguration
+        public static class ManagementApi
         {
-            public const string RootPath = "/umbraco/management/api";
+            public const string RootPath = "hubspot-forms/management/api";
 
-            public const string ApiName = "hubspot-management";
+            public const string ApiTitle = "HubSpot Forms Management API";
+
+            public const string ApiName = "hubspot-forms-management";
+
+            public const string GroupName = "Forms";
         }
 
         internal static readonly JsonSerializerSettings SerializationSettings = new JsonSerializerSettings

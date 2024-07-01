@@ -1,13 +1,13 @@
-﻿using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models;
-using Umbraco.Cms.Web.Common.Controllers;
+﻿using Microsoft.AspNetCore.Mvc;
+using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models;
 
-using Microsoft.AspNetCore.Mvc;
-
-namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Controllers
+namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Api.Management.Controllers
 {
-    public class HubspotAuthorizationController : UmbracoApiController
+    [ApiController]
+    [Route("/umbraco/api/hubspotauthorization")]
+    public class HubspotAuthorizationController : Controller
     {
-        [HttpGet]
+        [HttpGet("oauth")]
         public IActionResult OAuth(string code)
         {
             return new ContentResult

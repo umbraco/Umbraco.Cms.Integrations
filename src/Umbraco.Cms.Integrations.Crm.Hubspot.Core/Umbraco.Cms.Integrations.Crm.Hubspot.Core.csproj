@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net80</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -17,11 +17,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[14.0.0--beta001, 15)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[14.0.0--beta001, 15)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="[14.0.0--beta001, 15)" />
-		<PackageReference Include="Umbraco.Cms.Api.Common" version="[14.0.0--beta001, 15)" />
-		<PackageReference Include="Umbraco.Cms.Api.Management" version="[14.0.0--beta001, 15)" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[14.0.0,15)" />
+		<PackageReference Include="Umbraco.Cms.Api.Common" Version="[14.0.0,15)" />
 	</ItemGroup>
 
 </Project>

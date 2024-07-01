@@ -1,21 +1,34 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models;
+using System.Net.Http;
+using System;
+using Umbraco.Cms.Api.Common.Attributes;
+using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models.Dtos;
+using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models;
+using Umbraco.Cms.Web.Common.Authorization;
+using Umbraco.Cms.Web.Common.Routing;
+using System.Linq;
 
-namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Controllers
+namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Api.Management.Controllers
 {
-    [AllowAnonymous]
-    [ApiExplorerSettings(GroupName = "Integrations")]
-    [Route($"{Constants.ManagementApiConfiguration.RootPath}/v1/hubspot-forms/")]
-    public class HubSpotFormsControllerBase : HubspotManagementApiControllerBase
+    [ApiController]
+    [BackOfficeRoute($"{Constants.ManagementApi.RootPath}/v{{version:apiVersion}}/forms")]
+    [Authorize(Policy = AuthorizationPolicies.BackOfficeAccess)]
+    [MapToApi(Constants.ManagementApi.ApiName)]
+    public abstract class HubspotFormsControllerBase : Controller
     {
         protected const string HubspotFormsApiEndpoint = "https://api.hubapi.com/forms/v2/forms";
+
+        protected HubspotSettings Settings { get; }
+
+        protected HubspotFormsControllerBase(IOptions<HubspotSettings> settingsOptions)
+        {
+            Settings = settingsOptions.Value;
+        }
 
         protected HttpRequestMessage CreateRequest(string accessToken)
         {
