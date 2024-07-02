@@ -22,8 +22,16 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Api.Management.Controllers
         private readonly ITokenService _tokenService;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public GetAllOAuthController(IOptions<HubspotSettings> settingsOptions) : base(settingsOptions)
+        public GetAllOAuthController(
+            IOptions<HubspotSettings> settingsOptions, 
+            ILogger<GetAllOAuthController> logger,
+            IHttpClientFactory httpClientFactory,
+            ITokenService tokenService) 
+            : base(settingsOptions)
         {
+            _logger = logger;
+            _httpClientFactory = httpClientFactory;
+            _tokenService = tokenService;
         }
 
         [HttpGet("oauth/get")]
@@ -67,7 +75,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Api.Management.Controllers
             {
                 _logger.LogError(string.Format(LoggingResources.OAuthFetchFormsFailed, responseContent));
 
-                return new ResponseDto { IsExpired = true, Error = Constants.ErrorMessages.InvalidApiKey };
+                return new ResponseDto { IsExpired = true, Error = Constants.ErrorMessages.OAuthInvalidToken };
             }
             catch
             {

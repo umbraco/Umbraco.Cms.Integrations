@@ -1,6 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
-		<TargetFrameworks>net8.0</TargetFrameworks>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<StaticWebAssetBasePath>/</StaticWebAssetBasePath>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -19,26 +22,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[14.0.0,15)" />
-		<PackageReference Include="Umbraco.Cms.Api.Common" Version="[14.0.0,15)" />
+	  <Content Remove="Client\public\umbraco-package.json" />
+	  <Content Remove="umbraco-marketplace.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\**\*.*">
-			<Pack>true</Pack>
-			<PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
-		</Content>
-		<None Include="build\**\*.*">
-			<Pack>True</Pack>
-			<PackagePath>buildTransitive</PackagePath>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="App_Plugins\**\*.*">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-		</Content>
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="14.0.0" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="14.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -49,11 +39,23 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Include="Client\public\umbraco-package.json" />
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
+		<None Include="umbraco-marketplace.json" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\Umbraco.Cms.Integrations.Crm.Hubspot.Core\Umbraco.Cms.Integrations.Crm.Hubspot.Core.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Content Update="App_Plugins\HubspotForms\Render\HubspotForm.cshtml">
+	    <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+	    <Pack>true</Pack>
+	  </Content>
+	  <Content Update="wwwroot\App_Plugins\HubspotForms\Render\HubspotForm.cshtml">
+	    <PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\Hubspot\</PackagePath>
+	    <Pack>true</Pack>
+	  </Content>
+	</ItemGroup>
 </Project>

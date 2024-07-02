@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Services;
+using static Umbraco.Cms.Integrations.Crm.Hubspot.Core.HubspotComposer;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Api.Management.Controllers
 {
@@ -15,8 +16,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Api.Management.Controllers
 
         public GetAuthorizationUrlController(
             IOptions<HubspotSettings> settingsOptions,
-            IHubspotAuthorizationService authorizationService) 
-            : base(settingsOptions) => _authorizationService = authorizationService;
+            AuthorizationImplementationFactory authorizationImplementationFactory) 
+            : base(settingsOptions) => _authorizationService = authorizationImplementationFactory(Settings.UseUmbracoAuthorization);
 
         [HttpGet("authorization-url")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]

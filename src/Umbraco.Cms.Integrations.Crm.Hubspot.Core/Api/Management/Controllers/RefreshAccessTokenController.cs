@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Services;
+using static Umbraco.Cms.Integrations.Crm.Hubspot.Core.HubspotComposer;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Api.Management.Controllers
 {
@@ -16,8 +17,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Api.Management.Controllers
 
         public RefreshAccessTokenController(
             IOptions<HubspotSettings> settingsOptions,
-            IHubspotAuthorizationService authorizationService) 
-            : base(settingsOptions) => _authorizationService = authorizationService;
+            AuthorizationImplementationFactory authorizationImplementationFactory) 
+            : base(settingsOptions) => _authorizationService = authorizationImplementationFactory(Settings.UseUmbracoAuthorization);
 
         [HttpPost("refresh")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
