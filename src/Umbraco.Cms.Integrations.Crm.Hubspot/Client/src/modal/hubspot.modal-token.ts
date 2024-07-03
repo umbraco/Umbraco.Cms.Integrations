@@ -1,5 +1,5 @@
 ﻿import { UmbModalToken } from "@umbraco-cms/backoffice/modal";
-import { HubspotFormDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
+import type { HubspotFormDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
 
 export type HubspotFormPickerModalData = {
     headline: string;

@@ -4,11 +4,10 @@ import { UMB_MODAL_MANAGER_CONTEXT } from "@umbraco-cms/backoffice/modal";
 import {
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
-
-import { HUBSPOT_FORMS_MODAL_TOKEN } from "../modal/hubspot.modal-token";
-import { ConfigDescription, HubspotServiceStatus } from "../models/hubspot-service.model";
+import { HUBSPOT_FORMS_MODAL_TOKEN } from "../modal/hubspot.modal-token.js";
+import { ConfigDescription, type HubspotServiceStatus } from "../models/hubspot-service.model.js";
 import { HUBSPOT_FORMS_CONTEXT_TOKEN } from "@umbraco-integrations/hubspot-forms/context";
-import { HubspotFormDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
+import type { HubspotFormDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
 
 const elementName = "hubspot-form-picker";
 
@@ -47,14 +46,14 @@ export class HubspotFormPickerElement extends UmbElementMixin(LitElement) {
 
         if (this.value == null || this.value.length == 0) return;
 
-        const { data } = await this.#hubspotFormsContext?.checkApiConfiguration();
-        if (!data) return;
+        const { data } = await this.#hubspotFormsContext.checkApiConfiguration();
+        if (!data || !data.type?.value) return;
 
         this._serviceStatus = {
-            isValid: data!.isValid,
-            type: data!.type?.value!,
+            isValid: data.isValid,
+            type: data.type.value,
             description: "",
-            useOAuth: data!.isValid && data!.type?.value! == "OAuth"
+            useOAuth: data.isValid && data.type.value === "OAuth"
         }
 
         if (!this._serviceStatus.isValid) {
@@ -104,11 +103,10 @@ export class HubspotFormPickerElement extends UmbElementMixin(LitElement) {
 				        class="add-button"
 				        @click=${this._openModal}
 				        label=${this.localize.term('general_add')}
-				        look="placeholder">
-                   </uui-button>
+				        look="placeholder"></uui-button>
                 `
                 : html`
-                    <uui-ref-node-form selectable name=${this._form?.name} detail=${this._form?.fields}>
+                    <uui-ref-node-form selectable name=${this._form?.name ?? ""} detail=${this._form?.fields ?? ""}>
                         <uui-action-bar slot="actions">
                             <uui-button label="Remove" @click=${this.#deleteForm}>Remove</uui-button>
                         </uui-action-bar>

@@ -1,4 +1,4 @@
-﻿import { ManifestModal } from "@umbraco-cms/backoffice/extension-registry";
+﻿import type { ManifestModal } from "@umbraco-cms/backoffice/extension-registry";
 
 export const manifest: ManifestModal = {
     type: "modal",

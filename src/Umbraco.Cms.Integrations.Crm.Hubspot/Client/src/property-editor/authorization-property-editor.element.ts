@@ -4,19 +4,20 @@ import {
     customElement,
     html,
     property,
-    state
+    state,
+    when
 } from "@umbraco-cms/backoffice/external/lit";
 import {
     UMB_NOTIFICATION_CONTEXT,
+    type UmbNotificationColor,
 } from "@umbraco-cms/backoffice/notification";
-
-import { HUBSPOT_FORMS_CONTEXT_TOKEN } from "@umbraco-integrations/hubspot-forms/context";
-import { OAuthRequestDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
 import {
     ConfigDescription,
     type HubspotOAuthSetup,
     type HubspotServiceStatus
 } from "../models/hubspot-service.model.js";
+import { HUBSPOT_FORMS_CONTEXT_TOKEN } from "@umbraco-integrations/hubspot-forms/context";
+import type { OAuthRequestDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
 
 const elementName = "hubspot-authorization";
 
@@ -57,14 +58,14 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
     }
 
     async #checkApiConfiguration() {
-        const { data } = await this.#hubspotFormsContext?.checkApiConfiguration();
-        if (!data) return;
+        const { data } = await this.#hubspotFormsContext.checkApiConfiguration();
+        if (!data || !data.type?.value) return;
 
         this._serviceStatus = {
-            isValid: data!.isValid,
-            type: data!.type?.value!,
+            isValid: data.isValid,
+            type: data.type.value,
             description: this.#getDescription(this._serviceStatus.type),
-            useOAuth: data!.isValid && data!.type?.value! == "OAuth"
+            useOAuth: data.isValid && data.type.value === "OAuth"
         }
 
         if (this._serviceStatus.useOAuth) {
@@ -77,7 +78,7 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
     }
 
     async #validateOAuthSetup() {
-        const { data } = await this.#hubspotFormsContext?.validateAccessToken();
+        const { data } = await this.#hubspotFormsContext.validateAccessToken();
         if (data) {
             this._oauthSetup = {
                 isConnected: data.isValid,
@@ -97,10 +98,10 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
 
     #getDescription(type: string): string {
         switch (type) {
-            case "api": return ConfigDescription.api; break;
-            case "oauth": return ConfigDescription.oauth; break;
-            case "oauthConnected": return ConfigDescription.oauthConnected; break;
-            default: return ConfigDescription.none; break;
+            case "api": return ConfigDescription.api;
+            case "oauth": return ConfigDescription.oauth;
+            case "oauthConnected": return ConfigDescription.oauthConnected;
+            default: return ConfigDescription.none;
         }
     }
 
@@ -112,7 +113,7 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
                     code: event.data.code
                 };
 
-                const { data } = await this.#hubspotFormsContext?.getAccessToken(oauthRequestDtoModel);
+                const { data } = await this.#hubspotFormsContext.getAccessToken(oauthRequestDtoModel);
                 if (!data) return;
 
                 if (data.startsWith("Error:")) {
@@ -129,7 +130,7 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
             }
         }, false);
 
-        const { data } = await this.#hubspotFormsContext?.getAuthorizationUrl();
+        const { data } = await this.#hubspotFormsContext.getAuthorizationUrl();
         if (!data) return;
 
         window.open(data, "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
@@ -146,44 +147,35 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
     }
 
     private async _showSuccess(message: string) {
-        const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
-        notificationContext?.peek("positive", {
-            data: { message: message },
-        });
+        await this._showMessage(message, "positive");
     }
 
     private async _showError(message: string) {
+        await this._showMessage(message, "danger");
+    }
+
+    private async _showMessage(message: string, color: UmbNotificationColor) {
         const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
-        notificationContext?.peek("danger", {
-            data: { message: message },
+        notificationContext?.peek(color, {
+            data: { message },
         });
     }
 
     render() {
         return html`
-            <div>
-                <p>${this._serviceStatus.description}</p>
-            </div>
-            ${this._serviceStatus.useOAuth
-                ? html`
-                    <div>
-                        <uui-button look="primary" 
-                                    label="Connect"
-                                    ?disabled=${this._oauthSetup.isConnected}
-                                    @click=${this.#onConnect}>
-                                    Connect
-                        </uui-button>
-                        <uui-button look="primary"
-                                    color="danger"
-                                    label="Revoke"
-                                    ?disabled=${!this._oauthSetup.isConnected}
-                                    @click=${this.#onRevoke}>
-                                    Revoke
-                        </uui-button>
-                    </div>
-                `
-                : ""
-            }
+            <p>${this._serviceStatus.description}</p>
+            ${when(this._serviceStatus.useOAuth, () => 
+                html`
+                    <uui-button look="primary" 
+                                label="Connect"
+                                ?disabled=${this._oauthSetup.isConnected}
+                                @click=${this.#onConnect}></uui-button>
+                    <uui-button look="primary"
+                                color="danger"
+                                label="Revoke"
+                                ?disabled=${!this._oauthSetup.isConnected}
+                                @click=${this.#onRevoke}></uui-button>`
+            )}
         `;
     }
 }

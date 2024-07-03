@@ -1,31 +1,21 @@
-﻿import { html, css, LitElement, property, state, customElement } from "@umbraco-cms/backoffice/external/lit";
-import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
-import type { UmbModalContext } from "@umbraco-cms/backoffice/modal";
-import { UmbModalExtensionElement } from "@umbraco-cms/backoffice/extension-registry";
+﻿import { html, css, state, customElement } from "@umbraco-cms/backoffice/external/lit";
+import { UmbModalBaseElement } from "@umbraco-cms/backoffice/modal";
 import {
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
-
-import { HUBSPOT_FORMS_CONTEXT_TOKEN } from "@umbraco-integrations/hubspot-forms/context";
+import type { UUIInputEvent } from "@umbraco-cms/backoffice/external/uui";
+import type { HubspotServiceStatus } from "../models/hubspot-service.model.js";
 import type { HubspotFormPickerModalData, HubspotFormPickerModalValue } from "./hubspot.modal-token.js";
-import { HubspotServiceStatus } from "../models/hubspot-service.model.js";
-import { HubspotFormDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
-import { UUIInputEvent } from "@umbraco-cms/backoffice/external/uui";
+import type { HubspotFormDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
+import { HUBSPOT_FORMS_CONTEXT_TOKEN } from "@umbraco-integrations/hubspot-forms/context";
 
 const elementName = "hubspot-forms-modal";
 
 @customElement(elementName)
 export default class HubspotFormsModalElement
-    extends UmbElementMixin(LitElement)
-    implements UmbModalExtensionElement<HubspotFormPickerModalData, HubspotFormPickerModalValue> {
+    extends UmbModalBaseElement<HubspotFormPickerModalData, HubspotFormPickerModalValue> {
 
     #hubspotFormsContext!: typeof HUBSPOT_FORMS_CONTEXT_TOKEN.TYPE;
-
-    @property({ attribute: false })
-    modalContext?: UmbModalContext<HubspotFormPickerModalData, HubspotFormPickerModalValue>;
-
-    @property({ attribute: false })
-    data?: HubspotFormPickerModalData;
 
     @state()
     private _serviceStatus: HubspotServiceStatus = {
@@ -58,14 +48,16 @@ export default class HubspotFormsModalElement
     }
 
     async #checkApiConfiguration() {
-        const { data } = await this.#hubspotFormsContext?.checkApiConfiguration();
-        if (!data) return;
+        if (!this.#hubspotFormsContext) return;
+
+        const { data } = await this.#hubspotFormsContext.checkApiConfiguration();
+        if (!data || !data.type?.value) return;
 
         this._serviceStatus = {
-            isValid: data!.isValid,
-            type: data!.type?.value!,
+            isValid: data.isValid,
+            type: data.type.value,
             description: "",
-            useOAuth: data!.isValid && data!.type?.value! == "OAuth"
+            useOAuth: data.isValid && data.type.value === "OAuth"
         }
 
         await this.#loadForms();
@@ -78,8 +70,8 @@ export default class HubspotFormsModalElement
             : await this.#hubspotFormsContext.getFormsByApiKey();
         if (!data) return;
 
-        this._forms = data.forms!;
-        this._filteredForms = data.forms!;
+        this._forms = data.forms ?? [];
+        this._filteredForms = data.forms ?? [];
         this._loading = false;
 
         if (!data.isValid || data.isExpired) {
@@ -109,19 +101,15 @@ export default class HubspotFormsModalElement
 		</uui-input>`;
     }
 
-    private _onClose() {
-        this.modalContext?.submit();
-    }
-
     private _onSelect(form: HubspotFormDtoModel) {
-        this.modalContext?.updateValue({ form: form });
-        this.modalContext?.submit();
+        this.value = { form };
+        this._submitModal();
     }
 
     private async _showError(message: string) {
         const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
         notificationContext?.peek("danger", {
-            data: { message: message },
+            data: { message },
         });
     }
 
@@ -135,8 +123,8 @@ export default class HubspotFormsModalElement
                         return html`
                             <uui-ref-node-form
                               selectable
-                              name=${form.name}
-                              detail=${form.fields}
+                              name=${form.name ?? ""}
+                              detail=${form.fields ?? ""}
                               @selected=${() => this._onSelect(form)}>
                             </uui-ref-node-form>
                         `;
@@ -147,9 +135,7 @@ export default class HubspotFormsModalElement
                     <hubspot-authorization></hubspot-authorization>
                 </uui-box>
 
-                <div slot="actions">
-                    <uui-button id="close" label="Close" @click="${this._onClose}">Close</uui-button>
-                </div>
+                <uui-button slot="actions" label=${this.localize.term("general_close")} @click=${this._rejectModal}></uui-button>
             </umb-body-layout>
         `;
     }
@@ -157,17 +143,17 @@ export default class HubspotFormsModalElement
     static styles = [
         css`
             uui-box {
-                margin-bottom: 10px;
+                margin-bottom: var(--uui-size-8);
             }
 
             #filter {
                 width: 100%;
-                margin-bottom: 10px;
+                margin-bottom: var(--uui-size-3);
             }
 
             uui-icon {
                 margin: auto;
-                margin-left: 5px;
+                margin-left: var(--uui-size-2);
             }
         `];
 }
