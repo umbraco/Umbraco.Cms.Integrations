@@ -16,9 +16,9 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
         private readonly IScopeProvider _scopeProvider;
 
 #if NETCOREAPP
-        private readonly ILogger<DynamicsService> _logger;
+        private readonly ILogger<DynamicsConfigurationService> _logger;
 
-        public DynamicsConfigurationService(IScopeProvider scopeProvider, ILogger<DynamicsService> logger)
+        public DynamicsConfigurationService(IScopeProvider scopeProvider, ILogger<DynamicsConfigurationService> logger)
         {
             _scopeProvider = scopeProvider;
 

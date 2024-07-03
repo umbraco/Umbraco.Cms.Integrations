@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -13,15 +12,17 @@ using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
 
-
 #if NETCOREAPP
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 #else
+using System.Configuration;
+using Umbraco.Core.Logging;
 #endif
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 {
-    public class DynamicsService
+	public class DynamicsService
     {
         private readonly DynamicsSettings _settings;
 
@@ -34,18 +35,26 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
         public static Func<HttpClient> ClientFactory = () => s_client;
 
 #if NETCOREAPP
-        public DynamicsService(IOptions<DynamicsSettings> options, DynamicsConfigurationService dynamicsConfigurationService)
+        private readonly ILogger<DynamicsService> _logger;
+
+        public DynamicsService(IOptions<DynamicsSettings> options, DynamicsConfigurationService dynamicsConfigurationService, ILogger<DynamicsService> logger)
         {
             _settings = options.Value;
 
             _dynamicsConfigurationService = dynamicsConfigurationService;
+
+            _logger = logger;
         }
 #else
-        public DynamicsService(DynamicsConfigurationService dynamicsConfigurationService)
+		private readonly ILogger _logger;
+
+		public DynamicsService(DynamicsConfigurationService dynamicsConfigurationService, ILogger logger)
         {
             _settings = new DynamicsSettings(ConfigurationManager.AppSettings);
 
             _dynamicsConfigurationService = dynamicsConfigurationService;
+
+            _logger = logger;
         }
 #endif
 
@@ -187,13 +196,24 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
                 RequestUri = new Uri($"{_settings.HostUrl}{_settings.ApiPath}{modulePath}")
             };
             requestMessage.Headers.Authorization =
-                new AuthenticationHeaderValue("Bearer", accessToken);
+                new AuthenticationHeaderValue("Bearer", accessToken + "1");
 
             var response = await ClientFactory().SendAsync(requestMessage);
 
-            if (!response.IsSuccessStatusCode) return null;
+			var result = await response.Content.ReadAsStringAsync();
 
-            var result = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = string.Format("An error has occured while trying to retrieve the Dynamics {0} forms: {1} {2}",
+                    modulePath, response.ReasonPhrase, result);
+#if NETCOREAPP
+                _logger.LogError(errorMessage);
+#else
+                _logger.Error<DynamicsService>(errorMessage);
+#endif
+
+                return null;
+            }
 
             return JsonConvert.DeserializeObject<ResponseDto<T>>(result);
         }
