@@ -196,7 +196,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
                 RequestUri = new Uri($"{_settings.HostUrl}{_settings.ApiPath}{modulePath}")
             };
             requestMessage.Headers.Authorization =
-                new AuthenticationHeaderValue("Bearer", accessToken + "1");
+                new AuthenticationHeaderValue("Bearer", accessToken);
 
             var response = await ClientFactory().SendAsync(requestMessage);
 
