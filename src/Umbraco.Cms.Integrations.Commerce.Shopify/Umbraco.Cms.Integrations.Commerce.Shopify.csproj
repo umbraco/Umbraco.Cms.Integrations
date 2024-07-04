@@ -1,0 +1,76 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\backoffice\icons\icon-shopify.svg" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\css\shopify.css" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\productPicker.controller.js" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\productPickerSettings.controller.js" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\shopify.resource.js" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\shopify.service.js" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\package.manifest" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPicker.html" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPickerOverlay.html" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPickerSettings.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\backoffice\icons\icon-shopify.svg">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\css\shopify.css">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\productPicker.controller.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\productPickerSettings.controller.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\shopify.resource.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\js\shopify.service.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\package.manifest">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPicker.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPickerOverlay.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\views\productPickerSettings.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\Render\Products.cshtml">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\Render\ProductsV9.cshtml">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
+
+</Project>
