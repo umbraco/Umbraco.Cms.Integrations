@@ -1,0 +1,69 @@
+{
+  "AuthorDetails": {
+    "Description": "Umbraco HQ",
+    "Url": "https://umbraco.com/",
+    "ImageUrl": "https://avatars.githubusercontent.com/u/1419552?s=200&v=4"
+  },
+  "Category": "Commerce",
+  "LicenseType": "Free",
+  "PackageType": "Integration",
+  "PackagesByAuthor": [
+    "Umbraco.Cms.Integrations.Commerce.CommerceTools",
+    "Umbraco.Cms.Integrations.SEO.Semrush",
+    "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool",
+    "Umbraco.Cms.Integrations.Crm.Hubspot",
+    "Umbraco.Cms.Integrations.Crm.Dynamics",
+    "Umbraco.Cms.Integrations.Crm.ActiveCampaign",
+    "Umbraco.Cms.Integrations.Automation.Zapier"
+  ],
+  "RelatedPackages": [
+    {
+      "PackageId": "Umbraco.Cms.Integrations.Commerce.CommerceTools",
+      "Description": "A product and category picker that can be added as a property editor for content, with a value converter providing a strongly typed model for rendering."
+    },
+    {
+      "PackageId": "Umbraco.Cms.Integrations.SEO.Semrush",
+      "Description": "A search tool available as a content app, helping editors research and use appropriate keywords for their content, to help with website search engine optimisation."
+    },
+    {
+      "PackageId": "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool",
+      "Description": "A tool allowing programmatic access to URL-level data for properties managed in Google Search Console and the indexed version of a URL."
+    },
+    {
+      "PackageId": "Umbraco.Cms.Integrations.Crm.Hubspot",
+      "Description": "A form picker and rendering component for Hubspot forms."
+    },
+    {
+      "PackageId": "Umbraco.Cms.Integrations.Crm.Dynamics",
+      "Description": "A form picker and rendering component for Dynamics 365 Marketing forms."
+    },
+    {
+      "PackageId": "Umbraco.Cms.Integrations.Crm.ActiveCampaign",
+      "Description": "A form picker and rendering component for ActiveCampaign forms."
+    },
+    {
+      "PackageId": "Umbraco.Cms.Integrations.Automation.Zapier",
+      "Description": "A dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published."
+    }
+  ],
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/data-type1.png",
+      "Caption": "data type 1"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/data-type2.png",
+      "Caption": "data type 2"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/editors.png",
+      "Caption": "editors"
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/umbraco/Umbraco.Cms.Integrations/main/src/Umbraco.Cms.Integrations.Commerce.Shopify/docs/images/products.png",
+      "Caption": "products"
+    }
+  ],
+  "Tags": [],
+  "Title": "Shopify"
+}
