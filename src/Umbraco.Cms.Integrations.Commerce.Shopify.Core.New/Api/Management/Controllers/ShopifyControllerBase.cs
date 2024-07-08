@@ -16,7 +16,7 @@ using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Api.Management.Controllers
 {
     [ApiController]
-    [BackOfficeRoute($"{Constants.ManagementApi.RootPath}/v{{version:apiVersion}}/shopify")]
+    [BackOfficeRoute($"{Constants.ManagementApi.RootPath}/v{{version:apiVersion}}")]
     [Authorize(Policy = AuthorizationPolicies.BackOfficeAccess)]
     [MapToApi(Constants.ManagementApi.ApiName)]
     public abstract class ShopifyControllerBase : Controller
