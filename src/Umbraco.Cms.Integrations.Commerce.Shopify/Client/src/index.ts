@@ -9,7 +9,7 @@ export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
     extensionRegistry.registerMany([
         ...picker,
         shopifyModal,
-      shopifyContext
+        shopifyContext
     ]);
   
     host.consumeContext(UMB_AUTH_CONTEXT, async (instance) => {

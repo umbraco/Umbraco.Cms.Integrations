@@ -65,14 +65,15 @@
 
   <ItemGroup>
     <PackageReference Include="Umbraco.Cms.Api.Common" Version="14.0.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Common" Version="14.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Umbraco.Cms.Integrations.Commerce.Shopify.Core\Umbraco.Cms.Integrations.Commerce.Shopify.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\Render\Products.cshtml">
-      <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
-      <Pack>true</Pack>
-    </Content>
-    <Content Update="App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\Render\ProductsV9.cshtml">
       <PackagePath>App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\</PackagePath>
       <Pack>true</Pack>
     </Content>
