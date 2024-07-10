@@ -10,7 +10,7 @@ import { SHOPIFY_CONTEXT_TOKEN } from "../context/shopify.context";
 import type { ProductDtoModel } from "../generated/models";
 
 const elementName = "shopify-picker";
-export class ShopifyPickerPropertyEditor extends UmbElementMixin(LitElement){
+export class ShopifyProductPickerPropertyEditor extends UmbElementMixin(LitElement){
     #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
     #shopifyContext!: typeof SHOPIFY_CONTEXT_TOKEN.TYPE;
 
@@ -108,10 +108,10 @@ export class ShopifyPickerPropertyEditor extends UmbElementMixin(LitElement){
 }
 
 
-export default ShopifyPickerPropertyEditor;
+export default ShopifyProductPickerPropertyEditor;
 
 declare global {
     interface HTMLElementTagNameMap {
-        [elementName]: ShopifyPickerPropertyEditor;
+        [elementName]: ShopifyProductPickerPropertyEditor;
     }
 }

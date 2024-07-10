@@ -1,5 +1,14 @@
 
 
+export type ConfigurationTypeModel = {
+        readonly value: string
+    };
+
+export type EditorSettingsModel = {
+        isValid: boolean
+type: ConfigurationTypeModel
+    };
+
 export enum EventMessageTypeModel {
     DEFAULT = 'Default',
     INFO = 'Info',
@@ -78,9 +87,9 @@ GetListByIds: {
         
         
         responses: {
-            CheckConfiguration: any
+            CheckConfiguration: EditorSettingsModel
                 ,GetAccessToken: string
-                ,GetAuthorizationUrl: any
+                ,GetAuthorizationUrl: string
                 ,GetList: ResponseDtoProductsListDtoModel
                 ,GetListByIds: ResponseDtoProductsListDtoModel
                 ,RevokeAccessToken: string

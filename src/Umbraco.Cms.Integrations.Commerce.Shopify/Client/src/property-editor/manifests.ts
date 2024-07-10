@@ -4,8 +4,8 @@ export const propertyEditorUiManifest : ManifestPropertyEditorUi = {
     type: "propertyEditorUi",
     alias: "Shopify.PropertyEditorUi.ProductPicker",
     name: "Shopify Product Picker Property Editor UI",
-    js: () => import("./shopify-picker-property-editor.element.js"),
-    elementName: "shopify-picker",
+    js: () => import("./shopify-product-picker-property-editor.element.js"),
+    elementName: "shopify-product-picker",
     meta: {
         label: "Shopify Product Picker",
         icon: "icon-handshake",

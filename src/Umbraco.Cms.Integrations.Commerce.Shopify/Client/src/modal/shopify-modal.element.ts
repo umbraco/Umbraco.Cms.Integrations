@@ -5,12 +5,12 @@ import {
 } from "@umbraco-cms/backoffice/notification";
 import type { UUIInputEvent } from "@umbraco-cms/backoffice/external/uui";
 import type { ShopifyServiceStatus } from "../models/shopify-service.model.js";
-import type { ShopifyPickerModalData, ShopifyPickerModalValue } from "./shopify.modal-token.js";
+import type { ShopifyProductPickerModalData, ShopifyProductPickerModalValue } from "./shopify.modal-token.js";
 import type { ProductsListDtoModel } from "../generated";
 import { SHOPIFY_CONTEXT_TOKEN } from "../context/shopify.context.js";
 
 const elementName = "shopify-modal";
 
-export default class ShopifyModalElement extends UmbModalBaseElement<ShopifyPickerModalData, ShopifyPickerModalValue>{
+export default class ShopifyModalElement extends UmbModalBaseElement<ShopifyProductPickerModalData, ShopifyProductPickerModalValue>{
 
 }

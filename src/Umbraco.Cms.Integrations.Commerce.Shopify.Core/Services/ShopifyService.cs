@@ -39,11 +39,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
 
         private readonly ShopifyOAuthSettings _oauthSettings;
 
-#if NETCOREAPP
         private readonly ILogger<ShopifyService> _umbCoreLogger;
-#else
-        private readonly ILogger _umbCoreLogger;
-#endif
 
         private readonly ITokenService _tokenService;
 
@@ -53,7 +49,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
         // Access to the client within the class is via ClientFactory(), allowing us to mock the responses in tests.
         public static Func<HttpClient> ClientFactory = () => Client;
 
-#if NETCOREAPP
         public ShopifyService(ILogger<ShopifyService> logger,
             IOptions<ShopifySettings> options, IOptions<ShopifyOAuthSettings> oauthOptions,
             ITokenService tokenService)
@@ -73,25 +68,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
 
             _tokenService = tokenService;
         }
-#else
-        public ShopifyService(ILogger logger, ITokenService tokenService)
-        {
-            var resolver = new JsonPropertyRenameContractResolver();
-            resolver.RenameProperty(typeof(ResponseDto<ProductsListDto>), "Result", "products");
-
-            _serializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = resolver
-            };
-
-            _settings = new ShopifySettings(ConfigurationManager.AppSettings);
-            _oauthSettings = new ShopifyOAuthSettings(ConfigurationManager.AppSettings);
-
-            _umbCoreLogger = logger;
-
-            _tokenService = tokenService;
-        }
-#endif
 
         public EditorSettings GetApiConfiguration()
         {
@@ -301,19 +277,11 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
         {
             if (logLevel == ShopifyLogLevel.Error)
             {
-#if NETCOREAPP
                 _umbCoreLogger.LogError(message);
-#else
-                _umbCoreLogger.Error<ShopifyService>(message);
-#endif
             }
             else if (logLevel == ShopifyLogLevel.Information)
             {
-#if NETCOREAPP
                 _umbCoreLogger.LogInformation(message);
-#else
-                _umbCoreLogger.Info<ShopifyService>(message: message);
-#endif
             }
         }
     }

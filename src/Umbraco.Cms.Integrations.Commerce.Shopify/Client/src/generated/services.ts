@@ -6,7 +6,7 @@ import type { ShopifyData } from './models';
 export class ShopifyService {
 
 	/**
-	 * @returns any OK
+	 * @returns unknown OK
 	 * @throws ApiError
 	 */
 	public static checkConfiguration(): CancelablePromise<ShopifyData['responses']['CheckConfiguration']> {
@@ -35,7 +35,7 @@ export class ShopifyService {
 	}
 
 	/**
-	 * @returns any OK
+	 * @returns string OK
 	 * @throws ApiError
 	 */
 	public static getAuthorizationUrl(): CancelablePromise<ShopifyData['responses']['GetAuthorizationUrl']> {
@@ -74,7 +74,7 @@ export class ShopifyService {
                     requestBody
                 } = data;
 		return __request(OpenAPI, {
-			method: 'POST',
+			method: 'GET',
 			url: '/umbraco/shopify/management/api/v1/get-list-by-ids',
 			body: requestBody,
 			mediaType: 'application/json',

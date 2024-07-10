@@ -43,16 +43,5 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Api.Management.Controll
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             return requestMessage;
         }
-
-        public IActionResult OAuth(string code)
-        {
-            return new ContentResult
-            {
-                Content = string.IsNullOrEmpty(code)
-                    ? JavascriptResponse.Fail("Authorization process failed.")
-                    : JavascriptResponse.Ok(code),
-                ContentType = "text/html"
-            };
-        }
     }
 }
