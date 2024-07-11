@@ -23,6 +23,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core
             builder.Services.AddSingleton<ICacheHelper, CacheHelper>();
 
             builder.Services.AddSingleton<IShopifyService, ShopifyService>();
+            builder.Services.AddSingleton<IShopifyAuthorizationService, UmbracoAuthorizationService>();
 
             builder.Services.AddSingleton<UmbracoAuthorizationService>();
             builder.Services.AddSingleton<AuthorizationService>();
