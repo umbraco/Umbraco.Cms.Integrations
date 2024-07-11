@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Configuration;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Api.Configuration;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core
 {
@@ -38,6 +39,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core
                         Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Shopify product(s) and configuration."
                     });
 
+                options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
                 options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
             });
         }
