@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "shopify",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,43 +11,23 @@
     "lint:errors": "npm run lint -- --quiet",
     "lint:fix": "npm run lint -- --fix",
     "lint": "eslint src",
-    "generate:api": "openapi-ts --input http://localhost:6583/umbraco/swagger/shopify-management/swagger.json --output src/generated --debug true --enums typescript --lint true --schemas false"
-  },
-  "dependencies": {
-    "lit": "^3.1.4"
+    "generate:api": "openapi-ts"
   },
   "devDependencies": {
-    "@eslint/js": "^9.6.0",
-    "@hey-api/openapi-ts": "^0.37.3",
-    "@storybook/addon-essentials": "^7.4.0",
-    "@storybook/addon-links": "^7.4.0",
-    "@storybook/blocks": "^7.4.0",
-    "@storybook/web-components": "^7.4.0",
-    "@storybook/web-components-vite": "^7.4.0",
-    "@types/diff": "^5.0.8",
-    "@types/node": "^20.5.9",
-    "@typescript-eslint/eslint-plugin": "^6.14.0",
-    "@typescript-eslint/parser": "^6.14.0",
+    "@hey-api/openapi-ts": "^0.46.3",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
     "@umbraco-cms/backoffice": "^14.0.0",
-    "eslint": "^9.6.0",
+    "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-lit": "^1.10.1",
+    "eslint-plugin-lit": "^1.11.0",
     "eslint-plugin-lit-a11y": "^4.1.1",
     "eslint-plugin-local-rules": "^2.0.1",
-    "eslint-plugin-storybook": "^0.6.15",
     "eslint-plugin-wc": "^2.0.4",
-    "globals": "^15.8.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "remark-gfm": "^3.0.1",
-    "storybook": "7.2.1",
     "typescript": "^5.2.2",
-    "typescript-eslint": "^7.15.0",
-    "vite": "^5.3.1",
-    "vite-plugin-static-copy": "^1.0.1",
-    "vite-tsconfig-paths": "^4.3.1",
-    "web-component-analyzer": "^2.0.0-next.5"
+    "vite": "^5.2.0",
+    "vite-tsconfig-paths": "^4.3.1"
   }
 }

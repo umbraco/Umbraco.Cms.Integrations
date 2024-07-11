@@ -1,7 +1,7 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
-import { ShopifyService, type OAuthRequestDtoModel } from "../generated";
+import { ShopifyService, type OAuthRequestDtoModel } from "@umbraco-integrations/shopify/generated";
 
 export class ShopifyRepository extends UmbControllerBase {
     constructor(host: UmbControllerHost) {

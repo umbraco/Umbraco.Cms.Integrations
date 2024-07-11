@@ -7,7 +7,7 @@ export default defineConfig({
             entry: "src/index.ts",
             formats: ["es"],
         },
-        outDir: "obj/Debug/net8.0/clientassets",
+        outDir: "../wwwroot/App_Plugins/Shopify",
         emptyOutDir: true,
         sourcemap: true,
         rollupOptions: {

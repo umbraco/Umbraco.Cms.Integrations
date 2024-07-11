@@ -2,7 +2,7 @@ import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { ShopifyRepository } from "../repository/shopify.repository";
-import { type OAuthRequestDtoModel } from "../generated/models";
+import { type OAuthRequestDtoModel } from "@umbraco-integrations/shopify/generated";
 
 export class ShopifyContext extends UmbControllerBase{
     #repository: ShopifyRepository;

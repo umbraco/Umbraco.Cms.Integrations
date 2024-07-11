@@ -3,7 +3,7 @@ import { UMB_AUTH_CONTEXT } from "@umbraco-cms/backoffice/auth";
 import { manifest as shopifyContext } from "./context/manifests";
 import { manifests as picker } from "./property-editor/manifests.js";
 import { manifest as shopifyModal } from "./modal/manifests.js";
-import { OpenAPI } from "./generated";
+import { OpenAPI } from "@umbraco-integrations/shopify/generated";
 
 export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
     extensionRegistry.registerMany([

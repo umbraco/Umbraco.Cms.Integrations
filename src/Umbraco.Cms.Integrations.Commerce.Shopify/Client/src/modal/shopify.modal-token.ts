@@ -1,5 +1,5 @@
 import { UmbModalToken } from "@umbraco-cms/backoffice/modal";
-import type { ProductDtoModel } from "../generated";
+import type { ProductDtoModel } from "@umbraco-integrations/shopify/generated";
 
 export type ShopifyProductPickerModalData = {
     headline: string;

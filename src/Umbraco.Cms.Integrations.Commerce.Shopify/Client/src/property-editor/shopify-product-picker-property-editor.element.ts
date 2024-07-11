@@ -7,7 +7,7 @@ import {
 import { SHOPIFY_MODAL_TOKEN } from "../modal/shopify.modal-token";
 import { ConfigDescription, type ShopifyServiceStatus } from "../models/shopify-service.model";
 import { SHOPIFY_CONTEXT_TOKEN } from "../context/shopify.context";
-import type { ProductDtoModel } from "../generated/models";
+import type { ProductDtoModel } from "@umbraco-integrations/shopify/generated";
 
 const elementName = "shopify-picker";
 export class ShopifyProductPickerPropertyEditor extends UmbElementMixin(LitElement){
