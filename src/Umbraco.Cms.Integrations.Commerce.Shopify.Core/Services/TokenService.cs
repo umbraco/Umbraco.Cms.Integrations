@@ -1,8 +1,4 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Core.Services;
-#else
-using Umbraco.Core.Services;
-#endif
+﻿using Umbraco.Cms.Core.Services;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
 {

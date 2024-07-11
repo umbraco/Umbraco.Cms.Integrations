@@ -1,8 +1,4 @@
-﻿#if NETCOREAPP
-using Microsoft.Extensions.Options;
-#else
-using System.Configuration;
-#endif
+﻿using Microsoft.Extensions.Options;
 
 using System;
 using System.Collections.Generic;
@@ -23,20 +19,11 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
 
         private readonly ShopifyOAuthSettings _oauthSettings;
 
-#if NETCOREAPP
         public AuthorizationService(IOptions<ShopifySettings> options, IOptions<ShopifyOAuthSettings> oauthSettings, ITokenService tokenService)
-#else
-        public AuthorizationService(ITokenService tokenService)
-#endif
             : base(tokenService) 
         {
-#if NETCOREAPP
             _settings = options.Value;
             _oauthSettings = oauthSettings.Value;
-#else
-            _settings = new ShopifySettings(ConfigurationManager.AppSettings);
-            _oauthSettings = new ShopifyOAuthSettings(ConfigurationManager.AppSettings);
-#endif
         }
 
         public string GetAccessToken(string code) =>

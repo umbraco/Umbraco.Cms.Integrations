@@ -1,19 +1,12 @@
 ﻿using Newtonsoft.Json;
-
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
-
 using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Configuration;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models.Dtos;
-
-#if NETCOREAPP
 using Microsoft.Extensions.Options;
-#else
-using System.Configuration;
-#endif
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
 {
@@ -27,25 +20,16 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
 
         public const string ServiceAddressReplace = "service_address_shop-replace";
 
-        public const string OAuthProxyBaseUrl = "https://localhost:44340/";  // for local testing: "https://localhost:44364/";
+        public const string OAuthProxyBaseUrl = "https://hubspot-forms-auth.umbraco.com/";  // for local testing: "https://localhost:44364/";
 
         public const string OAuthProxyRedirectUrl = OAuthProxyBaseUrl + "oauth/shopify";
 
         public const string OAuthProxyTokenUrl = OAuthProxyBaseUrl + "oauth/v1/token";
-
-#if NETCOREAPP
         public UmbracoAuthorizationService(IOptions<ShopifySettings> options, ITokenService tokenService)
             : base(tokenService) 
         {
             _settings = options.Value;
         }
-#else
-        public UmbracoAuthorizationService(ITokenService tokenService)
-            : base(tokenService)
-        {
-            _settings = new ShopifySettings(ConfigurationManager.AppSettings);
-        }
-#endif
 
         public string GetAccessToken(string code) => 
             GetAccessTokenAsync(code).ConfigureAwait(false).GetAwaiter().GetResult();
