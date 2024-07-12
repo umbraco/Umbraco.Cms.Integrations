@@ -1,13 +1,13 @@
-var R = (t) => {
+var k = (t) => {
   throw TypeError(t);
 };
-var A = (t, e, r) => e.has(t) || R("Cannot " + r);
-var u = (t, e, r) => (A(t, e, "read from private field"), r ? r.call(t) : e.get(t)), k = (t, e, r) => e.has(t) ? R("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(t) : e.set(t, r), C = (t, e, r, s) => (A(t, e, "write to private field"), s ? s.call(t, r) : e.set(t, r), r);
-import { UmbControllerBase as S } from "@umbraco-cms/backoffice/class-api";
+var A = (t, e, r) => e.has(t) || k("Cannot " + r);
+var u = (t, e, r) => (A(t, e, "read from private field"), r ? r.call(t) : e.get(t)), R = (t, e, r) => e.has(t) ? k("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(t) : e.set(t, r), C = (t, e, r, s) => (A(t, e, "write to private field"), s ? s.call(t, r) : e.set(t, r), r);
+import { UmbControllerBase as E } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken as P } from "@umbraco-cms/backoffice/context-api";
-import { tryExecuteAndNotify as h } from "@umbraco-cms/backoffice/resources";
-import { O as y } from "./index-B9zm0pl6.js";
-class E extends Error {
+import { tryExecuteAndNotify as l } from "@umbraco-cms/backoffice/resources";
+import { O as h } from "./index-DM1PFbxq.js";
+class S extends Error {
   constructor(e, r, s) {
     super(s), this.name = "ApiError", this.url = r.url, this.status = r.status, this.statusText = r.statusText, this.body = r.body, this.request = e;
   }
@@ -24,20 +24,20 @@ class x {
   constructor(e) {
     this._isResolved = !1, this._isRejected = !1, this._isCancelled = !1, this.cancelHandlers = [], this.promise = new Promise((r, s) => {
       this._resolve = r, this._reject = s;
-      const n = (o) => {
-        this._isResolved || this._isRejected || this._isCancelled || (this._isResolved = !0, this._resolve && this._resolve(o));
-      }, a = (o) => {
-        this._isResolved || this._isRejected || this._isCancelled || (this._isRejected = !0, this._reject && this._reject(o));
-      }, i = (o) => {
-        this._isResolved || this._isRejected || this._isCancelled || this.cancelHandlers.push(o);
+      const n = (i) => {
+        this._isResolved || this._isRejected || this._isCancelled || (this._isResolved = !0, this._resolve && this._resolve(i));
+      }, a = (i) => {
+        this._isResolved || this._isRejected || this._isCancelled || (this._isRejected = !0, this._reject && this._reject(i));
+      }, o = (i) => {
+        this._isResolved || this._isRejected || this._isCancelled || this.cancelHandlers.push(i);
       };
-      return Object.defineProperty(i, "isResolved", {
+      return Object.defineProperty(o, "isResolved", {
         get: () => this._isResolved
-      }), Object.defineProperty(i, "isRejected", {
+      }), Object.defineProperty(o, "isRejected", {
         get: () => this._isRejected
-      }), Object.defineProperty(i, "isCancelled", {
+      }), Object.defineProperty(o, "isCancelled", {
         get: () => this._isCancelled
-      }), e(n, a, i);
+      }), e(n, a, o);
     });
   }
   get [Symbol.toStringTag]() {
@@ -79,13 +79,13 @@ const m = (t) => typeof t == "string", T = (t) => m(t) && t !== "", b = (t) => t
   const e = [], r = (n, a) => {
     e.push(`${encodeURIComponent(n)}=${encodeURIComponent(String(a))}`);
   }, s = (n, a) => {
-    a != null && (a instanceof Date ? r(n, a.toISOString()) : Array.isArray(a) ? a.forEach((i) => s(n, i)) : typeof a == "object" ? Object.entries(a).forEach(([i, o]) => s(`${n}[${i}]`, o)) : r(n, a));
+    a != null && (a instanceof Date ? r(n, a.toISOString()) : Array.isArray(a) ? a.forEach((o) => s(n, o)) : typeof a == "object" ? Object.entries(a).forEach(([o, i]) => s(`${n}[${o}]`, i)) : r(n, a));
   };
   return Object.entries(t).forEach(([n, a]) => s(n, a)), e.length ? `?${e.join("&")}` : "";
 }, B = (t, e) => {
-  const r = encodeURI, s = e.url.replace("{api-version}", t.VERSION).replace(/{(.*?)}/g, (a, i) => {
-    var o;
-    return (o = e.path) != null && o.hasOwnProperty(i) ? r(String(e.path[i])) : a;
+  const r = encodeURI, s = e.url.replace("{api-version}", t.VERSION).replace(/{(.*?)}/g, (a, o) => {
+    var i;
+    return (i = e.path) != null && i.hasOwnProperty(o) ? r(String(e.path[o])) : a;
   }), n = t.BASE + s;
   return e.query ? n + N(e.query) : n;
 }, U = (t) => {
@@ -103,35 +103,35 @@ const m = (t) => typeof t == "string", T = (t) => m(t) && t !== "", b = (t) => t
     g(e, t.USERNAME),
     g(e, t.PASSWORD),
     g(e, t.HEADERS)
-  ]), i = Object.entries({
+  ]), o = Object.entries({
     Accept: "application/json",
     ...a,
     ...e.headers
-  }).filter(([, o]) => o != null).reduce((o, [l, d]) => ({
-    ...o,
-    [l]: String(d)
+  }).filter(([, i]) => i != null).reduce((i, [p, d]) => ({
+    ...i,
+    [p]: String(d)
   }), {});
-  if (T(r) && (i.Authorization = `Bearer ${r}`), T(s) && T(n)) {
-    const o = I(`${s}:${n}`);
-    i.Authorization = `Basic ${o}`;
+  if (T(r) && (o.Authorization = `Bearer ${r}`), T(s) && T(n)) {
+    const i = I(`${s}:${n}`);
+    o.Authorization = `Basic ${i}`;
   }
-  return e.body !== void 0 && (e.mediaType ? i["Content-Type"] = e.mediaType : b(e.body) ? i["Content-Type"] = e.body.type || "application/octet-stream" : m(e.body) ? i["Content-Type"] = "text/plain" : _(e.body) || (i["Content-Type"] = "application/json")), new Headers(i);
+  return e.body !== void 0 && (e.mediaType ? o["Content-Type"] = e.mediaType : b(e.body) ? o["Content-Type"] = e.body.type || "application/octet-stream" : m(e.body) ? o["Content-Type"] = "text/plain" : _(e.body) || (o["Content-Type"] = "application/json")), new Headers(o);
 }, H = (t) => {
   var e, r;
   if (t.body !== void 0)
     return (e = t.mediaType) != null && e.includes("application/json") || (r = t.mediaType) != null && r.includes("+json") ? JSON.stringify(t.body) : m(t.body) || b(t.body) || _(t.body) ? t.body : JSON.stringify(t.body);
-}, D = async (t, e, r, s, n, a, i) => {
-  const o = new AbortController();
-  let l = {
+}, D = async (t, e, r, s, n, a, o) => {
+  const i = new AbortController();
+  let p = {
     headers: a,
     body: s ?? n,
     method: e.method,
-    signal: o.signal
+    signal: i.signal
   };
-  t.WITH_CREDENTIALS && (l.credentials = t.CREDENTIALS);
+  t.WITH_CREDENTIALS && (p.credentials = t.CREDENTIALS);
   for (const d of t.interceptors.request._fns)
-    l = await d(l);
-  return i(() => o.abort()), await fetch(r, l);
+    p = await d(p);
+  return o(() => i.abort()), await fetch(r, p);
 }, F = (t, e) => {
   if (e) {
     const r = t.headers.get(e);
@@ -201,26 +201,26 @@ const m = (t) => typeof t == "string", T = (t) => m(t) && t !== "", b = (t) => t
     ...t.errors
   }[e.status];
   if (s)
-    throw new E(t, e, s);
+    throw new S(t, e, s);
   if (!e.ok) {
-    const n = e.status ?? "unknown", a = e.statusText ?? "unknown", i = (() => {
+    const n = e.status ?? "unknown", a = e.statusText ?? "unknown", o = (() => {
       try {
         return JSON.stringify(e.body, null, 2);
       } catch {
         return;
       }
     })();
-    throw new E(
+    throw new S(
       t,
       e,
-      `Generic Error: status: ${n}; status text: ${a}; body: ${i}`
+      `Generic Error: status: ${n}; status text: ${a}; body: ${o}`
     );
   }
 }, f = (t, e) => new x(async (r, s, n) => {
   try {
-    const a = B(t, e), i = U(e), o = H(e), l = await L(t, e);
+    const a = B(t, e), o = U(e), i = H(e), p = await L(t, e);
     if (!n.isCancelled) {
-      let d = await D(t, e, a, o, i, l, n);
+      let d = await D(t, e, a, i, o, p, n);
       for (const j of t.interceptors.response._fns)
         d = await j(d);
       const q = await $(d), v = F(d, e.responseHeader), w = {
@@ -236,13 +236,13 @@ const m = (t) => typeof t == "string", T = (t) => m(t) && t !== "", b = (t) => t
     s(a);
   }
 });
-class p {
+class y {
   /**
    * @returns unknown OK
    * @throws ApiError
    */
   static checkConfiguration() {
-    return f(y, {
+    return f(h, {
       method: "GET",
       url: "/umbraco/shopify/management/api/v1/check-configuration",
       errors: {
@@ -257,7 +257,7 @@ class p {
    * @throws ApiError
    */
   static getAccessToken(e = {}) {
-    return f(y, {
+    return f(h, {
       method: "POST",
       url: "/umbraco/shopify/management/api/v1/get-access-token",
       body: e.requestBody,
@@ -272,7 +272,7 @@ class p {
    * @throws ApiError
    */
   static getAuthorizationUrl() {
-    return f(y, {
+    return f(h, {
       method: "GET",
       url: "/umbraco/shopify/management/api/v1/get-authorization-url",
       errors: {
@@ -287,7 +287,7 @@ class p {
    * @throws ApiError
    */
   static getList(e = {}) {
-    return f(y, {
+    return f(h, {
       method: "GET",
       url: "/umbraco/shopify/management/api/v1/get-list",
       query: {
@@ -305,7 +305,7 @@ class p {
    * @throws ApiError
    */
   static getListByIds(e = {}) {
-    return f(y, {
+    return f(h, {
       method: "GET",
       url: "/umbraco/shopify/management/api/v1/get-list-by-ids",
       body: e.requestBody,
@@ -319,8 +319,21 @@ class p {
    * @returns string OK
    * @throws ApiError
    */
+  static refreshAccessToken() {
+    return f(h, {
+      method: "POST",
+      url: "/umbraco/shopify/management/api/v1/refresh",
+      errors: {
+        401: "The resource is protected and requires an authentication token"
+      }
+    });
+  }
+  /**
+   * @returns string OK
+   * @throws ApiError
+   */
   static revokeAccessToken() {
-    return f(y, {
+    return f(h, {
       method: "POST",
       url: "/umbraco/shopify/management/api/v1/revoke-access-token",
       responseHeader: "Umb-Notifications",
@@ -334,7 +347,7 @@ class p {
    * @throws ApiError
    */
   static getTotalPages() {
-    return f(y, {
+    return f(h, {
       method: "GET",
       url: "/umbraco/shopify/management/api/v1/total-pages",
       errors: {
@@ -347,7 +360,7 @@ class p {
    * @throws ApiError
    */
   static validateAccessToken() {
-    return f(y, {
+    return f(h, {
       method: "GET",
       url: "/umbraco/shopify/management/api/v1/validate-access-token",
       errors: {
@@ -356,48 +369,52 @@ class p {
     });
   }
 }
-class G extends S {
+class G extends E {
   constructor(e) {
     super(e);
   }
   async checkConfiguration() {
-    const { data: e, error: r } = await h(this, p.checkConfiguration());
+    const { data: e, error: r } = await l(this, y.checkConfiguration());
     return r || !e ? { error: r } : { data: e };
   }
   async getAccessToken(e) {
-    const { data: r, error: s } = await h(this, p.getAccessToken({ requestBody: e }));
+    const { data: r, error: s } = await l(this, y.getAccessToken({ requestBody: e }));
     return s || !r ? { error: s } : { data: r };
   }
   async validateAccessToken() {
-    const { data: e, error: r } = await h(this, p.validateAccessToken());
+    const { data: e, error: r } = await l(this, y.validateAccessToken());
     return r || !e ? { error: r } : { data: e };
   }
   async revokeAccessToken() {
-    const { data: e, error: r } = await h(this, p.revokeAccessToken());
+    const { data: e, error: r } = await l(this, y.revokeAccessToken());
     return r || !e ? { error: r } : { data: e };
   }
   async getList() {
-    const { data: e, error: r } = await h(this, p.getList());
+    const { data: e, error: r } = await l(this, y.getList());
     return r || !e ? { error: r } : { data: e };
   }
   async getListByIds() {
-    const { data: e, error: r } = await h(this, p.getListByIds());
+    const { data: e, error: r } = await l(this, y.getListByIds());
     return r || !e ? { error: r } : { data: e };
   }
   async getTotalPages() {
-    const { data: e, error: r } = await h(this, p.getTotalPages());
+    const { data: e, error: r } = await l(this, y.getTotalPages());
     return r || !e ? { error: r } : { data: e };
   }
   async getAuthorizationUrl() {
-    const { data: e, error: r } = await h(this, p.getAuthorizationUrl());
+    const { data: e, error: r } = await l(this, y.getAuthorizationUrl());
+    return r || !e ? { error: r } : { data: e };
+  }
+  async refreshAccessToken() {
+    const { data: e, error: r } = await l(this, y.refreshAccessToken());
     return r || !e ? { error: r } : { data: e };
   }
 }
 var c;
-class M extends S {
+class M extends E {
   constructor(r) {
     super(r);
-    k(this, c);
+    R(this, c);
     this.provideContext(J, this), C(this, c, new G(r));
   }
   async checkConfiguration() {
@@ -424,6 +441,9 @@ class M extends S {
   async getAuthorizationUrl() {
     return await u(this, c).getAuthorizationUrl();
   }
+  async refreshAccessToken() {
+    return await u(this, c).refreshAccessToken();
+  }
 }
 c = new WeakMap();
 const J = new P(M.name);
@@ -432,4 +452,4 @@ export {
   M as ShopifyContext,
   M as default
 };
-//# sourceMappingURL=shopify.context-BMBZ2TCh.js.map
+//# sourceMappingURL=shopify.context-DlBtK13t.js.map

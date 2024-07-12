@@ -1,4 +1,6 @@
-import type { ManifestPropertyEditorUi, ManifestPropertyEditorSchema } from "@umbraco-cms/backoffice/extension-registry";
+import { ManifestTypes, type ManifestPropertyEditorUi } from "@umbraco-cms/backoffice/extension-registry";
+import { manifests as amountManifest } from "../config/amount/manifests.js";
+import { manifests as authorizationManifest } from "../config/authorization/manifests.js";
 
 export const propertyEditorUiManifest : ManifestPropertyEditorUi = {
     type: "propertyEditorUi",
@@ -8,32 +10,30 @@ export const propertyEditorUiManifest : ManifestPropertyEditorUi = {
     elementName: "shopify-product-picker",
     meta: {
         label: "Shopify Product Picker",
-        icon: "icon-handshake",
+        icon: "icon-shopping-basket-alt",
         group: "pickers",
-        propertyEditorSchemaAlias: "Shopify.ProductPicker"
-    }
-};
-
-const propertyEditorSchema : ManifestPropertyEditorSchema = {
-    type: "propertyEditorSchema",
-    name: "Shopify Product Picker",
-    alias: "Shopify.ProductPicker",
-    meta: {
-        defaultPropertyEditorUiAlias: "Shopify.PropertyEditorUi.ProductPicker",
-        settings: {
-            properties: [
+		propertyEditorSchemaAlias: 'Shopify.ProductPicker',
+        settings:{
+            properties:[
                 {
-                    alias: "Shopify.authorization",
-                    label: "Authorization",
-                    description: "Authorization Details",
-                    propertyEditorUiAlias: "Shopify.PropertyEditorUi.Authorization"
+                    alias: 'authorization',
+					label: 'Authorization',
+					description: 'Authorize your Shopify connection.',
+					propertyEditorUiAlias: 'Shopify.PropertyEditorUi.Authorization',
+                },
+                {
+                    alias: 'amount',
+					label: 'Amount',
+					description: 'Set a required range of items selected.',
+					propertyEditorUiAlias: 'Shopify.PropertyEditorUi.Amount',
                 }
             ]
         }
     }
 };
 
-export const manifests = [
+export const manifests : Array<ManifestTypes> = [
     propertyEditorUiManifest,
-    propertyEditorSchema
+    amountManifest,
+    authorizationManifest
 ];

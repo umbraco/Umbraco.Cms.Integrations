@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { CheckConfigurationResponse, GetAccessTokenData, GetAccessTokenResponse, GetAuthorizationUrlResponse, GetListData, GetListResponse, GetListByIdsData, GetListByIdsResponse, RevokeAccessTokenResponse, GetTotalPagesResponse, ValidateAccessTokenResponse } from './types.gen';
+import type { CheckConfigurationResponse, GetAccessTokenData, GetAccessTokenResponse, GetAuthorizationUrlResponse, GetListData, GetListResponse, GetListByIdsData, GetListByIdsResponse, RefreshAccessTokenResponse, RevokeAccessTokenResponse, GetTotalPagesResponse, ValidateAccessTokenResponse } from './types.gen';
 
 export class ShopifyService {
     /**
@@ -83,6 +83,20 @@ export class ShopifyService {
             url: '/umbraco/shopify/management/api/v1/get-list-by-ids',
             body: data.requestBody,
             mediaType: 'application/json',
+            errors: {
+                401: 'The resource is protected and requires an authentication token'
+            }
+        });
+    }
+    
+    /**
+     * @returns string OK
+     * @throws ApiError
+     */
+    public static refreshAccessToken(): CancelablePromise<RefreshAccessTokenResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/umbraco/shopify/management/api/v1/refresh',
             errors: {
                 401: 'The resource is protected and requires an authentication token'
             }

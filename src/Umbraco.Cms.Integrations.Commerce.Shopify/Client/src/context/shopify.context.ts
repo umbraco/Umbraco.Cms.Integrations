@@ -45,6 +45,10 @@ export class ShopifyContext extends UmbControllerBase{
     async getAuthorizationUrl(){
         return await this.#repository.getAuthorizationUrl();
     }
+
+    async refreshAccessToken(){
+        return await this.#repository.refreshAccessToken();
+    }
 }
 
 export default ShopifyContext;

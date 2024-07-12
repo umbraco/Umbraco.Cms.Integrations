@@ -26,6 +26,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Api.Management.Controll
         protected IShopifyService ShopifyService;
         protected IShopifyAuthorizationService ShopifyAuthorizationService;
 
+
         protected ShopifyControllerBase(IOptions<ShopifySettings> shopifySettings, IShopifyService shopifyService, IShopifyAuthorizationService shopifyAuthorizationService)
         {
             ShopifySettings = shopifySettings.Value;

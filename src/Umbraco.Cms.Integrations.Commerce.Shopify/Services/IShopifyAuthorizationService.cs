@@ -9,5 +9,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
         string GetAccessToken(string code);
 
         Task<string> GetAccessTokenAsync(string code);
+        string RefreshAccessToken();
+
+        Task<string> RefreshAccessTokenAsync();
     }
 }

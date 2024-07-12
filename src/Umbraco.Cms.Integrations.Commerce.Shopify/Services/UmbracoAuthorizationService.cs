@@ -1,19 +1,12 @@
 ﻿using Newtonsoft.Json;
-
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
-
 using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Configuration;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models.Dtos;
-
-#if NETCOREAPP
 using Microsoft.Extensions.Options;
-#else
-using System.Configuration;
-#endif
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
 {
@@ -33,19 +26,11 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
 
         public const string OAuthProxyTokenUrl = OAuthProxyBaseUrl + "oauth/v1/token";
 
-#if NETCOREAPP
         public UmbracoAuthorizationService(IOptions<ShopifySettings> options, ITokenService tokenService)
             : base(tokenService) 
         {
             _settings = options.Value;
         }
-#else
-        public UmbracoAuthorizationService(ITokenService tokenService)
-            : base(tokenService)
-        {
-            _settings = new ShopifySettings(ConfigurationManager.AppSettings);
-        }
-#endif
 
         public string GetAccessToken(string code) => 
             GetAccessTokenAsync(code).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -95,5 +80,42 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
             _settings.Shop,
             ClientId,
             OAuthProxyRedirectUrl);
+
+        public string RefreshAccessToken() => RefreshAccessTokenAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+        public async Task<string> RefreshAccessTokenAsync()
+        {
+            TokenService.TryGetParameters(Constants.RefreshTokenDbKey, out string refreshToken);
+
+            var data = new Dictionary<string, string>
+            {
+                {"grant_type", "refresh_token"},
+                {"client_id", ClientId },
+                { "refresh_token", refreshToken }
+            };
+
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(OAuthProxyTokenUrl),
+                Content = new FormUrlEncodedContent(data)
+            };
+            requestMessage.Headers.Add("service_name", Service);
+
+            var response = await ClientFactory().SendAsync(requestMessage);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+
+                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
+
+                TokenService.SaveParameters(Constants.AccessTokenDbKey, tokenDto.AccessToken);
+                TokenService.SaveParameters(Constants.RefreshTokenDbKey, tokenDto.RefreshToken);
+
+                return result;
+            }
+
+            return "error";
+        }
     }
 }

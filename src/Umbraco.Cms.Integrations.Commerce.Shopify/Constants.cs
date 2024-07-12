@@ -11,6 +11,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core
 
         public const string ProductsCountApiEndpoint = "https://{0}.myshopify.com/admin/api/{1}/products/count.json";
 
+        public const string RefreshTokenDbKey = "Umbraco.Cms.Integrations.Shopify.RefreshTokenDbKey";
+
         public const int DEFAULT_PAGE_SIZE = 10;
 
         public static class RenderingComponent

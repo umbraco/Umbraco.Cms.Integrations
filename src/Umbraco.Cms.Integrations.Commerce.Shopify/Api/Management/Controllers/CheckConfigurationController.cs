@@ -19,16 +19,28 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Api.Management.Controll
     [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
     public class CheckConfigurationController : ShopifyControllerBase
     {
-        public CheckConfigurationController(IOptions<ShopifySettings> shopifySettings, IShopifyService shopifyService, IShopifyAuthorizationService shopifyAuthorizationService) : base(shopifySettings, shopifyService, shopifyAuthorizationService)
+        private readonly ShopifyOAuthSettings _oauthSettings;
+        public CheckConfigurationController(IOptions<ShopifySettings> shopifySettings, IShopifyService shopifyService, IShopifyAuthorizationService shopifyAuthorizationService, IOptions<ShopifyOAuthSettings> oauthSettings) : base(shopifySettings, shopifyService, shopifyAuthorizationService)
         {
+            _oauthSettings = oauthSettings.Value;
         }
 
         [HttpGet("check-configuration")]
         [ProducesResponseType(typeof(EditorSettings), StatusCodes.Status200OK)]
-        public ActionResult CheckConfiguration()
+        public IActionResult CheckConfiguration()
         {
-            var setting = ShopifyService.GetApiConfiguration();
-            return Ok(setting);
+            var settings = !string.IsNullOrEmpty(ShopifySettings.AccessToken)
+                    ? new EditorSettings { IsValid = true, Type = ConfigurationType.Api }
+                    : ShopifySettings.UseUmbracoAuthorization
+                        ? new EditorSettings { IsValid = true, Type = ConfigurationType.OAuth }
+                        : !string.IsNullOrEmpty(_oauthSettings.ClientId)
+                       && !string.IsNullOrEmpty(_oauthSettings.Scopes)
+                       && !string.IsNullOrEmpty(_oauthSettings.ClientSecret)
+                       && !string.IsNullOrEmpty(_oauthSettings.TokenEndpoint)
+                        ? new EditorSettings { IsValid = true, Type = ConfigurationType.OAuth }
+                        : new EditorSettings();
+
+            return Ok(settings);
         }
     }
 }

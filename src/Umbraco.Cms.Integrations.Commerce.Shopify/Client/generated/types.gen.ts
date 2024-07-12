@@ -90,6 +90,8 @@ export type GetListByIdsData = {
 
 export type GetListByIdsResponse = ResponseDtoProductsListDtoModel;
 
+export type RefreshAccessTokenResponse = string;
+
 export type RevokeAccessTokenResponse = string;
 
 export type GetTotalPagesResponse = number;
@@ -163,6 +165,20 @@ export type $OpenApiTs = {
                  * OK
                  */
                 200: ResponseDtoProductsListDtoModel;
+                /**
+                 * The resource is protected and requires an authentication token
+                 */
+                401: unknown;
+            };
+        };
+    };
+    '/umbraco/shopify/management/api/v1/refresh': {
+        post: {
+            res: {
+                /**
+                 * OK
+                 */
+                200: string;
                 /**
                  * The resource is protected and requires an authentication token
                  */

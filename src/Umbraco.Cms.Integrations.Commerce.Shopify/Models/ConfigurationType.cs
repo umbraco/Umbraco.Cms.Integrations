@@ -15,7 +15,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models
         public static ConfigurationType Api => new ConfigurationType("API");
 
         public static ConfigurationType OAuth => new ConfigurationType("OAuth");
-
+        public static ConfigurationType OAuthConnected => new ConfigurationType("OAuthConnected");
 
         public static ConfigurationType None => new ConfigurationType("None");
     }

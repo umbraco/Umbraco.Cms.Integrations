@@ -87,6 +87,16 @@ export class ShopifyRepository extends UmbControllerBase {
 
         return { data };
     }
+
+    async refreshAccessToken(){
+        const { data, error } = await tryExecuteAndNotify(this, ShopifyService.refreshAccessToken());
+
+        if (error || !data) {
+            return { error };
+        }
+
+        return { data };
+    }
 }
 
 export default ShopifyRepository;
