@@ -6,7 +6,7 @@ export type ShopifyProductPickerModalData = {
 }
 
 export type ShopifyProductPickerModalValue = {
-    products: ProductDtoModel;
+    products: Array<ProductDtoModel>;
 }
 
 export const SHOPIFY_MODAL_TOKEN = new UmbModalToken<ShopifyProductPickerModalData, ShopifyProductPickerModalValue>("Shopify.Modal", {

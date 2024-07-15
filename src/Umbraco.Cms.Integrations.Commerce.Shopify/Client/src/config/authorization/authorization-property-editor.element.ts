@@ -107,7 +107,7 @@ export class ShopifyAuthorizationElement extends UmbElementMixin(LitElement){
 
     async #connectButtonClick(){
         window.addEventListener("message", async (event: MessageEvent) => {
-            if (event.data.type === "hubspot:oauth:success") {
+            if (event.data.type === "shopify:oauth:success") {
 
                 const oauthRequestDtoModel: OAuthRequestDtoModel = {
                     code: event.data.code
@@ -158,13 +158,13 @@ export class ShopifyAuthorizationElement extends UmbElementMixin(LitElement){
                         look="primary" 
                         label="Connect" 
                         ?disabled=${this._oauthSetup.isConnected} 
-                        .onclick=${this.#connectButtonClick()}></uui-button>
+                        @click=${this.#connectButtonClick}></uui-button>
                     <uui-button 
                         color="danger" 
                         look="secondary" 
                         label="Revoke" 
                         ?disabled=${!this._oauthSetup.isConnected} 
-                        .onclick=${this.#revokeButtonClick()}></uui-button>
+                        @click=${this.#revokeButtonClick}></uui-button>
                 </div>
                 `)}
             

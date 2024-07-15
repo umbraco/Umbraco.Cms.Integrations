@@ -20,7 +20,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
 
         public const string ServiceAddressReplace = "service_address_shop-replace";
 
-        public const string OAuthProxyBaseUrl = "https://localhost:44340/";  // for local testing: "https://localhost:44364/";
+        public const string OAuthProxyBaseUrl = "https://hubspot-forms-auth.umbraco.com/";  // for local testing: "https://localhost:44364/";
 
         public const string OAuthProxyRedirectUrl = OAuthProxyBaseUrl + "oauth/shopify";
 
