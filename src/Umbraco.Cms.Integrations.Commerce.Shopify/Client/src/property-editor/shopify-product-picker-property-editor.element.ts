@@ -64,7 +64,7 @@ export class ShopifyProductPickerPropertyEditor extends UmbElementMixin(LitEleme
     private async _openModal() {
         const pickerContext = this.#modalManagerContext?.open(this, SHOPIFY_MODAL_TOKEN, {
             data: {
-                headline: "HubSpot Forms",
+                headline: "Shopify Products",
             },
         });
 
