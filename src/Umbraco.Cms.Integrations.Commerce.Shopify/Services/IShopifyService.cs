@@ -7,7 +7,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
     public interface IShopifyService
     {
-        EditorSettings GetApiConfiguration();
+        Task<EditorSettings> GetApiConfiguration();
 
         Task<ResponseDto<ProductsListDto>> ValidateAccessToken();
 

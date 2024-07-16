@@ -12,6 +12,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models
         [JsonProperty("isValid")]
         public bool IsValid { get; set; }
 
+        [JsonProperty("isConnected")]
+        public bool IsConnected { get; set; }
+
         [JsonProperty("type")]
         public ConfigurationType Type { get; set; }
     }

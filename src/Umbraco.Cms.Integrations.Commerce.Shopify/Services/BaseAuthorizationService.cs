@@ -16,8 +16,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
         protected const string ShopifyAuthorizationUrl = "https://{0}.myshopify.com/admin/oauth/authorize" +
             "?client_id={1}" +
             "&redirect_uri={2}" +
-            "&scope=read_products" +
-            "&grant_options[]=value";
+            "&scope=read_products";
 
         public BaseAuthorizationService(ITokenService tokenService)
         {
