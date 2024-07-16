@@ -58,11 +58,11 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         const { data } = await this.#shopifyContext.getList();
         if (!data) return;
 
-        this._products = data.products ?? [];
+        this._products = data.result.products ?? [];
         this._loading = false;
 
         if (!data.isValid || data.isExpired) {
-            this._showError(data.error!);
+            this._showError("Data is invalid or expired."!);
         }
     }
 

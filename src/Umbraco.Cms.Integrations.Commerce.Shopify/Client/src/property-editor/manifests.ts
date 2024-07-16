@@ -12,7 +12,7 @@ export const propertyEditorUiManifest : ManifestPropertyEditorUi = {
         label: "Shopify Product Picker",
         icon: "icon-shopping-basket-alt",
         group: "pickers",
-		propertyEditorSchemaAlias: 'Shopify.ProductPicker',
+		propertyEditorSchemaAlias: 'Umbraco.Cms.Integrations.Commerce.Shopify.Core.ProductPicker',
         settings:{
             properties:[
                 {
