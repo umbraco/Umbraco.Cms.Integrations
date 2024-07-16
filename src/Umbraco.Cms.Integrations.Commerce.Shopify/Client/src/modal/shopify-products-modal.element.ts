@@ -1,12 +1,14 @@
 import { UmbModalBaseElement } from "@umbraco-cms/backoffice/modal";
 import { SHOPIFY_CONTEXT_TOKEN } from "../context/shopify.context.js";
 import { UMB_NOTIFICATION_CONTEXT } from "@umbraco-cms/backoffice/notification";
-import { html, css, state } from "@umbraco-cms/backoffice/external/lit";
+import { html, css, state, customElement } from "@umbraco-cms/backoffice/external/lit";
 import type { ProductDtoModel } from "../../generated";
 import type { ShopifyProductPickerModalData, ShopifyProductPickerModalValue } from "./shopify.modal-token.js";
 import type { ShopifyServiceStatus } from "../models/shopify-service.model.js";
 
 const elementName = "shopify-products-modal";
+
+@customElement(elementName)
 export default class ShopifyProductsModalElement extends UmbModalBaseElement<ShopifyProductPickerModalData, ShopifyProductPickerModalValue>{
     #shopifyContext!: typeof SHOPIFY_CONTEXT_TOKEN.TYPE;
 
