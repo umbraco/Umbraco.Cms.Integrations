@@ -5,7 +5,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Resolvers
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Resolvers
 {
     public class JsonPropertyRenameContractResolver : DefaultContractResolver
     {

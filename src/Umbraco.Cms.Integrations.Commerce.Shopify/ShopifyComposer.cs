@@ -1,13 +1,13 @@
-﻿using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services;
+﻿using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Configuration;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Api.Configuration;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Api.Configuration;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core
+namespace Umbraco.Cms.Integrations.Commerce.Shopify
 {
     public class ShopifyComposer : IComposer
     {

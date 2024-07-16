@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Configuration;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models.Dtos;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
 using Microsoft.Extensions.Options;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
     public class UmbracoAuthorizationService : BaseAuthorizationService, IShopifyAuthorizationService
     {

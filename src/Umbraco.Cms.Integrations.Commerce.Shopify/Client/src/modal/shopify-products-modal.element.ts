@@ -5,12 +5,61 @@ import { html, css, state, customElement } from "@umbraco-cms/backoffice/externa
 import type { ProductDtoModel } from "../../generated";
 import type { ShopifyProductPickerModalData, ShopifyProductPickerModalValue } from "./shopify.modal-token.js";
 import type { ShopifyServiceStatus } from "../models/shopify-service.model.js";
+import type { UmbTableColumn, UmbTableConfig, UmbTableItem } from '@umbraco-cms/backoffice/components';
+import type {ShopifyCollectionModel} from "../types/types.js";
+import type { UmbDefaultCollectionContext } from '@umbraco-cms/backoffice/collection';
+import { UMB_COLLECTION_CONTEXT } from '@umbraco-cms/backoffice/collection';
 
 const elementName = "shopify-products-modal";
 
 @customElement(elementName)
 export default class ShopifyProductsModalElement extends UmbModalBaseElement<ShopifyProductPickerModalData, ShopifyProductPickerModalValue>{
     #shopifyContext!: typeof SHOPIFY_CONTEXT_TOKEN.TYPE;
+    #collectionContext!: UmbDefaultCollectionContext<ShopifyCollectionModel>;
+
+    @state()
+	private _tableConfig: UmbTableConfig = {
+		allowSelection: false,
+	};
+
+    @state()
+	private _tableColumns: Array<UmbTableColumn> = [
+		{
+			name: 'Name',
+			alias: 'productName'
+		},
+		{
+			name: 'Vendor',
+			alias: 'vendor',
+		},
+		{
+			name: 'Status',
+			alias: 'status'
+		},
+		{
+			name: 'Tags',
+			alias: 'tags'
+		},
+		{
+			name: 'SKU',
+			alias: 'sku',
+		},
+        {
+			name: 'Barcode',
+			alias: 'barcode',
+		},
+        {
+			name: 'Price',
+			alias: 'price',
+		},
+		{
+			name: '',
+			alias: 'entityActions'
+		},
+	];
+
+    @state()
+	private _tableItems: Array<UmbTableItem> = [];
 
     @state()
     private _serviceStatus: ShopifyServiceStatus = {
@@ -32,6 +81,11 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         this.consumeContext(SHOPIFY_CONTEXT_TOKEN, (context) => {
             this.#shopifyContext = context;
         });
+
+        this.consumeContext(UMB_COLLECTION_CONTEXT, (instance) => {
+			this.#collectionContext = instance;
+			this.#observeCollectionItems();
+		});
     }
 
     async connectedCallback() {
@@ -57,7 +111,7 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 
     async #loadProducts() {
         this._loading = true;
-        const { data } = await this.#shopifyContext.getList();
+        const { data } = await this.#shopifyContext.getList(undefined);
         if (!data) return;
 
         this._products = data.result.products ?? [];
@@ -80,16 +134,39 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         });
     }
 
+    #observeCollectionItems() {
+		if (!this.#shopifyContext) return;
+		this.observe(this.#collectionContext.items, (items) => this.#createTableItems(items, this._products), 'umbCollectionItemsObserver');
+	}
+
+    #createTableItems(products: Array<ShopifyCollectionModel>, actual: Array<ProductDtoModel>) {
+		this._tableItems = products.map((product) => {
+			return {
+				id: product.unique,
+				icon: '',
+				data: [
+					{
+						columnAlias: 'productName',
+						value: actual[0].title
+					},
+					...actual.map(a => {
+                        return {
+                            columnAlias: 'Vendor',
+							value: a.vendor
+                        };
+                    }),
+				],
+			};
+		});
+	}
+
     render() {
         return html`
             <umb-body-layout>
                 <uui-box headline="Shopify Products">
                     ${this._loading ? html`<div class="center"><uui-loader></uui-loader></div>` : ""}
-                    ${this._products.map((product) => {
-                        return html`
-                            <umb-table></umb-table>
-                        `;
-                    })}
+                    <umb-table .config=${this._tableConfig} .columns=${this._tableColumns} .items=${this._tableItems}></umb-table>
+                    
                 </uui-box>
                 <span>Add up to x items(s)</span>
 

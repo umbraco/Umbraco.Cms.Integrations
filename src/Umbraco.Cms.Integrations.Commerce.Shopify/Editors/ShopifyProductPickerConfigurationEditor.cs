@@ -5,7 +5,7 @@
 //using Umbraco.Core.PropertyEditors;
 //#endif
 
-//namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Editors
+//namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 //{
 //    public class ShopifyProductPickerConfigurationEditor: ConfigurationEditor<ShopifyProductPickerConfiguration>
 //    {

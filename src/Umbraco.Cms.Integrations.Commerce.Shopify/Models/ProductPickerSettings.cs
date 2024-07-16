@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models
 {
     public class ProductPickerSettings
     {

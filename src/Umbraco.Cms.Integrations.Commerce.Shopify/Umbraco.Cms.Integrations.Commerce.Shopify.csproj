@@ -12,7 +12,7 @@
     <Title>Umbraco CMS Integrations: Commerce - Shopify.Core</Title>
     <Description>Core package for Umbraco CMS integration with Shopify.</Description>
     <PackageIconUrl></PackageIconUrl>
-    <PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main/src/Umbraco.Cms.Integrations.Commerce.Shopify.Core</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main/src/Umbraco.Cms.Integrations.Commerce.Shopify</PackageProjectUrl>
     <RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
     <Version>5.0.0</Version>
     <Authors>Umbraco HQ</Authors>

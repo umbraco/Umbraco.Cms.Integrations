@@ -1,5 +1,5 @@
 ﻿
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models.ViewModels
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.ViewModels
 {
     public class ProductViewModel
     {

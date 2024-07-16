@@ -12,6 +12,6 @@ export type ShopifyProductPickerModalValue = {
 export const SHOPIFY_MODAL_TOKEN = new UmbModalToken<ShopifyProductPickerModalData, ShopifyProductPickerModalValue>("Shopify.Modal", {
     modal: {
         type: "sidebar",
-        size: "small"
+        size: "large"
     }
 });

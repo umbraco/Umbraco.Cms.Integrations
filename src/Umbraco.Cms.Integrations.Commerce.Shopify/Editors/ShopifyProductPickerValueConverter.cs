@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models.ViewModels;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Models.ViewModels;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
 
 #if NETCOREAPP
 using Umbraco.Cms.Core.PropertyEditors;
@@ -13,7 +13,7 @@ using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
 #endif
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Editors
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 {
     public class ShopifyProductPickerValueConverter : PropertyValueConverterBase
     {

@@ -1,5 +1,5 @@
 ﻿
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Resources
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Resources
 {
     public class LoggingResources
     {

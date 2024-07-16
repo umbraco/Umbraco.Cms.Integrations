@@ -1,4 +1,4 @@
-﻿//using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models;
+﻿//using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
 
 //#if NETCOREAPP
 //using Umbraco.Cms.Core.PropertyEditors;
@@ -6,7 +6,7 @@
 //using Umbraco.Core.PropertyEditors;
 //#endif
 
-//namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Editors
+//namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 //{
 //    public class ShopifyProductPickerConfiguration
 //    {

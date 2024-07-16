@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models
 {
     public class JavascriptResponse
     {

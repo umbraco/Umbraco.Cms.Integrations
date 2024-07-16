@@ -1,6 +1,6 @@
 ﻿using System.Collections.Specialized;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Configuration
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Configuration
 {
     public class ShopifyOAuthSettings
     {

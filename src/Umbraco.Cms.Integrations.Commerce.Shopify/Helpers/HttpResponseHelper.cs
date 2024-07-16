@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Web;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Helpers
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Helpers
 {
     public static class HttpResponseHelper
     {

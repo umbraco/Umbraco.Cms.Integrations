@@ -1,5 +1,5 @@
 ﻿
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core
+namespace Umbraco.Cms.Integrations.Commerce.Shopify
 {
     public static class Constants
     {
@@ -40,31 +40,31 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core
             public const string OAuthSettings = "Umbraco:Cms:Integrations:Commerce:Shopify:OAuthSettings";
 
             public const string UmbracoCmsIntegrationsCommerceShopifyApiVersion =
-            "Umbraco.Cms.Integrations.Commerce.Shopify.Core.ApiVersion";
+            "Umbraco.Cms.Integrations.Commerce.Shopify.ApiVersion";
 
             public const string UmbracoCmsIntegrationsCommerceShopifyShop =
-                "Umbraco.Cms.Integrations.Commerce.Shopify.Core.Shop";
+                "Umbraco.Cms.Integrations.Commerce.Shopify.Shop";
 
             public const string UmbracoCmsIntegrationsCommerceShopifyAccessToken =
-                "Umbraco.Cms.Integrations.Commerce.Shopify.Core.AccessToken";
+                "Umbraco.Cms.Integrations.Commerce.Shopify.AccessToken";
 
             public const string UmbracoCmsIntegrationsCommerceShopifyUseUmbracoAuthorizationKey =
-                "Umbraco.Cms.Integrations.Commerce.Shopify.Core.UseUmbracoAuthorization";
+                "Umbraco.Cms.Integrations.Commerce.Shopify.UseUmbracoAuthorization";
 
-            public const string UmbracoCmsIntegrationsCommerceShopifyClientIdKey = "Umbraco.Cms.Integrations.Commerce.Shopify.Core.ClientId";
+            public const string UmbracoCmsIntegrationsCommerceShopifyClientIdKey = "Umbraco.Cms.Integrations.Commerce.Shopify.ClientId";
 
-            public const string UmbracoCmsIntegrationsCommerceShopifyClientSecretKey = "Umbraco.Cms.Integrations.Commerce.Shopify.Core.ClientSecret";
+            public const string UmbracoCmsIntegrationsCommerceShopifyClientSecretKey = "Umbraco.Cms.Integrations.Commerce.Shopify.ClientSecret";
 
-            public const string UmbracoCmsIntegrationsCommerceShopifyRedirectUriKey = "Umbraco.Cms.Integrations.Commerce.Shopify.Core.RedirectUri";
+            public const string UmbracoCmsIntegrationsCommerceShopifyRedirectUriKey = "Umbraco.Cms.Integrations.Commerce.Shopify.RedirectUri";
 
-            public const string UmbracoCmsIntegrationsCommerceShopifyScopesKey = "Umbraco.Cms.Integrations.Commerce.Shopify.Core.Scopes";
+            public const string UmbracoCmsIntegrationsCommerceShopifyScopesKey = "Umbraco.Cms.Integrations.Commerce.Shopify.Scopes";
 
-            public const string UmbracoCmsIntegrationsCommerceShopifyTokenEndpointKey = "Umbraco.Cms.Integrations.Commerce.Shopify.Core.TokenEndpoint";
+            public const string UmbracoCmsIntegrationsCommerceShopifyTokenEndpointKey = "Umbraco.Cms.Integrations.Commerce.Shopify.TokenEndpoint";
         }
 
         public static class PropertyEditors
         {
-            public const string ProductPickerAlias = "Umbraco.Cms.Integrations.Commerce.Shopify.Core.ProductPicker";
+            public const string ProductPickerAlias = "Umbraco.Cms.Integrations.Commerce.Shopify.ProductPicker";
         }
     }
 }

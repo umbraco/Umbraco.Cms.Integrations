@@ -9,11 +9,11 @@ using Umbraco.Cms.Api.Common.Attributes;
 using Umbraco.Cms.Web.Common.Authorization;
 using Umbraco.Cms.Web.Common.Routing;
 using System.Linq;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Configuration;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Api.Management.Controllers
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Api.Management.Controllers
 {
     [ApiController]
     [BackOfficeRoute($"{Constants.ManagementApi.RootPath}/v{{version:apiVersion}}")]

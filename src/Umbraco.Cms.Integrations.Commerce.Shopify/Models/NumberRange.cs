@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models
 {
     [DataContract]
     public class NumberRange

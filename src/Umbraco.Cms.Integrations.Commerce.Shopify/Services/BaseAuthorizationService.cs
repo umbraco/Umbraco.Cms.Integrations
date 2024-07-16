@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
     public class BaseAuthorizationService
     {

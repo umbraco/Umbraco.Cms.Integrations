@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models.Dtos;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
     public interface IShopifyService
     {

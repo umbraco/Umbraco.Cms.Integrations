@@ -1,9 +1,9 @@
 ﻿using Umbraco.Cms.Core.PropertyEditors;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Editors
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 {
     [DataEditor(
-        "Umbraco.Cms.Integrations.Commerce.Shopify.Core.ProductPicker",
+        "Umbraco.Cms.Integrations.Commerce.Shopify.ProductPicker",
         ValueEditorIsReusable = true)]
     public class ShopifyProductPickerPropertyEditor : DataEditor
     {

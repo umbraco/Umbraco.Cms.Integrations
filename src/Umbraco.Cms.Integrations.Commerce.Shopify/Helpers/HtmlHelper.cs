@@ -10,9 +10,9 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 #endif
 
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models.ViewModels;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Models.ViewModels;
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Helpers
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Helpers
 {
     public static class ShopifyHtmlExtensions
     {

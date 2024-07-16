@@ -5,15 +5,17 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 using Newtonsoft.Json;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Configuration;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Models.Dtos;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Resolvers;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Resources;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Resolvers;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Resources;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Web;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Core.Helpers;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Helpers;
+using static Umbraco.Cms.Core.Constants.HttpContext;
+
 
 
 
@@ -29,7 +31,7 @@ using Umbraco.Core.Logging;
 using ShopifyLogLevel = Umbraco.Core.Logging.LogLevel;
 #endif
 
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
+namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
     public class ShopifyService : IShopifyService
     {
@@ -159,9 +161,25 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Core.Services
             var response = await ClientFactory().SendAsync(requestMessage);
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                Log(ShopifyLogLevel.Error, string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
+                //Log(ShopifyLogLevel.Error, string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
 
-                return new ResponseDto<ProductsListDto> { Message = response.ReasonPhrase };
+                //return new ResponseDto<ProductsListDto> { Message = response.ReasonPhrase };
+
+                using (StreamReader r = new StreamReader("temp.json"))
+                {
+                    string json = r.ReadToEnd();
+                    var responseDto = new ResponseDto<ProductsListDto>
+                    {
+                        IsValid = true,
+                        Result = JsonConvert.DeserializeObject<ProductsListDto>(json, _serializerSettings)
+                    };
+
+                    //var pageInfoDetails = response.GetPageInfo();
+                    //responseDto.PreviousPageInfo = pageInfoDetails.Item1;
+                    //responseDto.NextPageInfo = pageInfoDetails.Item2;
+
+                    return responseDto;
+                }
             }
 
             if (response.IsSuccessStatusCode)
