@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-
 using Newtonsoft.Json;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
@@ -15,21 +14,9 @@ using System.Linq;
 using System.Web;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Helpers;
 using static Umbraco.Cms.Core.Constants.HttpContext;
-
-
-
-
-
-
-#if NETCOREAPP
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ShopifyLogLevel = Umbraco.Cms.Core.Logging.LogLevel;
-#else
-using System.Configuration;
-using Umbraco.Core.Logging;
-using ShopifyLogLevel = Umbraco.Core.Logging.LogLevel;
-#endif
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {

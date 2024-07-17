@@ -1,15 +1,10 @@
+import { ProductDtoModel } from "@umbraco-integrations/shopify/generated";
 import type { ShopifyCollectionEntityType, ShopifyVariantsCollectionEntityType } from "../entities/entities";
 
 export interface ShopifyCollectionModel {
 	unique: string;
 	entityType: ShopifyCollectionEntityType;
-    title: string;
-    vendor: string;
-    status: string;
-    tags: string;
-    variants: Array<ShopifyVariantsCollectionModel>;
-    barcode: string;
-    price: string;
+    products: Array<ProductDtoModel>;
 }
 
 export interface ShopifyVariantsCollectionModel {

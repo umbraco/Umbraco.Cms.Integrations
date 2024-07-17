@@ -9,13 +9,14 @@ export class ShopifyAmountElement extends UmbElementMixin(LitElement){
     #shopifyContext!: typeof SHOPIFY_CONTEXT_TOKEN.TYPE;
     @property()
     minValue: number = 0;
+    maxValue: number = 0;
 
     render() {
         return html`
             <div>
                 <uui-input .value=${this.minValue}></uui-input>
                 <span>-</span>
-                <uui-input placeholder="∞"></uui-input>
+                <uui-input placeholder="∞" .value=${this.maxValue}></uui-input>
             </div>
         `;
     }
