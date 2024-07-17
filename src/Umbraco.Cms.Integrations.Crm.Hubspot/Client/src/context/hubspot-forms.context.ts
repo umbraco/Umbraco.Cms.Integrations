@@ -3,10 +3,14 @@ import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 
 import { HubspotFormsRepository } from "../repository/hubspot-forms.repository.js";
-import { type OAuthRequestDtoModel } from "../../generated/types.gen.js";
+import { HubspotFormPickerSettingsModel, type OAuthRequestDtoModel } from "../../generated/types.gen.js";
+import { UmbObjectState } from "@umbraco-cms/backoffice/observable-api";
 
 export class HubspotFormsContext extends UmbControllerBase {
     #repository: HubspotFormsRepository;
+
+    #settingsModel = new UmbObjectState<HubspotFormPickerSettingsModel | undefined>(undefined);
+    settingsModel = this.#settingsModel.asObservable();
 
     constructor(host: UmbControllerHost) {
         super(host);
@@ -15,12 +19,19 @@ export class HubspotFormsContext extends UmbControllerBase {
         this.#repository = new HubspotFormsRepository(host);
     }
 
+    async hostConnected() {
+        super.hostConnected();
+        this.checkApiConfiguration();
+    }
+
     async getAuthorizationUrl() {
         return await this.#repository.getAuthorizationUrl();
     }
 
     async checkApiConfiguration() {
-        return await this.#repository.checkApiConfiguration();
+        const { data } = await this.#repository.checkApiConfiguration();
+
+        this.#settingsModel.setValue(data);
     }
 
     async getAccessToken(oauthRequestDto: OAuthRequestDtoModel) {

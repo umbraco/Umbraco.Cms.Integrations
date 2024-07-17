@@ -17,7 +17,7 @@ import {
     type HubspotServiceStatus
 } from "../models/hubspot-service.model.js";
 import { HUBSPOT_FORMS_CONTEXT_TOKEN } from "@umbraco-integrations/hubspot-forms/context";
-import type { OAuthRequestDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
+import type { HubspotFormPickerSettingsModel, OAuthRequestDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
 
 const elementName = "hubspot-authorization";
 
@@ -25,6 +25,7 @@ const elementName = "hubspot-authorization";
 export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
 
     #hubspotFormsContext!: typeof HUBSPOT_FORMS_CONTEXT_TOKEN.TYPE;
+    #settingsModel?: HubspotFormPickerSettingsModel;
 
     @state()
     private _serviceStatus: HubspotServiceStatus = {
@@ -46,9 +47,12 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
 
     constructor() {
         super();
-
         this.consumeContext(HUBSPOT_FORMS_CONTEXT_TOKEN, (context) => {
+            if (!context) return;
             this.#hubspotFormsContext = context;
+            this.observe(context.settingsModel, (settingsModel) => {
+                this.#settingsModel = settingsModel;
+            });
         });
     }
 
@@ -58,21 +62,21 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
     }
 
     async #checkApiConfiguration() {
-        const { data } = await this.#hubspotFormsContext.checkApiConfiguration();
-        if (!data || !data.type?.value) return;
+
+        if (!this.#settingsModel) return;
 
         this._serviceStatus = {
-            isValid: data.isValid,
-            type: data.type.value,
+            isValid: this.#settingsModel.isValid,
+            type: this.#settingsModel.type?.value!,
             description: this.#getDescription(this._serviceStatus.type),
-            useOAuth: data.isValid && data.type.value === "OAuth"
+            useOAuth: this.#settingsModel.isValid && this.#settingsModel.type?.value === "OAuth"
         }
 
         if (this._serviceStatus.useOAuth) {
             await this.#validateOAuthSetup();
         }
 
-        if (!data!.isValid) {
+        if (!this.#settingsModel.isValid) {
             this._showError("Invalid setup. Please review the API/OAuth settings.");
         }
     }
@@ -106,9 +110,13 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
     }
 
     async #onConnect() {
-        window.addEventListener("message", async (event: MessageEvent) => {
-            if (event.data.type === "hubspot:oauth:success") {
+        const { data } = await this.#hubspotFormsContext.getAuthorizationUrl();
+        if (!data) return;
 
+        window.open(data, "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
+        window.addEventListener("message", async (event: MessageEvent) => {
+
+            if (event.data.type === "hubspot:oauth:success1") {
                 const oauthRequestDtoModel: OAuthRequestDtoModel = {
                     code: event.data.code
                 };
@@ -125,15 +133,11 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
                     this._serviceStatus.description = ConfigDescription.oauthConnected;
                     this._showSuccess("OAuth Connected");
 
+                    this.dispatchEvent(new CustomEvent("connect"));
                 }
 
             }
         }, false);
-
-        const { data } = await this.#hubspotFormsContext.getAuthorizationUrl();
-        if (!data) return;
-
-        window.open(data, "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
     }
 
     async #onRevoke() {
@@ -144,6 +148,8 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
         };
         this._serviceStatus.description = ConfigDescription.none;
         this._showSuccess("OAuth connection revoked.");
+
+        this.dispatchEvent(new CustomEvent("revoke"));
     }
 
     private async _showSuccess(message: string) {
@@ -164,8 +170,8 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
     render() {
         return html`
             <p>${this._serviceStatus.description}</p>
-            ${when(this._serviceStatus.useOAuth, () => 
-                html`
+            ${when(this._serviceStatus.useOAuth, () =>
+            html`
                     <uui-button look="primary" 
                                 label="Connect"
                                 ?disabled=${this._oauthSetup.isConnected}
@@ -175,7 +181,7 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
                                 label="Revoke"
                                 ?disabled=${!this._oauthSetup.isConnected}
                                 @click=${this.#onRevoke}></uui-button>`
-            )}
+        )}
         `;
     }
 }

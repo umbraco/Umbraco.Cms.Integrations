@@ -6,7 +6,7 @@ import {
 import type { UUIInputEvent } from "@umbraco-cms/backoffice/external/uui";
 import type { HubspotServiceStatus } from "../models/hubspot-service.model.js";
 import type { HubspotFormPickerModalData, HubspotFormPickerModalValue } from "./hubspot.modal-token.js";
-import type { HubspotFormDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
+import type { HubspotFormDtoModel, HubspotFormPickerSettingsModel } from "@umbraco-integrations/hubspot-forms/generated";
 import { HUBSPOT_FORMS_CONTEXT_TOKEN } from "@umbraco-integrations/hubspot-forms/context";
 
 const elementName = "hubspot-forms-modal";
@@ -16,6 +16,7 @@ export default class HubspotFormsModalElement
     extends UmbModalBaseElement<HubspotFormPickerModalData, HubspotFormPickerModalValue> {
 
     #hubspotFormsContext!: typeof HUBSPOT_FORMS_CONTEXT_TOKEN.TYPE;
+    #settingsModel?: HubspotFormPickerSettingsModel;
 
     @state()
     private _serviceStatus: HubspotServiceStatus = {
@@ -38,7 +39,11 @@ export default class HubspotFormsModalElement
         super();
 
         this.consumeContext(HUBSPOT_FORMS_CONTEXT_TOKEN, (context) => {
+            if (!context) return;
             this.#hubspotFormsContext = context;
+            this.observe(context.settingsModel, (settingsModel) => {
+                this.#settingsModel = settingsModel;
+            });
         });
     }
 
@@ -48,16 +53,13 @@ export default class HubspotFormsModalElement
     }
 
     async #checkApiConfiguration() {
-        if (!this.#hubspotFormsContext) return;
-
-        const { data } = await this.#hubspotFormsContext.checkApiConfiguration();
-        if (!data || !data.type?.value) return;
+        if (!this.#hubspotFormsContext || !this.#settingsModel) return;
 
         this._serviceStatus = {
-            isValid: data.isValid,
-            type: data.type.value,
+            isValid: this.#settingsModel.isValid,
+            type: this.#settingsModel.type!.value!,
             description: "",
-            useOAuth: data.isValid && data.type.value === "OAuth"
+            useOAuth: this.#settingsModel.isValid && this.#settingsModel.type!.value === "OAuth"
         }
 
         await this.#loadForms();
@@ -113,6 +115,15 @@ export default class HubspotFormsModalElement
         });
     }
 
+    async #onConnect() {
+        await this.#loadForms();
+    }
+
+    async #onRevoke() {
+        this._filteredForms = [];
+        await this.#checkApiConfiguration();
+    }
+
     render() {
         return html`
             <umb-body-layout>
@@ -132,7 +143,7 @@ export default class HubspotFormsModalElement
                 </uui-box>
 
                 <uui-box headline="HubSpot API">
-                    <hubspot-authorization></hubspot-authorization>
+                    <hubspot-authorization @connect=${this.#onConnect} @revoke=${this.#onRevoke}> </hubspot-authorization>
                 </uui-box>
 
                 <uui-button slot="actions" label=${this.localize.term("general_close")} @click=${this._rejectModal}></uui-button>

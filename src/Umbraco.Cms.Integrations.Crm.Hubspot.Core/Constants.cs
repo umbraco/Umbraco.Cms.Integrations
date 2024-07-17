@@ -1,9 +1,5 @@
 ﻿namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core
 {
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Converters;
-    using System.Globalization;
-
     public static class Constants
     {
         public const string PropertyEditorAlias = "HubSpot.FormPicker";
@@ -44,15 +40,5 @@
 
             public const string GroupName = "Forms";
         }
-
-        internal static readonly JsonSerializerSettings SerializationSettings = new JsonSerializerSettings
-        {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling = DateParseHandling.None,
-            Converters =
-            {
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
-            },
-        };
     }
 }

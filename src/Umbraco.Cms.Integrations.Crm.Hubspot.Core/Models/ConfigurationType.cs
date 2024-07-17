@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models
 {
     public class ConfigurationType
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public string Value { get; private set; }
 
         private ConfigurationType(string value)

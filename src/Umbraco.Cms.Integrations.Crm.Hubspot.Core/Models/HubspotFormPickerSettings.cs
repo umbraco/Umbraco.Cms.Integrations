@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models
 {
@@ -9,10 +9,10 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models
             Type = ConfigurationType.None;
         }
 
-        [JsonProperty("isValid")]
+        [JsonPropertyName("isValid")]
         public bool IsValid { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public ConfigurationType Type { get; set; }
     }
 }

@@ -1,22 +1,23 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models
 {
     public class HubspotForm
     {
-        [JsonProperty("portalId")]
+        [JsonPropertyName("portalId")]
         public long PortalId { get; set; }
 
-        [JsonProperty("guid")]
+        [JsonPropertyName("guid")]
         public string Guid { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("formFieldGroups")]
+        [JsonPropertyName("formFieldGroups")]
         public List<FormFieldGroup> FormFieldGroups { get; set; }
 
-        public static HubspotForm FromJson(string json) => JsonConvert.DeserializeObject<HubspotForm>(json, Constants.SerializationSettings);
+        public static HubspotForm FromJson(string json) => JsonSerializer.Deserialize<HubspotForm>(json);
     }
 }

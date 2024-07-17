@@ -1,29 +1,28 @@
-﻿using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using Microsoft.Extensions.Options;
 using System;
-using Newtonsoft.Json;
-using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Configuration;
+using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models.Dtos;
-
-using Microsoft.Extensions.Options;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Services
 {
-    public class UmbracoAuthorizationService : BaseAuthorizationService, IHubspotAuthorizationService
+	public class UmbracoAuthorizationService : BaseAuthorizationService, IHubspotAuthorizationService
     {
         private readonly HubspotSettings _settings;
 
         public const string ClientId = "1a04f5bf-e99e-48e1-9d62-6c25bf2bdefe";
 
-        public const string RedirectUri = OAuthProxyBaseUrl;
+		public const string RedirectUri = OAuthProxyBaseUrl;
 
         public const string Service = "HubspotForms";
 
         public const string OAuthProxyBaseUrl = "https://hubspot-forms-auth.umbraco.com/"; // for local testing: https://localhost:44364;
 
-        public const string OAuthProxyTokenEndpoint = "{0}oauth/v1/token";
+		public const string OAuthProxyTokenEndpoint = "{0}oauth/v1/token";
 
         public const string OAuthScopes = "oauth forms crm.objects.contacts.read crm.objects.contacts.write";
 
@@ -62,7 +61,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Services
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
+                var tokenDto = JsonSerializer.Deserialize<TokenDto>(result);
 
                 TokenService.SaveParameters(Constants.AccessTokenDbKey, tokenDto.AccessToken);
                 TokenService.SaveParameters(Constants.RefreshTokenDbKey, tokenDto.RefreshToken);
@@ -73,7 +72,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Services
             if (response.StatusCode == HttpStatusCode.BadRequest)
             {
                 var errorResult = await response.Content.ReadAsStringAsync();
-                var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
+                var errorDto = JsonSerializer.Deserialize<ErrorDto>(errorResult);
 
                 return "Error: " + errorDto.Message;
             }
@@ -108,7 +107,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Services
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
+                var tokenDto = JsonSerializer.Deserialize<TokenDto>(result);
 
                 TokenService.SaveParameters(Constants.AccessTokenDbKey, tokenDto.AccessToken);
                 TokenService.SaveParameters(Constants.RefreshTokenDbKey, tokenDto.RefreshToken);

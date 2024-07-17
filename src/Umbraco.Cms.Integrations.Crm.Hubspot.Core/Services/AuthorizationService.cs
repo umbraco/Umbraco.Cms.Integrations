@@ -1,19 +1,16 @@
-﻿using System.Threading.Tasks;
-using System.Net.Http;
+﻿using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-
-using Newtonsoft.Json;
-
+using System.Net;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models.Dtos;
-using System.Net;
-
-using Microsoft.Extensions.Options;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Services
 {
-    public class AuthorizationService : BaseAuthorizationService, IHubspotAuthorizationService
+	public class AuthorizationService : BaseAuthorizationService, IHubspotAuthorizationService
     {
         private readonly HubspotOAuthSettings _oauthSettings;
 
@@ -55,7 +52,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Services
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
+                var tokenDto = JsonSerializer.Deserialize<TokenDto>(result);
 
                 TokenService.SaveParameters(Constants.AccessTokenDbKey, tokenDto.AccessToken);
                 TokenService.SaveParameters(Constants.RefreshTokenDbKey, tokenDto.RefreshToken);
@@ -66,7 +63,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Services
             if (response.StatusCode == HttpStatusCode.BadRequest)
             {
                 var errorResult = await response.Content.ReadAsStringAsync();
-                var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
+                var errorDto = JsonSerializer.Deserialize<ErrorDto>(errorResult);
 
                 return "Error: " + errorDto.Message;
             }
@@ -101,7 +98,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Services
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
+                var tokenDto = JsonSerializer.Deserialize<TokenDto>(result);
 
                 TokenService.SaveParameters(Constants.AccessTokenDbKey, tokenDto.AccessToken);
                 TokenService.SaveParameters(Constants.RefreshTokenDbKey, tokenDto.RefreshToken);

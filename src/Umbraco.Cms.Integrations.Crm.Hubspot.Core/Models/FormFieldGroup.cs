@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models
 {
     public class FormFieldGroup
     {
-        [JsonProperty("fields")]
+        [JsonPropertyName("fields")]
         public List<Field> Fields { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models.Dtos
 {
@@ -16,16 +15,16 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models.Dtos
             Forms = new List<HubspotFormDto>();
         }
 
-        [JsonProperty("isValid")]
+        [JsonPropertyName("isValid")]
         public bool IsValid { get; set; }
 
-        [JsonProperty("isExpired")]
+        [JsonPropertyName("isExpired")]
         public bool IsExpired { get; set; }
 
-        [JsonProperty("error")]
+        [JsonPropertyName("error")]
         public string Error { get; set; }
 
-        [JsonProperty("forms")]
+        [JsonPropertyName("forms")]
         public List<HubspotFormDto> Forms { get; set; }
     }
 

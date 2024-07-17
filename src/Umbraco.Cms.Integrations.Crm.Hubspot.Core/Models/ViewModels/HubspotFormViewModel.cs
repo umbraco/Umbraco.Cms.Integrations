@@ -1,11 +1,16 @@
-﻿namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models.ViewModels
+﻿using System.Text.Json.Serialization;
+
+namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Models.ViewModels
 {
     public class HubspotFormViewModel
     {
+        [JsonPropertyName("portalId")]
         public string PortalId { get; set; }
 
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
+        [JsonPropertyName("region")]
         public string Region { get; set; }
 
         public string ScriptPath =>
