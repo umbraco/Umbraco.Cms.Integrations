@@ -1,9 +1,11 @@
 ﻿import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import {
     LitElement,
+    css,
     customElement,
     html,
     property,
+    query,
     state,
     when
 } from "@umbraco-cms/backoffice/external/lit";
@@ -44,6 +46,12 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
 
     @property({ type: String })
     public value = "";
+
+    @state()
+    showAuthTokenComponent: boolean = false;
+
+    @query('#auth-code-input')
+    private _authCodeInput!: HTMLInputElement;
 
     constructor() {
         super();
@@ -113,28 +121,28 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
         const { data } = await this.#hubspotFormsContext.getAuthorizationUrl();
         if (!data) return;
 
-        window.open(data, "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
+        var authCodeElement = document.getElementById("authToken");
+        if (authCodeElement) {
+            authCodeElement.style.display = "none";
+        }
+
+        const authWin = window.open(data, "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
+
+        // check in 7 seconds for authorization window closed
+        setTimeout(() => {
+            if (!authWin?.closed) {
+                this.showAuthTokenComponent = true;
+            }
+        }, 7000);
+
         window.addEventListener("message", async (event: MessageEvent) => {
 
-            if (event.data.type === "hubspot:oauth:success1") {
+            if (event.data.type === "hubspot:oauth:success") {
                 const oauthRequestDtoModel: OAuthRequestDtoModel = {
                     code: event.data.code
                 };
 
-                const { data } = await this.#hubspotFormsContext.getAccessToken(oauthRequestDtoModel);
-                if (!data) return;
-
-                if (data.startsWith("Error:")) {
-                    this._showError(data);
-                } else {
-                    this._oauthSetup = {
-                        isConnected: true
-                    };
-                    this._serviceStatus.description = ConfigDescription.oauthConnected;
-                    this._showSuccess("OAuth Connected");
-
-                    this.dispatchEvent(new CustomEvent("connect"));
-                }
+                await this.getAccessToken(oauthRequestDtoModel);
 
             }
         }, false);
@@ -150,6 +158,36 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
         this._showSuccess("OAuth connection revoked.");
 
         this.dispatchEvent(new CustomEvent("revoke"));
+    }
+
+    async #onAuthorize() {
+        if (this._authCodeInput.value.length == 0) {
+            this._showError("Incorrect authorization code.");
+            return;
+        }
+        const oauthRequestDtoModel: OAuthRequestDtoModel = {
+            code: this._authCodeInput.value
+        };
+        await this.getAccessToken(oauthRequestDtoModel);
+    }
+
+    async getAccessToken(oauthRequestDtoModel: OAuthRequestDtoModel) {
+        const { data } = await this.#hubspotFormsContext.getAccessToken(oauthRequestDtoModel);
+        if (!data) return;
+
+        this.showAuthTokenComponent = false;
+
+        if (data.startsWith("Error:")) {
+            this._showError(data);
+        } else {
+            this._oauthSetup = {
+                isConnected: true
+            };
+            this._serviceStatus.description = ConfigDescription.oauthConnected;
+            this._showSuccess("OAuth Connected");
+
+            this.dispatchEvent(new CustomEvent("connect"));
+        }
     }
 
     private async _showSuccess(message: string) {
@@ -171,19 +209,40 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
         return html`
             <p>${this._serviceStatus.description}</p>
             ${when(this._serviceStatus.useOAuth, () =>
-            html`
-                    <uui-button look="primary" 
-                                label="Connect"
-                                ?disabled=${this._oauthSetup.isConnected}
-                                @click=${this.#onConnect}></uui-button>
-                    <uui-button look="primary"
-                                color="danger"
-                                label="Revoke"
-                                ?disabled=${!this._oauthSetup.isConnected}
-                                @click=${this.#onRevoke}></uui-button>`
-        )}
+                html`
+                    <div id="authConnect">
+                        <uui-button look="primary" 
+                                    label="Connect"
+                                    ?disabled=${this._oauthSetup.isConnected}
+                                    @click=${this.#onConnect}></uui-button>
+                        <uui-button look="primary"
+                                    color="danger"
+                                    label="Revoke"
+                                    ?disabled=${!this._oauthSetup.isConnected}
+                                    @click=${this.#onRevoke}></uui-button>
+                    </div>
+                    ${when(this.showAuthTokenComponent, () => html`
+                        <div id="authToken">
+                            <uui-input id="auth-code-input" placeholder="Authorization code"></uui-input>
+                            <uui-button look="primary"
+                                        label="Authorize"
+                                        @click=${this.#onAuthorize}></uui-button>
+                        </div>
+                    `)}
+                `
+            )}
         `;
     }
+
+    static styles = [
+        css`
+            #authToken { 
+                margin-top: 20px; 
+            }
+            #authToken uui-input {
+                width: 50%;
+            }
+        `];
 }
 
 export default HubspotAuthorizationElement;

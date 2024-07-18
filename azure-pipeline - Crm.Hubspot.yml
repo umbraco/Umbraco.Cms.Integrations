@@ -6,9 +6,7 @@ pool:
 
 variables:
   projectName: 'Umbraco.Cms.Integrations.Crm.Hubspot'
-  coreProjectName: 'Umbraco.Cms.Integrations.Crm.Hubspot.Core'
   project: 'src/$(projectName)/$(projectName).csproj'
-  coreProject: 'src/$(coreProjectName)/$(coreProjectName).csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -25,14 +23,6 @@ steps:
     includeNuGetOrg: true
 
 - task: VSBuild@1
-  displayName: 'Build Core Project'
-  inputs:
-    solution: '$(coreProject)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
-- task: VSBuild@1
   displayName: 'Build Project'
   inputs:
     solution: '$(project)'
@@ -47,23 +37,6 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
     packagesToPack: '$(project)'
     versioningScheme: 'off'
-
-- task: DotNetCoreCLI@2
-  displayName: 'Create Core NuGet Package'
-  inputs:
-    command: 'pack'
-    arguments: '--configuration $(buildConfiguration)'
-    packagesToPack: '$(coreProject)'
-    versioningScheme: 'off'
-
-- task: CmdLine@2
-  displayName: 'Create Umbraco Package'
-  inputs:
-    script: |
-      dotnet tool install --global Umbraco.Tools.Packages
-      cd src/$(projectName)/
-      umbpack pack .\package.xml -o $(Build.ArtifactStagingDirectory)
-      cd ../../
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Build Artifacts'
