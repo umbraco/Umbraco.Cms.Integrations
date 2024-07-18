@@ -34,6 +34,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
 
         [JsonProperty("published_scope")]
         public string PublishedScope { get; set; }
+
+        [JsonProperty("handle")]
+        public string Handle { get; set; }
     }
 
 
