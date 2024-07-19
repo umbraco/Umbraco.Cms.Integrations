@@ -9,7 +9,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Helpers
     {
         public static IHtmlContent RenderHubspotForm(this IHtmlHelper<dynamic> htmlHelper, HubspotFormViewModel hubspotFormViewModel)
         {
-            return htmlHelper.Partial("~/App_Plugins/Hubspot/Render/HubspotForm.cshtml", hubspotFormViewModel ?? new HubspotFormViewModel());
+            return htmlHelper.Partial("~/App_Plugins/HubspotForms/Render/HubspotForm.cshtml", hubspotFormViewModel ?? new HubspotFormViewModel());
         }
     }
 }
