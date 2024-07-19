@@ -3,9 +3,11 @@ import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { ShopifyRepository } from "../repository/shopify.repository";
 import { type OAuthRequestDtoModel } from "@umbraco-integrations/shopify/generated";
+import { UmbObjectState } from "@umbraco-cms/backoffice/observable-api";
 
 export class ShopifyContext extends UmbControllerBase{
     #repository: ShopifyRepository;
+    #data = new UmbObjectState<string | undefined>(undefined);
 
     constructor(host: UmbControllerHost){
         super(host);
@@ -49,6 +51,10 @@ export class ShopifyContext extends UmbControllerBase{
     async refreshAccessToken(){
         return await this.#repository.refreshAccessToken();
     }
+
+    getData() {
+        return this.#data.getValue();
+      }
 }
 
 export default ShopifyContext;

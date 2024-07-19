@@ -6,8 +6,7 @@ export const propertyEditorUiManifest : ManifestPropertyEditorUi = {
     type: "propertyEditorUi",
     alias: "Shopify.PropertyEditorUi.ProductPicker",
     name: "Shopify Product Picker Property Editor UI",
-    js: () => import("./shopify-product-picker-property-editor.element.js"),
-    elementName: "shopify-product-picker",
+    element: () => import("./shopify-product-picker-property-editor.element.js"),
     meta: {
         label: "Shopify Product Picker",
         icon: "icon-shopping-basket-alt",
@@ -26,6 +25,15 @@ export const propertyEditorUiManifest : ManifestPropertyEditorUi = {
 					label: 'Amount',
 					description: 'Set a required range of items selected.',
 					propertyEditorUiAlias: 'Shopify.PropertyEditorUi.Amount',
+                    config: [
+                        {
+                            alias: 'amountMin',
+                            value: 0,
+                        },{
+                            alias: 'amountMax',
+                            value: 2,
+                        }
+                    ],
                 }
             ]
         }

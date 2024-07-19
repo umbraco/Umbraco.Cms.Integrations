@@ -1,4 +1,4 @@
-import { LitElement, customElement, html, css, property, state } from "@umbraco-cms/backoffice/external/lit";
+import { customElement, html, css, property, state, repeat } from "@umbraco-cms/backoffice/external/lit";
 import { UMB_MODAL_MANAGER_CONTEXT } from "@umbraco-cms/backoffice/modal";
 import {
     UMB_NOTIFICATION_CONTEXT,
@@ -9,13 +9,31 @@ import { SHOPIFY_CONTEXT_TOKEN } from "../context/shopify.context";
 import type { ProductDtoModel } from "@umbraco-integrations/shopify/generated";
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UmbPropertyEditorUiElement } from '@umbraco-cms/backoffice/extension-registry';
+import type { UmbPropertyEditorConfigCollection } from "@umbraco-cms/backoffice/property-editor";
+import { ShopifyProductPickerConfiguration } from "../types/types";
 
-const elementName = "shopify-picker";
+const elementName = "shopify-product-picker";
 
 @customElement(elementName)
 export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements UmbPropertyEditorUiElement {
     #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
     #shopifyContext!: typeof SHOPIFY_CONTEXT_TOKEN.TYPE;
+
+    @state()
+	private _config?: ShopifyProductPickerConfiguration;
+
+    @property({ attribute: false })
+	public set config(config: UmbPropertyEditorConfigCollection) {
+		this._config = this.#mapDataTypeConfigToCollectionConfig(config);
+	}
+
+    #mapDataTypeConfigToCollectionConfig(
+		config: UmbPropertyEditorConfigCollection | undefined,
+	) : any {
+		return {
+			amount: config?.getValueByAlias('amount')
+		};
+	}
 
     @property({ type: String })
     public value = "";
@@ -68,38 +86,48 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
         const pickerContext = this.#modalManagerContext?.open(this, SHOPIFY_MODAL_TOKEN, {
             data: {
                 headline: "Shopify Products",
+                selectedItemIdList: this.products.map(p => p.id.toString())
             },
         });
 
         const data = await pickerContext?.onSubmit();
         if (!data) return;
 
-        this.value = JSON.stringify(data.products);
-        console.log(this.value);
+        this.value = JSON.stringify(data.productList);
+        this.products = JSON.parse(this.value);
         this.dispatchEvent(new CustomEvent('property-value-change'));
     }
 
     private async _showError(message: string) {
         const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
         notificationContext?.peek("danger", {
-            data: { message: message },
+            data: { message: message }
         });
     }
 
     render() {
         return html`
-            ${this.value == null || this.value.length == 0
+            ${this._serviceStatus.isValid 
                 ? html`
-                    <uui-button
-				        class="add-button"
-				        @click=${this._openModal}
-				        label=${this.localize.term('general_add')}
-				        look="placeholder"></uui-button>
-                `
+                    <div>
+                        <uui-button
+                            class="add-button"
+                            @click=${this._openModal}
+                            label=${this.localize.term('general_add')}
+                            look="placeholder"></uui-button>
+                    </div>
+                    <div>
+                        ${repeat(this.products, (product) => 
+                            html`
+                                <uui-ref-node-form name=${product.title} detail=${product.vendor}></uui-ref-node-form>
+                            `
+                        )}    
+                    </div>
+                ` 
                 : html`
-                    <div></div>
+                    <shopify-authorization></shopify-authorization>
                 `}
-		`;
+            `;
     }
 
     static styles = [

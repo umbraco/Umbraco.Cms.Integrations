@@ -1,5 +1,5 @@
 import { ProductDtoModel } from "@umbraco-integrations/shopify/generated";
-import type { ShopifyCollectionEntityType, ShopifyVariantsCollectionEntityType } from "../entities/entities";
+import type { ShopifyCollectionEntityType } from "../entities/entities";
 
 export interface ShopifyCollectionModel {
 	unique: string;
@@ -7,9 +7,15 @@ export interface ShopifyCollectionModel {
     products: Array<ProductDtoModel>;
 }
 
-export interface ShopifyVariantsCollectionModel {
-	unique: string;
-	entityType: ShopifyVariantsCollectionEntityType;
-    product_id: string;
-    sku: string;
+export interface ShopifyProductPickerConfiguration {
+    unique?: string;
+    dataTypeId?: string;
+    amount?: ShopifyAmountConfiguration;
+}
+
+export interface ShopifyAmountConfiguration {
+    unique?: string;
+    dataTypeId?: string;
+    amountMin?: number;
+    amountMax?: number;
 }

@@ -148,25 +148,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             var response = await ClientFactory().SendAsync(requestMessage);
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
-                //Log(ShopifyLogLevel.Error, string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
+                Log(ShopifyLogLevel.Error, string.Format(LoggingResources.FetchProductsFailed, response.ReasonPhrase));
 
-                //return new ResponseDto<ProductsListDto> { Message = response.ReasonPhrase };
-
-                using (StreamReader r = new StreamReader("temp.json"))
-                {
-                    string json = r.ReadToEnd();
-                    var responseDto = new ResponseDto<ProductsListDto>
-                    {
-                        IsValid = true,
-                        Result = JsonConvert.DeserializeObject<ProductsListDto>(json, _serializerSettings)
-                    };
-
-                    //var pageInfoDetails = response.GetPageInfo();
-                    //responseDto.PreviousPageInfo = pageInfoDetails.Item1;
-                    //responseDto.NextPageInfo = pageInfoDetails.Item2;
-
-                    return responseDto;
-                }
+                return new ResponseDto<ProductsListDto> { Message = response.ReasonPhrase };
             }
 
             if (response.IsSuccessStatusCode)

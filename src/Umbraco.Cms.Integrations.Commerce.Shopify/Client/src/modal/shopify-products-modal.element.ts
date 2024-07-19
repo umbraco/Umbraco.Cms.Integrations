@@ -1,12 +1,12 @@
 import { UmbModalBaseElement } from "@umbraco-cms/backoffice/modal";
 import { SHOPIFY_CONTEXT_TOKEN } from "../context/shopify.context.js";
 import { UMB_NOTIFICATION_CONTEXT } from "@umbraco-cms/backoffice/notification";
-import { html, css, state, customElement } from "@umbraco-cms/backoffice/external/lit";
+import { html, state, customElement, css } from "@umbraco-cms/backoffice/external/lit";
 import type { ProductDtoModel } from "../../generated";
 import type { ShopifyProductPickerModalData, ShopifyProductPickerModalValue } from "./shopify.modal-token.js";
 import type { ShopifyServiceStatus } from "../models/shopify-service.model.js";
-import type { UmbTableColumn, UmbTableConfig, UmbTableItem, UmbTableSelectedEvent, UmbTableElement, UmbTableDeselectedEvent } from '@umbraco-cms/backoffice/components';
-import type {ShopifyCollectionModel} from "../types/types.js";
+import type { UmbTableColumn, UmbTableConfig, UmbTableItem, UmbTableSelectedEvent, UmbTableElement, UmbTableDeselectedEvent, UmbTableItemData } from '@umbraco-cms/backoffice/components';
+import type { ShopifyCollectionModel } from "../types/types.js";
 import type { UmbDefaultCollectionContext } from '@umbraco-cms/backoffice/collection';
 import { UMB_COLLECTION_CONTEXT } from '@umbraco-cms/backoffice/collection';
 
@@ -16,14 +16,34 @@ const elementName = "shopify-products-modal";
 export default class ShopifyProductsModalElement extends UmbModalBaseElement<ShopifyProductPickerModalData, ShopifyProductPickerModalValue>{
     #shopifyContext!: typeof SHOPIFY_CONTEXT_TOKEN.TYPE;
     #collectionContext!: UmbDefaultCollectionContext<ShopifyCollectionModel>;
-
+    _modalSelectedProducts: Array<ProductDtoModel> = [];
+    _numberOfSelection: number = 0;
+    _selectionIdList: Array<string | null> = [];
+    
     @state()
-	private _selection: Array<string> = [];
+	private _selection: Array<string | null> = [];
 
     @state()
 	private _tableConfig: UmbTableConfig = {
 		allowSelection: true,
 	};
+
+    @state()
+	private _tableItems: Array<UmbTableItem> = [];
+
+    @state()
+    private _serviceStatus: ShopifyServiceStatus = {
+        isValid: false,
+        type: "",
+        description: "",
+        useOAuth: false
+    };
+
+    @state()
+    private _loading = false;
+
+    @state()
+    private _products: Array<ProductDtoModel> = [];
 
     @state()
 	private _tableColumns: Array<UmbTableColumn> = [
@@ -61,23 +81,6 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 		},
 	];
 
-    @state()
-	private _tableItems: Array<UmbTableItem> = [];
-
-    @state()
-    private _serviceStatus: ShopifyServiceStatus = {
-        isValid: false,
-        type: "",
-        description: "",
-        useOAuth: false
-    };
-
-    @state()
-    private _loading = false;
-
-    @state()
-    private _products: Array<ProductDtoModel> = [];
-
     constructor() {
         super();
 
@@ -87,7 +90,14 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 
         this.consumeContext(UMB_COLLECTION_CONTEXT, (instance) => {
 			this.#collectionContext = instance;
+            this.observe(
+				this.#collectionContext.selection.selection,
+				(selection) => (this._selection = selection),
+				'umbCollectionSelectionObserver',
+			);
 		});
+
+        
     }
 
     async connectedCallback() {
@@ -124,21 +134,61 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         }
 
         this.#createTableItems(this._products);
+        this._selection = this.data!.selectedItemIdList;
     }
 
     #onSelected(event: UmbTableSelectedEvent) {
-		event.stopPropagation();
-		const table = event.target as UmbTableElement;
-		const selection = table.selection;
-		this.#collectionContext?.selection.setSelection(selection);
+        this.#onEventRun(event);
 	}
 
     #onDeselected(event: UmbTableDeselectedEvent) {
-		event.stopPropagation();
+		this.#onEventRun(event);
+	}
+
+    #onEventRun(event: UmbTableSelectedEvent | UmbTableDeselectedEvent){
+        event.stopPropagation();
 		const table = event.target as UmbTableElement;
 		const selection = table.selection;
+        const items = table.items;
 		this.#collectionContext?.selection.setSelection(selection);
-	}
+
+        this.#getSelectedProduct(selection, items);
+        this._numberOfSelection = selection.length;
+    }
+
+    #getSelectedProduct(selectedRows: Array<string>, allRows: Array<UmbTableItem>){
+        let lst: Array<UmbTableItem[]> = [];
+        selectedRows.forEach(selectedRow => {
+            const selectedProduct = allRows.filter(r => r.id == selectedRow);
+            lst.push(selectedProduct); 
+        });
+
+        let lstData = lst.map(l => l[0].data);
+        let lstId = lst.map(l => l[0].id);
+        this._modalSelectedProducts = this.#mapToDto(lstData, lstId);
+    }
+
+    #mapToDto(lstData: UmbTableItemData[][], lstId: string[]){
+        let productList: Array<ProductDtoModel> = [];
+        for(let i = 0; i < lstData.length; i++){
+            let dto: ProductDtoModel = {
+                title: lstData[i].find(x => x.columnAlias == "productName")?.value,
+                vendor: lstData[i].find(x => x.columnAlias == "vendor")?.value,
+                id: Number(lstId[i]),
+                body: "",
+                status: lstData[i].find(x => x.columnAlias == "status")?.value,
+                tags: lstData[i].find(x => x.columnAlias == "tags")?.value,
+                variants: [],
+                image: {
+                    src: ""
+                }
+            }
+
+            productList.push(dto);
+        }
+
+        return productList;
+    }
 
     private async _showError(message: string) {
         const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
@@ -185,10 +235,23 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 		});
 	}
 
+    _onSubmit() {
+        if(this._numberOfSelection > 2){
+            this._showError("Cannot select more than 2 products."!);
+        }else{
+            if(this._modalSelectedProducts.length == 0){
+                this._rejectModal();
+            }
+
+            this.value = {productList: this._modalSelectedProducts};
+            this._submitModal();
+        }
+    }
+
     render() {
         return html`
             <umb-body-layout>
-                <uui-box headline="Shopify Products">
+                <uui-box headline=${this.data!.headline}>
                     ${this._loading ? html`<div class="center"><uui-loader></uui-loader></div>` : ""}
                     <umb-table 
                         .config=${this._tableConfig} 
@@ -199,11 +262,23 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
                         @deselected="${this.#onDeselected}"></umb-table>
                     
                 </uui-box>
-                <span>Add up to x items(s)</span>
 
-                <uui-button slot="actions" label="Submit" @click=${this._submitModal}></uui-button>
+                <div class="maximum-selection">
+                    <span>
+                        Add up to 2 items(s)
+                    </span>
+                </div>
+
+                <uui-button look="primary"  slot="actions" label="Submit" @click=${this._onSubmit}></uui-button>
                 <uui-button slot="actions" label="Close" @click=${this._rejectModal}></uui-button>
             </umb-body-layout>
         `;
     }
+
+    static styles = [css`
+        .maximum-selection{
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    `];
 }
