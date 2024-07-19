@@ -85,6 +85,12 @@ export class HubspotFormPickerElement extends UmbElementMixin(LitElement) {
         const data = await pickerContext?.onSubmit();
         if (!data) return;
 
+        this._form = {
+            id: data.form.id,
+            name: data.form.name,
+            fields: data.form.fields
+        };
+
         this.value = JSON.stringify(data.form);
         this.dispatchEvent(new CustomEvent('property-value-change'));
     }
