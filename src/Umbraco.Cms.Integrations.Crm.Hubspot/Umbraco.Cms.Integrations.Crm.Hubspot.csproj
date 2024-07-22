@@ -19,7 +19,6 @@
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
 		<PackageIcon>hubspot.png</PackageIcon>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
-		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 	</PropertyGroup>
 
 	<ItemGroup>
