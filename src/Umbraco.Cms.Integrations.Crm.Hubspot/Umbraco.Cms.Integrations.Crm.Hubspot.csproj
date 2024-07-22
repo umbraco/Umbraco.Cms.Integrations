@@ -3,7 +3,6 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<EnableDefaultContentItems>false</EnableDefaultContentItems>
 		<StaticWebAssetBasePath>/</StaticWebAssetBasePath>
 	</PropertyGroup>
 
@@ -20,30 +19,13 @@
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
 		<PackageIcon>hubspot.png</PackageIcon>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Umbraco.Cms.Api.Common" Version="[14.0.0,15)" />
 		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[14.0.0,15)" />
 		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[14.0.0,15)" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="App_Plugins\HubspotForms\**\*.*">
-			<Pack>true</Pack>
-			<PackagePath>App_Plugins\HubspotForms\</PackagePath>
-		</Content>
-		<None Include="build\**\*.*">
-			<Pack>True</Pack>
-			<PackagePath>buildTransitive</PackagePath>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="App_Plugins\**\*.*">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -56,4 +38,9 @@
 	<ItemGroup>
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="wwwroot\" />
+	</ItemGroup>
+
 </Project>
