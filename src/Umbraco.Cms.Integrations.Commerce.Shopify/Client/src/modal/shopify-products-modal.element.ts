@@ -142,7 +142,6 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 		this._tableItems = products.map((product) => {
 			return {
                 id: product.id.toString(),
-				icon: 'icon-book-alt-2',
                 data: [{
                     columnAlias: "productName",
                     value: product.title,

@@ -80,17 +80,17 @@ export type GetAuthorizationUrlResponse = string;
 
 export type CheckConfigurationResponse = EditorSettingsModel;
 
+export type GetListData = {
+    pageInfo?: string;
+};
+
+export type GetListResponse = ResponseDtoProductsListDtoModel;
+
 export type GetListByIdsData = {
     requestBody?: RequestDtoModel;
 };
 
 export type GetListByIdsResponse = ResponseDtoProductsListDtoModel;
-
-export type GetListData = {
-    pageInfo: string;
-};
-
-export type GetListResponse = ResponseDtoProductsListDtoModel;
 
 export type RefreshAccessTokenResponse = string;
 
@@ -144,9 +144,9 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/umbraco/shopify/management/api/v1/list-by-ids': {
+    '/umbraco/shopify/management/api/v1/list': {
         get: {
-            req: GetListByIdsData;
+            req: GetListData;
             res: {
                 /**
                  * OK
@@ -159,9 +159,9 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/umbraco/shopify/management/api/v1/list/{pageInfo}': {
+    '/umbraco/shopify/management/api/v1/list-by-ids': {
         get: {
-            req: GetListData;
+            req: GetListByIdsData;
             res: {
                 /**
                  * OK

@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { GetAccessTokenData, GetAccessTokenResponse, GetAuthorizationUrlResponse, CheckConfigurationResponse, GetListByIdsData, GetListByIdsResponse, GetListData, GetListResponse, RefreshAccessTokenResponse, RevokeAccessTokenResponse, GetTotalPagesResponse, ValidateAccessTokenResponse } from './types.gen';
+import type { GetAccessTokenData, GetAccessTokenResponse, GetAuthorizationUrlResponse, CheckConfigurationResponse, GetListData, GetListResponse, GetListByIdsData, GetListByIdsResponse, RefreshAccessTokenResponse, RevokeAccessTokenResponse, GetTotalPagesResponse, ValidateAccessTokenResponse } from './types.gen';
 
 export class ShopifyService {
     /**
@@ -54,6 +54,25 @@ export class ShopifyService {
     
     /**
      * @param data The data for the request.
+     * @param data.pageInfo
+     * @returns unknown OK
+     * @throws ApiError
+     */
+    public static getList(data: GetListData = {}): CancelablePromise<GetListResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/umbraco/shopify/management/api/v1/list',
+            query: {
+                pageInfo: data.pageInfo
+            },
+            errors: {
+                401: 'The resource is protected and requires an authentication token'
+            }
+        });
+    }
+    
+    /**
+     * @param data The data for the request.
      * @param data.requestBody
      * @returns unknown OK
      * @throws ApiError
@@ -64,25 +83,6 @@ export class ShopifyService {
             url: '/umbraco/shopify/management/api/v1/list-by-ids',
             body: data.requestBody,
             mediaType: 'application/json',
-            errors: {
-                401: 'The resource is protected and requires an authentication token'
-            }
-        });
-    }
-    
-    /**
-     * @param data The data for the request.
-     * @param data.pageInfo
-     * @returns unknown OK
-     * @throws ApiError
-     */
-    public static getList(data: GetListData): CancelablePromise<GetListResponse> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/umbraco/shopify/management/api/v1/list/{pageInfo}',
-            path: {
-                pageInfo: data.pageInfo
-            },
             errors: {
                 401: 'The resource is protected and requires an authentication token'
             }
