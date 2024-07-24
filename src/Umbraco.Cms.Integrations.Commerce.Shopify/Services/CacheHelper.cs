@@ -1,13 +1,7 @@
 ﻿using System;
-
 using Newtonsoft.Json;
-
-#if NETCOREAPP
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Extensions;
-#else
-using Umbraco.Core.Cache;
-#endif
 
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services

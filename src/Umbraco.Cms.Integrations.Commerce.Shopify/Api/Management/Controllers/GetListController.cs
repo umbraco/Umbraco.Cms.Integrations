@@ -22,11 +22,13 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Api.Management.Controllers
         {
         }
 
-        [HttpGet("get-list")]
+        [HttpGet("list/{pageInfo}")]
         [ProducesResponseType(typeof(ResponseDto<ProductsListDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetList(string? pageInfo)
         {
             var result = await ShopifyService.GetResults(pageInfo);
+            result.Skip = 0;
+            result.Take = 5;
             return Ok(result);
         }
     }

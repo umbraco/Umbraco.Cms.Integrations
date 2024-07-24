@@ -1,11 +1,11 @@
-import { UmbTableItem } from "@umbraco-cms/backoffice/components";
 import { UmbModalToken } from "@umbraco-cms/backoffice/modal";
-import { UmbSelectionManager } from "@umbraco-cms/backoffice/utils";
 import type { ProductDtoModel } from "@umbraco-integrations/shopify/generated";
+import { ShopifyProductPickerConfiguration } from "../types/types";
 
 export type ShopifyProductPickerModalData = {
     headline: string;
     selectedItemIdList: Array<string | null>;
+    config: ShopifyProductPickerConfiguration | undefined;
 }
 
 export type ShopifyProductPickerModalValue = {

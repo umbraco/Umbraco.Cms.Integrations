@@ -2,7 +2,7 @@ import { UmbModalBaseElement } from "@umbraco-cms/backoffice/modal";
 import { SHOPIFY_CONTEXT_TOKEN } from "../context/shopify.context.js";
 import { UMB_NOTIFICATION_CONTEXT } from "@umbraco-cms/backoffice/notification";
 import { html, state, customElement, css } from "@umbraco-cms/backoffice/external/lit";
-import type { ProductDtoModel } from "../../generated";
+import type { EditorSettingsModel, ProductDtoModel } from "../../generated";
 import type { ShopifyProductPickerModalData, ShopifyProductPickerModalValue } from "./shopify.modal-token.js";
 import type { ShopifyServiceStatus } from "../models/shopify-service.model.js";
 import type { UmbTableColumn, UmbTableConfig, UmbTableItem, UmbTableSelectedEvent, UmbTableElement, UmbTableDeselectedEvent, UmbTableItemData } from '@umbraco-cms/backoffice/components';
@@ -15,9 +15,11 @@ const elementName = "shopify-products-modal";
 @customElement(elementName)
 export default class ShopifyProductsModalElement extends UmbModalBaseElement<ShopifyProductPickerModalData, ShopifyProductPickerModalValue>{
     #shopifyContext!: typeof SHOPIFY_CONTEXT_TOKEN.TYPE;
+    #settingsModel?: EditorSettingsModel;
     #collectionContext!: UmbDefaultCollectionContext<ShopifyCollectionModel>;
     _modalSelectedProducts: Array<ProductDtoModel> = [];
     _numberOfSelection: number = 0;
+    _addUpToItems: number = 0;
     _selectionIdList: Array<string | null> = [];
     
     @state()
@@ -85,7 +87,11 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         super();
 
         this.consumeContext(SHOPIFY_CONTEXT_TOKEN, (context) => {
+            if (!context) return;
             this.#shopifyContext = context;
+            this.observe(context.settingsModel, (settingsModel) => {
+                this.#settingsModel = settingsModel;
+            });
         });
 
         this.consumeContext(UMB_COLLECTION_CONTEXT, (instance) => {
@@ -96,8 +102,6 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 				'umbCollectionSelectionObserver',
 			);
 		});
-
-        
     }
 
     async connectedCallback() {
@@ -106,16 +110,13 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
     }
 
     async #checkApiConfiguration() {
-        if (!this.#shopifyContext) return;
-
-        const { data } = await this.#shopifyContext.checkConfiguration();
-        if (!data || !data.type?.value) return;
+        if (!this.#shopifyContext || !this.#settingsModel) return;
 
         this._serviceStatus = {
-            isValid: data.isValid,
-            type: data.type.value,
+            isValid: this.#settingsModel.isValid,
+            type: this.#settingsModel.type.value,
             description: "",
-            useOAuth: data.isValid && data.type.value === "OAuth"
+            useOAuth: this.#settingsModel.isValid && this.#settingsModel.type.value === "OAuth"
         }
 
         await this.#loadProducts();
@@ -123,7 +124,7 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 
     async #loadProducts() {
         this._loading = true;
-        const { data } = await this.#shopifyContext.getList(undefined);
+        const { data } = await this.#shopifyContext.getList("");
         if (!data) return;
 
         this._products = data.result.products ?? [];
@@ -134,7 +135,50 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         }
 
         this.#createTableItems(this._products);
+        this.#loadSelectionItems();
+    }
+
+    #createTableItems(products: Array<ProductDtoModel>) {
+		this._tableItems = products.map((product) => {
+			return {
+                id: product.id.toString(),
+				icon: 'icon-book-alt-2',
+                data: [{
+                    columnAlias: "productName",
+                    value: product.title,
+                },
+                {
+                    columnAlias: "vendor",
+                    value: product.vendor,
+                },
+                {
+                    columnAlias: "status",
+                    value: product.status,
+                },
+                {
+                    columnAlias: "tags",
+                    value: product.tags,
+                },
+                {
+                    columnAlias: "sku",
+                    value: product.variants.map(v => v.sku).join(","),
+                },
+                {
+                    columnAlias: "barcode",
+                    value: product.variants.map(v => v.barcode).join(","),
+                },
+                {
+                    columnAlias: "price",
+                    value: product.variants[0].price,
+                },
+            ]
+            }
+		});
+	}
+
+    async #loadSelectionItems(){
         this._selection = this.data!.selectedItemIdList;
+        this._addUpToItems = this.data?.config?.maxItems! - this.data?.config?.minItems!;
     }
 
     #onSelected(event: UmbTableSelectedEvent) {
@@ -190,62 +234,24 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         return productList;
     }
 
-    private async _showError(message: string) {
-        const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
-        notificationContext?.peek("danger", {
-            data: { message },
-        });
-    }
-
-    #createTableItems(products: Array<ProductDtoModel>) {
-		this._tableItems = products.map((product) => {
-			return {
-                id: product.id.toString(),
-				icon: 'icon-book-alt-2',
-                data: [{
-                    columnAlias: "productName",
-                    value: product.title,
-                },
-                {
-                    columnAlias: "vendor",
-                    value: product.vendor,
-                },
-                {
-                    columnAlias: "status",
-                    value: product.status,
-                },
-                {
-                    columnAlias: "tags",
-                    value: product.tags,
-                },
-                {
-                    columnAlias: "sku",
-                    value: product.variants.map(v => v.sku).join(","),
-                },
-                {
-                    columnAlias: "barcode",
-                    value: product.variants.map(v => v.barcode).join(","),
-                },
-                {
-                    columnAlias: "price",
-                    value: product.variants[0].price,
-                },
-            ]
-            }
-		});
-	}
-
     _onSubmit() {
-        if(this._numberOfSelection > 2){
-            this._showError("Cannot select more than 2 products."!);
+        if(this._numberOfSelection > this.data?.config?.maxItems! || this._numberOfSelection < this.data?.config?.minItems!){
+            this._showError("Please select the amount of items that has been configured in the setting.");
         }else{
-            if(this._modalSelectedProducts.length == 0){
+            if(this._numberOfSelection == 0){
                 this._rejectModal();
             }
 
             this.value = {productList: this._modalSelectedProducts};
             this._submitModal();
         }
+    }
+
+    private async _showError(message: string) {
+        const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
+        notificationContext?.peek("danger", {
+            data: { message },
+        });
     }
 
     render() {
@@ -265,7 +271,7 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 
                 <div class="maximum-selection">
                     <span>
-                        Add up to 2 items(s)
+                        Add up to ${this._addUpToItems} items(s)
                     </span>
                 </div>
 

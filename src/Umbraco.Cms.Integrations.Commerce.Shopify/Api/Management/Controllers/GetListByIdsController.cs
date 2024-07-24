@@ -22,7 +22,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Api.Management.Controllers
         {
         }
 
-        [HttpGet("get-list-by-ids")]
+        [HttpGet("list-by-ids")]
         [ProducesResponseType(typeof(ResponseDto<ProductsListDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetListByIds([FromBody] RequestDto dto)
         {

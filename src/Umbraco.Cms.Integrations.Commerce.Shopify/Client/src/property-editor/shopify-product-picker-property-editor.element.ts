@@ -6,7 +6,7 @@ import {
 import { SHOPIFY_MODAL_TOKEN } from "../modal/shopify.modal-token";
 import { ConfigDescription, type ShopifyServiceStatus } from "../models/shopify-service.model";
 import { SHOPIFY_CONTEXT_TOKEN } from "../context/shopify.context";
-import type { ProductDtoModel } from "@umbraco-integrations/shopify/generated";
+import type { EditorSettingsModel, ProductDtoModel } from "@umbraco-integrations/shopify/generated";
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UmbPropertyEditorUiElement } from '@umbraco-cms/backoffice/extension-registry';
 import type { UmbPropertyEditorConfigCollection } from "@umbraco-cms/backoffice/property-editor";
@@ -17,7 +17,7 @@ const elementName = "shopify-product-picker";
 @customElement(elementName)
 export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements UmbPropertyEditorUiElement {
     #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
-    #shopifyContext!: typeof SHOPIFY_CONTEXT_TOKEN.TYPE;
+    #settingsModel?: EditorSettingsModel;
 
     @state()
 	private _config?: ShopifyProductPickerConfiguration;
@@ -29,9 +29,10 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
 
     #mapDataTypeConfigToCollectionConfig(
 		config: UmbPropertyEditorConfigCollection | undefined,
-	) : any {
+	) : ShopifyProductPickerConfiguration {
 		return {
-			amount: config?.getValueByAlias('amount')
+			minItems: config?.getValueByAlias('minItems'),
+            maxItems: config?.getValueByAlias('maxItems')
 		};
 	}
 
@@ -55,28 +56,30 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
             this.#modalManagerContext = instance;
         });
         this.consumeContext(SHOPIFY_CONTEXT_TOKEN, (context) => {
-            this.#shopifyContext = context;
+            if (!context) return;
+            this.observe(context.settingsModel, (settingsModel) => {
+                this.#settingsModel = settingsModel;
+            });
         });
     }
 
     async connectedCallback() {
         super.connectedCallback();
 
-        if (this.value == null || this.value.length == 0) return;
-
-        const { data } = await this.#shopifyContext.checkConfiguration();
-        if (!data || !data.type?.value) return;
+        if (!this.#settingsModel) return;
 
         this._serviceStatus = {
-            isValid: data.isValid,
-            type: data.type.value,
+            isValid: this.#settingsModel.isValid,
+            type: this.#settingsModel.type.value,
             description: "",
-            useOAuth: data.isValid && data.type.value === "OAuth"
+            useOAuth: this.#settingsModel.isValid && this.#settingsModel.type.value === "OAuth"
         }
 
         if (!this._serviceStatus.isValid) {
             this._showError(ConfigDescription.none);
         }
+
+        if (this.value == null || this.value.length == 0) return;
 
         const dto: Array<ProductDtoModel> = JSON.parse(JSON.stringify(this.value));
         this.products = dto;
@@ -86,7 +89,8 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
         const pickerContext = this.#modalManagerContext?.open(this, SHOPIFY_MODAL_TOKEN, {
             data: {
                 headline: "Shopify Products",
-                selectedItemIdList: this.products.map(p => p.id.toString())
+                selectedItemIdList: this.products.map(p => p.id.toString()),
+                config: this._config
             },
         });
 
@@ -105,6 +109,13 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
         });
     }
 
+    deleteForm(id: number){
+        var index = this.products.map(p => p.id).indexOf(id);
+        this.products.splice(index, 1);
+        this.value = JSON.stringify(this.products);
+        this.dispatchEvent(new CustomEvent('property-value-change'));
+    }
+
     render() {
         return html`
             ${this._serviceStatus.isValid 
@@ -119,13 +130,17 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
                     <div>
                         ${repeat(this.products, (product) => 
                             html`
-                                <uui-ref-node-form name=${product.title} detail=${product.vendor}></uui-ref-node-form>
+                                <uui-ref-node-form name=${product.title} detail=${product.vendor}>
+                                    <uui-action-bar slot="actions">
+                                        <uui-button label="Remove" @click=${() => this.deleteForm(product.id)}>Remove</uui-button>
+                                    </uui-action-bar>
+                                </uui-ref-node-form>
                             `
                         )}    
                     </div>
                 ` 
                 : html`
-                    <shopify-authorization></shopify-authorization>
+                    <span></span>
                 `}
             `;
     }

@@ -2,13 +2,14 @@ import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import { LitElement, customElement, html, property, state, when } from "@umbraco-cms/backoffice/external/lit";
 import { SHOPIFY_CONTEXT_TOKEN } from "../../context/shopify.context";
 import { ConfigDescription, ShopifyOAuthSetup, type ShopifyServiceStatus } from "../../models/shopify-service.model";
-import { OAuthRequestDtoModel } from "../../../generated";
+import { EditorSettingsModel, OAuthRequestDtoModel } from "../../../generated";
 import { UMB_NOTIFICATION_CONTEXT, type UmbNotificationColor } from "@umbraco-cms/backoffice/notification";
 
 const elementName = "shopify-authorization";
 
 @customElement(elementName)
-export class ShopifyAuthorizationElement extends UmbElementMixin(LitElement){
+export class ShopifyAuthorizationElement extends UmbElementMixin(LitElement){ 
+    #settingsModel?: EditorSettingsModel;
     #shopifyContext!: typeof SHOPIFY_CONTEXT_TOKEN.TYPE;
 
     @state()
@@ -33,7 +34,11 @@ export class ShopifyAuthorizationElement extends UmbElementMixin(LitElement){
         super();
 
         this.consumeContext(SHOPIFY_CONTEXT_TOKEN, (context) => {
+            if (!context) return;
             this.#shopifyContext = context;
+            this.observe(context.settingsModel, (settingsModel) => {
+                this.#settingsModel = settingsModel;
+            });
         });
     }
 
@@ -43,21 +48,20 @@ export class ShopifyAuthorizationElement extends UmbElementMixin(LitElement){
     }
 
     async #checkApiConfiguration() {
-        const { data } = await this.#shopifyContext.checkConfiguration();
-        if (!data || !data.type?.value) return;
+        if (!this.#settingsModel) return;
 
         this._serviceStatus = {
-            isValid: data.isValid,
-            type: data.type.value,
-            description: this.#getDescription(data.type.value),
-            useOAuth: data.isValid && data.type.value === "OAuth"
+            isValid: this.#settingsModel.isValid,
+            type: this.#settingsModel.type.value,
+            description: this.#getDescription(this.#settingsModel.type.value),
+            useOAuth: this.#settingsModel.isValid && this.#settingsModel.type.value === "OAuth"
         }
 
         if (this._serviceStatus.useOAuth) {
             await this.#validateOAuthSetup();
         }
 
-        if (!data!.isValid) {
+        if (!this.#settingsModel!.isValid) {
             this._showError("Invalid setup. Please review the API/OAuth settings.");
         }
     }
@@ -144,6 +148,8 @@ export class ShopifyAuthorizationElement extends UmbElementMixin(LitElement){
         };
         this._serviceStatus.description = ConfigDescription.none;
         this._showSuccess("OAuth connection revoked.");
+
+        this.dispatchEvent(new CustomEvent("revoke"));
     }
 
     render() {

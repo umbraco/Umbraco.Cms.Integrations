@@ -22,7 +22,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Api.Management.Controllers
         {
         }
 
-        [HttpPost("get-access-token")]
+        [HttpPost("access-token")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAccessToken([FromBody]OAuthRequestDto authRequestDto)
         {

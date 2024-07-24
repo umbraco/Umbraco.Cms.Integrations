@@ -66,9 +66,9 @@ export type ResponseDtoProductsListDtoModel = {
     isExpired: boolean;
     result: ProductsListDtoModel;
     message: string;
+    skip: number;
+    take: number;
 };
-
-export type CheckConfigurationResponse = EditorSettingsModel;
 
 export type GetAccessTokenData = {
     requestBody?: OAuthRequestDtoModel;
@@ -78,17 +78,19 @@ export type GetAccessTokenResponse = string;
 
 export type GetAuthorizationUrlResponse = string;
 
-export type GetListData = {
-    pageInfo?: string;
-};
-
-export type GetListResponse = ResponseDtoProductsListDtoModel;
+export type CheckConfigurationResponse = EditorSettingsModel;
 
 export type GetListByIdsData = {
     requestBody?: RequestDtoModel;
 };
 
 export type GetListByIdsResponse = ResponseDtoProductsListDtoModel;
+
+export type GetListData = {
+    pageInfo: string;
+};
+
+export type GetListResponse = ResponseDtoProductsListDtoModel;
 
 export type RefreshAccessTokenResponse = string;
 
@@ -99,21 +101,7 @@ export type GetTotalPagesResponse = number;
 export type ValidateAccessTokenResponse = ResponseDtoProductsListDtoModel;
 
 export type $OpenApiTs = {
-    '/umbraco/shopify/management/api/v1/check-configuration': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: EditorSettingsModel;
-                /**
-                 * The resource is protected and requires an authentication token
-                 */
-                401: unknown;
-            };
-        };
-    };
-    '/umbraco/shopify/management/api/v1/get-access-token': {
+    '/umbraco/shopify/management/api/v1/access-token': {
         post: {
             req: GetAccessTokenData;
             res: {
@@ -128,7 +116,7 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/umbraco/shopify/management/api/v1/get-authorization-url': {
+    '/umbraco/shopify/management/api/v1/authorization-url': {
         get: {
             res: {
                 /**
@@ -142,14 +130,13 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/umbraco/shopify/management/api/v1/get-list': {
+    '/umbraco/shopify/management/api/v1/check-configuration': {
         get: {
-            req: GetListData;
             res: {
                 /**
                  * OK
                  */
-                200: ResponseDtoProductsListDtoModel;
+                200: EditorSettingsModel;
                 /**
                  * The resource is protected and requires an authentication token
                  */
@@ -157,7 +144,7 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/umbraco/shopify/management/api/v1/get-list-by-ids': {
+    '/umbraco/shopify/management/api/v1/list-by-ids': {
         get: {
             req: GetListByIdsData;
             res: {
@@ -172,7 +159,22 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/umbraco/shopify/management/api/v1/refresh': {
+    '/umbraco/shopify/management/api/v1/list/{pageInfo}': {
+        get: {
+            req: GetListData;
+            res: {
+                /**
+                 * OK
+                 */
+                200: ResponseDtoProductsListDtoModel;
+                /**
+                 * The resource is protected and requires an authentication token
+                 */
+                401: unknown;
+            };
+        };
+    };
+    '/umbraco/shopify/management/api/v1/refresh-access-token': {
         post: {
             res: {
                 /**

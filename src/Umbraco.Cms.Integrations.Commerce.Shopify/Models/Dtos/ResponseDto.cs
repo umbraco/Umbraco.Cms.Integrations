@@ -23,5 +23,10 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
         [JsonProperty("message")]
         public string Message { get; set; }
 
+        [JsonProperty("skip")]
+        public int Skip { get; set; }
+
+        [JsonProperty("take")]
+        public int Take { get; set; }
     }
 }

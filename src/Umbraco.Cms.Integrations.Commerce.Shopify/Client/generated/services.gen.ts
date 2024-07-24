@@ -3,9 +3,41 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { CheckConfigurationResponse, GetAccessTokenData, GetAccessTokenResponse, GetAuthorizationUrlResponse, GetListData, GetListResponse, GetListByIdsData, GetListByIdsResponse, RefreshAccessTokenResponse, RevokeAccessTokenResponse, GetTotalPagesResponse, ValidateAccessTokenResponse } from './types.gen';
+import type { GetAccessTokenData, GetAccessTokenResponse, GetAuthorizationUrlResponse, CheckConfigurationResponse, GetListByIdsData, GetListByIdsResponse, GetListData, GetListResponse, RefreshAccessTokenResponse, RevokeAccessTokenResponse, GetTotalPagesResponse, ValidateAccessTokenResponse } from './types.gen';
 
 export class ShopifyService {
+    /**
+     * @param data The data for the request.
+     * @param data.requestBody
+     * @returns string OK
+     * @throws ApiError
+     */
+    public static getAccessToken(data: GetAccessTokenData = {}): CancelablePromise<GetAccessTokenResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/umbraco/shopify/management/api/v1/access-token',
+            body: data.requestBody,
+            mediaType: 'application/json',
+            errors: {
+                401: 'The resource is protected and requires an authentication token'
+            }
+        });
+    }
+    
+    /**
+     * @returns string OK
+     * @throws ApiError
+     */
+    public static getAuthorizationUrl(): CancelablePromise<GetAuthorizationUrlResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/umbraco/shopify/management/api/v1/authorization-url',
+            errors: {
+                401: 'The resource is protected and requires an authentication token'
+            }
+        });
+    }
+    
     /**
      * @returns unknown OK
      * @throws ApiError
@@ -23,29 +55,15 @@ export class ShopifyService {
     /**
      * @param data The data for the request.
      * @param data.requestBody
-     * @returns string OK
+     * @returns unknown OK
      * @throws ApiError
      */
-    public static getAccessToken(data: GetAccessTokenData = {}): CancelablePromise<GetAccessTokenResponse> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/umbraco/shopify/management/api/v1/get-access-token',
-            body: data.requestBody,
-            mediaType: 'application/json',
-            errors: {
-                401: 'The resource is protected and requires an authentication token'
-            }
-        });
-    }
-    
-    /**
-     * @returns string OK
-     * @throws ApiError
-     */
-    public static getAuthorizationUrl(): CancelablePromise<GetAuthorizationUrlResponse> {
+    public static getListByIds(data: GetListByIdsData = {}): CancelablePromise<GetListByIdsResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/umbraco/shopify/management/api/v1/get-authorization-url',
+            url: '/umbraco/shopify/management/api/v1/list-by-ids',
+            body: data.requestBody,
+            mediaType: 'application/json',
             errors: {
                 401: 'The resource is protected and requires an authentication token'
             }
@@ -58,31 +76,13 @@ export class ShopifyService {
      * @returns unknown OK
      * @throws ApiError
      */
-    public static getList(data: GetListData = {}): CancelablePromise<GetListResponse> {
+    public static getList(data: GetListData): CancelablePromise<GetListResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/umbraco/shopify/management/api/v1/get-list',
-            query: {
+            url: '/umbraco/shopify/management/api/v1/list/{pageInfo}',
+            path: {
                 pageInfo: data.pageInfo
             },
-            errors: {
-                401: 'The resource is protected and requires an authentication token'
-            }
-        });
-    }
-    
-    /**
-     * @param data The data for the request.
-     * @param data.requestBody
-     * @returns unknown OK
-     * @throws ApiError
-     */
-    public static getListByIds(data: GetListByIdsData = {}): CancelablePromise<GetListByIdsResponse> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/umbraco/shopify/management/api/v1/get-list-by-ids',
-            body: data.requestBody,
-            mediaType: 'application/json',
             errors: {
                 401: 'The resource is protected and requires an authentication token'
             }
@@ -96,7 +96,7 @@ export class ShopifyService {
     public static refreshAccessToken(): CancelablePromise<RefreshAccessTokenResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/umbraco/shopify/management/api/v1/refresh',
+            url: '/umbraco/shopify/management/api/v1/refresh-access-token',
             errors: {
                 401: 'The resource is protected and requires an authentication token'
             }

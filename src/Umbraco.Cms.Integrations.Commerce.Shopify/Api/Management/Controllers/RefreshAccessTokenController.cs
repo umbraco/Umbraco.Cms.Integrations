@@ -23,7 +23,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Api.Management.Controllers
         {
         }
 
-        [HttpPost("refresh")]
+        [HttpPost("refresh-access-token")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public async Task<IActionResult> RefreshAccessToken()
         {

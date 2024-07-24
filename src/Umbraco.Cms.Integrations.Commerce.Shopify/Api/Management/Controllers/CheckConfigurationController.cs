@@ -29,16 +29,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Api.Management.Controllers
         [ProducesResponseType(typeof(EditorSettings), StatusCodes.Status200OK)]
         public IActionResult CheckConfiguration()
         {
-            var settings = !string.IsNullOrEmpty(ShopifySettings.AccessToken)
-                    ? new EditorSettings { IsValid = true, Type = ConfigurationType.Api }
-                    : ShopifySettings.UseUmbracoAuthorization
-                        ? new EditorSettings { IsValid = true, Type = ConfigurationType.OAuth }
-                        : !string.IsNullOrEmpty(_oauthSettings.ClientId)
-                       && !string.IsNullOrEmpty(_oauthSettings.Scopes)
-                       && !string.IsNullOrEmpty(_oauthSettings.ClientSecret)
-                       && !string.IsNullOrEmpty(_oauthSettings.TokenEndpoint)
-                        ? new EditorSettings { IsValid = true, Type = ConfigurationType.OAuth }
-                        : new EditorSettings();
+            var settings = ShopifyService.GetApiConfiguration();
 
             return Ok(settings);
         }

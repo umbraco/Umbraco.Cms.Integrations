@@ -21,20 +21,21 @@ export const propertyEditorUiManifest : ManifestPropertyEditorUi = {
 					propertyEditorUiAlias: 'Shopify.PropertyEditorUi.Authorization',
                 },
                 {
-                    alias: 'amount',
-					label: 'Amount',
-					description: 'Set a required range of items selected.',
-					propertyEditorUiAlias: 'Shopify.PropertyEditorUi.Amount',
-                    config: [
-                        {
-                            alias: 'amountMin',
-                            value: 0,
-                        },{
-                            alias: 'amountMax',
-                            value: 2,
-                        }
-                    ],
+                    alias: 'minItems',
+					label: 'Minimum number of items',
+					description: 'Set a minimum number of items selected.',
+					propertyEditorUiAlias: 'Umb.PropertyEditorUi.Integer'
+                },
+                {
+                    alias: 'maxItems',
+					label: 'Maximum number of items',
+					description: 'Set a maximum number of items selected.',
+					propertyEditorUiAlias: 'Umb.PropertyEditorUi.Integer'
                 }
+            ],
+            defaultData:[
+                { alias: 'minItems', value: 0 },
+                { alias: 'maxItems', value: 2 },
             ]
         }
     }

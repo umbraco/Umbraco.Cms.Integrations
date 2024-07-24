@@ -23,9 +23,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Api.Management.Controllers
         {
         }
 
-        [HttpGet("get-authorization-url")]
+        [HttpGet("authorization-url")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        public ActionResult GetAuthorizationUrl()
+        public IActionResult GetAuthorizationUrl()
         {
             var authUrl = ShopifyAuthorizationService.GetAuthorizationUrl();
             return Ok(authUrl);
