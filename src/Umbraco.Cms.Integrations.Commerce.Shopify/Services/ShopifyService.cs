@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Net;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Helpers;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Resolvers;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Resources;
-using Newtonsoft.Json.Linq;
-using System.Linq;
-using System.Web;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Helpers;
-using static Umbraco.Cms.Core.Constants.HttpContext;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using ShopifyLogLevel = Umbraco.Cms.Core.Logging.LogLevel;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services

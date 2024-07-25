@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.ViewModels;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
-using Umbraco.Cms.Core.PropertyEditors;
-using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 {

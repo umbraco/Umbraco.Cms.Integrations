@@ -1,12 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System.Net;
-using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
-using Microsoft.Extensions.Options;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {

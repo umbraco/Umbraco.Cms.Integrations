@@ -1,17 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 using System.Net.Http.Headers;
-using System.Net.Http;
-using System;
 using Umbraco.Cms.Api.Common.Attributes;
-using Umbraco.Cms.Web.Common.Authorization;
-using Umbraco.Cms.Web.Common.Routing;
-using System.Linq;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
+using Umbraco.Cms.Web.Common.Authorization;
+using Umbraco.Cms.Web.Common.Routing;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Api.Management.Controllers
 {

@@ -1,29 +1,12 @@
-﻿using System.Collections.Specialized;
-
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Configuration
+﻿namespace Umbraco.Cms.Integrations.Commerce.Shopify.Configuration
 {
     public class ShopifySettings
     {
-        public ShopifySettings()
-        {
-            
-        }
+        public string ApiVersion { get; set; } = string.Empty;
 
-        public ShopifySettings(NameValueCollection appSettings)
-        {
-            ApiVersion = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyApiVersion];
-            Shop = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyShop];
-            AccessToken = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyAccessToken];
-            UseUmbracoAuthorization = bool.TryParse(appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyUseUmbracoAuthorizationKey], out var key)
-               ? key
-               : true;
-        }
+        public string Shop { get; set; } = string.Empty;
 
-        public string ApiVersion { get; set; }
-
-        public string Shop { get; set; }
-
-        public string AccessToken { get; set; }
+        public string AccessToken { get; set; } = string.Empty;
 
         public bool UseUmbracoAuthorization { get; set; } = true;
     }

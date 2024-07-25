@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
 {

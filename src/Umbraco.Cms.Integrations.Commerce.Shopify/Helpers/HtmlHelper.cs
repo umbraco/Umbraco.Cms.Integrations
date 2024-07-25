@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Html;
+﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.ViewModels;
 

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Reflection;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Resolvers
 {

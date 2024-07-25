@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
+﻿namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
     public interface IShopifyAuthorizationService
     {

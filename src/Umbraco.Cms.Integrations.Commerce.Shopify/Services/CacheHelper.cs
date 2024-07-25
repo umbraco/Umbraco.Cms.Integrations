@@ -1,5 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Extensions;
 
