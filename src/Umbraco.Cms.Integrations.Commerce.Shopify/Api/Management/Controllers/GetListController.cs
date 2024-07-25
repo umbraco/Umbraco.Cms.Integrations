@@ -21,8 +21,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Api.Management.Controllers
         public async Task<IActionResult> GetList(string? pageInfo)
         {
             var result = await ShopifyService.GetResults(pageInfo);
-            result.Skip = 0;
-            result.Take = 5;
             return Ok(result);
         }
     }

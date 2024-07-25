@@ -40,7 +40,7 @@ export class ShopifyContext extends UmbControllerBase{
         return await this.#repository.revokeAccessToken();
     }
 
-    async getList(pageInfo: string){
+    async getList(pageInfo?: string){
         return await this.#repository.getList(pageInfo);
     }
 

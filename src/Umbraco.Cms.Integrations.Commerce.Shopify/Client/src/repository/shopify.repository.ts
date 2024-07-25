@@ -48,7 +48,7 @@ export class ShopifyRepository extends UmbControllerBase {
         return { data };
     }
 
-    async getList(pageInfo: string){
+    async getList(pageInfo?: string){
         const { data, error } = await tryExecuteAndNotify(this, ShopifyService.getList({pageInfo: pageInfo}));
 
         if (error || !data) {

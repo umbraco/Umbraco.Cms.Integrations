@@ -1,14 +1,16 @@
 import { UmbModalBaseElement } from "@umbraco-cms/backoffice/modal";
 import { SHOPIFY_CONTEXT_TOKEN } from "../context/shopify.context.js";
 import { UMB_NOTIFICATION_CONTEXT } from "@umbraco-cms/backoffice/notification";
-import { html, state, customElement, css } from "@umbraco-cms/backoffice/external/lit";
+import { html, state, customElement, css, nothing } from "@umbraco-cms/backoffice/external/lit";
 import type { EditorSettingsModel, ProductDtoModel } from "../../generated";
 import type { ShopifyProductPickerModalData, ShopifyProductPickerModalValue } from "./shopify.modal-token.js";
 import type { ShopifyServiceStatus } from "../models/shopify-service.model.js";
 import type { UmbTableColumn, UmbTableConfig, UmbTableItem, UmbTableSelectedEvent, UmbTableElement, UmbTableDeselectedEvent, UmbTableItemData } from '@umbraco-cms/backoffice/components';
 import type { ShopifyCollectionModel } from "../types/types.js";
-import type { UmbDefaultCollectionContext } from '@umbraco-cms/backoffice/collection';
-import { UMB_COLLECTION_CONTEXT } from '@umbraco-cms/backoffice/collection';
+import type { UmbDefaultCollectionContext } from "@umbraco-cms/backoffice/collection";
+import { UMB_COLLECTION_CONTEXT } from "@umbraco-cms/backoffice/collection";
+import { UmbPaginationManager } from "@umbraco-cms/backoffice/utils";
+import type { UUIPaginationEvent } from "@umbraco-cms/backoffice/external/uui";
 
 const elementName = "shopify-products-modal";
 
@@ -17,10 +19,23 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
     #shopifyContext!: typeof SHOPIFY_CONTEXT_TOKEN.TYPE;
     #settingsModel?: EditorSettingsModel;
     #collectionContext!: UmbDefaultCollectionContext<ShopifyCollectionModel>;
+    #paginationManager = new UmbPaginationManager();
     _modalSelectedProducts: Array<ProductDtoModel> = [];
     _numberOfSelection: number = 0;
     _addUpToItems: number = 0;
     _selectionIdList: Array<string | null> = [];
+
+    @state()
+    _currentPageNumber = 1;
+
+    @state()
+    _totalPages = 1;
+
+    @state()
+    _nextPageInfo?: string;
+
+    @state()
+    _previousPageInfo?: string;
     
     @state()
 	private _selection: Array<string | null> = [];
@@ -101,7 +116,7 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 				(selection) => (this._selection = selection),
 				'umbCollectionSelectionObserver',
 			);
-		});
+        });
     }
 
     async connectedCallback() {
@@ -119,13 +134,27 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
             useOAuth: this.#settingsModel.isValid && this.#settingsModel.type.value === "OAuth"
         }
 
-        await this.#loadProducts();
+        if (!this._serviceStatus.isValid) {
+            this._showError("Invalid Shopify API Configuration");
+            return;
+        }
+
+        await this.#getTotalPages();
+        await this.#loadProducts("");
     }
 
-    async #loadProducts() {
+    async #loadProducts(pageInfo?: string) {
+        await this.#getTotalPages();
+
         this._loading = true;
-        const { data } = await this.#shopifyContext.getList("");
+        const { data } = await this.#shopifyContext.getList(pageInfo);
         if (!data) return;
+
+        if (!data.isValid) {
+            this._showError("Cannot access Shopify API.");
+            this._loading = false;
+            return;
+        }
 
         this._products = data.result.products ?? [];
         this._loading = false;
@@ -134,8 +163,18 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
             this._showError("Data is invalid or expired."!);
         }
 
+        this._nextPageInfo = data.nextPageInfo;
+        this._previousPageInfo = data.previousPageInfo;
+
         this.#createTableItems(this._products);
         this.#loadSelectionItems();
+    }
+
+    async #getTotalPages() {
+        const { data } = await this.#shopifyContext.getTotalPages();
+        if (!data) return;
+
+        this._totalPages = data;
     }
 
     #createTableItems(products: Array<ProductDtoModel>) {
@@ -246,6 +285,17 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         }
     }
 
+    #onPageChange(event: UUIPaginationEvent) {
+        const forward = event.target?.current > this._currentPageNumber;
+
+        const currentPageNumber = forward ? this._currentPageNumber + 1 : this._currentPageNumber - 1
+
+        this.#paginationManager.setCurrentPageNumber(currentPageNumber);
+
+        this._currentPageNumber = currentPageNumber;
+        this.#loadProducts(forward ? this._nextPageInfo : this._previousPageInfo);
+    }
+
     private async _showError(message: string) {
         const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
         notificationContext?.peek("danger", {
@@ -257,15 +307,16 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         return html`
             <umb-body-layout>
                 <uui-box headline=${this.data!.headline}>
-                    ${this._loading ? html`<div class="center"><uui-loader></uui-loader></div>` : ""}
+                    ${this._loading ? html`<div class="center loader"><uui-loader></uui-loader></div>` : ""}
                     <umb-table 
                         .config=${this._tableConfig} 
                         .columns=${this._tableColumns} 
                         .items=${this._tableItems}
                         .selection=${this._selection}
                         @selected="${this.#onSelected}"
-                        @deselected="${this.#onDeselected}"></umb-table>
-                    
+                        @deselected="${this.#onDeselected}">
+                    </umb-table>
+                    ${this.#renderPagination()}
                 </uui-box>
 
                 <div class="maximum-selection">
@@ -280,10 +331,36 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         `;
     }
 
+    #renderPagination() {
+        return html`
+            ${this._totalPages > 1
+             ? html`
+                <div class="shopify-pagination">
+                    <uui-pagination
+					    class="pagination"
+					    .current=${this._currentPageNumber}
+					    .total=${this._totalPages}
+					    @change=${this.#onPageChange}></uui-pagination>
+                </div>
+             `
+             : nothing}
+        `;
+    }
+
     static styles = [css`
+        .loader {
+            display: flex;
+            justify-content: center;
+        }
         .maximum-selection{
             margin-top: 10px;
             font-weight: bold;
+        }
+        .shopify-pagination {
+            width: 50%;
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
         }
     `];
 }
