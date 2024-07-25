@@ -79,7 +79,7 @@ export class ShopifyService {
      */
     public static getListByIds(data: GetListByIdsData = {}): CancelablePromise<GetListByIdsResponse> {
         return __request(OpenAPI, {
-            method: 'GET',
+            method: 'POST',
             url: '/umbraco/shopify/management/api/v1/list-by-ids',
             body: data.requestBody,
             mediaType: 'application/json',

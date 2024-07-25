@@ -6,7 +6,7 @@ import {
 import { SHOPIFY_MODAL_TOKEN } from "../modal/shopify.modal-token";
 import { ConfigDescription, type ShopifyServiceStatus } from "../models/shopify-service.model";
 import { SHOPIFY_CONTEXT_TOKEN } from "../context/shopify.context";
-import type { EditorSettingsModel, ProductDtoModel } from "@umbraco-integrations/shopify/generated";
+import type { EditorSettingsModel, ProductDtoModel, RequestDtoModel } from "@umbraco-integrations/shopify/generated";
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UmbPropertyEditorUiElement } from '@umbraco-cms/backoffice/extension-registry';
 import type { UmbPropertyEditorConfigCollection } from "@umbraco-cms/backoffice/property-editor";
@@ -16,6 +16,7 @@ const elementName = "shopify-product-picker";
 
 @customElement(elementName)
 export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements UmbPropertyEditorUiElement {
+    #shopifyContext!: typeof SHOPIFY_CONTEXT_TOKEN.TYPE;
     #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
     #settingsModel?: EditorSettingsModel;
 
@@ -57,6 +58,7 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
         });
         this.consumeContext(SHOPIFY_CONTEXT_TOKEN, (context) => {
             if (!context) return;
+            this.#shopifyContext = context;
             this.observe(context.settingsModel, (settingsModel) => {
                 this.#settingsModel = settingsModel;
             });
@@ -81,8 +83,18 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
 
         if (this.value == null || this.value.length == 0) return;
 
-        const dto: Array<ProductDtoModel> = JSON.parse(JSON.stringify(this.value));
-        this.products = dto;
+        await this.#getProducts();
+    }
+
+    async #getProducts() {
+        const model: RequestDtoModel = {
+            ids: JSON.parse(JSON.stringify(this.value))
+        };
+
+        const { data } = await this.#shopifyContext.getListByIds(model);
+        if (!data) return;
+
+        this.products = data.result.products;
     }
 
     private async _openModal() {
@@ -97,8 +109,8 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
         const data = await pickerContext?.onSubmit();
         if (!data) return;
 
-        this.value = JSON.stringify(data.productList);
-        this.products = JSON.parse(this.value);
+        this.value = JSON.stringify(data.productList.map(product => product.id));
+        this.products = data.productList;
         this.dispatchEvent(new CustomEvent('property-value-change'));
     }
 
@@ -112,7 +124,7 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
     deleteForm(id: number){
         var index = this.products.map(p => p.id).indexOf(id);
         this.products.splice(index, 1);
-        this.value = JSON.stringify(this.products);
+        this.value = JSON.stringify(this.products.map(product => product.id));
         this.dispatchEvent(new CustomEvent('property-value-change'));
     }
 

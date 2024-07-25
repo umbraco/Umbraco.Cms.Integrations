@@ -16,11 +16,11 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Api.Management.Controllers
         {
         }
 
-        [HttpGet("list-by-ids")]
+        [HttpPost("list-by-ids")]
         [ProducesResponseType(typeof(ResponseDto<ProductsListDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetListByIds([FromBody] RequestDto dto)
         {
-            var result = await ShopifyService.GetProductsByIds(dto.Ids.Select(p => (long.Parse(p))).ToArray());
+            var result = await ShopifyService.GetProductsByIds(dto.Ids.Select(p => p).ToArray());
             return Ok(result);
         }
     }

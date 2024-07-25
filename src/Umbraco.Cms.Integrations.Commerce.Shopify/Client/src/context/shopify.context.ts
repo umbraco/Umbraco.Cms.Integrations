@@ -2,7 +2,7 @@ import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { ShopifyRepository } from "../repository/shopify.repository";
-import { EditorSettingsModel, type OAuthRequestDtoModel } from "@umbraco-integrations/shopify/generated";
+import { EditorSettingsModel, RequestDtoModel, type OAuthRequestDtoModel } from "@umbraco-integrations/shopify/generated";
 import { UmbObjectState } from "@umbraco-cms/backoffice/observable-api";
 
 export class ShopifyContext extends UmbControllerBase{
@@ -44,8 +44,8 @@ export class ShopifyContext extends UmbControllerBase{
         return await this.#repository.getList(pageInfo);
     }
 
-    async getListByIds(){
-        return await this.#repository.getListByIds();
+    async getListByIds(model: RequestDtoModel){
+        return await this.#repository.getListByIds(model);
     }
 
     async getTotalPages(){

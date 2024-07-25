@@ -1,7 +1,7 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
-import { ShopifyService, type OAuthRequestDtoModel } from "@umbraco-integrations/shopify/generated";
+import { ShopifyService, type OAuthRequestDtoModel, RequestDtoModel } from "@umbraco-integrations/shopify/generated";
 
 export class ShopifyRepository extends UmbControllerBase {
     constructor(host: UmbControllerHost) {
@@ -58,8 +58,10 @@ export class ShopifyRepository extends UmbControllerBase {
         return { data };
     }
 
-    async getListByIds(){
-        const { data, error } = await tryExecuteAndNotify(this, ShopifyService.getListByIds());
+    async getListByIds(model: RequestDtoModel) {
+        const { data, error } = await tryExecuteAndNotify(this, ShopifyService.getListByIds({
+            requestBody: model
+        }));
 
         if (error || !data) {
             return { error };

@@ -214,9 +214,9 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 		});
 	}
 
-    async #loadSelectionItems(){
+    async #loadSelectionItems() {
         this._selection = this.data!.selectedItemIdList;
-        this._addUpToItems = this.data?.config?.maxItems! - this.data?.config?.minItems!;
+        this._addUpToItems = (this.data?.config?.maxItems ? this.data?.config?.maxItems : 0) - (this.data?.config?.minItems ? this.data?.config?.minItems : 0);
     }
 
     #onSelected(event: UmbTableSelectedEvent) {
@@ -273,9 +273,9 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
     }
 
     _onSubmit() {
-        if(this._numberOfSelection > this.data?.config?.maxItems! || this._numberOfSelection < this.data?.config?.minItems!){
+        if (this._addUpToItems != 0 && this._numberOfSelection > this._addUpToItems) {
             this._showError("Please select the amount of items that has been configured in the setting.");
-        }else{
+        } else {
             if(this._numberOfSelection == 0){
                 this._rejectModal();
             }
@@ -319,12 +319,16 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
                     ${this.#renderPagination()}
                 </uui-box>
 
-                <div class="maximum-selection">
-                    <span>
-                        Add up to ${this._addUpToItems} items(s)
-                    </span>
-                </div>
-
+                ${this._addUpToItems > 0
+                    ? html`
+                        <div class="maximum-selection">
+                            <span>
+                                Add up to ${this._addUpToItems} items(s)
+                            </span>
+                        </div>
+                    `
+                    : nothing
+                }
                 <uui-button look="primary"  slot="actions" label="Submit" @click=${this._onSubmit}></uui-button>
                 <uui-button slot="actions" label="Close" @click=${this._rejectModal}></uui-button>
             </umb-body-layout>

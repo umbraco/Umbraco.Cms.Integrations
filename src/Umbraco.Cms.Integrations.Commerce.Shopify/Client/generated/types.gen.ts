@@ -160,7 +160,7 @@ export type $OpenApiTs = {
         };
     };
     '/umbraco/shopify/management/api/v1/list-by-ids': {
-        get: {
+        post: {
             req: GetListByIdsData;
             res: {
                 /**
