@@ -1,24 +1,18 @@
 ﻿using Umbraco.Cms.Integrations.Automation.Zapier.Services;
-
-#if NETCOREAPP
 using Microsoft.Extensions.DependencyInjection;
-
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
 using Umbraco.Cms.Integrations.Automation.Zapier.Migrations;
-
-#else
-using Umbraco.Core;
-using Umbraco.Core.Composing;
-#endif
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Umbraco.Cms.Integrations.Automation.Zapier.Api.Configuration;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier
 {
     public class ZapierComposer : IComposer
     {
-#if NETCOREAPP
         public void Compose(IUmbracoBuilder builder)
         {
             builder.Services
@@ -40,21 +34,21 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
             builder.Services.AddScoped<IZapierContentService, ZapierContentService>();
 
             builder.Services.AddScoped<IZapierContentFactory, ZapierContentFactory>();
+
+            // Generate Swagger documentation for Shopify API
+            builder.Services.Configure<SwaggerGenOptions>(options =>
+            {
+                options.SwaggerDoc(
+                    Constants.ManagementApi.ApiName,
+                    new OpenApiInfo
+                    {
+                        Title = Constants.ManagementApi.ApiTitle,
+                        Version = "Latest",
+                        Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Zapier automation and configuration."
+                    });
+                options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
+                options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
+            });
         }
-#else
-        public void Compose(Composition composition)
-        {
-            composition.Register<ZapierSubscriptionHookService>(Lifetime.Singleton);
-
-            composition.Register<ZapierService>(Lifetime.Singleton);
-
-            composition.Register<IUserValidationService, UserValidationService>(Lifetime.Scope);
-
-            composition.Register<IZapierContentService, ZapierContentService>(Lifetime.Transient);
-
-            composition.Register<IZapierContentFactory, ZapierContentFactory>(Lifetime.Transient);
-        }
-#endif
-
     }
 }

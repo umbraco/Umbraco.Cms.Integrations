@@ -17,6 +17,17 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
         public const string UmbracoFormsIntegrationsAutomationZapierApiKey = "Umbraco.Forms.Integrations.Automation.Zapier.ApiKey";
 
+        public static class ManagementApi
+        {
+            public const string RootPath = "zapier/management/api";
+
+            public const string ApiName = "zapier-management";
+
+            public const string ApiTitle = "Zapier Management API";
+
+            public const string GroupName = "Zapier";
+        }
+
         public static class ZapierAppConfiguration
         {
             public const string UsernameHeaderKey = "X-USERNAME";

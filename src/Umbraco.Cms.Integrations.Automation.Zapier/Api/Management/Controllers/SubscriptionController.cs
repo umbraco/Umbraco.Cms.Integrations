@@ -1,50 +1,43 @@
 ﻿using System.Collections.Generic;
 using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
 using Umbraco.Cms.Integrations.Automation.Zapier.Services;
-
-#if NETCOREAPP
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
-#else
-using System.Web.Http;
-#endif
+using Asp.Versioning;
 
-namespace Umbraco.Cms.Integrations.Automation.Zapier.Controllers
+namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
 {
     /// <summary>
     /// Subscription API handling the ON/OFF trigger events in Zapier.
     /// </summary>
-    public class SubscriptionController : ZapierAuthorizedApiController
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
+    public class SubscriptionController : ZapierControllerBase
     {
         private readonly ZapierSubscriptionHookService _zapierSubscriptionHookService;
 
-#if NETCOREAPP
-        public SubscriptionController(IOptions<ZapierSettings> options, 
+        public SubscriptionController(IOptions<ZapierSettings> options,
             ZapierSubscriptionHookService zapierSubscriptionHookService,
             IUserValidationService userValidationService)
             : base(options, userValidationService)
-#else
-        public SubscriptionController(
-            ZapierSubscriptionHookService zapierSubscriptionHookService, 
-            IUserValidationService userValidationService)
-            : base(userValidationService)
-#endif
         {
             _zapierSubscriptionHookService = zapierSubscriptionHookService;
         }
 
-        [HttpPost]
-        public bool UpdatePreferences([FromBody] SubscriptionDto dto)
+        [HttpPost("update-preferences")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+        public IActionResult UpdatePreferences([FromBody] SubscriptionDto dto)
         {
-            if (!IsAccessValid() || dto == null) return false;
+            if (!IsAccessValid() || dto == null) 
+                return NotFound();
 
             var result = dto.SubscribeHook
                 ? _zapierSubscriptionHookService.Add(dto.EntityId, dto.Type, dto.HookUrl)
                 : _zapierSubscriptionHookService.Delete(dto.EntityId, dto.Type, dto.HookUrl);
 
-            return string.IsNullOrEmpty(result);
+            return Ok(string.IsNullOrEmpty(result));
         }
     }
 }

@@ -1,18 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
-
-#if NETCOREAPP
 using Microsoft.Extensions.Options;
-
 using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
-#else
-using System.Configuration;
-
-using Umbraco.Core.Services;
-#endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 {

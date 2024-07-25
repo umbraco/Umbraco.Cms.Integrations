@@ -1,7 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
 
 	<PropertyGroup>
-		<TargetFrameworks>net472;net50;net60;net70;net80</TargetFrameworks>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<Title>Umbraco CMS Integrations: Automation - Zapier</Title>
@@ -13,69 +18,64 @@
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
 		<PackageIcon>zapier.png</PackageIcon>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<OutputType>Library</OutputType>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-		<PackageReference Include="UmbracoCms.Web" Version="8.14.0" />
-	</ItemGroup>
+  <ItemGroup>
+    <Content Remove="NuGet.config" />
+    <Content Remove="umbraco-marketplace.json" />
+  </ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[9.0.1,10)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[9.0.1,10)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="[9.0.1,10)" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\css\zapier.css" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\dashboard.html" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\js\zapier.controller.js" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\js\zapier.resource.js" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\lang\en-US.xml" />
+    <None Remove="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\package.manifest" />
+    <None Remove="zapier.png" />
+  </ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net60'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[10.0.0,11)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[10.0.0,11)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="[10.0.0,11)" />
-	</ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\css\zapier.css">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\dashboard.html">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\js\zapier.controller.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\js\zapier.resource.js">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\lang\en-US.xml">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\package.manifest">
+      <PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="zapier.png">
+      <PackagePath>\</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net70'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,13)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,13)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="[11.0.0,13)" />
-	</ItemGroup>
+  <ItemGroup>
+    <None Include="NuGet.config" />
+    <None Include="umbraco-marketplace.json" />
+  </ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net80'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[13.0.0,14)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[13.0.0,14)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" version="[13.0.0,14)" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="App_Plugins\UmbracoCms.Integrations\Automation\Zapier\**\*.*">
-			<Pack>true</Pack>
-			<PackagePath>App_Plugins\UmbracoCms.Integrations\Automation\Zapier\</PackagePath>
-		</Content>
-		<None Include="build\**\*.*">
-			<Pack>True</Pack>
-			<PackagePath>buildTransitive</PackagePath>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="App_Plugins\**\*.*">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="zapier.png">
-			<Pack>true</Pack>
-			<PackagePath>\</PackagePath>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
-	</ItemGroup>
-
-	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
-		<ItemGroup>
-			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
-		</ItemGroup>
-	</Target>
+    <ItemGroup>
+	    <PackageReference Include="Umbraco.Cms.Api.Common" Version="[14.0.0, 15)" />
+	    <PackageReference Include="Umbraco.Cms.Api.Management" Version="[14.0.0, 15)" />
+	    <PackageReference Include="Umbraco.Cms.Web.Common" Version="[14.0.0, 15)" />
+    </ItemGroup>
 
 </Project>
