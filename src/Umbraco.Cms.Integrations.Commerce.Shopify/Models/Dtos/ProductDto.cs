@@ -25,7 +25,14 @@
 
         [JsonPropertyName("image")]
         public ProductImageDto Image { get; set; }
+
+        [JsonPropertyName("product_type")]
+        public string ProductType { get; set; }
+
+        [JsonPropertyName("published_scope")]
+        public string PublishedScope { get; set; }
+
+        [JsonPropertyName("handle")]
+        public string Handle { get; set; }
     }
-
-
 }

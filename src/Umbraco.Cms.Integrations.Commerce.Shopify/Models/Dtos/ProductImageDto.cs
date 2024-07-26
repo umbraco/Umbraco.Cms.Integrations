@@ -4,5 +4,8 @@
     {
         [JsonPropertyName("src")]
         public string Src { get; set; }
+
+        [JsonPropertyName("alt")]
+        public string Alt { get; set; }
     }
 }

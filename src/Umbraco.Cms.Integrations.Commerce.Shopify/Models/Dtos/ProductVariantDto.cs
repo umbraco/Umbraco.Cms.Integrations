@@ -16,5 +16,9 @@
 
         [JsonPropertyName("inventory_quantity")]
         public int InventoryQuantity { get; set; }
+
+
+        [JsonPropertyName("taxable")]
+        public bool Taxable { get; set; }
     }
 }
