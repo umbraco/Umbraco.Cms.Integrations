@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+import { outputPath } from "./config.outputPath.js";
 
 export default defineConfig({
     build: {
@@ -7,7 +8,7 @@ export default defineConfig({
             entry: "src/index.ts",
             formats: ["es"],
         },
-        outDir: "../wwwroot/App_Plugins/Shopify",
+        outDir: outputPath,
         emptyOutDir: true,
         sourcemap: true,
         rollupOptions: {
