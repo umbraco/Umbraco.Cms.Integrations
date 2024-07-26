@@ -60,7 +60,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
                                Id = p.Id,
                                Title = p.Title,
                                Body = p.Body,
-                               ProductImage = p.Image != null ? new ProductImage { Src = p.Image.Src, Alt = p.Image.Alt } : null,
+                               ProductImage = p.Image != null ? new ProductImageViewModel { Src = p.Image.Src, Alt = p.Image.Alt } : null,
                                Tags = p.Tags,
                                ProductType = p.ProductType,
                                PublishedScope = p.PublishedScope,

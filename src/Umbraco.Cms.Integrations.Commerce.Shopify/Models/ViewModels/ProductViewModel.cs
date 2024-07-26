@@ -10,7 +10,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.ViewModels
         public string Body { get; set; }
 
         public string Image => ProductImage.Src;
-        public ProductImage ProductImage { get; set; }
+        public ProductImageViewModel ProductImage { get; set; }
         public string ProductType { get; set; }
         public string Tags { get; set; }
         public string Status { get; set; }
