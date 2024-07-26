@@ -60,10 +60,11 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
                                Id = p.Id,
                                Title = p.Title,
                                Body = p.Body,
-                               Image = p.Image?.Src,
+                               ProductImage = p.Image != null ? new ProductImage { Src = p.Image.Src, Alt = p.Image.Alt } : null,
                                Tags = p.Tags,
                                ProductType = p.ProductType,
                                PublishedScope = p.PublishedScope,
+                               Handle = p.Handle,
                                Status = p.Status,
                                Variants = from v in p.Variants
                                           select new VariantViewModel
