@@ -1,13 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Dynamic;
 using System.Net;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Helpers;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Resolvers;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Resources;
 using ShopifyLogLevel = Umbraco.Cms.Core.Logging.LogLevel;
 
@@ -15,8 +13,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
     public class ShopifyService : IShopifyService
     {
-        private readonly JsonSerializerSettings _serializerSettings;
-
         private readonly ShopifySettings _settings;
 
         private readonly ShopifyOAuthSettings _oauthSettings;
@@ -35,14 +31,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             IOptions<ShopifySettings> options, IOptions<ShopifyOAuthSettings> oauthOptions,
             ITokenService tokenService)
         {
-            var resolver = new JsonPropertyRenameContractResolver();
-            resolver.RenameProperty(typeof(ResponseDto<ProductsListDto>), "Result", "products");
-
-            _serializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = resolver
-            };
-
             _settings = options.Value;
             _oauthSettings = oauthOptions.Value;
 
@@ -152,7 +140,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
                 var responseDto = new ResponseDto<ProductsListDto>
                 {
                     IsValid = true,
-                    Result = JsonConvert.DeserializeObject<ProductsListDto>(result, _serializerSettings)
+                    Result = JsonSerializer.Deserialize<ProductsListDto>(result)
                 };
 
                 var pageInfoDetails = response.GetPageInfo();
@@ -206,7 +194,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
                 var responseDto = new ResponseDto<ProductsListDto>
                 {
                     IsValid = true,
-                    Result = JsonConvert.DeserializeObject<ProductsListDto>(result, _serializerSettings)
+                    Result = JsonSerializer.Deserialize<ProductsListDto>(result)
                 };
 
                 return responseDto;
@@ -252,7 +240,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             }
 
             var result = await response.Content.ReadAsStringAsync();
-            return ((JObject)JsonConvert.DeserializeObject(result)).Value<int>("count");
+            return JsonSerializer.Deserialize<ProductCountDto>(result).Count; 
         }
 
         private void Log(ShopifyLogLevel logLevel, string message)

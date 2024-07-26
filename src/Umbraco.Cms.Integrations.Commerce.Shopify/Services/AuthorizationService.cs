@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System.Net;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
@@ -44,7 +43,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
+                var tokenDto = JsonSerializer.Deserialize<TokenDto>(result);
 
                 TokenService.SaveParameters(Constants.AccessTokenDbKey, tokenDto.AccessToken);
 
@@ -54,7 +53,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             if (response.StatusCode == HttpStatusCode.BadRequest)
             {
                 var errorResult = await response.Content.ReadAsStringAsync();
-                var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
+                var errorDto = JsonSerializer.Deserialize<ErrorDto>(errorResult);
 
                 return "Error: " + errorDto.Message;
             }
@@ -94,7 +93,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
+                var tokenDto = JsonSerializer.Deserialize<TokenDto>(result);
 
                 TokenService.SaveParameters(Constants.AccessTokenDbKey, tokenDto.AccessToken);
                 TokenService.SaveParameters(Constants.RefreshTokenDbKey, tokenDto.RefreshToken);

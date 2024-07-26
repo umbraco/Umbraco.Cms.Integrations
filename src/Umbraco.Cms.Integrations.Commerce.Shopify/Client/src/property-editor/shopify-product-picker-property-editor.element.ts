@@ -121,9 +121,9 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
         });
     }
 
-    deleteForm(id: number){
+    deleteProduct(id: number) {
         var index = this.products.map(p => p.id).indexOf(id);
-        this.products.splice(index, 1);
+        this.products.splice(index);
         this.value = JSON.stringify(this.products.map(product => product.id));
         this.dispatchEvent(new CustomEvent('property-value-change'));
     }
@@ -144,7 +144,7 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
                             html`
                                 <uui-ref-node-form name=${product.title} detail=${product.vendor}>
                                     <uui-action-bar slot="actions">
-                                        <uui-button label="Remove" @click=${() => this.deleteForm(product.id)}>Remove</uui-button>
+                                        <uui-button label="Remove" @click=${() => this.deleteProduct(product.id)}>Remove</uui-button>
                                     </uui-action-bar>
                                 </uui-ref-node-form>
                             `

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.ViewModels;
@@ -28,7 +28,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
         {
             if (source == null) return null;
 
-            return JsonConvert.DeserializeObject<long[]>(source.ToString());
+            return JsonSerializer.Deserialize<long[]>(source.ToString());
         }
 
         public override object ConvertIntermediateToObject(IPublishedElement owner, IPublishedPropertyType propertyType,

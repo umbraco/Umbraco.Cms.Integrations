@@ -1,7 +1,5 @@
-﻿using Newtonsoft.Json;
-using Umbraco.Cms.Core.Cache;
+﻿using Umbraco.Cms.Core.Cache;
 using Umbraco.Extensions;
-
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
@@ -20,7 +18,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 
             item = string.IsNullOrEmpty(serializedItem)
                 ? null
-                : JsonConvert.DeserializeObject<T>(serializedItem);
+                : JsonSerializer.Deserialize<T>(serializedItem);
 
             return !string.IsNullOrEmpty(serializedItem);
         }
