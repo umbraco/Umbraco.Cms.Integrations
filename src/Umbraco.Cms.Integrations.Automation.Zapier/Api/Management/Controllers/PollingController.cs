@@ -8,6 +8,7 @@ using Umbraco.Cms.Web.Common;
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
 {
@@ -45,24 +46,20 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetContentByType(string alias)
         {
-            //if (!IsAccessValid()) 
-            //    return NotFound();
+            if (!IsAccessValid())
+                return NotFound();
 
-            //var contentType = _contentTypeService.Get(alias);
-            //if (contentType == null) 
-            //    return Ok(new List<Dictionary<string, string>>());
+            var contentType = _contentTypeService.Get(alias);
+            if (contentType == null)
+                return Ok(new List<Dictionary<string, string>>());
 
-            //var contentItems = _umbracoHelper.ContentAtXPath("//" + alias)
-            //    .OrderByDescending(p => p.UpdateDate);
+            var contentItems = _umbracoHelper.ContentAtRoot().DescendantsOrSelfOfType(alias)
+                .OrderByDescending(p => p.UpdateDate);
+            var contentTypeDictionary = new List<Dictionary<string, string>>{
+                _zapierContentService.GetContentTypeDictionary(contentType, contentItems.FirstOrDefault())
+            };
 
-            //return Ok(new List<Dictionary<string, string>>
-            //    {
-            //        _zapierContentService.GetContentTypeDictionary(contentType, contentItems.FirstOrDefault())
-            //    });
-
-            return Ok();
+            return Ok(contentTypeDictionary);
         }
-
-
     }
 }
