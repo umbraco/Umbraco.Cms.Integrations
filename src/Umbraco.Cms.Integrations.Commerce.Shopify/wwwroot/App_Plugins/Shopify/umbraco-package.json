@@ -1,0 +1,14 @@
+{
+    "id": "Umbraco.Cms.Integrations.Commerce.Shopify",
+    "name": "Umbraco CMS Integrations: Commerce - Shopify",
+    "version": "1.0.0",
+    "extensions": [
+      {
+        "name": "Umbraco EntryPoint",
+        "alias": "Umb.Shopify.EntryPoint",
+        "type": "entryPoint",
+        "js": "/App_Plugins/Shopify/shopify.js"
+      }
+    ]
+  }
+  

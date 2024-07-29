@@ -1,49 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System.Dynamic;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-
-using Newtonsoft.Json;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Helpers;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Resolvers;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Resources;
-using Newtonsoft.Json.Linq;
-using System.Linq;
-using System.Web;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Helpers;
-
-
-
-
-
-#if NETCOREAPP
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using ShopifyLogLevel = Umbraco.Cms.Core.Logging.LogLevel;
-#else
-using System.Configuration;
-using Umbraco.Core.Logging;
-using ShopifyLogLevel = Umbraco.Core.Logging.LogLevel;
-#endif
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
     public class ShopifyService : IShopifyService
     {
-        private readonly JsonSerializerSettings _serializerSettings;
-
         private readonly ShopifySettings _settings;
 
         private readonly ShopifyOAuthSettings _oauthSettings;
 
-#if NETCOREAPP
         private readonly ILogger<ShopifyService> _umbCoreLogger;
-#else
-        private readonly ILogger _umbCoreLogger;
-#endif
 
         private readonly ITokenService _tokenService;
 
@@ -53,19 +27,10 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
         // Access to the client within the class is via ClientFactory(), allowing us to mock the responses in tests.
         public static Func<HttpClient> ClientFactory = () => Client;
 
-#if NETCOREAPP
         public ShopifyService(ILogger<ShopifyService> logger,
             IOptions<ShopifySettings> options, IOptions<ShopifyOAuthSettings> oauthOptions,
             ITokenService tokenService)
         {
-            var resolver = new JsonPropertyRenameContractResolver();
-            resolver.RenameProperty(typeof(ResponseDto<ProductsListDto>), "Result", "products");
-
-            _serializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = resolver
-            };
-
             _settings = options.Value;
             _oauthSettings = oauthOptions.Value;
 
@@ -73,25 +38,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 
             _tokenService = tokenService;
         }
-#else
-        public ShopifyService(ILogger logger, ITokenService tokenService)
-        {
-            var resolver = new JsonPropertyRenameContractResolver();
-            resolver.RenameProperty(typeof(ResponseDto<ProductsListDto>), "Result", "products");
-
-            _serializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = resolver
-            };
-
-            _settings = new ShopifySettings(ConfigurationManager.AppSettings);
-            _oauthSettings = new ShopifyOAuthSettings(ConfigurationManager.AppSettings);
-
-            _umbCoreLogger = logger;
-
-            _tokenService = tokenService;
-        }
-#endif
 
         public EditorSettings GetApiConfiguration()
         {
@@ -194,7 +140,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
                 var responseDto = new ResponseDto<ProductsListDto>
                 {
                     IsValid = true,
-                    Result = JsonConvert.DeserializeObject<ProductsListDto>(result, _serializerSettings)
+                    Result = JsonSerializer.Deserialize<ProductsListDto>(result)
                 };
 
                 var pageInfoDetails = response.GetPageInfo();
@@ -248,7 +194,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
                 var responseDto = new ResponseDto<ProductsListDto>
                 {
                     IsValid = true,
-                    Result = JsonConvert.DeserializeObject<ProductsListDto>(result, _serializerSettings)
+                    Result = JsonSerializer.Deserialize<ProductsListDto>(result)
                 };
 
                 return responseDto;
@@ -294,26 +240,18 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
             }
 
             var result = await response.Content.ReadAsStringAsync();
-            return ((JObject)JsonConvert.DeserializeObject(result)).Value<int>("count");
+            return JsonSerializer.Deserialize<ProductCountDto>(result).Count; 
         }
 
         private void Log(ShopifyLogLevel logLevel, string message)
         {
             if (logLevel == ShopifyLogLevel.Error)
             {
-#if NETCOREAPP
                 _umbCoreLogger.LogError(message);
-#else
-                _umbCoreLogger.Error<ShopifyService>(message);
-#endif
             }
             else if (logLevel == ShopifyLogLevel.Information)
             {
-#if NETCOREAPP
                 _umbCoreLogger.LogInformation(message);
-#else
-                _umbCoreLogger.Info<ShopifyService>(message: message);
-#endif
             }
         }
     }

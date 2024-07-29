@@ -1,24 +1,19 @@
-﻿using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
+﻿global using System.Text.Json;
+global using System.Text.Json.Serialization;
 
-#if NETCOREAPP
 using Microsoft.Extensions.DependencyInjection;
-
-using Umbraco.Cms.Core.DependencyInjection;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Api.Configuration;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
-
-#else
-using Umbraco.Core;
-using Umbraco.Core.Composing;
-#endif
+using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify
 {
     public class ShopifyComposer : IComposer
     {
-        public delegate IShopifyAuthorizationService AuthorizationImplementationFactory(bool useUmbracoAuthorization);
-
-#if NETCOREAPP
         public void Compose(IUmbracoBuilder builder)
         {
             var options = builder.Services.AddOptions<ShopifySettings>()
@@ -31,37 +26,26 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify
             builder.Services.AddSingleton<ICacheHelper, CacheHelper>();
 
             builder.Services.AddSingleton<IShopifyService, ShopifyService>();
+            builder.Services.AddSingleton<IShopifyAuthorizationService, UmbracoAuthorizationService>();
 
             builder.Services.AddSingleton<UmbracoAuthorizationService>();
             builder.Services.AddSingleton<AuthorizationService>();
-            builder.Services.AddSingleton<AuthorizationImplementationFactory>(f => useUmbracoAuthorization =>
+
+            // Generate Swagger documentation for Shopify API
+            builder.Services.Configure<SwaggerGenOptions>(options =>
             {
-                return useUmbracoAuthorization switch
-                {
-                    true => f.GetService<UmbracoAuthorizationService>(),
-                    _ => f.GetService<AuthorizationService>()
-                };
+                options.SwaggerDoc(
+                    Constants.ManagementApi.ApiName,
+                    new OpenApiInfo
+                    {
+                        Title = Constants.ManagementApi.ApiTitle,
+                        Version = "Latest",
+                        Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Shopify product(s) and configuration."
+                    });
+
+                options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
+                options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
             });
         }
-#else
-        public void Compose(Composition composition)
-        {
-            composition.Register<ITokenService, TokenService>(Lifetime.Singleton);
-
-            composition.Register<ICacheHelper, CacheHelper>(Lifetime.Singleton);
-
-            composition.Register<IShopifyService, ShopifyService>(Lifetime.Singleton);
-
-            composition.Register<UmbracoAuthorizationService>(Lifetime.Singleton);
-            composition.Register<AuthorizationService>(Lifetime.Singleton);
-            composition.Register<AuthorizationImplementationFactory>(f => (useUmbracoAuthorization) =>
-            {
-                if (useUmbracoAuthorization)
-                    return f.GetInstance<UmbracoAuthorizationService>();
-
-                return f.GetInstance<AuthorizationService>();
-            }, Lifetime.Singleton);
-        }
-#endif
     }
 }

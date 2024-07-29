@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
-
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
+﻿namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
 {
     public class ProductImageDto
     {
-        [JsonProperty("src")]
+        [JsonPropertyName("src")]
         public string Src { get; set; }
+
+        [JsonPropertyName("alt")]
+        public string Alt { get; set; }
     }
 }

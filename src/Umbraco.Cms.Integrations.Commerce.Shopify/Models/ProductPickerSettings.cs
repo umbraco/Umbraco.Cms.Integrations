@@ -1,13 +1,11 @@
-﻿using Newtonsoft.Json;
-
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models
+﻿namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models
 {
     public class ProductPickerSettings
     {
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
         public string Message { get; set; }
     }
 }

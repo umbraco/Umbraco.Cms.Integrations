@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.ViewModels;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
-
-#if NETCOREAPP
-using Umbraco.Cms.Core.PropertyEditors;
-using Umbraco.Cms.Core.Models.PublishedContent;
-#else
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.PropertyEditors;
-#endif
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 {
@@ -37,10 +28,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
         {
             if (source == null) return null;
 
-            return source.ToString()
-                .Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
-                .Select(long.Parse)
-                .ToArray();
+            return JsonSerializer.Deserialize<long[]>(source.ToString());
         }
 
         public override object ConvertIntermediateToObject(IPublishedElement owner, IPublishedPropertyType propertyType,
@@ -60,8 +48,23 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
                                Id = p.Id,
                                Title = p.Title,
                                Body = p.Body,
-                               Image = p.Image?.Src
+                               ProductImage = p.Image != null ? new ProductImageViewModel { Src = p.Image.Src, Alt = p.Image.Alt } : null,
+                               Tags = p.Tags,
+                               ProductType = p.ProductType,
+                               PublishedScope = p.PublishedScope,
+                               Handle = p.Handle,
+                               Status = p.Status,
+                               Variants = from v in p.Variants
+                                          select new VariantViewModel
+                                          {
+                                              InventoryQuantity = v.InventoryQuantity,
+                                              Position = v.Position,
+                                              Price = v.Price,
+                                              Sku = v.Sku,
+                                              Taxable = v.Taxable
+                                          }
                            };
+
 
             return products.ToList();
         }

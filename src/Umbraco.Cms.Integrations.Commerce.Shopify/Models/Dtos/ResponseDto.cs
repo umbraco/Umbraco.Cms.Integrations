@@ -1,27 +1,30 @@
-﻿using Newtonsoft.Json;
-
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
+﻿namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
 {
     public class ResponseDto<T> 
         where T : class
     {
-        [JsonProperty("isValid")]
+        [JsonPropertyName("isValid")]
         public bool IsValid { get; set; }
 
-        [JsonProperty("nextPageInfo")]
+        [JsonPropertyName("nextPageInfo")]
         public string NextPageInfo { get; set; }
 
-        [JsonProperty("previousPageInfo")]
+        [JsonPropertyName("previousPageInfo")]
         public string PreviousPageInfo { get; set; }
 
-        [JsonProperty("isExpired")]
+        [JsonPropertyName("isExpired")]
         public bool IsExpired { get; set; }
 
-        [JsonProperty("result")] 
+        [JsonPropertyName("result")]
         public T Result { get; set; }
 
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
         public string Message { get; set; }
 
+        [JsonPropertyName("skip")]
+        public int Skip { get; set; }
+
+        [JsonPropertyName("take")]
+        public int Take { get; set; }
     }
 }
