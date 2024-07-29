@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
+﻿namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
 {
     public interface IShopifyAuthorizationService
     {
@@ -9,5 +7,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
         string GetAccessToken(string code);
 
         Task<string> GetAccessTokenAsync(string code);
+        string RefreshAccessToken();
+
+        Task<string> RefreshAccessTokenAsync();
     }
 }

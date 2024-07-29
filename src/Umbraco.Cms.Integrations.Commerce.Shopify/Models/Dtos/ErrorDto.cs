@@ -1,13 +1,11 @@
-﻿using Newtonsoft.Json;
-
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
+﻿namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
 {
     public class ErrorDto
     {
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
 
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
         public string Message { get; set; }
     }
 }

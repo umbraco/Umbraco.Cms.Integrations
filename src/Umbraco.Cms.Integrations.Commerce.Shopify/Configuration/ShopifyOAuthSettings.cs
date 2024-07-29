@@ -1,32 +1,15 @@
-﻿using System.Collections.Specialized;
-
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Configuration
+﻿namespace Umbraco.Cms.Integrations.Commerce.Shopify.Configuration
 {
     public class ShopifyOAuthSettings
     {
-        public ShopifyOAuthSettings() { }
+        public string ClientId { get; set; } = string.Empty;
 
-        public ShopifyOAuthSettings(NameValueCollection appSettings)
-        {
-            ClientId = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyClientIdKey];
+        public string ClientSecret { get; set; } = string.Empty;
 
-            ClientSecret = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyClientSecretKey];
+        public string RedirectUri { get; set; } = string.Empty;
 
-            RedirectUri = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyRedirectUriKey];
+        public string Scopes { get; set; } = string.Empty;
 
-            Scopes = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyScopesKey];
-
-            TokenEndpoint = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyTokenEndpointKey];
-        }
-
-        public string ClientId { get; set; }
-
-        public string ClientSecret { get; set; }
-
-        public string RedirectUri { get; set; }
-
-        public string Scopes { get; set; }
-
-        public string TokenEndpoint { get; set; }
+        public string TokenEndpoint { get; set; } = string.Empty;
     }
 }

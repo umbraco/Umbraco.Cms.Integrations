@@ -1,22 +1,24 @@
-﻿using Newtonsoft.Json;
-
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
+﻿namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
 {
     public class ProductVariantDto
     {
-        [JsonProperty("price")]
+        [JsonPropertyName("price")]
         public string Price { get; set; }
 
-        [JsonProperty("sku")]
+        [JsonPropertyName("sku")]
         public string Sku { get; set; }
 
-        [JsonProperty("position")]
+        [JsonPropertyName("position")]
         public int Position { get; set; }
 
-        [JsonProperty("barcode")]
+        [JsonPropertyName("barcode")]
         public string Barcode { get; set; }
 
-        [JsonProperty("inventory_quantity")]
+        [JsonPropertyName("inventory_quantity")]
         public int InventoryQuantity { get; set; }
+
+
+        [JsonPropertyName("taxable")]
+        public bool Taxable { get; set; }
     }
 }

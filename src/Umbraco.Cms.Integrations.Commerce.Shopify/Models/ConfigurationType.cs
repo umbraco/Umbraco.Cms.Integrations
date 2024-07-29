@@ -1,10 +1,8 @@
-﻿using Newtonsoft.Json;
-
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models
+﻿namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models
 {
     public class ConfigurationType
     {
-        [JsonProperty("value")]
+        [JsonPropertyName("value")]
         public string Value { get; private set; }
 
         private ConfigurationType(string value)
@@ -16,6 +14,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models
 
         public static ConfigurationType OAuth => new ConfigurationType("OAuth");
 
+        public static ConfigurationType OAuthConnected => new ConfigurationType("OAuthConnected");
 
         public static ConfigurationType None => new ConfigurationType("None");
     }
