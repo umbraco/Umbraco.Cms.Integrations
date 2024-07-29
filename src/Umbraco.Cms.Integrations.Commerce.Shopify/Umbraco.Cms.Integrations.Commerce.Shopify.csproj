@@ -45,6 +45,10 @@
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Content Include="Views\**" />
+	</ItemGroup>
+
 	<!-- Build client assets using NPM -->
 	<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
 	<PropertyGroup>
