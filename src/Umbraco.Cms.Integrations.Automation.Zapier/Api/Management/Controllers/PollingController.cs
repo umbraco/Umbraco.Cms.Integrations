@@ -9,6 +9,7 @@ using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Extensions;
+using Microsoft.AspNetCore.Http;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
 {

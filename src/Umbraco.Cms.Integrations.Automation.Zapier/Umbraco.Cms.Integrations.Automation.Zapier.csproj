@@ -1,9 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+	  <EnableDefaultContentItems>false</EnableDefaultContentItems>
+	  <StaticWebAssetBasePath>/App_Plugins/Zapier</StaticWebAssetBasePath>
   </PropertyGroup>
 
 	<PropertyGroup>
@@ -18,10 +21,14 @@
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
 		<PackageIcon>zapier.png</PackageIcon>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
-		<OutputType>Library</OutputType>
 	</PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+
+	<ItemGroup>
     <Content Remove="NuGet.config" />
     <Content Remove="umbraco-marketplace.json" />
   </ItemGroup>
@@ -78,4 +85,17 @@
 	    <PackageReference Include="Umbraco.Cms.Web.Common" Version="[14.0.0, 15)" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Client\" />
+    </ItemGroup>
+
+	<!-- Build client assets using NPM -->
+	<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
+	<PropertyGroup>
+		<!-- Use this to (temporarily) disable building client assets, e.g. to start the project and generate updated API models -->
+		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
+	</PropertyGroup>
+	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
+		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '$(Configuration)' !== 'Release' ? '../wwwroot' : '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
+	</Target>
 </Project>

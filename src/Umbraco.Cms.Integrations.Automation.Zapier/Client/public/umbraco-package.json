@@ -1,0 +1,14 @@
+{
+    "id": "Umbraco.Cms.Integrations.Automation.Zapier",
+    "name": "Umbraco CMS Integrations: Automation - Zapier",
+    "version": "1.3.0",
+    "extensions": [
+      {
+        "name": "Umbraco EntryPoint",
+        "alias": "Umb.Zapier.EntryPoint",
+        "type": "entryPoint",
+        "js": "/App_Plugins/Zapier/zapier.js"
+      }
+    ]
+  }
+  

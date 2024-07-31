@@ -8,6 +8,7 @@ using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters.Xml;
+using Microsoft.AspNetCore.Http;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
 {
