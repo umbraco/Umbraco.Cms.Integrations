@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http;
-using System.Web;
+﻿using System.Web;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Helpers
 {

@@ -7,7 +7,7 @@ src/Testsite/umbraco
 src/Testsite/Views
 src/Testsite/wwwroot
 src/Umbraco.Cms.Integrations.Automation.Zapier/wwwroot
-
+src/Umbraco.Cms.Integrations.Commerce.Shopify/wwwroot
 
 
 # User-specific files

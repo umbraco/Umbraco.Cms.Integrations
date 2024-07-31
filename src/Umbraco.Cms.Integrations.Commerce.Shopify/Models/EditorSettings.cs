@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models
+﻿namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models
 {
     public class EditorSettings
     {
@@ -9,10 +7,10 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models
             Type = ConfigurationType.None;
         }
 
-        [JsonProperty("isValid")]
+        [JsonPropertyName("isValid")]
         public bool IsValid { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public ConfigurationType Type { get; set; }
     }
 }

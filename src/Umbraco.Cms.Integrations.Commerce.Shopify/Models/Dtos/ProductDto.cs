@@ -1,35 +1,38 @@
-﻿using System.Collections.Generic;
-
-using Newtonsoft.Json;
-
-namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
+﻿namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
 {
     public class ProductDto
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public long Id { get; set; }
 
-        [JsonProperty("title")]
+        [JsonPropertyName("title")]
         public string Title { get; set; }
 
-        [JsonProperty("body_html")]
+        [JsonPropertyName("body_html")]
         public string Body { get; set; }
 
-        [JsonProperty("vendor")]
+        [JsonPropertyName("vendor")]
         public string Vendor { get; set; }
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
 
-        [JsonProperty("tags")]
+        [JsonPropertyName("tags")]
         public string Tags { get; set; }
 
-        [JsonProperty("variants")]
+        [JsonPropertyName("variants")]
         public IEnumerable<ProductVariantDto> Variants { get; set; }
 
-        [JsonProperty("image")]
+        [JsonPropertyName("image")]
         public ProductImageDto Image { get; set; }
+
+        [JsonPropertyName("product_type")]
+        public string ProductType { get; set; }
+
+        [JsonPropertyName("published_scope")]
+        public string PublishedScope { get; set; }
+
+        [JsonPropertyName("handle")]
+        public string Handle { get; set; }
     }
-
-
 }
