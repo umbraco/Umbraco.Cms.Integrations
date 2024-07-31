@@ -18,4 +18,13 @@
                     disabled="!vm.oauthSetup.isConnected">
         </umb-button>
     </div>
+    <div id="authCode" class="mt3">
+        <input id="inAuthCode" type="text" ng-model="vm.authCode" placeholder="Authorization code" no-dirty-check />
+        <umb-button action="vm.onAuthorize()"
+                    type="button"
+                    button-style="primary"
+                    state="init"
+                    label="Authorize">
+        </umb-button>
+    </div>
 </div>

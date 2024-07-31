@@ -19,11 +19,11 @@
     background-color: #eee;
 }
 
-    .hsFormsList a i {
-        position: absolute;
-        top: .4rem;
-        left: .25rem;
-    }
+.hsFormsList a i {
+    position: absolute;
+    top: .4rem;
+    left: .25rem;
+}
 
 .hsFormsList .formLine {
     display: block;
@@ -33,4 +33,11 @@
     padding-top: 4px;
 }
 
+#authCode {
+    display: none;
+}
 
+#inAuthCode {
+    width: 40%;
+    margin: 0 auto;
+}
