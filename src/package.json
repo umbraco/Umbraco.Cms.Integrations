@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "copy-and-watch": "^0.1.5"
+    "copy-and-watch": "^0.1.6"
   }
 }
