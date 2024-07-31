@@ -21,10 +21,17 @@
 
     vm.onConnectClick = function () {
 
-        window.addEventListener("message", getAccessToken, false);
+        window.addEventListener("message", handleOAuthSuccess, false);
         umbracoCmsIntegrationsCrmDynamicsResource.getAuthorizationUrl().then(function (response) {
             vm.authWindow = window.open(response,
                 "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
+
+            // check in 7 seconds for authorization window closed
+            setTimeout(() => {
+                if (vm.authWindow && !vm.authWindow.closed) {
+                    toggleAuthCodeSection(true);
+                }
+            }, 7000);
         });
     }
 
@@ -45,32 +52,49 @@
         });
     }
 
-    function getAccessToken(event) {
-        if (event.data.type === "dynamics:oauth:success") {
-            umbracoCmsIntegrationsCrmDynamicsResource.getAccessToken(event.data.code).then(function (response) {
-                if (response.startsWith("Error:")) {
+    vm.onAuthorize = function () {
+        getAccessToken(vm.authCode);
+    }
 
-                    // if directive runs from property editor, the notifications should be hidden, because they will not be displayed properly behind the overlay window.
-                    // if directive runs from data type, the notifications are displayed
-                    if (typeof $scope.connected === "undefined")
-                        notificationsService.error("Dynamics Configuration", response);
-                } else {
-                    vm.oauthConfig.isConnected = true;
-
-                    // if directive runs from property editor, the notifications should be hidden, because they will not be displayed properly behind the overlay window.
-                    // if directive runs from data type, the notifications are displayed
-                    if (typeof $scope.connected === "undefined")
-                        notificationsService.success("Dynamics Configuration", "OAuth connected.");
-
-                    umbracoCmsIntegrationsCrmDynamicsResource.getSystemUserFullName().then(function (response) {
-                        vm.oauthConfig.fullName = response;
-                    });
-
-                    if (typeof $scope.connected === "function")
-                        $scope.connected();
-                }
-            });
+    function getAccessToken(code) {
+        if (!code || code.length == 0) {
+            notificationsService.warning("Dynamics Configuration", "Please add a valid authentication code.");
+            return;
         }
+
+        umbracoCmsIntegrationsCrmDynamicsResource.getAccessToken(event.data.code).then(function (response) {
+            if (response.startsWith("Error:")) {
+
+                // if directive runs from property editor, the notifications should be hidden, because they will not be displayed properly behind the overlay window.
+                // if directive runs from data type, the notifications are displayed
+                if (typeof $scope.connected === "undefined")
+                    notificationsService.error("Dynamics Configuration", response);
+            } else {
+                vm.oauthConfig.isConnected = true;
+
+                // if directive runs from property editor, the notifications should be hidden, because they will not be displayed properly behind the overlay window.
+                // if directive runs from data type, the notifications are displayed
+                if (typeof $scope.connected === "undefined")
+                    notificationsService.success("Dynamics Configuration", "OAuth connected.");
+
+                umbracoCmsIntegrationsCrmDynamicsResource.getSystemUserFullName().then(function (response) {
+                    vm.oauthConfig.fullName = response;
+                });
+
+                if (typeof $scope.connected === "function")
+                    $scope.connected();
+            }
+        });
+    }
+
+    function handleOAuthSuccess(event) {
+        if (event.data.type === "dynamics:oauth:success") {
+            getAccessToken(event.data.code);
+        }
+    }
+
+    function toggleAuthCodeSection(isVisible) {
+        document.getElementById("authCode").style.display = isVisible ? "block" : "none";
     }
 }
 
