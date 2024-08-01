@@ -32,6 +32,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shopify", "Shopify", "{D04E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Commerce.Shopify", "Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj", "{1D1A9DC0-DB6B-4979-92B6-EAD1F992F1AB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dynamics", "Dynamics", "{8238AC1E-483C-45FB-B07E-CE0812869E4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Crm.Dynamics", "Umbraco.Cms.Integrations.Crm.Dynamics\Umbraco.Cms.Integrations.Crm.Dynamics.csproj", "{2D64385A-20BA-45F4-998C-37FFD70AB187}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +58,10 @@ Global
 		{1D1A9DC0-DB6B-4979-92B6-EAD1F992F1AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D1A9DC0-DB6B-4979-92B6-EAD1F992F1AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D1A9DC0-DB6B-4979-92B6-EAD1F992F1AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D64385A-20BA-45F4-998C-37FFD70AB187}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D64385A-20BA-45F4-998C-37FFD70AB187}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D64385A-20BA-45F4-998C-37FFD70AB187}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D64385A-20BA-45F4-998C-37FFD70AB187}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +73,8 @@ Global
 		{3ACC56EC-1A65-4A63-8DB4-428D8D2A6380} = {9D18B109-4E18-4EEC-B5BE-DAA27CADEAC0}
 		{D04EE8B1-1354-4B59-A224-646643A4E345} = {712BCE87-E004-479D-BB49-6BA287ED1B5D}
 		{1D1A9DC0-DB6B-4979-92B6-EAD1F992F1AB} = {D04EE8B1-1354-4B59-A224-646643A4E345}
+		{8238AC1E-483C-45FB-B07E-CE0812869E4C} = {8736740E-72E9-4249-803C-7254D5F08BD4}
+		{2D64385A-20BA-45F4-998C-37FFD70AB187} = {8238AC1E-483C-45FB-B07E-CE0812869E4C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FB51E08-A3C8-4DFF-B3CB-E99C2ED021D5}

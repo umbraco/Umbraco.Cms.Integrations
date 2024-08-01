@@ -3,6 +3,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
 {
     public class Constants
     {
+        public const string PropertyEditorAlias = "Dynamics.FormPicker";
+
         public const string DynamicsOAuthConfigurationTable = "dynamicsOAuthConfiguration";
 
         public const string MigrationPlanName = "DynamicsOAuthMigrationPlan";
@@ -13,13 +15,11 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
 
         public const int AccessTokenFieldSize = 4000;
 
-        public const string AppPluginFolderPath = "~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics";
+        public const string AppPluginFolderPath = "~/App_Plugins/Dynamics";
 
         public static class RenderingComponent
         {
             public const string DefaultViewPath = AppPluginFolderPath + "/Render/DynamicsForm.cshtml";
-
-            public const string DefaultV8ViewPath = AppPluginFolderPath + "/Render/DynamicsFormV8.cshtml";
         }
 
         public static class EmbedAttribute

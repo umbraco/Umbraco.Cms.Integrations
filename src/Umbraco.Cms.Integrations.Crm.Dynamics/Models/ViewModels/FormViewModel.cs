@@ -1,27 +1,34 @@
-﻿using Newtonsoft.Json;
-using System.Linq;
-
+﻿
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels
 {
     public class FormViewModel
     {
-        [JsonProperty("iframeEmbedded")]
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("iframeEmbedded")]
         public bool IframeEmbedded { get; set; }
 
-        [JsonProperty("formBlockId")]
+        [JsonPropertyName("embedCode")]
+        public string EmbedCode { get; set; }
+
+        [JsonPropertyName("formBlockId")]
         public string FormBlockId { get; set; }
 
-        [JsonProperty("containerId")]
+        [JsonPropertyName("containerId")]
         public string ContainerId { get; set; }
 
-        [JsonProperty("containerClass")]
+        [JsonPropertyName("containerClass")]
         public string ContainerClass { get; set; }
 
-        [JsonProperty("websiteId")]
+        [JsonPropertyName("websiteId")]
         public string WebsiteId { get; set; }
 
-        [JsonProperty("hostname")]
+        [JsonPropertyName("hostname")]
         public string Hostname { get; set; }
+
+        [JsonPropertyName("module")]
+        public string ModuleStr { get; set; }
 
         public DynamicsModule Module { get; set; }
 

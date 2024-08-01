@@ -1,31 +1,17 @@
-﻿#if NETCOREAPP
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-
-using Umbraco.Cms.Web.BackOffice.Controllers;
-using Umbraco.Cms.Web.Common.Attributes;
-#else
-using System.Configuration;
-using System.Web.Http;
-
-using Umbraco.Web.Mvc;
-using Umbraco.Web.WebApi;
-#endif
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
+using Umbraco.Cms.Web.Common.Attributes;
+using Umbraco.Cms.Web.Common.Controllers;
 using static Umbraco.Cms.Integrations.Crm.Dynamics.DynamicsComposer;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
 {
     [PluginController("UmbracoCmsIntegrationsCrmDynamics")]
-    public class FormsController : UmbracoAuthorizedApiController
+    public class FormsController : UmbracoApiController
     {
         // Using a static HttpClient (see: https://www.aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/).
         private readonly static HttpClient s_client = new HttpClient();
@@ -41,24 +27,13 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Controllers
 
         private readonly DynamicsConfigurationService _dynamicsConfigurationService;
 
-#if NETCOREAPP
         public FormsController(IOptions<DynamicsSettings> options,
             DynamicsService dynamicsService, 
             DynamicsConfigurationService dynamicsConfigurationService,
             AuthorizationImplementationFactory authorizationImplementationFactory)
-#else
-        public FormsController(
-            DynamicsService dynamicsService,
-            DynamicsConfigurationService dynamicsConfigurationService,
-            AuthorizationImplementationFactory authorizationImplementationFactory)
-#endif
         {
 
-#if NETCOREAPP
             _settings = options.Value;
-#else
-            _settings = new DynamicsSettings(ConfigurationManager.AppSettings);
-#endif
 
             _authorizationService = authorizationImplementationFactory(_settings.UseUmbracoAuthorization);
 

@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
+﻿namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 {
     public interface IDynamicsAuthorizationService
     {

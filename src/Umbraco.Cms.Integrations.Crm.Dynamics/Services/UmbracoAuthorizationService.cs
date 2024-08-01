@@ -1,17 +1,6 @@
-﻿using System.Threading.Tasks;
-
+﻿using Microsoft.Extensions.Options;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
-using System.Collections.Generic;
-using System.Net.Http;
-using System;
-using Newtonsoft.Json;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
-
-#if NETCOREAPP
-using Microsoft.Extensions.Options;
-#else
-using System.Configuration;
-#endif
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 {
@@ -31,20 +20,12 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
         protected const string OAuthScopes = "{0}.default";
 
-#if NETCOREAPP
         public UmbracoAuthorizationService(IOptions<DynamicsSettings> options, 
             DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService) 
             : base(dynamicsService, dynamicsConfigurationService)
         {
             _settings = options.Value;
         }
-#else
-        public UmbracoAuthorizationService(DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService)
-            : base(dynamicsService, dynamicsConfigurationService)
-        {
-            _settings = new DynamicsSettings(ConfigurationManager.AppSettings);
-        }
-#endif
 
         public string GetAuthorizationUrl()
         {
@@ -78,7 +59,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
+                var tokenDto = JsonSerializer.Deserialize<TokenDto>(result);
 
                 var identity = await DynamicsService.GetIdentity(tokenDto.AccessToken);
 
@@ -91,7 +72,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             }
 
             var errorResult = await response.Content.ReadAsStringAsync();
-            var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
+            var errorDto = JsonSerializer.Deserialize<ErrorDto>(errorResult);
 
             return "Error: " + errorDto.ErrorDescription;
         }

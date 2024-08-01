@@ -1,23 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Net.Http;
+﻿using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
-
-
-#if NETCOREAPP
-using Microsoft.Extensions.Options;
-#else
-#endif
+using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 {
@@ -33,21 +18,12 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
         // Access to the client within the class is via ClientFactory(), allowing us to mock the responses in tests.
         public static Func<HttpClient> ClientFactory = () => s_client;
 
-#if NETCOREAPP
         public DynamicsService(IOptions<DynamicsSettings> options, DynamicsConfigurationService dynamicsConfigurationService)
         {
             _settings = options.Value;
 
             _dynamicsConfigurationService = dynamicsConfigurationService;
         }
-#else
-        public DynamicsService(DynamicsConfigurationService dynamicsConfigurationService)
-        {
-            _settings = new DynamicsSettings(ConfigurationManager.AppSettings);
-
-            _dynamicsConfigurationService = dynamicsConfigurationService;
-        }
-#endif
 
         public async Task<IdentityDto> GetIdentity(string accessToken)
         {
@@ -68,10 +44,13 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             var result = await response.Content.ReadAsStringAsync();
 
-            var systemUser = JsonConvert.DeserializeObject<ResponseDto<IdentityDto>>(result).Value.FirstOrDefault(p => p.UserId == user.UserId.ToString());
-            systemUser.IsAuthorized = true;
+            var systemUser = JsonSerializer.Deserialize<ResponseDto<IdentityDto>>(result)?.Value.FirstOrDefault(p => p.UserId == user.UserId.ToString());
+            if (systemUser != null)
+            {
+                systemUser.IsAuthorized = true;
+            }
 
-            return systemUser;
+            return systemUser ?? new IdentityDto { IsAuthorized = false };
         }
 
         public async Task<string> GetEmbedCode(string formId)
@@ -92,9 +71,11 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             var result = await response.Content.ReadAsStringAsync();
 
-            var embedCode = JsonConvert.DeserializeObject<ResponseDto<OutboundFormDto>>(result);
+            var embedCode = JsonSerializer.Deserialize<ResponseDto<OutboundFormDto>>(result);
 
-            return embedCode.Value.FirstOrDefault() != null ? embedCode.Value.First().EmbedCode : string.Empty;
+            return embedCode != null 
+                 ? embedCode.Value.FirstOrDefault() != null ? embedCode.Value.First().EmbedCode : string.Empty
+                 : string.Empty;
         }
 
         private async Task<IdentityDto> GetUser(string accessToken)
@@ -113,14 +94,14 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             if (!response.IsSuccessStatusCode)
             {
                 return !string.IsNullOrEmpty(result)
-                    ? JsonConvert.DeserializeObject<IdentityDto>(result)
+                    ? JsonSerializer.Deserialize<IdentityDto>(result)
                     : new IdentityDto { IsAuthorized = false };
             }
 
             return new IdentityDto
             {
                 IsAuthorized = true,
-                UserId = JObject.Parse(result)["UserId"].ToString()
+                UserId = JsonSerializer.Deserialize<IdentityDto>(result).UserId
             };
         }
 
@@ -188,7 +169,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             var result = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<ResponseDto<T>>(result);
+            return JsonSerializer.Deserialize<ResponseDto<T>>(result);
         }
     }
 }

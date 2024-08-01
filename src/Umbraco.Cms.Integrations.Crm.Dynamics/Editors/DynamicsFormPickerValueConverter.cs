@@ -1,22 +1,14 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Helpers;
+﻿using Umbraco.Cms.Integrations.Crm.Dynamics.Helpers;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
 
 
 
-#if NETCOREAPP
 using Microsoft.Extensions.Options;
 
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Models.PublishedContent;
-#else
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.PropertyEditors;
-#endif
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
 {
@@ -39,21 +31,15 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
         {
             if (source == null) return null;
 
-            var jObject = JObject.Parse(source.ToString());
+            var vm = JsonSerializer.Deserialize<FormViewModel>(source.ToString());
 
-            var vm = new FormViewModel
-            {
-                IframeEmbedded = (bool)jObject["iframeEmbedded"]
-            };
-
-            var module = (DynamicsModule)Enum.Parse(typeof(DynamicsModule), jObject["module"].ToString());
+            var module = (DynamicsModule)Enum.Parse(typeof(DynamicsModule), vm.ModuleStr);
 
             vm.Module = module;
 
             if (module.HasFlag(DynamicsModule.Outbound))
             {
-
-                var embedCode = jObject["embedCode"].ToString();
+                var embedCode = vm.EmbedCode;
 
                 vm.FormBlockId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataFormBlockId);
                 vm.ContainerId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.ContainerId);
@@ -63,7 +49,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
             }
             else
             {
-                var form = _dynamicsService.GetRealTimeForm(jObject["id"].ToString()).ConfigureAwait(false).GetAwaiter().GetResult();
+                var form = _dynamicsService.GetRealTimeForm(vm.Id).ConfigureAwait(false).GetAwaiter().GetResult();
                 if (form != null)
                 {
                     vm.Html = form.StandaloneHtml;
