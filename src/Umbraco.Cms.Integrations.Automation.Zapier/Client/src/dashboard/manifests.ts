@@ -8,7 +8,7 @@ const dashboards: Array<ManifestDashboard> = [
 		element: () => import('./zapier-management-dashboard.element'),
 		weight: 20,
 		meta: {
-			label: 'Zapier Management Dashboard',
+			label: 'Zapier Integrations',
 			pathname: 'zapier-management',
 		},
 		conditions: [
