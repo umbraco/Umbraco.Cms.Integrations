@@ -18,8 +18,10 @@ export class ZapierRepository extends UmbControllerBase {
         return { data };
     }
 
-    async getContentByType(){
-        const { data, error } = await tryExecuteAndNotify(this, ZapierService.getContentByType());
+    async getContentByType(alias: string) {
+        const { data, error } = await tryExecuteAndNotify(this, ZapierService.getContentByContentType({
+            alias: alias
+        }));
 
         if (error || !data) {
             return { error };
@@ -28,7 +30,7 @@ export class ZapierRepository extends UmbControllerBase {
         return { data };
     }
 
-    async getContentTypes(){
+    async getContentTypes() {
         const { data, error } = await tryExecuteAndNotify(this, ZapierService.getContentTypes());
 
         if (error || !data) {
@@ -38,8 +40,8 @@ export class ZapierRepository extends UmbControllerBase {
         return { data };
     }
 
-    async isFormsExtensionInstalled(){
-        const { data, error } = await tryExecuteAndNotify(this, ZapierService.isFormsExtensionInstalled());
+    async checkFormsExtensionInstalled() {
+        const { data, error } = await tryExecuteAndNotify(this, ZapierService.checkFormsExtensionInstalled());
 
         if (error || !data) {
             return { error };
@@ -58,8 +60,8 @@ export class ZapierRepository extends UmbControllerBase {
         return { data };
     }
 
-    async validateUser(){
-        const { data, error } = await tryExecuteAndNotify(this, ZapierService.validateUser());
+    async validateUser() {
+        const { data, error } = await tryExecuteAndNotify(this, ZapierService.validate());
 
         if (error || !data) {
             return { error };

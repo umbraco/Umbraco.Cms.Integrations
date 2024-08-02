@@ -737,19 +737,17 @@ export type UserModel = {
     apiKey: string;
 };
 
-export type GetAllResponse = Array<(SubscriptionDtoModel)>;
+export type CheckFormsExtensionInstalledResponse = boolean;
 
-export type GetContentByTypeData = {
-    alias?: string;
+export type GetContentByContentTypeData = {
+    alias: string;
 };
 
-export type GetContentByTypeResponse = Array<{
+export type GetContentByContentTypeResponse = Array<{
     [key: string]: (string);
 }>;
 
 export type GetContentTypesResponse = Array<(ContentTypeDtoModel)>;
-
-export type IsFormsExtensionInstalledResponse = boolean;
 
 export type UpdatePreferencesData = {
     requestBody?: SubscriptionDtoModel;
@@ -757,30 +755,28 @@ export type UpdatePreferencesData = {
 
 export type UpdatePreferencesResponse = boolean;
 
-export type ValidateUserData = {
+export type GetAllResponse = Array<(SubscriptionDtoModel)>;
+
+export type ValidateData = {
     requestBody?: UserModel;
 };
 
-export type ValidateUserResponse = Task_1;
+export type ValidateResponse = Task_1;
 
 export type $OpenApiTs = {
-    '/umbraco/zapier/management/api/v1/all': {
+    '/umbraco/zapier/management/api/v1/check-form-extension': {
         get: {
             res: {
                 /**
                  * OK
                  */
-                200: Array<(SubscriptionDtoModel)>;
-                /**
-                 * The resource is protected and requires an authentication token
-                 */
-                401: unknown;
+                200: boolean;
             };
         };
     };
-    '/umbraco/zapier/management/api/v1/content-by-type': {
+    '/umbraco/zapier/management/api/v1/content-type/{alias}/content': {
         get: {
-            req: GetContentByTypeData;
+            req: GetContentByContentTypeData;
             res: {
                 /**
                  * OK
@@ -789,13 +785,9 @@ export type $OpenApiTs = {
                     [key: string]: (string);
                 }>;
                 /**
-                 * The resource is protected and requires an authentication token
+                 * Unauthorized
                  */
                 401: unknown;
-                /**
-                 * Not Found
-                 */
-                404: unknown;
             };
         };
     };
@@ -807,31 +799,13 @@ export type $OpenApiTs = {
                  */
                 200: Array<(ContentTypeDtoModel)>;
                 /**
-                 * The resource is protected and requires an authentication token
-                 */
-                401: unknown;
-                /**
-                 * Not Found
-                 */
-                404: unknown;
-            };
-        };
-    };
-    '/umbraco/zapier/management/api/v1/form-extension-installed': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: boolean;
-                /**
-                 * The resource is protected and requires an authentication token
+                 * Unauthorized
                  */
                 401: unknown;
             };
         };
     };
-    '/umbraco/zapier/management/api/v1/update-preferences': {
+    '/umbraco/zapier/management/api/v1/subscription': {
         post: {
             req: UpdatePreferencesData;
             res: {
@@ -840,28 +814,30 @@ export type $OpenApiTs = {
                  */
                 200: boolean;
                 /**
-                 * The resource is protected and requires an authentication token
+                 * Unauthorized
                  */
                 401: unknown;
+            };
+        };
+    };
+    '/umbraco/zapier/management/api/v1/subscription-hooks': {
+        get: {
+            res: {
                 /**
-                 * Not Found
+                 * OK
                  */
-                404: string;
+                200: Array<(SubscriptionDtoModel)>;
             };
         };
     };
     '/umbraco/zapier/management/api/v1/validate-user': {
         post: {
-            req: ValidateUserData;
+            req: ValidateData;
             res: {
                 /**
                  * OK
                  */
                 200: Task_1;
-                /**
-                 * The resource is protected and requires an authentication token
-                 */
-                401: unknown;
             };
         };
     };

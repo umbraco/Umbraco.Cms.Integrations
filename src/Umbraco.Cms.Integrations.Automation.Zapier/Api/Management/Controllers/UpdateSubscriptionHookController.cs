@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
-using Umbraco.Cms.Integrations.Automation.Zapier.Services;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
-using Asp.Versioning;
-using Microsoft.AspNetCore.Http;
+using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
+using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
 {
@@ -14,11 +13,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
     /// </summary>
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
-    public class SubscriptionController : ZapierControllerBase
+    public class UpdateSubscriptionHookController : ZapierControllerBase
     {
         private readonly ZapierSubscriptionHookService _zapierSubscriptionHookService;
 
-        public SubscriptionController(IOptions<ZapierSettings> options,
+        public UpdateSubscriptionHookController(IOptions<ZapierSettings> options,
             ZapierSubscriptionHookService zapierSubscriptionHookService,
             IUserValidationService userValidationService)
             : base(options, userValidationService)
@@ -26,13 +25,13 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
             _zapierSubscriptionHookService = zapierSubscriptionHookService;
         }
 
-        [HttpPost("update-preferences")]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpPost("subscription")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public IActionResult UpdatePreferences([FromBody] SubscriptionDto dto)
         {
             if (!IsAccessValid() || dto == null) 
-                return NotFound();
+                return Unauthorized();
 
             var result = dto.SubscribeHook
                 ? _zapierSubscriptionHookService.Add(dto.EntityId, dto.Type, dto.HookUrl)

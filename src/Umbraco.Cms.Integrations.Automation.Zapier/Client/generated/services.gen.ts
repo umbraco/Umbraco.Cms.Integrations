@@ -3,20 +3,17 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { GetAllResponse, GetContentByTypeData, GetContentByTypeResponse, GetContentTypesResponse, IsFormsExtensionInstalledResponse, UpdatePreferencesData, UpdatePreferencesResponse, ValidateUserData, ValidateUserResponse } from './types.gen';
+import type { CheckFormsExtensionInstalledResponse, GetContentByContentTypeData, GetContentByContentTypeResponse, GetContentTypesResponse, UpdatePreferencesData, UpdatePreferencesResponse, GetAllResponse, ValidateData, ValidateResponse } from './types.gen';
 
 export class ZapierService {
     /**
-     * @returns unknown OK
+     * @returns boolean OK
      * @throws ApiError
      */
-    public static getAll(): CancelablePromise<GetAllResponse> {
+    public static checkFormsExtensionInstalled(): CancelablePromise<CheckFormsExtensionInstalledResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/umbraco/zapier/management/api/v1/all',
-            errors: {
-                401: 'The resource is protected and requires an authentication token'
-            }
+            url: '/umbraco/zapier/management/api/v1/check-form-extension'
         });
     }
     
@@ -26,16 +23,15 @@ export class ZapierService {
      * @returns string OK
      * @throws ApiError
      */
-    public static getContentByType(data: GetContentByTypeData = {}): CancelablePromise<GetContentByTypeResponse> {
+    public static getContentByContentType(data: GetContentByContentTypeData): CancelablePromise<GetContentByContentTypeResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/umbraco/zapier/management/api/v1/content-by-type',
-            query: {
+            url: '/umbraco/zapier/management/api/v1/content-type/{alias}/content',
+            path: {
                 alias: data.alias
             },
             errors: {
-                401: 'The resource is protected and requires an authentication token',
-                404: 'Not Found'
+                401: 'Unauthorized'
             }
         });
     }
@@ -49,22 +45,7 @@ export class ZapierService {
             method: 'GET',
             url: '/umbraco/zapier/management/api/v1/content-types',
             errors: {
-                401: 'The resource is protected and requires an authentication token',
-                404: 'Not Found'
-            }
-        });
-    }
-    
-    /**
-     * @returns boolean OK
-     * @throws ApiError
-     */
-    public static isFormsExtensionInstalled(): CancelablePromise<IsFormsExtensionInstalledResponse> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/umbraco/zapier/management/api/v1/form-extension-installed',
-            errors: {
-                401: 'The resource is protected and requires an authentication token'
+                401: 'Unauthorized'
             }
         });
     }
@@ -78,13 +59,23 @@ export class ZapierService {
     public static updatePreferences(data: UpdatePreferencesData = {}): CancelablePromise<UpdatePreferencesResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/umbraco/zapier/management/api/v1/update-preferences',
+            url: '/umbraco/zapier/management/api/v1/subscription',
             body: data.requestBody,
             mediaType: 'application/json',
             errors: {
-                401: 'The resource is protected and requires an authentication token',
-                404: 'Not Found'
+                401: 'Unauthorized'
             }
+        });
+    }
+    
+    /**
+     * @returns unknown OK
+     * @throws ApiError
+     */
+    public static getAll(): CancelablePromise<GetAllResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/umbraco/zapier/management/api/v1/subscription-hooks'
         });
     }
     
@@ -94,15 +85,12 @@ export class ZapierService {
      * @returns unknown OK
      * @throws ApiError
      */
-    public static validateUser(data: ValidateUserData = {}): CancelablePromise<ValidateUserResponse> {
+    public static validate(data: ValidateData = {}): CancelablePromise<ValidateResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/umbraco/zapier/management/api/v1/validate-user',
             body: data.requestBody,
-            mediaType: 'application/json',
-            errors: {
-                401: 'The resource is protected and requires an authentication token'
-            }
+            mediaType: 'application/json'
         });
     }
     

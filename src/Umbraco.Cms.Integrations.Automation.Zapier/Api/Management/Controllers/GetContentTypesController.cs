@@ -1,14 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
-using Umbraco.Cms.Integrations.Automation.Zapier.Services;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
-using Asp.Versioning;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters.Xml;
-using Microsoft.AspNetCore.Http;
+using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
+using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
 {
@@ -17,10 +14,10 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
     /// </summary>
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
-    public class ContentController : ZapierControllerBase
+    public class GetContentTypesController : ZapierControllerBase
     {
         private readonly IContentTypeService _contentTypeService;
-        public ContentController(IOptions<ZapierSettings> options, IContentTypeService contentTypeService, IUserValidationService userValidationService)
+        public GetContentTypesController(IOptions<ZapierSettings> options, IContentTypeService contentTypeService, IUserValidationService userValidationService)
             : base(options, userValidationService)
         {
             _contentTypeService = contentTypeService;
@@ -28,11 +25,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
 
         [HttpGet("content-types")]
         [ProducesResponseType(typeof(IEnumerable<ContentTypeDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetContentTypes()
         {
             if (!IsAccessValid()) 
-                return NotFound();
+                return Unauthorized();
 
             var contentTypes = _contentTypeService.GetAll();
             var mapToDto = contentTypes

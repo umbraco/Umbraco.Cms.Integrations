@@ -21,16 +21,16 @@ export class ZapierContext extends UmbControllerBase{
         return await this.#repository.getAll();
     }
 
-    async getContentByType(){
-        return await this.#repository.getContentByType();
+    async getContentByType(alias: string){
+        return await this.#repository.getContentByType(alias);
     }
 
     async getContentTypes(){
         return await this.#repository.getContentTypes();
     }
 
-    async isFormsExtensionInstalled(){
-        return await this.#repository.isFormsExtensionInstalled();
+    async checkFormsExtensionInstalled() {
+        return await this.#repository.checkFormsExtensionInstalled();
     }
 
     async updatePreferences(){

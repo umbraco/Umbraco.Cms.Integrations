@@ -35,7 +35,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
             builder.Services.AddScoped<IZapierContentFactory, ZapierContentFactory>();
 
-            // Generate Swagger documentation for Shopify API
+            // Generate Swagger documentation for Zapier API
             builder.Services.Configure<SwaggerGenOptions>(options =>
             {
                 options.SwaggerDoc(
@@ -46,7 +46,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
                         Version = "Latest",
                         Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Zapier automation and configuration."
                     });
-                options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
+                // remove this as Swagger throws an ArgumentException: An item with the same key has already been added. Key: 401
+                //options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
                 options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
             });
         }

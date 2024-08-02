@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Umbraco.Cms.Integrations.Automation.Zapier.Services;
-using Microsoft.Extensions.Options;
-using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Web.Common;
-using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
-using Asp.Versioning;
-using Microsoft.AspNetCore.Mvc;
-using Umbraco.Extensions;
+﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
+using Umbraco.Cms.Integrations.Automation.Zapier.Services;
+using Umbraco.Cms.Web.Common;
+using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
 {
@@ -20,7 +17,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
     /// </summary>
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
-    public class PollingController : ZapierControllerBase
+    public class GetContentByTypeController : ZapierControllerBase
     {
         private readonly IContentTypeService _contentTypeService;
 
@@ -28,7 +25,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
 
         private readonly UmbracoHelper _umbracoHelper;
 
-        public PollingController(
+        public GetContentByTypeController(
             IOptions<ZapierSettings> options,
             IContentService contentService,
             IContentTypeService contentTypeService,
@@ -42,13 +39,13 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
             _umbracoHelper = umbracoHelper;
         }
 
-        [HttpGet("content-by-type")]
+        [HttpGet("content-type/{alias}/content")]
         [ProducesResponseType(typeof(List<Dictionary<string, string>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult GetContentByType(string alias)
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public IActionResult GetContentByContentType(string alias)
         {
             if (!IsAccessValid())
-                return NotFound();
+                return Unauthorized();
 
             var contentType = _contentTypeService.Get(alias);
             if (contentType == null)
@@ -56,7 +53,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
 
             var contentItems = _umbracoHelper.ContentAtRoot().DescendantsOrSelfOfType(alias)
                 .OrderByDescending(p => p.UpdateDate);
-            var contentTypeDictionary = new List<Dictionary<string, string>>{
+            var contentTypeDictionary = new List<Dictionary<string, string>> 
+            {
                 _zapierContentService.GetContentTypeDictionary(contentType, contentItems.FirstOrDefault())
             };
 

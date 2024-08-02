@@ -1,28 +1,24 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Umbraco.Cms.Api.Common.Attributes;
-using Umbraco.Cms.Web.Common.Authorization;
-using Umbraco.Cms.Web.Common.Routing;
-using Umbraco.Cms.Integrations.Automation.Zapier.Models;
-using Umbraco.Cms.Integrations.Automation.Zapier.Services;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Umbraco.Cms.Api.Common.Attributes;
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
+using Umbraco.Cms.Integrations.Automation.Zapier.Services;
+using Umbraco.Cms.Web.Common.Routing;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
 {
     [ApiController]
     [BackOfficeRoute($"{Constants.ManagementApi.RootPath}/v{{version:apiVersion}}")]
-    [Authorize(Policy = AuthorizationPolicies.BackOfficeAccess)]
     [MapToApi(Constants.ManagementApi.ApiName)]
     public class ZapierControllerBase : Controller
     {
-        private readonly ZapierSettings Options;
+        private readonly ZapierSettings ZapierSettings;
 
         protected IUserValidationService _userValidationService;
 
         public ZapierControllerBase(IOptions<ZapierSettings> options, IUserValidationService userValidationService)
         {
-            Options = options.Value;
+            ZapierSettings = options.Value;
 
             _userValidationService = userValidationService;
         }

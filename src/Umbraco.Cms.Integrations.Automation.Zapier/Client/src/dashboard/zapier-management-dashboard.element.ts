@@ -92,8 +92,8 @@ export class ZapierManagementDashboardElement extends UmbLitElement {
         this.#createTableItems(lst);
     }
 
-    async checkFormsExtension(){
-        const data = await this.#zapierContext?.isFormsExtensionInstalled();
+    async checkFormsExtension() {
+        const data = await this.#zapierContext?.checkFormsExtensionInstalled();
         if (!data) return;
 
         this.#isFormsExtensionInstalled = data.data;

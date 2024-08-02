@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Cms.Integrations.Automation.Zapier.Migrations;
 using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
-using Microsoft.Extensions.Logging;
-using Umbraco.Cms.Core.Scoping;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 {
