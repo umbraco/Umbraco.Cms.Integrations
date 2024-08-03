@@ -1,21 +1,17 @@
-﻿using System.Linq;
-
-using Newtonsoft.Json;
-
-namespace Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos
+﻿namespace Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos
 {
     public class SubscriptionDto
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public int Id { get; set; }
 
-        [JsonProperty("entityId")]
+        [JsonPropertyName("entityId")]
         public string EntityId { get; set; }
 
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public int Type { get; set; }
 
-        [JsonProperty("typeName")]
+        [JsonPropertyName("typeName")]
         public string TypeName
         {
             get
@@ -29,10 +25,10 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos
             }
         }
         
-        [JsonProperty("hookUrl")]
+        [JsonPropertyName("hookUrl")]
         public string HookUrl { get; set; }
 
-        [JsonProperty("subscribeHook")]
+        [JsonPropertyName("subscribeHook")]
         public bool SubscribeHook { get; set; }
     }
 }

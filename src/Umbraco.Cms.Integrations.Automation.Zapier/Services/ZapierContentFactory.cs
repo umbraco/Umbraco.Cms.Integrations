@@ -8,7 +8,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
         {
             switch (editorAlias)
             {
-                case Core.Constants.PropertyEditors.Aliases.MediaPicker:
                 case Core.Constants.PropertyEditors.Aliases.MediaPicker3:
                     return new MediaParser();
                 case Core.Constants.PropertyEditors.Aliases.DropDownListFlexible:

@@ -1,24 +1,21 @@
-﻿using Umbraco.Cms.Integrations.Automation.Zapier.Services;
+﻿global using System.Text.Json;
+global using System.Text.Json.Serialization;
 
-#if NETCOREAPP
 using Microsoft.Extensions.DependencyInjection;
-
-using Umbraco.Cms.Core.DependencyInjection;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
+using Umbraco.Cms.Integrations.Automation.Zapier.Components;
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
 using Umbraco.Cms.Integrations.Automation.Zapier.Migrations;
-
-#else
-using Umbraco.Core;
-using Umbraco.Core.Composing;
-#endif
+using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier
 {
     public class ZapierComposer : IComposer
     {
-#if NETCOREAPP
         public void Compose(IUmbracoBuilder builder)
         {
             builder.Services
@@ -30,6 +27,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
             builder
                 .AddNotificationHandler<UmbracoApplicationStartingNotification, UmbracoAppStartingHandler>();
+            builder.AddNotificationHandler<ContentPublishedNotification, NewContentPublishedNotification>();
+
 
             builder.Services.AddSingleton<ZapierSubscriptionHookService>();
 
@@ -40,21 +39,22 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
             builder.Services.AddScoped<IZapierContentService, ZapierContentService>();
 
             builder.Services.AddScoped<IZapierContentFactory, ZapierContentFactory>();
+
+            // Generate Swagger documentation for Zapier API
+            builder.Services.Configure<SwaggerGenOptions>(options =>
+            {
+                options.SwaggerDoc(
+                    Constants.ManagementApi.ApiName,
+                    new OpenApiInfo
+                    {
+                        Title = Constants.ManagementApi.ApiTitle,
+                        Version = "Latest",
+                        Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Zapier automation and configuration."
+                    });
+                // remove this as Swagger throws an ArgumentException: An item with the same key has already been added. Key: 401
+                //options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
+                options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
+            });
         }
-#else
-        public void Compose(Composition composition)
-        {
-            composition.Register<ZapierSubscriptionHookService>(Lifetime.Singleton);
-
-            composition.Register<ZapierService>(Lifetime.Singleton);
-
-            composition.Register<IUserValidationService, UserValidationService>(Lifetime.Scope);
-
-            composition.Register<IZapierContentService, ZapierContentService>(Lifetime.Transient);
-
-            composition.Register<IZapierContentFactory, ZapierContentFactory>(Lifetime.Transient);
-        }
-#endif
-
     }
 }

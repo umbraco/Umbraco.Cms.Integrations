@@ -6,7 +6,9 @@ src/Testsite/App_Plugins/Our.Umbraco.DashIt
 src/Testsite/umbraco
 src/Testsite/Views
 src/Testsite/wwwroot
+src/Umbraco.Cms.Integrations.Automation.Zapier/wwwroot
 src/Umbraco.Cms.Integrations.Commerce.Shopify/wwwroot
+src/Umbraco.Cms.Integrations.Crm.Hubspot/wwwroot
 
 
 # User-specific files
