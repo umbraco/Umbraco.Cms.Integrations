@@ -814,6 +814,10 @@ export type $OpenApiTs = {
                  */
                 200: boolean;
                 /**
+                 * Bad Request
+                 */
+                400: string;
+                /**
                  * Unauthorized
                  */
                 401: unknown;

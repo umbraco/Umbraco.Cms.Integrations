@@ -63,6 +63,7 @@ export class ZapierService {
             body: data.requestBody,
             mediaType: 'application/json',
             errors: {
+                400: 'Bad Request',
                 401: 'Unauthorized'
             }
         });

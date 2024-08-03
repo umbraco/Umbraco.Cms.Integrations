@@ -1,9 +1,7 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 {
@@ -11,15 +9,14 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
     {
         private readonly IUserService _userService;
 
-        private readonly ZapierSettings _zapierSettings;
+        private readonly AppSettings _zapierSettings;
 
         private readonly ZapierFormsSettings _zapierFormsSettings;
 
-#if NETCOREAPP
         private readonly IBackOfficeUserManager _backOfficeUserManager;
 
         public UserValidationService(
-            IOptions<ZapierSettings> options, 
+            IOptions<AppSettings> options, 
             IOptions<ZapierFormsSettings> zapierFormsSettings,
             IBackOfficeUserManager backOfficeUserManager)
         {
@@ -29,16 +26,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 
             _zapierFormsSettings = zapierFormsSettings.Value;
         }
-#else
-        public UserValidationService(IUserService userService)
-        {
-            _userService = userService;
-
-            _zapierSettings = new ZapierSettings(ConfigurationManager.AppSettings);
-
-            _zapierFormsSettings = new ZapierFormsSettings(ConfigurationManager.AppSettings);
-        }
-#endif
 
         /// <summary>
         /// Allow access by validating API Key. If API key is missing, validate user credentials.
@@ -76,12 +63,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
         /// <returns></returns>
         private async Task<bool> ValidateByCredentials(string username, string password)
         {
-#if NETCOREAPP
             var isUserValid =
                 await _backOfficeUserManager.ValidateCredentialsAsync(username, password);
-#else
-            var isUserValid = Web.Composing.Current.UmbracoContext.Security.ValidateBackOfficeCredentials(username, password);
-#endif
 
             if (!isUserValid) return false;
 

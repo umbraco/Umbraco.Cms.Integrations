@@ -27,11 +27,14 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
 
         [HttpPost("subscription")]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         public IActionResult UpdatePreferences([FromBody] SubscriptionDto dto)
         {
-            if (!IsAccessValid() || dto == null) 
+            if (!IsAccessValid())
                 return Unauthorized();
+
+            if (dto == null) return BadRequest();
 
             var result = dto.SubscribeHook
                 ? _zapierSubscriptionHookService.Add(dto.EntityId, dto.Type, dto.HookUrl)

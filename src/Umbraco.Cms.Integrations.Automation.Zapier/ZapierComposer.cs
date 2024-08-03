@@ -1,13 +1,16 @@
-﻿using Umbraco.Cms.Integrations.Automation.Zapier.Services;
+﻿global using System.Text.Json;
+global using System.Text.Json.Serialization;
+
 using Microsoft.Extensions.DependencyInjection;
-using Umbraco.Cms.Core.DependencyInjection;
-using Umbraco.Cms.Core.Composing;
-using Umbraco.Cms.Core.Notifications;
-using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
-using Umbraco.Cms.Integrations.Automation.Zapier.Migrations;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Umbraco.Cms.Integrations.Automation.Zapier.Api.Configuration;
+using Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Core.Notifications;
+using Umbraco.Cms.Integrations.Automation.Zapier.Components;
+using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
+using Umbraco.Cms.Integrations.Automation.Zapier.Migrations;
+using Umbraco.Cms.Integrations.Automation.Zapier.Services;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier
 {
@@ -24,6 +27,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
             builder
                 .AddNotificationHandler<UmbracoApplicationStartingNotification, UmbracoAppStartingHandler>();
+            builder.AddNotificationHandler<ContentPublishedNotification, NewContentPublishedNotification>();
+
 
             builder.Services.AddSingleton<ZapierSubscriptionHookService>();
 

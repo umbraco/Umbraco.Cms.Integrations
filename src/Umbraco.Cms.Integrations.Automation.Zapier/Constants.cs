@@ -9,14 +9,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
         public const string TargetStateName = "zapiersubscriptionhook-db";
 
-        public const string UmbracoCmsIntegrationsAutomationZapierUserGroupAlias = "Umbraco.Cms.Integrations.Automation.Zapier.UserGroupAlias";
-
-        public const string UmbracoCmsIntegrationsAutomationZapierApiKey = "Umbraco.Cms.Integrations.Automation.Zapier.ApiKey";
-
-        public const string UmbracoFormsIntegrationsAutomationZapierUserGroupAlias = "Umbraco.Forms.Integrations.Automation.Zapier.UserGroupAlias";
-
-        public const string UmbracoFormsIntegrationsAutomationZapierApiKey = "Umbraco.Forms.Integrations.Automation.Zapier.ApiKey";
-
         public static class ManagementApi
         {
             public const string RootPath = "zapier/management/api";
