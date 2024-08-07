@@ -17,9 +17,15 @@
 
     /* Linting */
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noFallthroughCasesInSwitch": true,
+
+    "paths": {
+      "@umbraco-integrations/dynamics/generated": [
+        "./generated/index.js"
+      ]
+    }
   },
-  "include": ["src"]
+  "include": ["src/**/*.ts"]
 }

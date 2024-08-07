@@ -17,7 +17,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
         {
         }
 
-        [HttpDelete]
+        [HttpDelete("revoke-access-token")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public IActionResult RevokeAccessToken() => Ok(DynamicsConfigurationService.Delete());
     }

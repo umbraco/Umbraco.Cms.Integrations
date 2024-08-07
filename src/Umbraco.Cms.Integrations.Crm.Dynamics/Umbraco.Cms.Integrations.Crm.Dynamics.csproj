@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
 	  <TargetFramework>net8.0</TargetFramework>
@@ -34,13 +34,13 @@
 	  <Folder Include="Client\" />
 	</ItemGroup>
 
-	<!-- Build client assets using NPM -->
-	<!--<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
+	<!-- Build client assets using NPM  -->
+	<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
 	<PropertyGroup>
-		--><!-- Use this to (temporarily) disable building client assets, e.g. to start the project and generate updated API models --><!--
+		<!-- Use this to (temporarily) disable building client assets, e.g. to start the project and generate updated API models  -->
 		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
 	</PropertyGroup>
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
 		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '$(Configuration)' !== 'Release' ? '../wwwroot' : '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
-	</Target>-->
+	</Target>
 </Project>
