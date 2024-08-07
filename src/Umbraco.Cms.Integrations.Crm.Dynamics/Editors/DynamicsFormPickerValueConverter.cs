@@ -5,18 +5,9 @@ using Umbraco.Cms.Integrations.Crm.Dynamics.Helpers;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
-
-
-
-#if NETCOREAPP
 using Microsoft.Extensions.Options;
-
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Models.PublishedContent;
-#else
-using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.PropertyEditors;
-#endif
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
 {
