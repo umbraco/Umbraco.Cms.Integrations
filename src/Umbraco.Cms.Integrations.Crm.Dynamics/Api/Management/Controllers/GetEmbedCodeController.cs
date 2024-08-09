@@ -17,7 +17,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
         {
         }
 
-        [HttpGet("get-embed-code")]
+        [HttpGet("embed-code")]
         [ProducesResponseType(typeof(Task<string>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetEmbedCode(string formId) => Ok(await DynamicsService.GetEmbedCode(formId));
     }

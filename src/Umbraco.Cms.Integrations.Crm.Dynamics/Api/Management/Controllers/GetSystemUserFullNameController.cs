@@ -17,7 +17,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
         {
         }
 
-        [HttpGet("get-system-user-fullname")]
+        [HttpGet("system-user-fullname")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public IActionResult GetSystemUserFullName() => Ok(DynamicsConfigurationService.GetSystemUserFullName());
     }

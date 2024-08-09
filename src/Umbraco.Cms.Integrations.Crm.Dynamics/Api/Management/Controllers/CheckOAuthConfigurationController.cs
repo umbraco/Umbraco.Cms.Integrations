@@ -18,15 +18,14 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
         {
         }
 
-        [HttpGet("check-oauth-configuration")]
+        [HttpGet("oauth-configuration")]
         [ProducesResponseType(typeof(OAuthConfigurationDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> CheckOAuthConfiguration()
         {
             var oauthConfiguration = DynamicsConfigurationService.GetOAuthConfiguration();
 
-            if (oauthConfiguration == null) return NotFound(new OAuthConfigurationDto { Message = string.Empty });
+            if (oauthConfiguration == null) return Unauthorized(new OAuthConfigurationDto { Message = string.Empty });
 
             var identity = await DynamicsService.GetIdentity(oauthConfiguration.AccessToken);
 

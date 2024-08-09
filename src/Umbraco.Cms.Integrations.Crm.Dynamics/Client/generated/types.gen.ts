@@ -749,23 +749,23 @@ export type GetFormsData = {
 
 export type GetFormsResponse = Array<(FormDtoModel)>;
 
-export type RevokeAccessTokenResponse = string;
-
-export type GetAuthorizationUrlResponse = string;
-
-export type CheckOauthConfigurationResponse = OAuthConfigurationDtoModel;
-
 export type GetAccessTokenData = {
     requestBody?: OAuthRequestDtoModel;
 };
 
 export type GetAccessTokenResponse = string;
 
+export type GetAuthorizationUrlResponse = string;
+
 export type GetEmbedCodeData = {
     formId?: string;
 };
 
 export type GetEmbedCodeResponse = Task_1;
+
+export type CheckOauthConfigurationResponse = OAuthConfigurationDtoModel;
+
+export type RevokeAccessTokenResponse = string;
 
 export type GetSystemUserFullNameResponse = string;
 
@@ -786,7 +786,10 @@ export type $OpenApiTs = {
                 200: Array<(FormDtoModel)>;
             };
         };
-        delete: {
+    };
+    '/dynamics/management/api/v1/forms/access-token': {
+        post: {
+            req: GetAccessTokenData;
             res: {
                 /**
                  * OK
@@ -805,36 +808,7 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/dynamics/management/api/v1/forms/check-oauth-configuration': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: OAuthConfigurationDtoModel;
-                /**
-                 * Unauthorized
-                 */
-                401: unknown;
-                /**
-                 * Not Found
-                 */
-                404: unknown;
-            };
-        };
-    };
-    '/dynamics/management/api/v1/forms/get-access-token': {
-        post: {
-            req: GetAccessTokenData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: string;
-            };
-        };
-    };
-    '/dynamics/management/api/v1/forms/get-embed-code': {
+    '/dynamics/management/api/v1/forms/embed-code': {
         get: {
             req: GetEmbedCodeData;
             res: {
@@ -845,7 +819,31 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/dynamics/management/api/v1/forms/get-system-user-fullname': {
+    '/dynamics/management/api/v1/forms/oauth-configuration': {
+        get: {
+            res: {
+                /**
+                 * OK
+                 */
+                200: OAuthConfigurationDtoModel;
+                /**
+                 * Unauthorized
+                 */
+                401: unknown;
+            };
+        };
+    };
+    '/dynamics/management/api/v1/forms/revoke-access-token': {
+        delete: {
+            res: {
+                /**
+                 * OK
+                 */
+                200: string;
+            };
+        };
+    };
+    '/dynamics/management/api/v1/forms/system-user-fullname': {
         get: {
             res: {
                 /**

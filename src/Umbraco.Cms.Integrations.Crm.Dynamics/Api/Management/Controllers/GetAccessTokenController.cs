@@ -18,7 +18,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
         {
         }
 
-        [HttpPost("get-access-token")]
+        [HttpPost("access-token")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAccessToken([FromBody] OAuthRequestDto authRequestDto) =>
             Ok(await AuthorizationService.GetAccessTokenAsync(authRequestDto.Code));

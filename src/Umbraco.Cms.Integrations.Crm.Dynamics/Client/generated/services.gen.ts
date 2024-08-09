@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { GetFormsData, GetFormsResponse, RevokeAccessTokenResponse, GetAuthorizationUrlResponse, CheckOauthConfigurationResponse, GetAccessTokenData, GetAccessTokenResponse, GetEmbedCodeData, GetEmbedCodeResponse, GetSystemUserFullNameResponse, OauthData, OauthResponse } from './types.gen';
+import type { GetFormsData, GetFormsResponse, GetAccessTokenData, GetAccessTokenResponse, GetAuthorizationUrlResponse, GetEmbedCodeData, GetEmbedCodeResponse, CheckOauthConfigurationResponse, RevokeAccessTokenResponse, GetSystemUserFullNameResponse, OauthData, OauthResponse } from './types.gen';
 
 export class DynamicsService {
     /**
@@ -23,13 +23,17 @@ export class DynamicsService {
     }
     
     /**
+     * @param data The data for the request.
+     * @param data.requestBody
      * @returns string OK
      * @throws ApiError
      */
-    public static revokeAccessToken(): CancelablePromise<RevokeAccessTokenResponse> {
+    public static getAccessToken(data: GetAccessTokenData = {}): CancelablePromise<GetAccessTokenResponse> {
         return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/dynamics/management/api/v1/forms'
+            method: 'POST',
+            url: '/dynamics/management/api/v1/forms/access-token',
+            body: data.requestBody,
+            mediaType: 'application/json'
         });
     }
     
@@ -45,36 +49,6 @@ export class DynamicsService {
     }
     
     /**
-     * @returns unknown OK
-     * @throws ApiError
-     */
-    public static checkOauthConfiguration(): CancelablePromise<CheckOauthConfigurationResponse> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/dynamics/management/api/v1/forms/check-oauth-configuration',
-            errors: {
-                401: 'Unauthorized',
-                404: 'Not Found'
-            }
-        });
-    }
-    
-    /**
-     * @param data The data for the request.
-     * @param data.requestBody
-     * @returns string OK
-     * @throws ApiError
-     */
-    public static getAccessToken(data: GetAccessTokenData = {}): CancelablePromise<GetAccessTokenResponse> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/dynamics/management/api/v1/forms/get-access-token',
-            body: data.requestBody,
-            mediaType: 'application/json'
-        });
-    }
-    
-    /**
      * @param data The data for the request.
      * @param data.formId
      * @returns unknown OK
@@ -83,10 +57,35 @@ export class DynamicsService {
     public static getEmbedCode(data: GetEmbedCodeData = {}): CancelablePromise<GetEmbedCodeResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/dynamics/management/api/v1/forms/get-embed-code',
+            url: '/dynamics/management/api/v1/forms/embed-code',
             query: {
                 formId: data.formId
             }
+        });
+    }
+    
+    /**
+     * @returns unknown OK
+     * @throws ApiError
+     */
+    public static checkOauthConfiguration(): CancelablePromise<CheckOauthConfigurationResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/dynamics/management/api/v1/forms/oauth-configuration',
+            errors: {
+                401: 'Unauthorized'
+            }
+        });
+    }
+    
+    /**
+     * @returns string OK
+     * @throws ApiError
+     */
+    public static revokeAccessToken(): CancelablePromise<RevokeAccessTokenResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/dynamics/management/api/v1/forms/revoke-access-token'
         });
     }
     
@@ -97,7 +96,7 @@ export class DynamicsService {
     public static getSystemUserFullName(): CancelablePromise<GetSystemUserFullNameResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/dynamics/management/api/v1/forms/get-system-user-fullname'
+            url: '/dynamics/management/api/v1/forms/system-user-fullname'
         });
     }
     
