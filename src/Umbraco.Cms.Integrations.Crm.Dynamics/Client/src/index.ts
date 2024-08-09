@@ -19,3 +19,5 @@ export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
         OpenAPI.WITH_CREDENTIALS = true;
       });
 }
+
+export * from './config/authorization/authorization-property-editor.element';

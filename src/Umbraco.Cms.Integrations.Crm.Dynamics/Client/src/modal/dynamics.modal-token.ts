@@ -4,7 +4,6 @@ import { DynamicsFormPickerConfiguration } from "../types/types";
 
 export type DynamicsFormPickerModalData = {
     headline: string;
-    config: DynamicsFormPickerConfiguration | undefined;
 }
 
 export type DynamicsFormPickerModalValue = {

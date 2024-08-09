@@ -77,10 +77,11 @@ export class DynamicsFormPickerPropertyEditor extends UmbLitElement implements U
     }
 
     private async _openModal() {
+        console.log(this._config?.module);
+        const module = this._config?.module == "Both" ? "Outbound | Real-Time" : this._config?.module;
         const pickerContext = this.#modalManagerContext?.open(this, DYNAMICS_MODAL_TOKEN, {
             data: {
-                headline: "Dynamics Forms",
-                config: this._config
+                headline:  `Dynamics Forms - ${module} Marketing Forms`
             },
         });
 
