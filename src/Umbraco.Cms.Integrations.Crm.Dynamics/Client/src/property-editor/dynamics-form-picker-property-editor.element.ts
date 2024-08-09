@@ -56,11 +56,20 @@ export class DynamicsFormPickerPropertyEditor extends UmbLitElement implements U
 
         if (this.value == null || this.value.length == 0) return;
 
-        await this.#getForms();
+        await this.#checkOAuthConfiguration();
     }
 
-    async #getForms(){
+    async #checkOAuthConfiguration(){
+        const {data} = await this.#dynamicsContext.checkOauthConfiguration();
+        if(!data) return;
+        if(!data.isAuthorized) this._showError("Unable to connect to Dynamics. Please review the settings of the form picker property's data type.");
 
+        await this.#getForm();
+    }
+
+    async #getForm(){
+        const model: FormDtoModel = JSON.parse(JSON.stringify(this.value));
+        this.selectedForm = model;
     }
 
     deleteForm(formId: string){
@@ -71,7 +80,6 @@ export class DynamicsFormPickerPropertyEditor extends UmbLitElement implements U
         const pickerContext = this.#modalManagerContext?.open(this, DYNAMICS_MODAL_TOKEN, {
             data: {
                 headline: "Dynamics Forms",
-                selectedFormId: "1",
                 config: this._config
             },
         });

@@ -2,6 +2,7 @@ import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { DynamicsRepository } from "../repository/dynamics.repository";
+import { OAuthRequestDtoModel } from "@umbraco-integrations/dynamics/generated";
 
 export class DynamicsContext extends UmbControllerBase{
     #repository: DynamicsRepository;
@@ -33,8 +34,8 @@ export class DynamicsContext extends UmbControllerBase{
         return await this.#repository.checkOauthConfiguration();
     }
 
-    async getAccessToken(){
-        return await this.#repository.getAccessToken();
+    async getAccessToken(oAuthRequestDtoModel: OAuthRequestDtoModel){
+        return await this.#repository.getAccessToken(oAuthRequestDtoModel);
     }
 
     async getEmbedCode(formId: string){

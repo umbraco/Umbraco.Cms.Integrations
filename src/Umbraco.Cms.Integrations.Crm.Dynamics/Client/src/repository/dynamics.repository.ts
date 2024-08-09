@@ -1,7 +1,7 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
-import { DynamicsService } from "@umbraco-integrations/dynamics/generated";
+import { DynamicsService, OAuthRequestDtoModel } from "@umbraco-integrations/dynamics/generated";
 
 export class DynamicsRepository extends UmbControllerBase {
     constructor(host: UmbControllerHost) {
@@ -50,8 +50,8 @@ export class DynamicsRepository extends UmbControllerBase {
         return { data };
     }
 
-    async getAccessToken(){
-        const { data, error } = await tryExecuteAndNotify(this, DynamicsService.getAccessToken());
+    async getAccessToken(oAuthRequestDtoModel: OAuthRequestDtoModel){
+        const { data, error } = await tryExecuteAndNotify(this, DynamicsService.getAccessToken({requestBody: oAuthRequestDtoModel}));
 
         if (error || !data) {
             return { error };
