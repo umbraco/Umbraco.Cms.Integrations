@@ -1,17 +1,11 @@
 ﻿using System.Threading.Tasks;
-
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 using Newtonsoft.Json;
 using System.Net.Http;
 using System;
 using System.Collections.Generic;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
-
-#if NETCOREAPP
 using Microsoft.Extensions.Options;
-#else
-using System.Configuration;
-#endif
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 {
@@ -19,7 +13,6 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
     {
         private readonly DynamicsOAuthSettings _oauthSettings;
 
-#if NETCOREAPP
         public AuthorizationService(IOptions<DynamicsOAuthSettings> oauthOptions,
             DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService)
                 : base(dynamicsService, dynamicsConfigurationService)
@@ -27,13 +20,6 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
         {
             _oauthSettings = oauthOptions.Value;
         }
-#else
-        public AuthorizationService(DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService)
-            : base(dynamicsService, dynamicsConfigurationService)
-        {
-            _oauthSettings = new DynamicsOAuthSettings(ConfigurationManager.AppSettings);
-        }
-#endif
 
         public string GetAuthorizationUrl() => string.Format(DynamicsAuthorizationUrl,
             _oauthSettings.ClientId,

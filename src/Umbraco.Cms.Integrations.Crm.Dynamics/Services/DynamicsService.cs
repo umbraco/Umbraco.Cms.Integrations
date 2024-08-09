@@ -5,19 +5,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
-
-
-#if NETCOREAPP
 using Microsoft.Extensions.Options;
-#else
-#endif
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 {
@@ -33,21 +26,12 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
         // Access to the client within the class is via ClientFactory(), allowing us to mock the responses in tests.
         public static Func<HttpClient> ClientFactory = () => s_client;
 
-#if NETCOREAPP
         public DynamicsService(IOptions<DynamicsSettings> options, DynamicsConfigurationService dynamicsConfigurationService)
         {
             _settings = options.Value;
 
             _dynamicsConfigurationService = dynamicsConfigurationService;
         }
-#else
-        public DynamicsService(DynamicsConfigurationService dynamicsConfigurationService)
-        {
-            _settings = new DynamicsSettings(ConfigurationManager.AppSettings);
-
-            _dynamicsConfigurationService = dynamicsConfigurationService;
-        }
-#endif
 
         public async Task<IdentityDto> GetIdentity(string accessToken)
         {
@@ -133,23 +117,29 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             if (module.HasFlag(DynamicsModule.Outbound))
             {
                 var forms = await Get<OutboundFormDto>(oauthConfiguration.AccessToken, Constants.Modules.OutboundPath);
-                list.AddRange(forms.Value.Select(p => new FormDto
+                if(forms != null)
                 {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Module = DynamicsModule.Outbound
-                }));
+                    list.AddRange(forms.Value.Select(p => new FormDto
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Module = DynamicsModule.Outbound
+                    }));
+                }
             }
 
             if (module.HasFlag(DynamicsModule.RealTime))
             {
                 var forms = await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath);
-                list.AddRange(forms.Value.Select(p => new FormDto
+                if (forms != null)
                 {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Module = DynamicsModule.RealTime
-                }));
+                    list.AddRange(forms.Value.Select(p => new FormDto
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Module = DynamicsModule.RealTime
+                    }));
+                }
             }
 
             return list;

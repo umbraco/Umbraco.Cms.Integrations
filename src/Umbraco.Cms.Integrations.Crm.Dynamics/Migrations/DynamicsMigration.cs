@@ -1,15 +1,7 @@
 ﻿using NPoco;
-
-#if NETCOREAPP
 using Microsoft.Extensions.Logging;
-
 using Umbraco.Cms.Infrastructure.Migrations;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
-#else
-using Umbraco.Core.Logging;
-using Umbraco.Core.Migrations;
-using Umbraco.Core.Persistence.DatabaseAnnotations;
-#endif
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
 {
@@ -24,18 +16,9 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
         {
         }
 
-#if NETCOREAPP
         protected override void Migrate()
-#else
-        public override void Migrate()
-#endif
         {
-#if NETCOREAPP
             Logger.LogDebug(MigrationLoggingMessage);
-
-#else
-            Logger.Debug<DynamicsMigration>(MigrationLoggingMessage);
-#endif
 
             if (TableExists(Constants.DynamicsOAuthConfigurationTable) == false)
             {
@@ -43,11 +26,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
             }
             else
             {
-#if NETCOREAPP
                 Logger.LogDebug(DbTableExistsMessage);
-#else
-                Logger.Debug<DynamicsMigration>(DbTableExistsMessage);
-#endif
             }
         }
     }

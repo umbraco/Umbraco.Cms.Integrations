@@ -1,10 +1,5 @@
-﻿#if NETCOREAPP
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Scoping;
-#else
-using Umbraco.Core.Logging;
-using Umbraco.Core.Scoping;
-#endif
 using System;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Migrations;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
@@ -14,8 +9,6 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
     public class DynamicsConfigurationService
     {
         private readonly IScopeProvider _scopeProvider;
-
-#if NETCOREAPP
         private readonly ILogger<DynamicsService> _logger;
 
         public DynamicsConfigurationService(IScopeProvider scopeProvider, ILogger<DynamicsService> logger)
@@ -24,16 +17,6 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             _logger = logger;
         }
-#else
-        private readonly ILogger _logger;
-
-        public DynamicsConfigurationService(IScopeProvider scopeProvider, ILogger logger)
-        {
-            _scopeProvider = scopeProvider;
-
-            _logger = logger;
-        }
-#endif
 
         public string AddorUpdateOAuthConfiguration(string accessToken, string userId, string fullName)
         {
@@ -61,11 +44,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             {
                 var message = $"An error has occurred while adding the OAuth configuration: {ex.Message}";
 
-#if NETCOREAPP
                 _logger.LogError(message);
-#else
-                _logger.Error<DynamicsService>(message);
-#endif
                 return message;
             }
         }
@@ -119,11 +98,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             {
                 var message = $"An error has occurred while deleting the OAuth configuration: {e.Message}";
 
-#if NETCOREAPP
                 _logger.LogError(message);
-#else
-                _logger.Error<DynamicsConfigurationService>(message);
-#endif
 
                 return message;
             }

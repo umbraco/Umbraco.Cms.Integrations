@@ -1,0 +1,14 @@
+{
+    "id": "Umbraco.Cms.Integrations.Crm.Dynamics",
+    "name": "Umbraco CMS Integrations: Crm - Dynamics",
+    "version": "1.0.0",
+    "extensions": [
+      {
+        "name": "Umbraco EntryPoint",
+        "alias": "Umb.Dynamics.EntryPoint",
+        "type": "entryPoint",
+        "js": "/App_Plugins/Dynamics/dynamics.js"
+      }
+    ]
+  }
+  

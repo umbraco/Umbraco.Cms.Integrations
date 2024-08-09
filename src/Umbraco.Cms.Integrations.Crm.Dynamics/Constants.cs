@@ -22,6 +22,17 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
             public const string DefaultV8ViewPath = AppPluginFolderPath + "/Render/DynamicsFormV8.cshtml";
         }
 
+        public static class ManagementApi
+        {
+            public const string RootPath = "dynamics/management/api";
+
+            public const string ApiName = "dynamics-management";
+
+            public const string ApiTitle = "Dynamics Management API";
+
+            public const string GroupName = "Dynamics";
+        }
+
         public static class EmbedAttribute
         {
             public const string DataFormBlockId = "data-form-block-id";
