@@ -10,16 +10,14 @@ const elementName = "dynamics-authorization";
 @customElement(elementName)
 export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
     #dynamicsContext!: typeof DYNAMICS_CONTEXT_TOKEN.TYPE;
+    #settingsModel?: OAuthConfigurationDtoModel;
 
     @state()
     private _oauthSetup: DynamicsOAuthSetup = {
         isConnected: false,
-        isAccessTokenExpired: false,
+        isAccessTokenExpired: true,
         isAccessTokenValid: false
     };
-
-    @state()
-    private _oAuthConfig: OAuthConfigurationDtoModel | undefined;
 
     constructor() {
         super();
@@ -27,6 +25,9 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
         this.consumeContext(DYNAMICS_CONTEXT_TOKEN, (context) => {
             if (!context) return;
             this.#dynamicsContext = context;
+            this.observe(context.settingsModel, (settingsModel) => {
+                this.#settingsModel = settingsModel;
+            });
         });
     }
 
@@ -37,29 +38,28 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
     }
 
     async #checkOAuthConfiguration(){
-        const { data } = await this.#dynamicsContext.checkOauthConfiguration();
-        if (!data) {
-            this._oauthSetup = {
-                isConnected: false,
-                isAccessTokenExpired: true,
-                isAccessTokenValid: false
-            }
-        } else {
-            if (!data.isAuthorized) {
-                this._showError("Unable to connect to Dynamics. Please review the settings of the form picker property's data type.")
-            } else {
-                this._oauthSetup = {
-                    isConnected: true,
-                    isAccessTokenExpired: false,
-                    isAccessTokenValid: true
-                }
+        //const { data } = await this.#dynamicsContext.checkOauthConfiguration();
+        if (!this.#settingsModel) {
+            return;
+        }
 
-                this._oAuthConfig = data;
+        if (!this.#settingsModel.isAuthorized) {
+            this._showError("Unable to connect to Dynamics. Please review the settings of the form picker property's data type.")
+        } else {
+            this._oauthSetup = {
+                isConnected: true,
+                isAccessTokenExpired: false,
+                isAccessTokenValid: true
             }
         }
     }
 
     async #connectButtonClick(){
+        const { data } = await this.#dynamicsContext.getAuthorizationUrl();
+        if (!data) return;
+
+        window.open(data, "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
+
         window.addEventListener("message", async (event: MessageEvent) => {
             if (event.data.type === "dynamics:oauth:success") {
 
@@ -67,26 +67,26 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
                     code: event.data.code
                 };
 
-                const { data } = await this.#dynamicsContext.getAccessToken(oauthRequestDtoModel);
-                if (!data) return;
-
-                if (data.startsWith("Error:")) {
-                    this._showError(data);
-                } else {
-                    this._oauthSetup = {
-                        isConnected: true
-                    };
-                    this._showSuccess("OAuth Connected");
-
-                }
-
+                await this.getAccessToken(oauthRequestDtoModel);
             }
         }, false);
+    }
 
-        const { data } = await this.#dynamicsContext.getAuthorizationUrl();
+    async getAccessToken(oauthRequestDtoModel: OAuthRequestDtoModel){
+        const { data } = await this.#dynamicsContext.getAccessToken(oauthRequestDtoModel);
         if (!data) return;
 
-        window.open(data, "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
+        if (data.startsWith("Error:")) {
+            this._showError(data);
+        } else {
+            this._oauthSetup = {
+                isConnected: true
+            };
+            this._showSuccess("OAuth Connected");
+
+            this.dispatchEvent(new CustomEvent("connect"));
+        }
+
     }
 
     async #revokeButtonClick(){
@@ -121,7 +121,7 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
                 ${this._oauthSetup.isConnected ? 
                     html`
                         <span>
-                            <b>Connected</b>: ${this._oAuthConfig?.fullName}
+                            <b>Connected</b>: ${this.#settingsModel?.fullName}
                         </span>
                     ` : 
                     html`

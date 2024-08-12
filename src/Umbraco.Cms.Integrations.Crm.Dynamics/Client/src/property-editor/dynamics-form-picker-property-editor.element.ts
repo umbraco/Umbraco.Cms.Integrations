@@ -3,7 +3,7 @@ import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UmbPropertyEditorUiElement } from '@umbraco-cms/backoffice/extension-registry';
 import { DYNAMICS_CONTEXT_TOKEN } from "../context/dynamics.context";
 import { UMB_MODAL_MANAGER_CONTEXT } from "@umbraco-cms/backoffice/modal";
-import { FormDtoModel } from "@umbraco-integrations/dynamics/generated";
+import { FormDtoModel, OAuthConfigurationDtoModel } from "@umbraco-integrations/dynamics/generated";
 import { DynamicsFormPickerConfiguration } from "../types/types";
 import { UmbPropertyEditorConfigCollection } from "@umbraco-cms/backoffice/property-editor";
 import { DYNAMICS_MODAL_TOKEN } from "../modal/dynamics.modal-token";
@@ -14,6 +14,7 @@ const elementName = "dynamics-form-picker";
 @customElement(elementName)
 export class DynamicsFormPickerPropertyEditor extends UmbLitElement implements UmbPropertyEditorUiElement {
     #dynamicsContext!: typeof DYNAMICS_CONTEXT_TOKEN.TYPE;
+    #settingsModel?: OAuthConfigurationDtoModel;
     #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
     @state()
 	private _config?: DynamicsFormPickerConfiguration;
@@ -45,9 +46,9 @@ export class DynamicsFormPickerPropertyEditor extends UmbLitElement implements U
         this.consumeContext(DYNAMICS_CONTEXT_TOKEN, (context) => {
             if (!context) return;
             this.#dynamicsContext = context;
-            // this.observe(context.settingsModel, (settingsModel) => {
-            //     this.#settingsModel = settingsModel;
-            // });
+            this.observe(context.settingsModel, (settingsModel) => {
+                this.#settingsModel = settingsModel;
+            });
         });
     }
 
@@ -60,9 +61,8 @@ export class DynamicsFormPickerPropertyEditor extends UmbLitElement implements U
     }
 
     async #checkOAuthConfiguration(){
-        const {data} = await this.#dynamicsContext.checkOauthConfiguration();
-        if(!data) return;
-        if(!data.isAuthorized) this._showError("Unable to connect to Dynamics. Please review the settings of the form picker property's data type.");
+        if(!this.#settingsModel) return;
+        if(!this.#settingsModel.isAuthorized) this._showError("Unable to connect to Dynamics. Please review the settings of the form picker property's data type.");
 
         await this.#getForm();
     }

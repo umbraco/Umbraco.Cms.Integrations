@@ -2,10 +2,13 @@ import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { DynamicsRepository } from "../repository/dynamics.repository";
-import { OAuthRequestDtoModel } from "@umbraco-integrations/dynamics/generated";
+import { OAuthConfigurationDtoModel, OAuthRequestDtoModel } from "@umbraco-integrations/dynamics/generated";
+import { UmbObjectState } from "@umbraco-cms/backoffice/observable-api";
 
 export class DynamicsContext extends UmbControllerBase{
     #repository: DynamicsRepository;
+    #settingsModel = new UmbObjectState<OAuthConfigurationDtoModel | undefined>(undefined);
+    settingsModel = this.#settingsModel.asObservable();
 
     constructor(host: UmbControllerHost){
         super(host);
@@ -16,6 +19,7 @@ export class DynamicsContext extends UmbControllerBase{
 
     async hostConnected() {
         super.hostConnected();
+        await this.checkOauthConfiguration();
     }
 
     async getForms(module: string){
@@ -31,7 +35,8 @@ export class DynamicsContext extends UmbControllerBase{
     }
 
     async checkOauthConfiguration(){
-        return await this.#repository.checkOauthConfiguration();
+        const { data } = await this.#repository.checkOauthConfiguration();
+        this.#settingsModel.setValue(data);
     }
 
     async getAccessToken(oAuthRequestDtoModel: OAuthRequestDtoModel){

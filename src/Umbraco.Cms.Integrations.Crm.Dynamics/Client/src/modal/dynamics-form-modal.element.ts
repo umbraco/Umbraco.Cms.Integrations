@@ -11,7 +11,8 @@ const elementName = "dynamics-forms-modal";
 @customElement(elementName)
 export default class DynamicsFormModalElement extends UmbModalBaseElement<DynamicsFormPickerModalData, DynamicsFormPickerModalValue>{
     #dynamicsContext!: typeof DYNAMICS_CONTEXT_TOKEN.TYPE;
-    
+    #settingsModel?: OAuthConfigurationDtoModel;
+
     @state()
     private _loading = false;
     @state()
@@ -23,6 +24,9 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
         this.consumeContext(DYNAMICS_CONTEXT_TOKEN, (context) => {
             if (!context) return;
             this.#dynamicsContext = context;
+            this.observe(context.settingsModel, (settingsModel) => {
+                this.#settingsModel = settingsModel;
+            });
         });
     }
 
@@ -32,16 +36,16 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
     }
 
     async #checkOAuthConfiguration(){
-        const { data } = await this.#dynamicsContext.checkOauthConfiguration();
-        if (!data) {
+        
+        if (!this.#settingsModel) {
+            return;
+        }
 
+        if (!this.#settingsModel.isAuthorized) {
+            this._showError("Unable to connect to Dynamics. Please review the settings of the form picker property's data type.")
         } else {
-            if (!data.isAuthorized) {
-                this._showError("Unable to connect to Dynamics. Please review the settings of the form picker property's data type.")
-            } else {
 
-                await this.#getForms();
-            }
+            await this.#getForms();
         }
     }
 

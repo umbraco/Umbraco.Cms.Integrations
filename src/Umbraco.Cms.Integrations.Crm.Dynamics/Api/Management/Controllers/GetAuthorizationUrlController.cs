@@ -19,6 +19,10 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
 
         [HttpGet("authorization-url")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        public IActionResult GetAuthorizationUrl() => Ok(AuthorizationService.GetAuthorizationUrl());
+        public IActionResult GetAuthorizationUrl()
+        {
+            var url = AuthorizationService.GetAuthorizationUrl();
+            return Ok(url);
+        }
     }
 }
