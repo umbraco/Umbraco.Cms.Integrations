@@ -57,10 +57,6 @@ export class DynamicsFormPickerPropertyEditor extends UmbLitElement implements U
 
         if (this.value == null || this.value.length == 0) return;
 
-        await this.#checkOAuthConfiguration();
-    }
-
-    async #checkOAuthConfiguration(){
         if(!this.#settingsModel) return;
         if(!this.#settingsModel.isAuthorized) this._showError("Unable to connect to Dynamics. Please review the settings of the form picker property's data type.");
 
@@ -72,12 +68,12 @@ export class DynamicsFormPickerPropertyEditor extends UmbLitElement implements U
         this.selectedForm = model;
     }
 
-    deleteForm(formId: string){
-        
+    #deleteForm(){
+        this.value = "";
+        this.dispatchEvent(new CustomEvent('property-value-change'));
     }
 
     private async _openModal() {
-        console.log(this._config?.module);
         const module = this._config?.module == "Both" ? "Outbound | Real-Time" : this._config?.module;
         const pickerContext = this.#modalManagerContext?.open(this, DYNAMICS_MODAL_TOKEN, {
             data: {
@@ -102,24 +98,25 @@ export class DynamicsFormPickerPropertyEditor extends UmbLitElement implements U
 
     render() {
         return html`
-            <div>
-                <uui-button
-                    class="add-button"
-                    @click=${this._openModal}
-                    label=${this.localize.term('general_add')}
-                    look="placeholder"></uui-button>
-            </div>
-            ${this.selectedForm ? 
-                html`
-                    <div>
-                        <uui-ref-node-form name=${this.selectedForm!.name}>
-                            <uui-action-bar slot="actions">
-                                <uui-button label="Remove" @click=${() => this.deleteForm(this.selectedForm!.id)}>Remove</uui-button>
-                            </uui-action-bar>
-                        </uui-ref-node-form>
-                    </div>
-                ` : 
-                html``}
+        ${this.value == null || this.value.length == 0 ? 
+            html`
+                <div>
+                    <uui-button
+                        class="add-button"
+                        @click=${this._openModal}
+                        label=${this.localize.term('general_add')}
+                        look="placeholder"></uui-button>
+                </div>
+            ` : 
+            html`
+                <div>
+                    <uui-ref-node-form name=${this.selectedForm?.name ?? ""}>
+                        <uui-action-bar slot="actions">
+                            <uui-button label="Remove" @click=${this.#deleteForm}>Remove</uui-button>
+                        </uui-action-bar>
+                    </uui-ref-node-form>
+                </div>
+            `}
         `;
     }
 

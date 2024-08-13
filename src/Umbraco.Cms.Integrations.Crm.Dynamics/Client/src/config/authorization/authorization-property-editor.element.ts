@@ -38,10 +38,7 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
     }
 
     async #checkOAuthConfiguration(){
-        //const { data } = await this.#dynamicsContext.checkOauthConfiguration();
-        if (!this.#settingsModel) {
-            return;
-        }
+        if (!this.#settingsModel) return;
 
         if (!this.#settingsModel.isAuthorized) {
             this._showError("Unable to connect to Dynamics. Please review the settings of the form picker property's data type.")

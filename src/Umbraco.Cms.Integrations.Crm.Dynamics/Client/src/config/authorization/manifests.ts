@@ -4,7 +4,7 @@ export const manifests : ManifestPropertyEditorUi = {
     type: 'propertyEditorUi',
     alias: 'Dynamics.PropertyEditorUi.Authorization',
     name: 'Dynamics Form Picker Authorization Setting',
-    element: () => import('./authorization-property-editor.element.js'),
+    js: () => import('./authorization-property-editor.element.js'),
     meta: {
         label: 'Authorization',
         icon: 'icon-autofill',

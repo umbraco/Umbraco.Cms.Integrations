@@ -5,7 +5,7 @@ export const propertyEditorUiManifest : ManifestPropertyEditorUi = {
     type: "propertyEditorUi",
     alias: "Dynamics.PropertyEditorUi.FormPicker",
     name: "Dynamics Form Picker Property Editor UI",
-    element: () => import("./dynamics-form-picker-property-editor.element"),
+    js: () => import("./dynamics-form-picker-property-editor.element"),
     meta: {
         label: "Dynamics Form Picker",
         icon: "icon-book",
