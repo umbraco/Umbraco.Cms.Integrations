@@ -2,11 +2,10 @@ import { customElement, html, repeat, state } from "@umbraco-cms/backoffice/exte
 import { UmbModalBaseElement } from "@umbraco-cms/backoffice/modal";
 import { DynamicsFormPickerModalData, DynamicsFormPickerModalValue } from "./dynamics.modal-token";
 import { DYNAMICS_CONTEXT_TOKEN } from "../context/dynamics.context";
-import { DynamicsModuleModel, FormDtoModel, OAuthConfigurationDtoModel } from "@umbraco-integrations/dynamics/generated";
+import { FormDtoModel, OAuthConfigurationDtoModel } from "@umbraco-integrations/dynamics/generated";
 import { UMB_NOTIFICATION_CONTEXT, UmbNotificationColor } from "@umbraco-cms/backoffice/notification";
 import { UUIInputEvent } from "@umbraco-cms/backoffice/external/uui";
 import { UmbPropertyValueChangeEvent } from "@umbraco-cms/backoffice/property-editor";
-import { UmbArrayState } from "@umbraco-cms/backoffice/observable-api";
 
 const elementName = "dynamics-forms-modal";
 enum testEnum {
@@ -18,7 +17,6 @@ enum testEnum {
 export default class DynamicsFormModalElement extends UmbModalBaseElement<DynamicsFormPickerModalData, DynamicsFormPickerModalValue>{
     #dynamicsContext!: typeof DYNAMICS_CONTEXT_TOKEN.TYPE;
     #settingsModel?: OAuthConfigurationDtoModel;
-    //#selectionState: UmbArrayState<FormDtoModel> = [];
 
     @state()
     private _loading = false;
@@ -50,9 +48,7 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
     }
 
     async #checkOAuthConfiguration(){
-        if (!this.#settingsModel) {
-            return;
-        }
+        if (!this.#settingsModel) return;
 
         if (!this.#settingsModel.isAuthorized) {
             this._showError("Unable to connect to Dynamics. Please review the settings of the form picker property's data type.");
@@ -68,7 +64,6 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
 
         this._forms = data;
         this._filterForms = data;
-        //this.#selectionState.setValue(data);
         this._loading = false;
     }
 

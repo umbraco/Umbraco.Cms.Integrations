@@ -19,6 +19,9 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
         isAccessTokenValid: false
     };
 
+    @state()
+    private _loading: boolean = true;
+
     constructor() {
         super();
 
@@ -34,10 +37,12 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
     async connectedCallback() {
         super.connectedCallback();
         
-        await this.#checkOAuthConfiguration();
+        setTimeout(() => {
+            this.#checkConfiguration();
+        }, 3000);
     }
 
-    async #checkOAuthConfiguration(){
+    #checkConfiguration(){
         if (!this.#settingsModel) return;
 
         if (!this.#settingsModel.isAuthorized) {
@@ -49,6 +54,8 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
                 isAccessTokenValid: true
             }
         }
+
+        this._loading = false;
     }
 
     async #connectButtonClick(){
@@ -83,7 +90,6 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
 
             this.dispatchEvent(new CustomEvent("connect"));
         }
-
     }
 
     async #revokeButtonClick(){
@@ -114,33 +120,40 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
 
     render(){
         return html`
-            <div>
-                ${this._oauthSetup.isConnected ? 
-                    html`
-                        <span>
-                            <b>Connected</b>: ${this.#settingsModel?.fullName}
-                        </span>
-                    ` : 
-                    html`
-                        <span>
-                            <b>Disconnected</b>
-                        </span>
-                    `}
-                
-            </div>
-            <div>
-                <uui-button 
-                    look="primary" 
-                    label="Connect"
-                    ?disabled=${this._oauthSetup?.isConnected}
-                    @click=${this.#connectButtonClick}></uui-button>
-                <uui-button 
-                    color="danger" 
-                    look="secondary" 
-                    label="Revoke"
-                    ?disabled=${!this._oauthSetup?.isConnected}
-                    @click=${this.#revokeButtonClick}></uui-button>
-            </div>
+            ${this._loading ? 
+                html`
+                    <div class="center loader"><uui-loader></uui-loader></div>
+                ` : 
+                html`
+                    <div>
+                        ${this._oauthSetup.isConnected ? 
+                            html`
+                                <span>
+                                    <b>Connected</b>: ${this.#settingsModel?.fullName}
+                                </span>
+                            ` : 
+                            html`
+                                <span>
+                                    <b>Disconnected</b>
+                                </span>
+                            `}
+                        
+                    </div>
+                    <div>
+                        <uui-button 
+                            look="primary" 
+                            label="Connect"
+                            ?disabled=${this._oauthSetup?.isConnected}
+                            @click=${this.#connectButtonClick}></uui-button>
+                        <uui-button 
+                            color="danger" 
+                            look="secondary" 
+                            label="Revoke"
+                            ?disabled=${!this._oauthSetup?.isConnected}
+                            @click=${this.#revokeButtonClick}></uui-button>
+                    </div>
+                `
+            }
         `;
     }
 }

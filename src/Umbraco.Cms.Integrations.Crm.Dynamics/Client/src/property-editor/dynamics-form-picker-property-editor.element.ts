@@ -55,17 +55,18 @@ export class DynamicsFormPickerPropertyEditor extends UmbLitElement implements U
     async connectedCallback() {
         super.connectedCallback();
 
+        setTimeout(() => {
+            this.#checkConfiguration();
+        }, 3000);
+    }
+
+    #checkConfiguration(){
         if (this.value == null || this.value.length == 0) return;
 
         if(!this.#settingsModel) return;
         if(!this.#settingsModel.isAuthorized) this._showError("Unable to connect to Dynamics. Please review the settings of the form picker property's data type.");
 
-        await this.#getForm();
-    }
-
-    async #getForm(){
-        const model: FormDtoModel = JSON.parse(JSON.stringify(this.value));
-        this.selectedForm = model;
+        this.selectedForm = JSON.parse(JSON.stringify(this.value));
     }
 
     #deleteForm(){
@@ -109,13 +110,19 @@ export class DynamicsFormPickerPropertyEditor extends UmbLitElement implements U
                 </div>
             ` : 
             html`
-                <div>
-                    <uui-ref-node-form name=${this.selectedForm?.name ?? ""}>
-                        <uui-action-bar slot="actions">
-                            <uui-button label="Remove" @click=${this.#deleteForm}>Remove</uui-button>
-                        </uui-action-bar>
-                    </uui-ref-node-form>
-                </div>
+            ${this.selectedForm ? 
+                html`
+                    <div>
+                        <uui-ref-node-form name=${this.selectedForm.name}>
+                            <uui-action-bar slot="actions">
+                                <uui-button label="Remove" @click=${this.#deleteForm}>Remove</uui-button>
+                            </uui-action-bar>
+                        </uui-ref-node-form>
+                    </div>
+                ` : 
+                html`
+                    <div class="center loader"><uui-loader></uui-loader></div>
+                `}
             `}
         `;
     }
