@@ -22,6 +22,9 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
     @state()
     private _loading: boolean = true;
 
+    @state()
+    private _userName: string | undefined = "";
+
     constructor() {
         super();
 
@@ -53,6 +56,8 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
                 isAccessTokenExpired: false,
                 isAccessTokenValid: true
             }
+
+            this._userName = this.#settingsModel.fullName;
         }
 
         this._loading = false;
@@ -95,6 +100,9 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
             };
             this._showSuccess("OAuth Connected");
 
+            const { data } = await this.#dynamicsContext.getSystemUserFullName();
+            this._userName = data;
+
             this.dispatchEvent(new CustomEvent("connect"));
         }
     }
@@ -136,7 +144,7 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
                         ${this._oauthSetup.isConnected ? 
                             html`
                                 <span>
-                                    <b>Connected</b>: ${this.#settingsModel?.fullName}
+                                    <b>Connected</b>: ${this._userName}
                                 </span>
                             ` : 
                             html`
