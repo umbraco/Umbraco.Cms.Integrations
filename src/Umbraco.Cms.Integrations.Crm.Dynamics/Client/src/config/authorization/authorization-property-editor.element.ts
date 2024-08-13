@@ -62,7 +62,14 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
         const { data } = await this.#dynamicsContext.getAuthorizationUrl();
         if (!data) return;
 
-        window.open(data, "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
+        const authWindow = window.open(data, "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
+        this._loading = true;
+
+        setTimeout(() => {
+            if(authWindow?.closed){
+                this._loading = false;
+            }
+        }, 3000);
 
         window.addEventListener("message", async (event: MessageEvent) => {
             if (event.data.type === "dynamics:oauth:success") {
