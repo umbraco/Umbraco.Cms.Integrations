@@ -6,8 +6,14 @@ src/Testsite/App_Plugins/Our.Umbraco.DashIt
 src/Testsite/umbraco
 src/Testsite/Views
 src/Testsite/wwwroot
-src/Umbraco.Cms.Integrations.Commerce.Shopify/wwwroot
-
+src/Umbraco.Cms.Integrations.Commerce.Shopify/wwwroot/*
+!src/Umbraco.Cms.Integrations.Commerce.Shopify/wwwroot/umbraco-package.json
+src/Umbraco.Cms.Integrations.Crm.Hubspot/wwwroot/*
+!src/Umbraco.Cms.Integrations.Crm.Hubspot/wwwroot/umbraco-package.json
+src/Umbraco.Cms.Integrations.Crm.Dynamics/wwwroot/*
+!src/Umbraco.Cms.Integrations.Crm.Dynamics/wwwroot/umbraco-package.json
+src/Umbraco.Cms.Integrations.Crm.ActiveCampaign/wwwroot/*
+!src/Umbraco.Cms.Integrations.Crm.ActiveCampaign/wwwroot/umbraco-package.json
 
 # User-specific files
 *.suo

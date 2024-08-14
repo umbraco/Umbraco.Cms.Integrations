@@ -1,64 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
-	<PropertyGroup>
-		<TargetFrameworks>net60;net70;net80</TargetFrameworks>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<WarningsAsErrors>Nullable</WarningsAsErrors>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<PackageId>Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageId>
-		<Title>Umbraco CMS Integrations: CRM - ActiveCampaign</Title>
-		<Description>An extension for Umbraco CMS providing a form picker and rendering component for ActiveCampaign.</Description>
-		<PackageIconUrl></PackageIconUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main/src/Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>2.0.4</Version>
-		<Authors>Umbraco HQ</Authors>
-		<Company>Umbraco</Company>
-		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
-		<PackageIcon>activecampaign.png</PackageIcon>
-		<PackageReadmeFile>readme.md</PackageReadmeFile>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<Content Include="App_Plugins\UmbracoCms.Integrations\Crm\ActiveCampaign\**\*.*">
-			<Pack>true</Pack>
-			<PackagePath>App_Plugins\UmbracoCms.Integrations\Crm\ActiveCampaign\</PackagePath>
-		</Content>
-		<None Include="build\**\*.*">
-			<Pack>True</Pack>
-			<PackagePath>buildTransitive</PackagePath>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="App_Plugins\**\*.*">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="App_Plugins\UmbracoCms.Integrations\backoffice\icons\icon-activecampaign.svg">
-			<Pack>true</Pack>
-			<PackagePath>App_Plugins\UmbracoCms.Integrations\backoffice\icons</PackagePath>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="activecampaign.png">
-			<Pack>true</Pack>
-			<PackagePath>\</PackagePath>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core\Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.csproj" />
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
 
 </Project>
