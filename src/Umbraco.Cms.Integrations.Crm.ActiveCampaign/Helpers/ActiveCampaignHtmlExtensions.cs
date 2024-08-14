@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Models.ViewModels;
+using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.ViewModels;
 
 namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Helpers
 {

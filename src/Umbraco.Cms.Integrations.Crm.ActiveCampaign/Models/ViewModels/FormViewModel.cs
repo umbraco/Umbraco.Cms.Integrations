@@ -1,5 +1,5 @@
 ﻿
-namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Models.ViewModels
+namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.ViewModels
 {
     public class FormViewModel
     {

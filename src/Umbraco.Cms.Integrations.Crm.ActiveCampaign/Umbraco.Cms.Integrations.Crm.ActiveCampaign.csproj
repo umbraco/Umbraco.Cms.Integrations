@@ -1,9 +1,48 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+	  <TargetFramework>net8.0</TargetFramework>
+	  <Nullable>enable</Nullable>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+	  <EnableDefaultContentItems>false</EnableDefaultContentItems>
+	  <StaticWebAssetBasePath>/App_Plugins/ActiveCampaign</StaticWebAssetBasePath>
   </PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageId>
+		<Title>Umbraco CMS Integrations: CRM - ActiveCampaign</Title>
+		<Description>An extension for Umbraco CMS providing a form picker and rendering component for ActiveCampaign.</Description>
+		<PackageIconUrl></PackageIconUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main/src/Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
+		<Version>3.0.0</Version>
+		<Authors>Umbraco HQ</Authors>
+		<Company>Umbraco</Company>
+		<PackageIcon>activecampaign.png</PackageIcon>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Umbraco.Cms.Api.Common" Version="[14.0.0, 15)" />
+		<PackageReference Include="Umbraco.Cms.Api.Management" Version="[14.0.0, 15)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[14.0.0, 15)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="activecampaign.png">
+			<Pack>true</Pack>
+			<PackagePath>\</PackagePath>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
 
 </Project>

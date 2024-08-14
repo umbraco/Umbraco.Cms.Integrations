@@ -4,10 +4,10 @@ using System;
 
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
-using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Configuration;
-using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Models.ViewModels;
+using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
+using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.ViewModels;
 
-namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Editors
+namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Editors
 {
     public class ActiveCampaignFormPickerValueConverter : PropertyValueConverterBase
     {
