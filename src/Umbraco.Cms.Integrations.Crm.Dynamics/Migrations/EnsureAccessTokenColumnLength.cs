@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Infrastructure.Migrations;
-using Umbraco.Cms.Infrastructure.Persistence;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
 {

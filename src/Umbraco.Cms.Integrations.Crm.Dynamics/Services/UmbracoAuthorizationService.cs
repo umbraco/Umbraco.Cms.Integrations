@@ -1,11 +1,7 @@
-﻿using System.Threading.Tasks;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
-using System.Collections.Generic;
-using System.Net.Http;
-using System;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
-using Microsoft.Extensions.Options;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 {

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Scoping;
-using System;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Migrations;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 

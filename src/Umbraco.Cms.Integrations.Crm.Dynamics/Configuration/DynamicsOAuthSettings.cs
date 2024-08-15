@@ -1,33 +1,15 @@
-﻿
-using System.Collections.Specialized;
-
-namespace Umbraco.Cms.Integrations.Crm.Dynamics.Configuration
+﻿namespace Umbraco.Cms.Integrations.Crm.Dynamics.Configuration
 {
     public class DynamicsOAuthSettings
     {
-        public DynamicsOAuthSettings() { }
+        public string ClientId { get; set; } = string.Empty;
 
-        public DynamicsOAuthSettings(NameValueCollection appSettings)
-        {
-            ClientId = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsClientIdKey];
+        public string ClientSecret { get; set; } = string.Empty;
 
-            ClientSecret = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsClientSecretKey];
+        public string RedirectUri { get; set; } = string.Empty;
 
-            RedirectUri = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsRedirectUriKey];
+        public string Scopes { get; set; } = string.Empty;
 
-            Scopes = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsScopesKey];
-
-            TokenEndpoint = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsTokenEndpointKey];
-        }
-
-        public string ClientId { get; set; }
-
-        public string ClientSecret { get; set; }
-
-        public string RedirectUri { get; set; }
-
-        public string Scopes { get; set; }
-
-        public string TokenEndpoint { get; set; }
+        public string TokenEndpoint { get; set; } = string.Empty;
     }
 }

@@ -1,13 +1,10 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Helpers;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
-using Microsoft.Extensions.Options;
-using Umbraco.Cms.Core.PropertyEditors;
+﻿using Newtonsoft.Json.Linq;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Helpers;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
 {

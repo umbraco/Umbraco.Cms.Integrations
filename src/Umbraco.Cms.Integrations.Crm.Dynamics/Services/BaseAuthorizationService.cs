@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.Http;
-
-namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
+﻿namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 {
     public class BaseAuthorizationService
     {

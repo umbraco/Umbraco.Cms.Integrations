@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Linq;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels
 {

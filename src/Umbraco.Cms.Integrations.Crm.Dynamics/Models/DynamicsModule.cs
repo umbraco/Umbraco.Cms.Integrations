@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models
+﻿namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models
 {
     [Flags]
     public enum DynamicsModule

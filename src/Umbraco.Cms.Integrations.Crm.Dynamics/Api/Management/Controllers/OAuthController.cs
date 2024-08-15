@@ -1,11 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
