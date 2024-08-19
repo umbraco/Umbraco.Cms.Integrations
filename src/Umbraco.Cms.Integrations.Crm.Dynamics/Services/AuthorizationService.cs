@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 
@@ -48,12 +47,12 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             {
                 var result = await response.Content.ReadAsStringAsync();
 
-                var tokenDto = JsonConvert.DeserializeObject<TokenDto>(result);
+                var tokenDto = JsonSerializer.Deserialize<TokenDto>(result);
 
                 var identity = await DynamicsService.GetIdentity(tokenDto.AccessToken);
 
                 if (identity.IsAuthorized)
-                    DynamicsConfigurationService.AddorUpdateOAuthConfiguration(tokenDto.AccessToken, identity.UserId, identity.FullName);
+                    DynamicsConfigurationStorage.AddOrUpdateOAuthConfiguration(tokenDto.AccessToken, identity.UserId, identity.FullName);
                 else
                     return "Error: " + identity.Error.Message;
 
@@ -61,7 +60,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             }
 
             var errorResult = await response.Content.ReadAsStringAsync();
-            var errorDto = JsonConvert.DeserializeObject<ErrorDto>(errorResult);
+            var errorDto = JsonSerializer.Deserialize<ErrorDto>(errorResult);
 
             return "Error: " + errorDto.ErrorDescription;
         }

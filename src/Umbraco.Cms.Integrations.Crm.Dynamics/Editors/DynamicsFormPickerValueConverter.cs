@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Json.More;
+using System.Text.Json.Nodes;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Helpers;
@@ -10,9 +11,9 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
 {
     public class DynamicsFormPickerValueConverter : PropertyValueConverterBase
     {
-        private readonly DynamicsService _dynamicsService;
+        private readonly IDynamicsService _dynamicsService;
 
-        public DynamicsFormPickerValueConverter(DynamicsService dynamicsService)
+        public DynamicsFormPickerValueConverter(IDynamicsService dynamicsService)
         {
             _dynamicsService = dynamicsService;
         }
@@ -27,21 +28,23 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
         {
             if (source == null) return null;
 
-            var jObject = JObject.Parse(source.ToString());
+            var jsonObj = JsonSerializer.Deserialize<JsonObject>(source.ToString());
+
+            if (jsonObj is null) return null;
 
             var vm = new FormViewModel
             {
-                IframeEmbedded = (bool)jObject["iframeEmbedded"]
+                IframeEmbedded =  jsonObj.TryGetValue("iframeEmbedded", out var _, out var _) ? (bool)jsonObj["iframeEmbedded"] : false
             };
 
-            var module = (DynamicsModule)Enum.Parse(typeof(DynamicsModule), jObject["module"].ToString());
+            var module = (DynamicsModule)Enum.Parse(typeof(DynamicsModule), jsonObj["module"].ToString());
 
             vm.Module = module;
 
             if (module.HasFlag(DynamicsModule.Outbound))
             {
 
-                var embedCode = jObject["embedCode"].ToString();
+                var embedCode = jsonObj["embedCode"].ToString();
 
                 vm.FormBlockId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.DataFormBlockId);
                 vm.ContainerId = embedCode.ParseDynamicsEmbedCodeAttributeValue(Constants.EmbedAttribute.ContainerId);
@@ -51,7 +54,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
             }
             else
             {
-                var form = _dynamicsService.GetRealTimeForm(jObject["id"].ToString()).ConfigureAwait(false).GetAwaiter().GetResult();
+                var form = _dynamicsService.GetRealTimeForm(jsonObj["id"].ToString()).ConfigureAwait(false).GetAwaiter().GetResult();
                 if (form != null)
                 {
                     vm.Html = form.StandaloneHtml;

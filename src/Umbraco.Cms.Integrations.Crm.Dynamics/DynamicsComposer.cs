@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿global using System.Text.Json;
+global using System.Text.Json.Serialization;
+
+using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
@@ -34,9 +37,9 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
                 };
             });
 
-            builder.Services.AddSingleton<DynamicsService>();
+            builder.Services.AddSingleton<IDynamicsConfigurationStorage, DynamicsConfigurationStorage>();
 
-            builder.Services.AddSingleton<DynamicsConfigurationService>();
+            builder.Services.AddSingleton<IDynamicsService, DynamicsService>();
 
             // Generate Swagger documentation for Zapier API
             builder.Services.Configure<SwaggerGenOptions>(options =>
