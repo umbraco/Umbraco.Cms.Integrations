@@ -101,6 +101,8 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
             };
             this._showSuccess("OAuth Connected");
 
+            await this.#dynamicsContext.checkOauthConfiguration();
+
             const { data } = await this.#dynamicsContext.getSystemUserFullName();
             this._userName = data;
 

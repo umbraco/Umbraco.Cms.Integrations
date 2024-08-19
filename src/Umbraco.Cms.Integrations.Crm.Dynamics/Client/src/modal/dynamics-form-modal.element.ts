@@ -57,9 +57,7 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
     async #checkOAuthConfiguration() {
         if (!this.#settingsModel) return;
 
-        if (!this.#settingsModel.isAuthorized) {
-            this._showError("Unable to connect to Dynamics. Please review the settings of the form picker property's data type.");
-        } else {
+        if (this.#settingsModel.isAuthorized) {
             await this.#getForms();
         }
     }
@@ -100,6 +98,15 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
         notificationContext?.peek(color, {
             data: { message },
         });
+    }
+
+    async #onConnect() {
+        await this.#getForms();
+    }
+
+    async #onRevoke() {
+        this._filteredForms = [];
+        await this.#dynamicsContext.checkOauthConfiguration();
     }
 
     onMessageOnSubmitIsHtmlChange() {
@@ -157,7 +164,7 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
                     <br />
 
                     <uui-box headline="Dynamics - OAuth Status">
-                        <dynamics-authorization></dynamics-authorization>
+                        <dynamics-authorization @connect=${this.#onConnect} @revoke=${this.#onRevoke}></dynamics-authorization>
                     </uui-box>
                 `}
 
