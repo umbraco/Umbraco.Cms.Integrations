@@ -8,12 +8,17 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
 {
     public class RevokeAccessTokenController : FormsControllerBase
     {
-        public RevokeAccessTokenController(IOptions<DynamicsSettings> options, DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService, DynamicsComposer.AuthorizationImplementationFactory authorizationImplementationFactory) : base(options, dynamicsService, dynamicsConfigurationService, authorizationImplementationFactory)
+        public RevokeAccessTokenController(
+            IOptions<DynamicsSettings> options, 
+            IDynamicsService dynamicsService, 
+            IDynamicsConfigurationStorage dynamicsConfigurationStorage, 
+            DynamicsComposer.AuthorizationImplementationFactory authorizationImplementationFactory) 
+            : base(options, dynamicsService, dynamicsConfigurationStorage, authorizationImplementationFactory)
         {
         }
 
         [HttpDelete("revoke-access-token")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        public IActionResult RevokeAccessToken() => Ok(DynamicsConfigurationService.Delete());
+        public IActionResult RevokeAccessToken() => Ok(DynamicsConfigurationStorage.Delete());
     }
 }

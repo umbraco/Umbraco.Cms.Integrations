@@ -9,7 +9,12 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
 {
     public class CheckOAuthConfigurationController : FormsControllerBase
     {
-        public CheckOAuthConfigurationController(IOptions<DynamicsSettings> options, DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService, DynamicsComposer.AuthorizationImplementationFactory authorizationImplementationFactory) : base(options, dynamicsService, dynamicsConfigurationService, authorizationImplementationFactory)
+        public CheckOAuthConfigurationController(
+            IOptions<DynamicsSettings> options, 
+            IDynamicsService dynamicsService, 
+            IDynamicsConfigurationStorage dynamicsConfigurationStorage, 
+            DynamicsComposer.AuthorizationImplementationFactory authorizationImplementationFactory) 
+            : base(options, dynamicsService, dynamicsConfigurationStorage, authorizationImplementationFactory)
         {
         }
 
@@ -17,7 +22,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
         [ProducesResponseType(typeof(OAuthConfigurationDto), StatusCodes.Status200OK)] 
         public async Task<IActionResult> CheckOAuthConfiguration()
         {
-            var oauthConfiguration = DynamicsConfigurationService.GetOAuthConfiguration();
+            var oauthConfiguration = DynamicsConfigurationStorage.GetOAuthConfiguration();
 
             if (oauthConfiguration == null) return Ok(new OAuthConfigurationDto { Message = string.Empty });
 

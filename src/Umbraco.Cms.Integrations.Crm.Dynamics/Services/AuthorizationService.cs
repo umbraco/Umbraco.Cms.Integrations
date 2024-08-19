@@ -8,9 +8,11 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
     {
         private readonly DynamicsOAuthSettings _oauthSettings;
 
-        public AuthorizationService(IOptions<DynamicsOAuthSettings> oauthOptions,
-            DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService)
-                : base(dynamicsService, dynamicsConfigurationService)
+        public AuthorizationService(
+            IOptions<DynamicsOAuthSettings> oauthOptions,
+            IDynamicsService dynamicsService, 
+            IDynamicsConfigurationStorage dynamicsConfigurationStorage)
+            : base(dynamicsService, dynamicsConfigurationStorage)
 
         {
             _oauthSettings = oauthOptions.Value;

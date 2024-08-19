@@ -10,7 +10,12 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
 {
     public class GetFormsController : FormsControllerBase
     {
-        public GetFormsController(IOptions<DynamicsSettings> options, DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService, DynamicsComposer.AuthorizationImplementationFactory authorizationImplementationFactory) : base(options, dynamicsService, dynamicsConfigurationService, authorizationImplementationFactory)
+        public GetFormsController(
+            IOptions<DynamicsSettings> options, 
+            IDynamicsService dynamicsService, 
+            IDynamicsConfigurationStorage dynamicsConfigurationStorage, 
+            DynamicsComposer.AuthorizationImplementationFactory authorizationImplementationFactory) 
+            : base(options, dynamicsService, dynamicsConfigurationStorage, authorizationImplementationFactory)
         {
         }
 

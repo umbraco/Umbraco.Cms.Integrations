@@ -9,7 +9,12 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
 {
     public class GetAccessTokenController : FormsControllerBase
     {
-        public GetAccessTokenController(IOptions<DynamicsSettings> options, DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService, DynamicsComposer.AuthorizationImplementationFactory authorizationImplementationFactory) : base(options, dynamicsService, dynamicsConfigurationService, authorizationImplementationFactory)
+        public GetAccessTokenController(
+            IOptions<DynamicsSettings> options, 
+            IDynamicsService dynamicsService, 
+            IDynamicsConfigurationStorage dynamicsConfigurationStorage, 
+            DynamicsComposer.AuthorizationImplementationFactory authorizationImplementationFactory) 
+            : base(options, dynamicsService, dynamicsConfigurationStorage, authorizationImplementationFactory)
         {
         }
 

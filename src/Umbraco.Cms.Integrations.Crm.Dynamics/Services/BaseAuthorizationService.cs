@@ -8,9 +8,9 @@
         // Access to the client within the class is via ClientFactory(), allowing us to mock the responses in tests.
         public static Func<HttpClient> ClientFactory = () => s_client;
 
-        protected readonly DynamicsService DynamicsService;
+        protected readonly IDynamicsService DynamicsService;
 
-        protected readonly DynamicsConfigurationService DynamicsConfigurationService;
+        protected readonly IDynamicsConfigurationStorage DynamicsConfigurationStorage;
 
         protected const string DynamicsAuthorizationUrl = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize" +
             "?client_id={0}" +
@@ -19,11 +19,11 @@
             "&response_mode=query" +
             "&scope={2}";
 
-        public BaseAuthorizationService(DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService)
+        public BaseAuthorizationService(IDynamicsService dynamicsService, IDynamicsConfigurationStorage dynamicsConfigurationStorage)
         {
             DynamicsService = dynamicsService;
 
-            DynamicsConfigurationService = dynamicsConfigurationService;
+            DynamicsConfigurationStorage = dynamicsConfigurationStorage;
         }
 
 

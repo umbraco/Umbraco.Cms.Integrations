@@ -1,23 +1,23 @@
 ﻿using Microsoft.Extensions.Logging;
-using Umbraco.Cms.Core.Scoping;
+using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Migrations;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 {
-    public class DynamicsConfigurationService
+    public class DynamicsConfigurationStorage : IDynamicsConfigurationStorage
     {
         private readonly IScopeProvider _scopeProvider;
-        private readonly ILogger<DynamicsService> _logger;
+        private readonly ILogger<DynamicsConfigurationStorage> _logger;
 
-        public DynamicsConfigurationService(IScopeProvider scopeProvider, ILogger<DynamicsService> logger)
+        public DynamicsConfigurationStorage(IScopeProvider scopeProvider, ILogger<DynamicsConfigurationStorage> logger)
         {
             _scopeProvider = scopeProvider;
 
             _logger = logger;
         }
 
-        public string AddorUpdateOAuthConfiguration(string accessToken, string userId, string fullName)
+        public string AddOrUpdateOAuthConfiguration(string accessToken, string userId, string fullName)
         {
             try
             {

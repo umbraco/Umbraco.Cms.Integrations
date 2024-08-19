@@ -16,13 +16,13 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
 
         protected readonly IDynamicsAuthorizationService AuthorizationService;
 
-        protected readonly DynamicsService DynamicsService;
+        protected readonly IDynamicsService DynamicsService;
 
-        protected readonly DynamicsConfigurationService DynamicsConfigurationService;
+        protected readonly IDynamicsConfigurationStorage DynamicsConfigurationStorage;
 
         public FormsControllerBase(IOptions<DynamicsSettings> options,
-            DynamicsService dynamicsService,
-            DynamicsConfigurationService dynamicsConfigurationService,
+            IDynamicsService dynamicsService,
+            IDynamicsConfigurationStorage dynamicsConfigurationStorage,
             AuthorizationImplementationFactory authorizationImplementationFactory)
         {
 
@@ -32,7 +32,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
 
             DynamicsService = dynamicsService;
 
-            DynamicsConfigurationService = dynamicsConfigurationService;
+            DynamicsConfigurationStorage = dynamicsConfigurationStorage;
         }
     }
 }

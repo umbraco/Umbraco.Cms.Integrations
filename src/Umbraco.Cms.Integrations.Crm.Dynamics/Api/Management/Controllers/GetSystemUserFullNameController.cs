@@ -8,12 +8,17 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
 {
     public class GetSystemUserFullNameController : FormsControllerBase
     {
-        public GetSystemUserFullNameController(IOptions<DynamicsSettings> options, DynamicsService dynamicsService, DynamicsConfigurationService dynamicsConfigurationService, DynamicsComposer.AuthorizationImplementationFactory authorizationImplementationFactory) : base(options, dynamicsService, dynamicsConfigurationService, authorizationImplementationFactory)
+        public GetSystemUserFullNameController(
+            IOptions<DynamicsSettings> options, 
+            IDynamicsService dynamicsService, 
+            IDynamicsConfigurationStorage dynamicsConfigurationStorage, 
+            DynamicsComposer.AuthorizationImplementationFactory authorizationImplementationFactory) 
+            : base(options, dynamicsService, dynamicsConfigurationStorage, authorizationImplementationFactory)
         {
         }
 
         [HttpGet("system-user-fullname")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        public IActionResult GetSystemUserFullName() => Ok(DynamicsConfigurationService.GetSystemUserFullName());
+        public IActionResult GetSystemUserFullName() => Ok(DynamicsConfigurationStorage.GetSystemUserFullName());
     }
 }
