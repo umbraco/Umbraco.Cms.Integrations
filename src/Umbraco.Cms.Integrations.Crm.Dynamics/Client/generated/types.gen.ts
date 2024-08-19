@@ -826,10 +826,6 @@ export type $OpenApiTs = {
                  * OK
                  */
                 200: OAuthConfigurationDtoModel;
-                /**
-                 * Unauthorized
-                 */
-                401: unknown;
             };
         };
     };

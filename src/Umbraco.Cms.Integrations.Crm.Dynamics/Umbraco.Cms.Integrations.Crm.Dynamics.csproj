@@ -31,10 +31,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Client\" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
@@ -48,6 +44,10 @@
 
 	<ItemGroup>
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Views\**" />
 	</ItemGroup>
 
 	<!-- Build client assets using NPM  -->

@@ -71,10 +71,7 @@ export class DynamicsService {
     public static checkOauthConfiguration(): CancelablePromise<CheckOauthConfigurationResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/dynamics/management/api/v1/forms/oauth-configuration',
-            errors: {
-                401: 'Unauthorized'
-            }
+            url: '/dynamics/management/api/v1/forms/oauth-configuration'
         });
     }
     

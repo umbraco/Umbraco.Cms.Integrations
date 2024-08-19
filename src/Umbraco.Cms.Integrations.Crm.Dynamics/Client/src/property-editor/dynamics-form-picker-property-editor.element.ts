@@ -3,7 +3,7 @@ import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { UmbPropertyEditorUiElement } from '@umbraco-cms/backoffice/extension-registry';
 import { DYNAMICS_CONTEXT_TOKEN } from "../context/dynamics.context";
 import { UMB_MODAL_MANAGER_CONTEXT } from "@umbraco-cms/backoffice/modal";
-import { FormDtoModel, OAuthConfigurationDtoModel } from "@umbraco-integrations/dynamics/generated";
+import { DynamicsModuleModel, FormDtoModel, OAuthConfigurationDtoModel } from "@umbraco-integrations/dynamics/generated";
 import { DynamicsFormPickerConfiguration } from "../types/types";
 import { UmbPropertyEditorConfigCollection } from "@umbraco-cms/backoffice/property-editor";
 import { DYNAMICS_MODAL_TOKEN } from "../modal/dynamics.modal-token";
@@ -60,7 +60,7 @@ export class DynamicsFormPickerPropertyEditor extends UmbLitElement implements U
         }, 3000);
     }
 
-    #checkConfiguration(){
+    #checkConfiguration() {
         if (this.value == null || this.value.length == 0) return;
 
         if(!this.#settingsModel) return;
@@ -76,10 +76,12 @@ export class DynamicsFormPickerPropertyEditor extends UmbLitElement implements U
 
     private async _openModal() {
         const module = this._config?.module == "Both" ? "Outbound | Real-Time" : this._config?.module;
+
         const pickerContext = this.#modalManagerContext?.open(this, DYNAMICS_MODAL_TOKEN, {
             data: {
-                headline:  `Dynamics Forms - ${module} Marketing Forms`
-            },
+                headline: `Dynamics Forms - ${module} Marketing Forms`,
+                module: this._config?.module!
+            }
         });
 
         const data = await pickerContext?.onSubmit();

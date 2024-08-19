@@ -88,7 +88,8 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
         }, false);
     }
 
-    async getAccessToken(oauthRequestDtoModel: OAuthRequestDtoModel){
+    async getAccessToken(oauthRequestDtoModel: OAuthRequestDtoModel) {
+        this._loading = false;
         const { data } = await this.#dynamicsContext.getAccessToken(oauthRequestDtoModel);
         if (!data) return;
 
@@ -162,7 +163,7 @@ export class DynamicsAuthorizationElement extends UmbElementMixin(LitElement){
                             @click=${this.#connectButtonClick}></uui-button>
                         <uui-button 
                             color="danger" 
-                            look="secondary" 
+                            look="primary" 
                             label="Revoke"
                             ?disabled=${!this._oauthSetup?.isConnected}
                             @click=${this.#revokeButtonClick}></uui-button>

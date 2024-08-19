@@ -8,7 +8,7 @@ export const propertyEditorUiManifest : ManifestPropertyEditorUi = {
     js: () => import("./dynamics-form-picker-property-editor.element"),
     meta: {
         label: "Dynamics Form Picker",
-        icon: "icon-book",
+        icon: "icon-handshake",
         group: "pickers",
 		propertyEditorSchemaAlias: 'Umbraco.Cms.Integrations.Crm.Dynamics.FormPicker',
         settings: {
