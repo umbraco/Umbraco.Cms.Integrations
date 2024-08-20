@@ -30,7 +30,8 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
         module: DynamicsModuleModel.BOTH,
         name: "",
         rawHtml: "",
-        standaloneHtml: ""
+        standaloneHtml: "",
+        iframeEmbedded: false
     };
     @state()
     private renderWithIFrame: boolean = false;
@@ -85,7 +86,9 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
             }
         }
 
-        this.value = { selectedForm: this._selectedForm, iframeEmbedded: this.renderWithIFrame };
+        this._selectedForm.iframeEmbedded = this.renderWithIFrame
+
+        this.value = { selectedForm: this._selectedForm };
         this._submitModal();
     }
 
@@ -145,19 +148,19 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
                             ${this._renderFilter()}
                             ${this._filteredForms.length > 0 ?
                                 html`
-                                            ${repeat(this._filteredForms, (form) => html`
-                                                <uui-ref-node-form
-                                                    selectable
-                                                    ?selected=${this._selectedForm.id == form.id}
-                                                    name=${form.name ?? ""}
-                                                    @selected=${() => this._onSelect(form)}>
-                                                </uui-ref-node-form>
-                                            `)}
-                                            <uui-toggle
-                                                ?checked=${this.renderWithIFrame}
-                                                .label=${this.toggleLabel}
-                                                @change=${this.onMessageOnSubmitIsHtmlChange}></uui-toggle>
-                                        ` :
+                                    ${repeat(this._filteredForms, (form) => html`
+                                        <uui-ref-node-form
+                                            selectable
+                                            ?selected=${this._selectedForm.id == form.id}
+                                            name=${form.name ?? ""}
+                                            @selected=${() => this._onSelect(form)}>
+                                        </uui-ref-node-form>
+                                    `)}
+                                    <uui-toggle
+                                        ?checked=${this.renderWithIFrame}
+                                        .label=${this.toggleLabel}
+                                        @change=${this.onMessageOnSubmitIsHtmlChange}></uui-toggle>
+                                ` :
                                 html``}
                         </uui-box>
 

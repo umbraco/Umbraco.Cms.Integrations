@@ -218,6 +218,7 @@ export type FormDtoModel = {
     rawHtml: string;
     standaloneHtml: string;
     module: DynamicsModuleModel;
+    iframeEmbedded: boolean;
 };
 
 export enum GenericParameterAttributes {

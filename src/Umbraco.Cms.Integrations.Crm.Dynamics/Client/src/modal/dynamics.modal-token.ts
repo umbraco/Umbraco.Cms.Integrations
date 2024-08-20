@@ -9,7 +9,6 @@ export type DynamicsFormPickerModalData = {
 
 export type DynamicsFormPickerModalValue = {
     selectedForm: FormDtoModel;
-    iframeEmbedded: boolean;
 }
 
 export const DYNAMICS_MODAL_TOKEN = new UmbModalToken<DynamicsFormPickerModalData, DynamicsFormPickerModalValue>("Dynamics.Modal", {

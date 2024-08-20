@@ -31,6 +31,11 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels
             {
                 const string dataCachedFormUrlKey = "data-cached-form-url=";
 
+                if (string.IsNullOrEmpty(Html))
+                {
+                    return string.Empty;
+                }
+
                 var dataCachedFromUrl = Html.Split(' ').FirstOrDefault(p => p.Contains("data-cached-form-url"));
                 if (string.IsNullOrEmpty(dataCachedFromUrl))
                 {

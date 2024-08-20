@@ -17,5 +17,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos
 
         [JsonPropertyName("module")]
         public DynamicsModule Module { get; set; }
+
+        [JsonPropertyName("iframeEmbedded")]
+        public bool IFrameEmbedded { get; set; }
     }
 }
