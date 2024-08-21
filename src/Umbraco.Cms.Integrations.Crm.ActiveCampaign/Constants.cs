@@ -3,7 +3,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
 {
     public class Constants
     {
-        public const string PropertyEditorAlias = "Umbraco.Cms.Integrations.Crm.ActiveCampaign.FormPicker";
+        public const string PropertyEditorAlias = "ActiveCampaign.FormPicker";
 
         public const string SettingsPath = "Umbraco:Cms:Integrations:Crm:ActiveCampaign:Settings";
 
@@ -20,13 +20,13 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
 
         public static class ManagementApi
         {
-            public const string RootPath = "active-campaign/management/api";
+            public const string RootPath = "active-campaign-forms/management/api";
 
-            public const string ApiTitle = "Active Campaign Management API";
+            public const string ApiTitle = "ActiveCampaign Forms Management API";
 
             public const string ApiName = "active-campaign-management";
 
-            public const string GroupName = "Active Campaign";
+            public const string GroupName = "Active Campaign Forms";
         }
     }
 }

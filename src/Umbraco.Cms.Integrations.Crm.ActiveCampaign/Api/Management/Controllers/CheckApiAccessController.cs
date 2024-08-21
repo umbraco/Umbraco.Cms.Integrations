@@ -2,11 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.Dtos;
 
@@ -21,7 +16,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
         }
 
         [HttpGet("api-access")]
-        [ProducesResponseType(typeof(JsonResult), StatusCodes.Status200OK)]
-        public IActionResult CheckApiAccess() => new JsonResult(new ApiAccessDto(Settings.BaseUrl, Settings.ApiKey));
+        [ProducesResponseType(typeof(ApiAccessDto), StatusCodes.Status200OK)]
+        public IActionResult CheckApiAccess() => Ok(new ApiAccessDto(Settings.BaseUrl, Settings.ApiKey));
     }
 }
