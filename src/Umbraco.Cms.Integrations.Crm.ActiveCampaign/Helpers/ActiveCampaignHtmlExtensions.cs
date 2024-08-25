@@ -11,7 +11,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Helpers
             FormViewModel formVM, string renderingViewPath = "")
         {
             return htmlHelper.Partial(string.IsNullOrEmpty(renderingViewPath) 
-                ? "~/App_Plugins/UmbracoCms.Integrations/Crm/ActiveCampaign/Render/ActiveCampaignForm.cshtml" 
+                ? "~/Views/ActiveCampaignForms/Render/ActiveCampaignForm.cshtml" 
                 : renderingViewPath,
                 formVM ?? new FormViewModel());
         }

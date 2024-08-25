@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-
-using System;
-
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
