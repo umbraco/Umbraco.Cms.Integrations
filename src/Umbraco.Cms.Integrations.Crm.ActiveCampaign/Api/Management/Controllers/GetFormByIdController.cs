@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.Dtos;
 
@@ -19,6 +17,9 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
 
         [HttpGet("forms/{id}")]
         [ProducesResponseType(typeof(FormResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetForm(string id)
         {
             var client = HttpClientFactory.CreateClient(Constants.FormsHttpClient);
@@ -30,7 +31,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
                     RequestUri = new Uri($"{client.BaseAddress}{ApiPath}/{id}")
                 });
 
-            return await HandleResponseAsync(response);
+            return await HandleResponseAsync<FormResponseDto>(response);
         }
     }
 }

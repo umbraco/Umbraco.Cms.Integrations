@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Text.Json;
@@ -6,6 +7,7 @@ using System.Text.Json.Nodes;
 using Umbraco.Cms.Api.Common.Attributes;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.Dtos;
+using Umbraco.Cms.Web.Common.Authorization;
 using Umbraco.Cms.Web.Common.Routing;
 
 namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
@@ -29,7 +31,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
             HttpClientFactory = httpClientFactory;
         }
 
-        protected async Task<IActionResult> HandleResponseAsync(HttpResponseMessage? httpResponse)
+        protected async Task<IActionResult> HandleResponseAsync<T>(HttpResponseMessage? httpResponse)
         {
             if (httpResponse is null)
             {
@@ -40,7 +42,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                return Ok(new JsonResult(JsonSerializer.Deserialize<FormCollectionResponseDto>(content)));
+                return Ok(JsonSerializer.Deserialize<T>(content));
             }
 
             var responseMessage = content.Contains("message") 
