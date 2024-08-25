@@ -20,11 +20,11 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
 
         public static class ManagementApi
         {
-            public const string RootPath = "active-campaign-forms/management/api";
+            public const string RootPath = "activecampaign-forms/management/api";
 
             public const string ApiTitle = "ActiveCampaign Forms Management API";
 
-            public const string ApiName = "active-campaign-management";
+            public const string ApiName = "activecampaign-forms-management";
 
             public const string GroupName = "Active Campaign Forms";
         }

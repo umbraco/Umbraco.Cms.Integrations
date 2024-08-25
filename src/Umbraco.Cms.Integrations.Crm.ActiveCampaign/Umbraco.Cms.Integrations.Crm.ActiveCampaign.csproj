@@ -6,7 +6,7 @@
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 	  <EnableDefaultContentItems>false</EnableDefaultContentItems>
-	  <StaticWebAssetBasePath>/App_Plugins/ActiveCampaign</StaticWebAssetBasePath>
+	  <StaticWebAssetBasePath>/App_Plugins/ActiveCampaignForms</StaticWebAssetBasePath>
   </PropertyGroup>
 
 	<PropertyGroup>
