@@ -1,8 +1,4 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Core.Models.PublishedContent;
-#else
-using Umbraco.Core.Models.PublishedContent;
-#endif
+﻿using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 {

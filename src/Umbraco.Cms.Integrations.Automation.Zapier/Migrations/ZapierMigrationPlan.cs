@@ -1,8 +1,4 @@
-﻿#if NETCOREAPP
-using Umbraco.Cms.Infrastructure.Migrations;
-#else
-using Umbraco.Core.Migrations;
-#endif
+﻿using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 {

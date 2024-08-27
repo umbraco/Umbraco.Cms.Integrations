@@ -1,15 +1,7 @@
 ﻿using NPoco;
-
-#if NETCOREAPP
 using Microsoft.Extensions.Logging;
-
 using Umbraco.Cms.Infrastructure.Migrations;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
-#else
-using Umbraco.Core.Migrations;
-using Umbraco.Core.Persistence.DatabaseAnnotations;
-using Umbraco.Core.Logging;
-#endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 {
@@ -24,18 +16,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
         {
         }
 
-#if NETCOREAPP
         protected override void Migrate()
-#else
-        public override void Migrate()
-#endif
         {
-#if NETCOREAPP
             Logger.LogDebug(MigrationLoggingMessage);
-            
-#else
-            Logger.Debug<ZapierMigration>(MigrationLoggingMessage);
-#endif
 
             if (TableExists(Constants.ZapierSubscriptionHookTable) == false)
             {
@@ -43,11 +26,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
             }
             else
             {
-#if NETCOREAPP
                 Logger.LogDebug(ContentDbTableExistsMessage);
-#else
-                Logger.Debug<ZapierMigration>(ContentDbTableExistsMessage);
-#endif
             }
         }
 
