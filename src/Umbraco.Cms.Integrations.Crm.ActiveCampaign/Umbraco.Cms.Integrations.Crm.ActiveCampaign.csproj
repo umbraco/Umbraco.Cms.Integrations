@@ -29,9 +29,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Api.Common" Version="[14.0.0, 15)" />
-		<PackageReference Include="Umbraco.Cms.Api.Management" Version="[14.0.0, 15)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[14.0.0, 15)" />
+		<PackageReference Include="Umbraco.Cms.Api.Common" Version="[14.2.0, 15)" />
+		<PackageReference Include="Umbraco.Cms.Api.Management" Version="[14.2.0, 15)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[14.2.0, 15)" />
 	</ItemGroup>
 
 	<ItemGroup>

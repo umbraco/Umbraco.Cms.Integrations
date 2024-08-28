@@ -1,6 +1,6 @@
 ﻿export default [
     {
         name: 'icon-activecampaign',
-        path: () => import('./activecampaign.js')
+        path: () => import('./icon-activecampaign.js')
     }
 ];
