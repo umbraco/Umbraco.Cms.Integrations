@@ -1,17 +1,15 @@
-﻿#if NETCOREAPP
-using Microsoft.Extensions.DependencyInjection;
+﻿global using System.Text.Json;
+global using System.Text.Json.Serialization;
 
+using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Migrations;
-#else
-using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
-using Umbraco.Core;
-using Umbraco.Core.Composing;
-#endif
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics
 {
@@ -19,7 +17,6 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
     {
         public delegate IDynamicsAuthorizationService AuthorizationImplementationFactory(bool useUmbracoAuthorization);
 
-#if NETCOREAPP
         public void Compose(IUmbracoBuilder builder)
         {
             var options = builder.Services.AddOptions<DynamicsSettings>()
@@ -40,28 +37,24 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
                 };
             });
 
-            builder.Services.AddSingleton<DynamicsService>();
+            builder.Services.AddSingleton<IDynamicsConfigurationStorage, DynamicsConfigurationStorage>();
 
-            builder.Services.AddSingleton<DynamicsConfigurationService>();
-        }
-#else
-        public void Compose(Composition composition)
-        {
-            composition.Register<UmbracoAuthorizationService>(Lifetime.Singleton);
-            composition.Register<AuthorizationService>(Lifetime.Singleton);
-            composition.Register<AuthorizationImplementationFactory>(f => (useUmbracoAuthorization) =>
+            builder.Services.AddSingleton<IDynamicsService, DynamicsService>();
+
+            // Generate Swagger documentation for Zapier API
+            builder.Services.Configure<SwaggerGenOptions>(options =>
             {
-                if (useUmbracoAuthorization)
-                    return f.GetInstance<UmbracoAuthorizationService>();
-
-                return f.GetInstance<AuthorizationService>();
-            }, Lifetime.Singleton);
-
-            composition.Register<DynamicsService>(Lifetime.Singleton);
-
-            composition.Register<DynamicsConfigurationService>(Lifetime.Singleton);
+                options.SwaggerDoc(
+                    Constants.ManagementApi.ApiName,
+                    new OpenApiInfo
+                    {
+                        Title = Constants.ManagementApi.ApiTitle,
+                        Version = "Latest",
+                        Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Dynamics forms and configuration."
+                    });
+                options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
+            });
         }
-#endif
 
     }
 }

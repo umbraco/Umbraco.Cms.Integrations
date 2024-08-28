@@ -1,31 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Net.Http;
+﻿using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
+using System.Text.Json.Nodes;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
-
-
-#if NETCOREAPP
-using Microsoft.Extensions.Options;
-#else
-#endif
+using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 {
-    public class DynamicsService
+    public class DynamicsService : IDynamicsService
     {
         private readonly DynamicsSettings _settings;
 
-        private readonly DynamicsConfigurationService _dynamicsConfigurationService;
+        private readonly IDynamicsConfigurationStorage _dynamicsConfigurationStorage;
 
         // Using a static HttpClient (see: https://www.aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/).
         private readonly static HttpClient s_client = new HttpClient();
@@ -33,21 +19,12 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
         // Access to the client within the class is via ClientFactory(), allowing us to mock the responses in tests.
         public static Func<HttpClient> ClientFactory = () => s_client;
 
-#if NETCOREAPP
-        public DynamicsService(IOptions<DynamicsSettings> options, DynamicsConfigurationService dynamicsConfigurationService)
+        public DynamicsService(IOptions<DynamicsSettings> options, IDynamicsConfigurationStorage dynamicsConfigurationStorage)
         {
             _settings = options.Value;
 
-            _dynamicsConfigurationService = dynamicsConfigurationService;
+            _dynamicsConfigurationStorage = dynamicsConfigurationStorage;
         }
-#else
-        public DynamicsService(DynamicsConfigurationService dynamicsConfigurationService)
-        {
-            _settings = new DynamicsSettings(ConfigurationManager.AppSettings);
-
-            _dynamicsConfigurationService = dynamicsConfigurationService;
-        }
-#endif
 
         public async Task<IdentityDto> GetIdentity(string accessToken)
         {
@@ -68,7 +45,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             var result = await response.Content.ReadAsStringAsync();
 
-            var systemUser = JsonConvert.DeserializeObject<ResponseDto<IdentityDto>>(result).Value.FirstOrDefault(p => p.UserId == user.UserId.ToString());
+            var systemUser = JsonSerializer.Deserialize<ResponseDto<IdentityDto>>(result).Value.FirstOrDefault(p => p.UserId == user.UserId.ToString());
             systemUser.IsAuthorized = true;
 
             return systemUser;
@@ -76,7 +53,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
         public async Task<string> GetEmbedCode(string formId)
         {
-            var oauthConfiguration = _dynamicsConfigurationService.GetOAuthConfiguration();
+            var oauthConfiguration = _dynamicsConfigurationStorage.GetOAuthConfiguration();
 
             var requestMessage = new HttpRequestMessage
             {
@@ -92,9 +69,62 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             var result = await response.Content.ReadAsStringAsync();
 
-            var embedCode = JsonConvert.DeserializeObject<ResponseDto<OutboundFormDto>>(result);
+            var embedCode = JsonSerializer.Deserialize<ResponseDto<OutboundFormDto>>(result);
 
             return embedCode.Value.FirstOrDefault() != null ? embedCode.Value.First().EmbedCode : string.Empty;
+        }
+
+        public async Task<IEnumerable<FormDto>> GetForms(DynamicsModule module)
+        {
+            var list = new List<FormDto>();
+
+            var oauthConfiguration = _dynamicsConfigurationStorage.GetOAuthConfiguration();
+
+            if (module.HasFlag(DynamicsModule.Outbound))
+            {
+                var forms = await Get<OutboundFormDto>(oauthConfiguration.AccessToken, Constants.Modules.OutboundPath);
+                if(forms != null)
+                {
+                    list.AddRange(forms.Value.Select(p => new FormDto
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Module = DynamicsModule.Outbound
+                    }));
+                }
+            }
+
+            if (module.HasFlag(DynamicsModule.RealTime))
+            {
+                var forms = await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath);
+                if (forms != null)
+                {
+                    list.AddRange(forms.Value.Select(p => new FormDto
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Module = DynamicsModule.RealTime
+                    }));
+                }
+            }
+
+            return list;
+        }
+
+        public async Task<FormDto> GetRealTimeForm(string id)
+        {
+            var oauthConfiguration = _dynamicsConfigurationStorage.GetOAuthConfiguration();
+
+            var forms = await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath);
+
+            if (forms == null || !forms.Value.Any(p => p.Id == id)) return null;
+
+            var form = forms.Value.First(p => p.Id == id);
+            return new FormDto
+            {
+                RawHtml = form.FormHtml,
+                StandaloneHtml = form.StandaloneHtml
+            };
         }
 
         private async Task<IdentityDto> GetUser(string accessToken)
@@ -113,61 +143,14 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             if (!response.IsSuccessStatusCode)
             {
                 return !string.IsNullOrEmpty(result)
-                    ? JsonConvert.DeserializeObject<IdentityDto>(result)
+                    ? JsonSerializer.Deserialize<IdentityDto>(result)
                     : new IdentityDto { IsAuthorized = false };
             }
 
             return new IdentityDto
             {
                 IsAuthorized = true,
-                UserId = JObject.Parse(result)["UserId"].ToString()
-            };
-        }
-
-        public async Task<IEnumerable<FormDto>> GetForms(DynamicsModule module)
-        {
-            var list = new List<FormDto>();
-
-            var oauthConfiguration = _dynamicsConfigurationService.GetOAuthConfiguration();
-
-            if (module.HasFlag(DynamicsModule.Outbound))
-            {
-                var forms = await Get<OutboundFormDto>(oauthConfiguration.AccessToken, Constants.Modules.OutboundPath);
-                list.AddRange(forms.Value.Select(p => new FormDto
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Module = DynamicsModule.Outbound
-                }));
-            }
-
-            if (module.HasFlag(DynamicsModule.RealTime))
-            {
-                var forms = await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath);
-                list.AddRange(forms.Value.Select(p => new FormDto
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Module = DynamicsModule.RealTime
-                }));
-            }
-
-            return list;
-        }
-
-        public async Task<FormDto> GetRealTimeForm(string id)
-        {
-            var oauthConfiguration = _dynamicsConfigurationService.GetOAuthConfiguration();
-
-            var forms = await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath);
-
-            if (forms == null || !forms.Value.Any(p => p.Id == id)) return null;
-
-            var form = forms.Value.First(p => p.Id == id);
-            return new FormDto
-            {
-                RawHtml = form.FormHtml,
-                StandaloneHtml = form.StandaloneHtml
+                UserId = JsonSerializer.Deserialize<JsonObject>(result)["UserId"].ToString()
             };
         }
 
@@ -188,7 +171,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
             var result = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<ResponseDto<T>>(result);
+            return JsonSerializer.Deserialize<ResponseDto<T>>(result);
         }
     }
 }
