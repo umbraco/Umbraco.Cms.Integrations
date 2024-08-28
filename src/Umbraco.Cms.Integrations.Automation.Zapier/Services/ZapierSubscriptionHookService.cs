@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Cms.Integrations.Automation.Zapier.Migrations;
 using Umbraco.Cms.Integrations.Automation.Zapier.Models.Dtos;
-
-#if NETCOREAPP
-using Microsoft.Extensions.Logging;
-
-using Umbraco.Cms.Core.Scoping;
-#else
-using Umbraco.Core.Logging;
-using Umbraco.Core.Scoping;
-#endif
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 {
@@ -22,8 +11,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
     public class ZapierSubscriptionHookService
     {
         private readonly IScopeProvider _scopeProvider;
-
-#if NETCOREAPP
         private readonly ILogger<ZapierSubscriptionHookService> _logger;
 
         public ZapierSubscriptionHookService(IScopeProvider scopeProvider, ILogger<ZapierSubscriptionHookService> logger)
@@ -32,16 +19,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 
             _logger = logger;
         }
-#else
-        private readonly ILogger _logger;
-
-         public ZapierSubscriptionHookService(IScopeProvider scopeProvider, ILogger logger)
-        {
-            _scopeProvider = scopeProvider;
-
-            _logger = logger;
-        }
-#endif
 
         public IEnumerable<SubscriptionDto> GetAll()
         {
@@ -82,11 +59,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
             {
                 var message = $"An error has occurred while adding a subscription hook: {e.Message}";
 
-#if NETCOREAPP
                 _logger.LogError(message);
-#else
-                _logger.Error<ZapierSubscriptionHookService>(message);
-#endif
 
                 return message;
             }
@@ -114,11 +87,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
             {
                 var message = $"An error has occurred while deleting a subscription hook: {e.Message}";
 
-#if NETCOREAPP
                 _logger.LogError(message);
-#else
-                _logger.Error<ZapierSubscriptionHookService>(message);
-#endif
 
                 return message;
             }
