@@ -12,6 +12,9 @@ src/Umbraco.Cms.Integrations.Crm.Hubspot/wwwroot/*
 !src/Umbraco.Cms.Integrations.Crm.Hubspot/wwwroot/umbraco-package.json
 src/Umbraco.Cms.Integrations.Crm.Dynamics/wwwroot/*
 !src/Umbraco.Cms.Integrations.Crm.Dynamics/wwwroot/umbraco-package.json
+src/Umbraco.Cms.Integrations.Automation.Zapier/wwwroot
+src/Umbraco.Cms.Integrations.Commerce.Shopify/wwwroot
+src/Umbraco.Cms.Integrations.Crm.Hubspot/wwwroot
 
 
 # User-specific files
