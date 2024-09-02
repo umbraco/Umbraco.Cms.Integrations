@@ -9,14 +9,14 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
     {
         private readonly IUserService _userService;
 
-        private readonly AppSettings _zapierSettings;
+        private readonly ZapierSettings _zapierSettings;
 
         private readonly ZapierFormsSettings _zapierFormsSettings;
 
         private readonly IBackOfficeUserManager _backOfficeUserManager;
 
         public UserValidationService(
-            IOptions<AppSettings> options, 
+            IOptions<ZapierSettings> options, 
             IOptions<ZapierFormsSettings> zapierFormsSettings,
             IBackOfficeUserManager backOfficeUserManager)
         {
