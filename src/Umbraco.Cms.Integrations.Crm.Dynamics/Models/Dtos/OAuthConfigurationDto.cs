@@ -1,26 +1,24 @@
 ﻿
-using Newtonsoft.Json;
-
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos
 {
     public class OAuthConfigurationDto
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public int Id { get; set; }
 
-        [JsonProperty("accessToken")]
+        [JsonPropertyName("accessToken")]
         public string AccessToken { get; set; }
 
-        [JsonProperty("userId")]
+        [JsonPropertyName("userId")]
         public string UserId { get; set; }
 
-        [JsonProperty("fullName")]
+        [JsonPropertyName("fullName")]
         public string FullName { get; set; }
 
-        [JsonProperty("isAuthorized")]
+        [JsonPropertyName("isAuthorized")]
         public bool IsAuthorized { get; set; }
 
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
         public string Message { get; set; }
     }
 }

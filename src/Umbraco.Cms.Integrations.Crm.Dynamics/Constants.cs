@@ -13,13 +13,20 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
 
         public const int AccessTokenFieldSize = 4000;
 
-        public const string AppPluginFolderPath = "~/App_Plugins/UmbracoCms.Integrations/Crm/Dynamics";
-
         public static class RenderingComponent
         {
-            public const string DefaultViewPath = AppPluginFolderPath + "/Render/DynamicsForm.cshtml";
+            public const string DefaultViewPath = "~/Views/Dynamics/Render/DynamicsForm.cshtml";
+        }
 
-            public const string DefaultV8ViewPath = AppPluginFolderPath + "/Render/DynamicsFormV8.cshtml";
+        public static class ManagementApi
+        {
+            public const string RootPath = "dynamics/management/api";
+
+            public const string ApiName = "dynamics-management";
+
+            public const string ApiTitle = "Dynamics Management API";
+
+            public const string GroupName = "Dynamics";
         }
 
         public static class EmbedAttribute
@@ -40,23 +47,6 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
             public const string Settings = "Umbraco:Cms:Integrations:Crm:Dynamics:Settings";
 
             public const string OAuthSettings = "Umbraco:Cms:Integrations:Crm:Dynamics:OAuthSettings";
-
-            public const string UmbracoCmsIntegrationsCrmDynamicsHostUrlKey = "Umbraco.Cms.Integrations.Crm.Dynamics.HostUrl";
-
-            public const string UmbracoCmsIntegrationsCrmDynamicsApiPathKey = "Umbraco.Cms.Integrations.Crm.Dynamics.ApiPath";
-
-            public const string UmbracoCmsIntegrationsCrmDynamicsUseUmbracoAuthorizationKey = 
-                "Umbraco.Cms.Integrations.Crm.Dynamics.UseUmbracoAuthorization";
-
-            public const string UmbracoCmsIntegrationsCrmDynamicsClientIdKey = "Umbraco.Cms.Integrations.Crm.Dynamics.ClientId";
-
-            public const string UmbracoCmsIntegrationsCrmDynamicsClientSecretKey = "Umbraco.Cms.Integrations.Crm.Dynamics.ClientSecret";
-
-            public const string UmbracoCmsIntegrationsCrmDynamicsRedirectUriKey = "Umbraco.Cms.Integrations.Crm.Dynamics.RedirectUri";
-
-            public const string UmbracoCmsIntegrationsCrmDynamicsScopesKey = "Umbraco.Cms.Integrations.Crm.Dynamics.Scopes";
-
-            public const string UmbracoCmsIntegrationsCrmDynamicsTokenEndpointKey = "Umbraco.Cms.Integrations.Crm.Dynamics.TokenEndpoint";
         }
 
         public static class Modules

@@ -1,19 +1,18 @@
-﻿using Newtonsoft.Json;
-
+﻿
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos
 {
     public class ErrorDto
     {
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
 
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public string Code { get; set; }
 
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
         public string Message { get; set; }
 
-        [JsonProperty("error_description")]
+        [JsonPropertyName("error_description")]
         public string ErrorDescription { get; set; }
     }
 }

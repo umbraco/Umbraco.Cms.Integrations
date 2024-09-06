@@ -1,22 +1,24 @@
-﻿using Newtonsoft.Json;
-
+﻿
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos
 {
     public class FormDto
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
 
-        [JsonProperty("name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [JsonProperty("rawHtml")]
+        [JsonPropertyName("rawHtml")]
         public string RawHtml { get; set; }
 
-        [JsonProperty("standaloneHtml")]
+        [JsonPropertyName("standaloneHtml")]
         public string StandaloneHtml { get; set; }
 
-        [JsonProperty("module")]
+        [JsonPropertyName("module")]
         public DynamicsModule Module { get; set; }
+
+        [JsonPropertyName("iframeEmbedded")]
+        public bool IFrameEmbedded { get; set; }
     }
 }

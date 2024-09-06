@@ -1,25 +1,10 @@
-﻿using System.Collections.Specialized;
-
-namespace Umbraco.Cms.Integrations.Crm.Dynamics.Configuration
+﻿namespace Umbraco.Cms.Integrations.Crm.Dynamics.Configuration
 {
     public class DynamicsSettings
     {
-        public DynamicsSettings() { }
+        public string HostUrl { get; set; } = string.Empty;
 
-        public DynamicsSettings(NameValueCollection appSettings)
-        {
-            HostUrl = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsHostUrlKey];
-
-            ApiPath = appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsApiPathKey];
-
-            UseUmbracoAuthorization = bool.TryParse(appSettings[Constants.Configuration.UmbracoCmsIntegrationsCrmDynamicsUseUmbracoAuthorizationKey], out var key) 
-                ? key 
-                : true;
-        }
-
-        public string HostUrl { get; set; }
-
-        public string ApiPath { get; set; }
+        public string ApiPath { get; set; } = string.Empty;
 
         public bool UseUmbracoAuthorization { get; set; } = true;
     }

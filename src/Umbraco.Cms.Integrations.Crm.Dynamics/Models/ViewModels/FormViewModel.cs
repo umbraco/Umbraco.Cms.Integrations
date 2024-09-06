@@ -1,26 +1,24 @@
-﻿using Newtonsoft.Json;
-using System.Linq;
-
+﻿
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels
 {
     public class FormViewModel
     {
-        [JsonProperty("iframeEmbedded")]
+        [JsonPropertyName("iframeEmbedded")]
         public bool IframeEmbedded { get; set; }
 
-        [JsonProperty("formBlockId")]
+        [JsonPropertyName("formBlockId")]
         public string FormBlockId { get; set; }
 
-        [JsonProperty("containerId")]
+        [JsonPropertyName("containerId")]
         public string ContainerId { get; set; }
 
-        [JsonProperty("containerClass")]
+        [JsonPropertyName("containerClass")]
         public string ContainerClass { get; set; }
 
-        [JsonProperty("websiteId")]
+        [JsonPropertyName("websiteId")]
         public string WebsiteId { get; set; }
 
-        [JsonProperty("hostname")]
+        [JsonPropertyName("hostname")]
         public string Hostname { get; set; }
 
         public DynamicsModule Module { get; set; }
@@ -32,6 +30,11 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Models.ViewModels
             get
             {
                 const string dataCachedFormUrlKey = "data-cached-form-url=";
+
+                if (string.IsNullOrEmpty(Html))
+                {
+                    return string.Empty;
+                }
 
                 var dataCachedFromUrl = Html.Split(' ').FirstOrDefault(p => p.Contains("data-cached-form-url"));
                 if (string.IsNullOrEmpty(dataCachedFromUrl))
