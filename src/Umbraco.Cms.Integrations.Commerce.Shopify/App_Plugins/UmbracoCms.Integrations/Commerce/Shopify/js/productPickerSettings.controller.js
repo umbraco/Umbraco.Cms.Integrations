@@ -62,11 +62,11 @@
 
     function validateOAuthSetup() {
         umbracoCmsIntegrationsCommerceShopifyResource.validateAccessToken().then(function (response) {
-
             vm.oauthSetup = {
-                isConnected: response.isValid,
+                isValid: response.isValid,
+                isConnected: response.isConnected,
                 isAccessTokenExpired: response.isExpired,
-                isAccessTokenValid: response.isValid
+                isAccessTokenValid: response.isConnected
             }
 
             if (vm.oauthSetup.isConnected === true && vm.oauthSetup.isAccessTokenValid === true) {

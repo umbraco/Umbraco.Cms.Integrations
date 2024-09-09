@@ -50,7 +50,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Controllers
         }
 
         [HttpGet]
-        public EditorSettings CheckConfiguration() => _apiService.GetApiConfiguration();
+        public async Task<EditorSettings> CheckConfiguration() => await _apiService.GetApiConfiguration();
 
         [HttpGet]
         public string GetAuthorizationUrl() => _authorizationService.GetAuthorizationUrl();

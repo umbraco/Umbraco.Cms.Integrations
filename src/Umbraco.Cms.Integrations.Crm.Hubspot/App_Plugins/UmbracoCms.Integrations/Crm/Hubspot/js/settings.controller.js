@@ -39,11 +39,17 @@
 
     vm.onConnectClick = function () {
 
-        window.addEventListener("message", getAccessToken, false);
+        window.addEventListener("message", handleOAuthSuccess, false);
         umbracoCmsIntegrationsCrmHubspotResource.getAuthorizationUrl().then(function (response) {
             vm.authWindow = window.open(response,
                 "Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
 
+            // check in 7 seconds for authorization window closed
+            setTimeout(() => {
+                if (vm.authWindow && !vm.authWindow.closed) {
+                    toggleAuthCodeSection(true);
+                }
+            }, 7000);
         });
     }
 
@@ -62,26 +68,40 @@
         });
     }
 
-    function getAccessToken(event) {
+    vm.onAuthorize = function () {
+        getAccessToken(vm.authCode);
+    }
+
+    function handleOAuthSuccess(event) {
         if (event.data.type === "hubspot:oauth:success") {
-            umbracoCmsIntegrationsCrmHubspotResource.getAccessToken(event.data.code).then(function (response) {
-                vm.authEventHandled = true;
-
-                if (response.startsWith("Error:")) {
-                    if (typeof $scope.connected === "undefined")
-                        notificationsService.error("HubSpot Configuration", response);
-                } else {
-                    vm.oauthSetup.isConnected = true;
-                    vm.status.description = umbracoCmsIntegrationsCrmHubspotService.configDescription.OAuthConnected;
-
-                    if (typeof $scope.connected === "undefined")
-                        notificationsService.success("HubSpot Configuration", "OAuth connected.");
-
-                    if (typeof $scope.connected === "function")
-                        $scope.connected();
-                }
-            });
+            getAccessToken(event.data.code);
         }
+    }
+
+    function getAccessToken(code) {
+        if (!code || code.length == 0) {
+            notificationsService.warning("HubSpot Configuration", "Please add a valid authentication code.");
+            return; 
+        }
+
+        umbracoCmsIntegrationsCrmHubspotResource.getAccessToken(code).then(function (response) {
+            vm.authEventHandled = true;
+            toggleAuthCodeSection(false);
+
+            if (response.startsWith("Error:")) {
+                if (typeof $scope.connected === "undefined")
+                    notificationsService.error("HubSpot Configuration", response);
+            } else {
+                vm.oauthSetup.isConnected = true;
+                vm.status.description = umbracoCmsIntegrationsCrmHubspotService.configDescription.OAuthConnected;
+
+                if (typeof $scope.connected === "undefined")
+                    notificationsService.success("HubSpot Configuration", "OAuth connected.");
+
+                if (typeof $scope.connected === "function")
+                    $scope.connected();
+            }
+        });
     }
 
     function validateOAuthSetup() {
@@ -104,6 +124,10 @@
             }
 
         });
+    }
+
+    function toggleAuthCodeSection(isVisible) {
+        document.getElementById("authCode").style.display = isVisible ? "block" : "none";
     }
 }
 

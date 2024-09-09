@@ -38,7 +38,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
             if (source == null) return null;
 
             return source.ToString()
-                .Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(long.Parse)
                 .ToArray();
         }
@@ -60,7 +60,21 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
                                Id = p.Id,
                                Title = p.Title,
                                Body = p.Body,
-                               Image = p.Image?.Src
+                               ProductImage = p.Image != null ? new ProductImageViewModel { Src = p.Image.Src, Alt = p.Image.Alt } : null,
+                               Tags = p.Tags,
+                               ProductType = p.ProductType,
+                               PublishedScope = p.PublishedScope,
+                               Handle = p.Handle,
+                               Status = p.Status,
+                               Variants = from v in p.Variants
+                                          select new VariantViewModel
+                                          {
+                                              InventoryQuantity = v.InventoryQuantity,
+                                              Position = v.Position,
+                                              Price = v.Price,
+                                              Sku = v.Sku,
+                                              Taxable = v.Taxable
+                                          }
                            };
 
             return products.ToList();

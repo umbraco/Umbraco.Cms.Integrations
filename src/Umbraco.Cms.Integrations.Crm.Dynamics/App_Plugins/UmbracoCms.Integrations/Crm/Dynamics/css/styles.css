@@ -36,3 +36,12 @@
 .dynFormSelected {
     background: #fee4e1;
 }
+
+#authCode {
+    display: none;
+}
+
+#inAuthCode {
+    width: 40%;
+    margin: 0 auto;
+}

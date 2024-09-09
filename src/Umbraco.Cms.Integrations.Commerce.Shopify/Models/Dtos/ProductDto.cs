@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
 {
@@ -29,6 +28,15 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
 
         [JsonProperty("image")]
         public ProductImageDto Image { get; set; }
+
+        [JsonProperty("product_type")]
+        public string ProductType { get; set; }
+
+        [JsonProperty("published_scope")]
+        public string PublishedScope { get; set; }
+
+        [JsonProperty("handle")]
+        public string Handle { get; set; }
     }
 
 

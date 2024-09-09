@@ -6,5 +6,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Models.Dtos
     {
         [JsonProperty("src")]
         public string Src { get; set; }
+
+        [JsonProperty("alt")]
+        public string Alt { get; set; }
     }
 }
