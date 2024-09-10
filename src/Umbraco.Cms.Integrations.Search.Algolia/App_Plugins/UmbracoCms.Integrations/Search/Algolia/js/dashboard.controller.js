@@ -382,9 +382,9 @@
                     headline: 'Algolia',
                     message: 'Index built successfully'
                 });
-                vm.loading = false;
             }
         });
+        vm.loading = false;
 
         closeBuildDialog();
     }

@@ -117,10 +117,11 @@
                             <uui-label slot="label">{{ vm.manageIndex.selectedContentType.name }} Properties</uui-label>
                             <uui-icon-registry-essential>
                                 <div class="alg-col-3">
-                                    <uui-card-content-node selectable
+                                    <uui-card-content-node selectable ng-attr-id="{{property.alias}}"
                                                            ng-attr-selected="{{property.selected || undefined}}"
                                                            ng-on-selected="vm.manageIndex.selectProperty(property)"
                                                            ng-on-unselected="vm.manageIndex.removeProperty(property)"
+                                                           ng-on-deselected="vm.manageIndex.removeProperty(property)"
                                                            ng-repeat="property in vm.manageIndex.propertiesList"
                                                            name="{{ property.name }}">
                                         <uui-tag ng-if="property.selected" size="s" slot="tag" color="primary">Selected</uui-tag>

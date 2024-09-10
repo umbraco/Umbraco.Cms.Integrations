@@ -1,4 +1,5 @@
 ﻿using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Integrations.Search.Algolia.Extensions;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 {
@@ -6,16 +7,11 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
     {
         public string Name => Core.Constants.PropertyEditors.Aliases.Integer;
 
-        public object ParseIndexValues(IProperty property, IEnumerable<object> indexValues)
-        {
-            if (indexValues != null && indexValues.Any())
-            {
-                var value = indexValues.FirstOrDefault();
-
-                return value ?? default(int);
-            }
-
-            return default(int);
-        }
+        public object ParseIndexValues(IProperty property) =>
+            property.TryGetPropertyIndexValue(out string value)
+            ? (int.TryParse(value.ToString(), out var result)
+                ? result
+                : default)
+            : default;
     }
 }
