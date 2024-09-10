@@ -30,11 +30,11 @@
 
         public string Name { get; set; }
 
-        public string CreateDate { get; set; }
+        public long CreateDate { get; set; }
 
         public string CreatorName { get; set; }
 
-        public string UpdateDate { get; set; }
+        public long UpdateDate { get; set; }
 
         public string WriterName { get; set; }
 

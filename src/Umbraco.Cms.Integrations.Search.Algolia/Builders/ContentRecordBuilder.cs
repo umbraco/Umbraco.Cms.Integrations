@@ -2,6 +2,7 @@
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
+using Umbraco.Cms.Integrations.Search.Algolia.Extensions;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Integrations.Search.Algolia.Services;
 using Umbraco.Extensions;
@@ -50,9 +51,9 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
             _record.Id = content.Id;
             _record.Name = content.Name;
             
-            _record.CreateDate = content.CreateDate.ToString();
+            _record.CreateDate = content.CreateDate.ToUnixTimestamp();
             _record.CreatorName = creator.Name;
-            _record.UpdateDate = content.UpdateDate.ToString();
+            _record.UpdateDate = content.UpdateDate.ToUnixTimestamp();
             _record.WriterName = writer.Name;
 
             _record.TemplateId = content.TemplateId.HasValue ? content.TemplateId.Value : -1;
