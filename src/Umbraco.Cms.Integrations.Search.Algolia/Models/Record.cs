@@ -32,9 +32,19 @@
 
         public string CreateDate { get; set; }
 
+        /// <summary>
+        /// Unix timestamp
+        /// </summary>
+        public long CreateDateTimestamp { get; set; }
+
         public string CreatorName { get; set; }
 
         public string UpdateDate { get; set; }
+
+        /// <summary>
+        /// Unix timestamp
+        /// </summary>
+        public long UpdateDateTimestamp { get; set; }
 
         public string WriterName { get; set; }
 
