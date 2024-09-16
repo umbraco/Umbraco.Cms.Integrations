@@ -12,6 +12,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Extensions
             if (property.GetValue() is null || string.IsNullOrEmpty(property.GetValue().ToString()))
             {
                 success = false;
+                return success;
             }
 
             value = property.GetValue().ToString();
