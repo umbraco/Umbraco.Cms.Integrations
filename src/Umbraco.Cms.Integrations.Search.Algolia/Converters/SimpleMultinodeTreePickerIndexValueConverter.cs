@@ -13,7 +13,6 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
         private readonly IUmbracoContextAccessor _umbracoContextAccessor;
         private readonly IContentService _contentService;
 
-
         public SimpleMultinodeTreePickerIndexValueConverter(
             IUmbracoContextAccessor umbracoContextAccessor,
             IContentService contentService)
@@ -22,10 +21,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
             _contentService = contentService ?? throw new ArgumentNullException(nameof(contentService));
         }
 
-
         public object ParseIndexValues(IProperty property)
         {
-
             if (property.Values.Count == 0)
                 return Enumerable.Empty<string>();
 
@@ -61,6 +58,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
                     }
                 }
             }
+
             return toReturn;
         }
 
