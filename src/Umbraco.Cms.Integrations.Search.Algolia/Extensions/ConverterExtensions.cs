@@ -13,7 +13,10 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Extensions
             {
                 success = false;
             }
-            else value = property.GetValue().ToString();
+            else
+            {
+                value = property.GetValue().ToString();
+            }
 
             return success;
         }
