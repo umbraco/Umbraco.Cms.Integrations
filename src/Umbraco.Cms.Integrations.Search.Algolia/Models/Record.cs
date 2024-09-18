@@ -1,10 +1,13 @@
-﻿namespace Umbraco.Cms.Integrations.Search.Algolia.Models
+﻿using Newtonsoft.Json;
+
+namespace Umbraco.Cms.Integrations.Search.Algolia.Models
 {
     public class Record
     {
         public Record()
         {
             Data = new Dictionary<string, object>();
+            Geoloc = new List<GeolocProperties>();
         }
 
         public Record(Record record)
@@ -22,6 +25,7 @@
             Path = record.Path;
             Url = record.Url;
             Data = record.Data;
+            Geoloc = record.Geoloc;
         }
 
         public string ObjectID { get; set; }
@@ -57,6 +61,9 @@
         public string ContentTypeAlias { get; set; }
 
         public string Url { get; set; }
+
+        [JsonProperty("_geoloc")]
+        public List<GeolocProperties> Geoloc { get; set; }
 
         public Dictionary<string, object> Data { get; set; }
     }
