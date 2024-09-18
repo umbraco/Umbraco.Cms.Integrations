@@ -11,10 +11,12 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
     public class AlgoliaIndexService : IAlgoliaIndexService
     {
         private readonly AlgoliaSettings _settings;
+        private readonly AlgoliaGeolocationService _algoliaGeolocationService;
 
-        public AlgoliaIndexService(IOptions<AlgoliaSettings> options)
+        public AlgoliaIndexService(IOptions<AlgoliaSettings> options, AlgoliaGeolocationService algoliaGeolocationService)
         {
             _settings = options.Value;
+            _algoliaGeolocationService = algoliaGeolocationService;
         }
 
         public async Task<Result> PushData(string name, List<Record> payload = null)
@@ -30,6 +32,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
                     : new List<Record> {
                         new Record {
                             ObjectID = Guid.NewGuid().ToString(),
+                            GeolocationData = await _algoliaGeolocationService.GetGeolocationDataAsync(),
                             Data = new Dictionary<string, object>()}
                     }, autoGenerateObjectId: false);
 

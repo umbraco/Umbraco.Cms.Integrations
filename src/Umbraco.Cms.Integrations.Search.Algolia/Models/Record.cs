@@ -7,7 +7,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Models
         public Record()
         {
             Data = new Dictionary<string, object>();
-            Geoloc = new List<GeolocProperties>();
+            GeolocationData = new List<GeolocationEntity>();
         }
 
         public Record(Record record)
@@ -25,7 +25,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Models
             Path = record.Path;
             Url = record.Url;
             Data = record.Data;
-            Geoloc = record.Geoloc;
+            GeolocationData = record.GeolocationData;
         }
 
         public string ObjectID { get; set; }
@@ -63,7 +63,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Models
         public string Url { get; set; }
 
         [JsonProperty("_geoloc")]
-        public List<GeolocProperties> Geoloc { get; set; }
+        public List<GeolocationEntity> GeolocationData { get; set; }
 
         public Dictionary<string, object> Data { get; set; }
     }
