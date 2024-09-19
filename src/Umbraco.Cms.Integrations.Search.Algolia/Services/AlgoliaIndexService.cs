@@ -32,7 +32,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
                     : new List<Record> {
                         new Record {
                             ObjectID = Guid.NewGuid().ToString(),
-                            GeolocationData = await _algoliaGeolocationProvider.GetGeolocationAsync(),
+                            GeolocationData = new List<GeolocationEntity>(),
                             Data = new Dictionary<string, object>()}
                     }, autoGenerateObjectId: false);
 
