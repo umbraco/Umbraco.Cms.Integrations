@@ -37,6 +37,8 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
 
             builder.Services.AddScoped<IAlgoliaSearchPropertyIndexValueFactory, AlgoliaSearchPropertyIndexValueFactory>();
 
+            builder.Services.AddSingleton<IAlgoliaGeolocationProvider, AlgoliaNullGeolocationProvider>();
+
             builder.AddAlgoliaConverters();
         }
 

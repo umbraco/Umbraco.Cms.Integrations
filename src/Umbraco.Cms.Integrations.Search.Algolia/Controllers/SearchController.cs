@@ -37,6 +37,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
         private readonly IAlgoliaSearchPropertyIndexValueFactory _algoliaSearchPropertyIndexValueFactory;
 
+        private readonly IAlgoliaGeolocationProvider _algoliaGeolocationProvider;
+
         private readonly IUmbracoContextFactory _umbracoContextFactory;
 
         private readonly ILogger<SearchController> _logger;
@@ -53,7 +55,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory,
             IUmbracoContextFactory umbracoContextFactory, 
             ILogger<SearchController> logger, 
-            IRecordBuilderFactory recordBuilderFactory)
+            IRecordBuilderFactory recordBuilderFactory,
+            IAlgoliaGeolocationProvider algoliaGeolocationProvider)
         {
             _indexService = indexService;
             
@@ -74,6 +77,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             _logger = logger;
 
             _recordBuilderFactory = recordBuilderFactory;
+
+            _algoliaGeolocationProvider = algoliaGeolocationProvider;
         }
 
         [HttpGet]
@@ -136,7 +141,13 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
                     foreach (var contentItem in contentItems.Where(p => !p.Trashed))
                     {
-                        var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory, _recordBuilderFactory, _umbracoContextFactory)
+                        var record = new ContentRecordBuilder(
+                                _userService, 
+                                _urlProvider, 
+                                _algoliaSearchPropertyIndexValueFactory, 
+                                _recordBuilderFactory, 
+                                _umbracoContextFactory,
+                                _algoliaGeolocationProvider)
                             .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
                             .Build();
 

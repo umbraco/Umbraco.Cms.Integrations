@@ -2,7 +2,7 @@
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Models
 {
-    public class GeolocProperties
+    public class GeolocationEntity
     {
         [JsonProperty("lat")]
         public double Latitude { get; set; }

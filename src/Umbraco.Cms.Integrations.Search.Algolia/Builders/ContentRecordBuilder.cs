@@ -3,7 +3,6 @@ using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
-using Umbraco.Cms.Integrations.Search.Algolia.Extensions;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Integrations.Search.Algolia.Services;
 using Umbraco.Extensions;
@@ -24,10 +23,15 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
 
         private readonly IUmbracoContextFactory _umbracoContextFactory;
 
-        public ContentRecordBuilder(IUserService userService, IPublishedUrlProvider urlProvider, 
+        private readonly IAlgoliaGeolocationProvider _algoliaGeolocationProvider;
+
+        public ContentRecordBuilder(
+            IUserService userService, 
+            IPublishedUrlProvider urlProvider, 
             IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory, 
             IRecordBuilderFactory recordBuilderFactory,
-            IUmbracoContextFactory umbracoContextFactory)
+            IUmbracoContextFactory umbracoContextFactory,
+            IAlgoliaGeolocationProvider algoliaGeolocationProvider)
         {
             _userService = userService;
 
@@ -38,6 +42,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
             _recordBuilderFactory = recordBuilderFactory;
 
             _umbracoContextFactory = umbracoContextFactory;
+
+            _algoliaGeolocationProvider = algoliaGeolocationProvider;
         }
 
         public ContentRecordBuilder BuildFromContent(IContent content, Func<IProperty, bool> filter = null)
@@ -64,6 +70,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
             _record.Path = content.Path.Split(',').ToList();
             _record.ContentTypeAlias = content.ContentType.Alias;
             _record.Url = _urlProvider.GetUrl(content.Id);
+            _record.GeolocationData = _algoliaGeolocationProvider.GetGeolocationAsync().ConfigureAwait(false).GetAwaiter().GetResult();
             _record.Data = new();
 
             if (content.PublishedCultures.Count() > 0)
