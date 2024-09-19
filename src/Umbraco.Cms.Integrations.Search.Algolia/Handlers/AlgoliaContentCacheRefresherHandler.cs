@@ -35,7 +35,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 
         private readonly IAlgoliaSearchPropertyIndexValueFactory _algoliaSearchPropertyIndexValueFactory;
 
-        private readonly AlgoliaGeolocationService _geolocationService;
+        private readonly IAlgoliaGeolocationProvider _algoliaGeolocationProvider;
 
         private readonly IRecordBuilderFactory _recordBuilderFactory;
 
@@ -50,7 +50,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             IUserService userService,
             IPublishedUrlProvider urlProvider,
             IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory, 
-            AlgoliaGeolocationService geolocationService,
+            IAlgoliaGeolocationProvider algoliaGeolocationProvider,
             IRecordBuilderFactory recordBuilderFactory,
             IUmbracoContextFactory umbracoContextFactory)
         {
@@ -62,7 +62,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             _userService = userService;
             _urlProvider = urlProvider;
             _algoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
-            _geolocationService = geolocationService;
+            _algoliaGeolocationProvider = algoliaGeolocationProvider;
             _recordBuilderFactory = recordBuilderFactory;
             _umbracoContextFactory = umbracoContextFactory;
         }
@@ -117,7 +117,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
                                 _algoliaSearchPropertyIndexValueFactory, 
                                 _recordBuilderFactory, 
                                 _umbracoContextFactory,
-                                _geolocationService)
+                                _algoliaGeolocationProvider)
                            .BuildFromContent(entity, (p) => indexConfiguration.Properties.Any(q => q.Alias == p.Alias))
                            .Build();
 

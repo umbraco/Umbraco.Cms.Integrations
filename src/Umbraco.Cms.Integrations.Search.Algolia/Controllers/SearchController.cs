@@ -37,7 +37,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
         private readonly IAlgoliaSearchPropertyIndexValueFactory _algoliaSearchPropertyIndexValueFactory;
 
-        private readonly AlgoliaGeolocationService _algoliaGeolocationService;
+        private readonly IAlgoliaGeolocationProvider _algoliaGeolocationProvider;
 
         private readonly IUmbracoContextFactory _umbracoContextFactory;
 
@@ -56,7 +56,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
             IUmbracoContextFactory umbracoContextFactory, 
             ILogger<SearchController> logger, 
             IRecordBuilderFactory recordBuilderFactory,
-            AlgoliaGeolocationService algoliaGeolocationService)
+            IAlgoliaGeolocationProvider algoliaGeolocationProvider)
         {
             _indexService = indexService;
             
@@ -78,7 +78,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
             _recordBuilderFactory = recordBuilderFactory;
 
-            _algoliaGeolocationService = algoliaGeolocationService;
+            _algoliaGeolocationProvider = algoliaGeolocationProvider;
         }
 
         [HttpGet]
@@ -147,7 +147,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
                                 _algoliaSearchPropertyIndexValueFactory, 
                                 _recordBuilderFactory, 
                                 _umbracoContextFactory,
-                                _algoliaGeolocationService)
+                                _algoliaGeolocationProvider)
                             .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
                             .Build();
 

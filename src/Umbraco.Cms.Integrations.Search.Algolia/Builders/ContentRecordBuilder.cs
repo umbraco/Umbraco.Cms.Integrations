@@ -23,7 +23,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
 
         private readonly IUmbracoContextFactory _umbracoContextFactory;
 
-        private readonly AlgoliaGeolocationService _algoliaGeolocationService;
+        private readonly IAlgoliaGeolocationProvider _algoliaGeolocationProvider;
 
         public ContentRecordBuilder(
             IUserService userService, 
@@ -31,7 +31,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
             IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory, 
             IRecordBuilderFactory recordBuilderFactory,
             IUmbracoContextFactory umbracoContextFactory,
-            AlgoliaGeolocationService algoliaGeolocationService)
+            IAlgoliaGeolocationProvider algoliaGeolocationProvider)
         {
             _userService = userService;
 
@@ -43,7 +43,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
 
             _umbracoContextFactory = umbracoContextFactory;
 
-            _algoliaGeolocationService = algoliaGeolocationService;
+            _algoliaGeolocationProvider = algoliaGeolocationProvider;
         }
 
         public ContentRecordBuilder BuildFromContent(IContent content, Func<IProperty, bool> filter = null)
@@ -70,7 +70,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
             _record.Path = content.Path.Split(',').ToList();
             _record.ContentTypeAlias = content.ContentType.Alias;
             _record.Url = _urlProvider.GetUrl(content.Id);
-            _record.GeolocationData = _algoliaGeolocationService.GetGeolocationDataAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+            _record.GeolocationData = _algoliaGeolocationProvider.GetGeolocationAsync()?.ConfigureAwait(false).GetAwaiter().GetResult();
             _record.Data = new();
 
             if (content.PublishedCultures.Count() > 0)
