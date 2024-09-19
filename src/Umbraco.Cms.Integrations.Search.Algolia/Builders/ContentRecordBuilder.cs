@@ -70,7 +70,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Builders
             _record.Path = content.Path.Split(',').ToList();
             _record.ContentTypeAlias = content.ContentType.Alias;
             _record.Url = _urlProvider.GetUrl(content.Id);
-            _record.GeolocationData = _algoliaGeolocationProvider.GetGeolocationAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+            _record.GeolocationData = _algoliaGeolocationProvider.GetGeolocationAsync(content).ConfigureAwait(false).GetAwaiter().GetResult();
             _record.Data = new();
 
             if (content.PublishedCultures.Count() > 0)
