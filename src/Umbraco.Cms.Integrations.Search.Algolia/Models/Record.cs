@@ -7,6 +7,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Models
         public Record()
         {
             Data = new Dictionary<string, object>();
+            GeolocationData = new List<GeolocationEntity>();
         }
 
         public Record(Record record)
@@ -61,10 +62,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Models
 
         public string Url { get; set; }
 
-#nullable enable
         [JsonProperty("_geoloc")]
-        public List<GeolocationEntity>? GeolocationData { get; set; }
-#nullable disable
+        public List<GeolocationEntity> GeolocationData { get; set; }
 
         public Dictionary<string, object> Data { get; set; }
     }

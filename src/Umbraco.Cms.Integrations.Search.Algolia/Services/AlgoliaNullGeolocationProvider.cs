@@ -4,6 +4,6 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
 {
     public class AlgoliaNullGeolocationProvider : IAlgoliaGeolocationProvider
     {
-        public Task<List<GeolocationEntity>> GetGeolocationAsync() => null;
+        public async Task<List<GeolocationEntity>> GetGeolocationAsync() => null;
     }
 }
