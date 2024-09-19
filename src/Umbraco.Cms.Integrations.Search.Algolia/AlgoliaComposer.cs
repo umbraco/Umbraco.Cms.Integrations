@@ -36,6 +36,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia
 
             builder.Services.AddScoped<IAlgoliaSearchPropertyIndexValueFactory, AlgoliaSearchPropertyIndexValueFactory>();
 
+            builder.Services.AddSingleton<IAlgoliaGeolocationProvider, AlgoliaNullGeolocationProvider>();
+
             builder.AddAlgoliaConverters();
 
             // Generate Swagger documentation for Algolia Search API
