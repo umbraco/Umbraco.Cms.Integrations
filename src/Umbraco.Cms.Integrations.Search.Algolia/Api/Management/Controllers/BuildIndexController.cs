@@ -27,6 +27,7 @@ public class BuildIndexController : SearchControllerBase
     private readonly IPublishedUrlProvider _urlProvider;
     private readonly IAlgoliaSearchPropertyIndexValueFactory _algoliaSearchPropertyIndexValueFactory;
     private readonly IRecordBuilderFactory _recordBuilderFactory;
+    private readonly IAlgoliaGeolocationProvider _algoliaGeolocationProvider;
 
     public BuildIndexController(
         IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
@@ -37,7 +38,8 @@ public class BuildIndexController : SearchControllerBase
         IUserService userService,
         IPublishedUrlProvider urlProvider,
         IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory,
-        IRecordBuilderFactory recordBuilderFactory)
+        IRecordBuilderFactory recordBuilderFactory,
+        IAlgoliaGeolocationProvider algoliaGeolocationProvider)
     {
         _indexStorage = indexStorage;
         _umbracoContextFactory = umbracoContextFactory;
@@ -48,6 +50,7 @@ public class BuildIndexController : SearchControllerBase
         _urlProvider = urlProvider;
         _algoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
         _recordBuilderFactory = recordBuilderFactory;
+        _algoliaGeolocationProvider = algoliaGeolocationProvider;
     }
 
     [HttpPost("index/build")]
@@ -82,7 +85,13 @@ public class BuildIndexController : SearchControllerBase
 
             foreach (var contentItem in contentItems.Where(p => !p.Trashed))
             {
-                var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory, _recordBuilderFactory, _umbracoContextFactory)
+                var record = new ContentRecordBuilder(
+                        _userService, 
+                        _urlProvider, 
+                        _algoliaSearchPropertyIndexValueFactory, 
+                        _recordBuilderFactory, 
+                        _umbracoContextFactory,
+                        _algoliaGeolocationProvider)
                     .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
                     .Build();
 

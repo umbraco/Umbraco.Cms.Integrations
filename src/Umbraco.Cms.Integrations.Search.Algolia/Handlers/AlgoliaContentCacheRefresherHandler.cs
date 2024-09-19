@@ -40,6 +40,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 
         private readonly IUmbracoContextFactory _umbracoContextFactory;
 
+        private readonly IAlgoliaGeolocationProvider _algoliaGeolocationProvider;
+
         public AlgoliaContentCacheRefresherHandler(
             IServerRoleAccessor serverRoleAccessor,
             ILogger<AlgoliaContentCacheRefresherHandler> logger,
@@ -50,7 +52,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             IPublishedUrlProvider urlProvider,
             IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory, 
             IRecordBuilderFactory recordBuilderFactory,
-            IUmbracoContextFactory umbracoContextFactory)
+            IUmbracoContextFactory umbracoContextFactory,
+            IAlgoliaGeolocationProvider algoliaGeolocationProvider)
         {
             _serverRoleAccessor = serverRoleAccessor;
             _contentService = contentService;
@@ -62,6 +65,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             _algoliaSearchPropertyIndexValueFactory = algoliaSearchPropertyIndexValueFactory;
             _recordBuilderFactory = recordBuilderFactory;
             _umbracoContextFactory = umbracoContextFactory;
+            _algoliaGeolocationProvider = algoliaGeolocationProvider;
         }
 
         public async Task HandleAsync(ContentCacheRefresherNotification notification, CancellationToken cancellationToken)
@@ -108,7 +112,13 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
                             .FirstOrDefault(p => p.Alias == entity.ContentType.Alias);
                         if (indexConfiguration == null || indexConfiguration.Alias != entity.ContentType.Alias) continue;
 
-                        var record = new ContentRecordBuilder(_userService, _urlProvider, _algoliaSearchPropertyIndexValueFactory, _recordBuilderFactory, _umbracoContextFactory)
+                        var record = new ContentRecordBuilder(
+                                _userService, 
+                                _urlProvider, 
+                                _algoliaSearchPropertyIndexValueFactory, 
+                                _recordBuilderFactory, 
+                                _umbracoContextFactory,
+                                _algoliaGeolocationProvider)
                            .BuildFromContent(entity, (p) => indexConfiguration.Properties.Any(q => q.Alias == p.Alias))
                            .Build();
 
