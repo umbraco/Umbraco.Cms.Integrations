@@ -1,6 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
-		<TargetFrameworks>net472;net50;net60;net70;net80</TargetFrameworks>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<EnableDefaultContentItems>false</EnableDefaultContentItems>
+		<StaticWebAssetBasePath>/App_Plugins/Semrush</StaticWebAssetBasePath>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -10,7 +15,7 @@
 		<PackageIconUrl></PackageIconUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.SEO.Semrush</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>1.2.4</Version>
+		<Version>2.0.0</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
@@ -18,47 +23,15 @@
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-		<PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
-		<PackageReference Include="UmbracoCms.Web" version="8.5.4" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net50'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[9.0.1,10)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[9.0.1,10)" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net60'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[10.0.0,11)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[10.0.0,11)" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net70'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[11.0.0,13)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[11.0.0,13)" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net80'">
-		<PackageReference Include="Umbraco.Cms.Web.Website" version="[13.0.0,14)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" version="[13.0.0,14)" />
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<SupportedPlatform Include="browser" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="App_Plugins\UmbracoCms.Integrations\SEO\Semrush\**\*.*">
-			<Pack>true</Pack>
-			<PackagePath>App_Plugins\UmbracoCms.Integrations\SEO\Semrush\</PackagePath>
-		</Content>
-		<None Include="build\**\*.*">
-			<Pack>True</Pack>
-			<PackagePath>buildTransitive</PackagePath>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="App_Plugins\**\*.*">
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
-		</Content>
+		<PackageReference Include="Umbraco.Cms.Api.Common" Version="[14.0.0, 15)" />
+		<PackageReference Include="Umbraco.Cms.Api.Management" Version="[14.0.0, 15)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[14.0.0, 15)" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -72,9 +45,17 @@
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
-	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
-		<ItemGroup>
-			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
-		</ItemGroup>
-	</Target>
+	<ItemGroup>
+		<Content Include="Views\**" />
+	</ItemGroup>
+
+	<!-- Build client assets using NPM -->
+	<!--<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
+	<PropertyGroup>
+		--><!-- Use this to (temporarily) disable building client assets, e.g. to start the project and generate updated API models --><!--
+		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
+	</PropertyGroup>
+	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
+		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '$(Configuration)' !== 'Release' ? '../wwwroot' : '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
+	</Target>-->
 </Project>

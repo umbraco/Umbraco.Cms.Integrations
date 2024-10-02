@@ -17,6 +17,7 @@
     <ProjectReference Include="..\Umbraco.Cms.Integrations.Automation.Zapier\Umbraco.Cms.Integrations.Automation.Zapier.csproj" />
     <ProjectReference Include="..\Umbraco.Cms.Integrations.Crm.Hubspot\Umbraco.Cms.Integrations.Crm.Hubspot.csproj" />
     <ProjectReference Include="..\Umbraco.Cms.Integrations.Search.Algolia\Umbraco.Cms.Integrations.Search.Algolia.csproj" />
+    <ProjectReference Include="..\Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj" />
     <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
   </ItemGroup>
 
