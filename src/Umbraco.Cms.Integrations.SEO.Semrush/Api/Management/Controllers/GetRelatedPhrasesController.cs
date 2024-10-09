@@ -9,9 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
 using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
 using Umbraco.Cms.Integrations.SEO.Semrush.Services;
+using static Umbraco.Cms.Core.Constants.HttpContext;
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
 {
@@ -31,7 +33,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
 
             if (_cacheHelper.TryGetCachedItem<RelatedPhrasesDto>(cacheKey, out var relatedPhrasesDto) && relatedPhrasesDto.Data != null)
             {
-                relatedPhrasesDto.TotalPages = relatedPhrasesDto.Data.Rows.Count / Constants.DefaultPageSize;
+                relatedPhrasesDto.TotalPages = (int)Math.Ceiling((double)relatedPhrasesDto.Data.Rows.Count / Constants.DefaultPageSize);
                 relatedPhrasesDto.Data.Rows = relatedPhrasesDto.Data.Rows
                     .Skip((pageNumber - 1) * Constants.DefaultPageSize)
                     .Take(Constants.DefaultPageSize)
@@ -47,21 +49,25 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var responseContent = await response.Content.ReadAsStringAsync();
+                //var responseContent = await response.Content.ReadAsStringAsync();
+                using (StreamReader r = new StreamReader("temp.json"))
+                {
+                    var responseContent = r.ReadToEnd();
 
-                var relatedPhrasesDeserialized = JsonSerializer.Deserialize<RelatedPhrasesDto>(responseContent);
+                    var relatedPhrasesDeserialized = JsonSerializer.Deserialize<RelatedPhrasesDto>(responseContent);
 
-                if (!relatedPhrasesDeserialized.IsSuccessful) return Ok(relatedPhrasesDeserialized);
+                    if (!relatedPhrasesDeserialized.IsSuccessful) return Ok(relatedPhrasesDeserialized);
 
-                _cacheHelper.AddCachedItem(cacheKey, responseContent);
+                    _cacheHelper.AddCachedItem(cacheKey, responseContent);
 
-                relatedPhrasesDeserialized.TotalPages = relatedPhrasesDeserialized.Data.Rows.Count / Constants.DefaultPageSize;
-                relatedPhrasesDeserialized.Data.Rows = relatedPhrasesDeserialized.Data.Rows
-                    .Skip((pageNumber - 1) * Constants.DefaultPageSize)
-                    .Take(Constants.DefaultPageSize)
-                    .ToList();
+                    relatedPhrasesDeserialized.TotalPages = (int)Math.Ceiling((double)relatedPhrasesDeserialized.Data.Rows.Count / Constants.DefaultPageSize);
+                    relatedPhrasesDeserialized.Data.Rows = relatedPhrasesDeserialized.Data.Rows
+                        .Skip((pageNumber - 1) * Constants.DefaultPageSize)
+                        .Take(Constants.DefaultPageSize)
+                        .ToList();
 
-                return Ok(relatedPhrasesDeserialized);
+                    return Ok(relatedPhrasesDeserialized);
+                }
             }
 
             return Ok(relatedPhrasesDto);

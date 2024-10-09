@@ -16,6 +16,11 @@ export type ColumnDtoModel = {
     description: string;
 };
 
+export type ContentPropertyDtoModel = {
+    propertyName: string;
+    propertyValue: string;
+};
+
 export type ContentResult = {
     content?: string | null;
     contentType?: string | null;
@@ -55,16 +60,16 @@ export type RelatedPhrasesDataDtoModel = {
 export type RelatedPhrasesDtoModel = {
     readonly isSuccessful: boolean;
     error: string;
-    status: string;
+    status: number;
     data: RelatedPhrasesDataDtoModel;
     totalPages: number;
 };
 
 export type TokenDtoModel = {
-    accessToken: string;
-    tokenType: string;
-    expiresIn: number;
-    refreshToken: string;
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    refresh_token: string;
     readonly isAccessTokenAvailable: boolean;
 };
 
@@ -91,6 +96,12 @@ export type OauthResponse = ContentResult;
 export type GetAuthorizationUrlResponse = string;
 
 export type GetColumnsResponse = Array<(ColumnDtoModel)>;
+
+export type GetCurrentContentPropertiesData = {
+    contentId?: string;
+};
+
+export type GetCurrentContentPropertiesResponse = Array<(ContentPropertyDtoModel)>;
 
 export type GetDataSourcesResponse = DataSourceDtoModel;
 
@@ -185,6 +196,17 @@ export type $OpenApiTs = {
                  * OK
                  */
                 200: Array<(ColumnDtoModel)>;
+            };
+        };
+    };
+    '/umbraco/semrush/management/api/v1/content-properties': {
+        get: {
+            req: GetCurrentContentPropertiesData;
+            res: {
+                /**
+                 * OK
+                 */
+                200: Array<(ContentPropertyDtoModel)>;
             };
         };
     };

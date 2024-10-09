@@ -3,10 +3,12 @@ import { UMB_AUTH_CONTEXT } from "@umbraco-cms/backoffice/auth";
 import { OpenAPI } from "@umbraco-integrations/semrush/generated";
 import { manifest as semrushContext } from "./context/manifest";
 import { manifests as workspaceManifest } from "./workspace/manifests";
+import { manifest as modalManifest } from "./modal/manifest";
 
 export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
     extensionRegistry.registerMany([
         semrushContext,
+        modalManifest,
         ...workspaceManifest
     ]);
   

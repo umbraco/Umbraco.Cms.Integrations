@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
 using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
@@ -27,13 +27,13 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
         [ProducesResponseType(typeof(DataSourceDto), StatusCodes.Status200OK)]
         public IActionResult GetDataSources()
         {
-            string semrushDataSourcesPath = $"{_webHostEnvironment.ContentRootPath}/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/semrushDataSources.json";
+            //string semrushDataSourcesPath = $"{_webHostEnvironment.ContentRootPath}/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/semrushDataSources.json";
+            string semrushDataSourcesPath = "semrushDataSources.json";
 
             _lock.EnterReadLock();
-
             try
             {
-                if (!System.IO.File.Exists(semrushDataSourcesPath))
+                if (!System.IO.File.Exists(Path.Combine(Directory.GetCurrentDirectory(), semrushDataSourcesPath)))
                 {
                     var fs = System.IO.File.Create(semrushDataSourcesPath);
                     fs.Close();
@@ -44,7 +44,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
                 var content = System.IO.File.ReadAllText(semrushDataSourcesPath);
                 var dataSourceDto = new DataSourceDto
                 {
-                    Items = JsonConvert.DeserializeObject<List<DataSourceItemDto>>(content).Select(p =>
+                    Items = JsonSerializer.Deserialize<List<DataSourceItemDto>>(content).Select(p =>
                         new DataSourceItemDto
                         {
                             Code = p.Code,

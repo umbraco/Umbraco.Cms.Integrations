@@ -2,9 +2,13 @@ import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { SemrushRepository } from "../repository/semrush.repository";
+import { UmbObjectState } from "@umbraco-cms/backoffice/observable-api";
+import { AuthorizationResponseDtoModel } from "@umbraco-integrations/semrush/generated";
 
 export class SemrushContext extends UmbControllerBase{
     #repository: SemrushRepository;
+    #settingsModel = new UmbObjectState<AuthorizationResponseDtoModel | undefined>(undefined);
+    settingsModel = this.#settingsModel.asObservable();
 
     constructor(host: UmbControllerHost){
         super(host);
@@ -59,6 +63,10 @@ export class SemrushContext extends UmbControllerBase{
 
     async ping(){
         return await this.#repository.ping();
+    }
+
+    async getCurrentContentProperties(contentId: string){
+        return await this.#repository.getCurrentContentProperties(contentId);
     }
 }
 

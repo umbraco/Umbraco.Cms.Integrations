@@ -1,17 +1,16 @@
-﻿
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos
 {
     public class AuthorizationResponseDto
     {
-        [JsonProperty("isAuthorized")]
+        [JsonPropertyName("isAuthorized")]
         public bool IsAuthorized { get; set; }
 
-        [JsonProperty("isValid")]
+        [JsonPropertyName("isValid")]
         public bool IsValid { get; set; }
 
-        [JsonProperty("isFreeAccount")]
+        [JsonPropertyName("isFreeAccount")]
         public bool? IsFreeAccount { get; set; }
     }
 }

@@ -122,4 +122,14 @@ export class SemrushRepository extends UmbControllerBase {
 
         return { data };
     }
+
+    async getCurrentContentProperties(contentId: string){
+        const { data, error } = await tryExecuteAndNotify(this, SemrushService.getCurrentContentProperties({contentId: contentId}));
+
+        if (error || !data) {
+            return { error };
+        }
+
+        return { data };
+    }
 }

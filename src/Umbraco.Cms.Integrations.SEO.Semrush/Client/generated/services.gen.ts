@@ -3,7 +3,7 @@
 import type { CancelablePromise } from './core/CancelablePromise';
 import { OpenAPI } from './core/OpenAPI';
 import { request as __request } from './core/request';
-import type { GetTokenDetailsResponse, GetAccessTokenData, GetAccessTokenResponse, RefreshAccessTokenResponse, RevokeTokenResponse, ValidateTokenResponse, OauthData, OauthResponse, GetAuthorizationUrlResponse, GetColumnsResponse, GetDataSourcesResponse, PingResponse, GetRelatedPhrasesData, GetRelatedPhrasesResponse } from './types.gen';
+import type { GetTokenDetailsResponse, GetAccessTokenData, GetAccessTokenResponse, RefreshAccessTokenResponse, RevokeTokenResponse, ValidateTokenResponse, OauthData, OauthResponse, GetAuthorizationUrlResponse, GetColumnsResponse, GetCurrentContentPropertiesData, GetCurrentContentPropertiesResponse, GetDataSourcesResponse, PingResponse, GetRelatedPhrasesData, GetRelatedPhrasesResponse } from './types.gen';
 
 export class AccessTokenService {
     /**
@@ -104,6 +104,22 @@ export class SemrushService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/umbraco/semrush/management/api/v1/columns'
+        });
+    }
+    
+    /**
+     * @param data The data for the request.
+     * @param data.contentId
+     * @returns unknown OK
+     * @throws ApiError
+     */
+    public static getCurrentContentProperties(data: GetCurrentContentPropertiesData = {}): CancelablePromise<GetCurrentContentPropertiesResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/umbraco/semrush/management/api/v1/content-properties',
+            query: {
+                contentId: data.contentId
+            }
         });
     }
     

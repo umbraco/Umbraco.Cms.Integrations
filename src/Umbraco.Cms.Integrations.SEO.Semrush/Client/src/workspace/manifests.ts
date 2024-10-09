@@ -2,17 +2,6 @@ import type { ManifestWorkspaceView, ManifestTypes, ManifestWorkspace } from '@u
 
 export const SEMRUSH_WORKSPACE_ALIAS = "Umb.Workspace.Semrush";
 
-const workspace: ManifestWorkspace = {
-    type: "workspace",
-    kind: "routable",
-    alias: SEMRUSH_WORKSPACE_ALIAS,
-    name: "Form Workspace",
-    api: () => import("./semrush-workspace.context"),
-    meta: {
-      entityType: 'block-grid-type',
-    },
-  };
-
 const workspaceView: Array<ManifestWorkspaceView> = [
     {
         type: "workspaceView",
@@ -22,16 +11,16 @@ const workspaceView: Array<ManifestWorkspaceView> = [
         weight: 30,
         meta: {
           label: "Semrush",
-          pathname: "semrush",
-          icon: "info",
+          pathname: "/semrush",
+          icon: "icon-book-alt",
         },
         conditions: [
           {
             alias: "Umb.Condition.WorkspaceAlias",
-            match: SEMRUSH_WORKSPACE_ALIAS,
+            match: "Umb.Workspace.Document",
           },
         ],
       },
 ];
 
-export const manifests: Array<ManifestTypes> = [...workspaceView, workspace];
+export const manifests: Array<ManifestTypes> = [...workspaceView];
