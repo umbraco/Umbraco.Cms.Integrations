@@ -20,16 +20,13 @@ export class SemrushWorkspaceElement extends UmbLitElement {
     #paginationManager = new UmbPaginationManager();
 
     @state()
-    _currentPageNumber = 1;
+    private _loading = false;
 
     @state()
-    _totalPages = 1;
+    private _currentPageNumber = 1;
 
     @state()
-    _nextPageInfo?: string;
-
-    @state()
-    _previousPageInfo?: string;
+    private _totalPages = 1;
 
     @state()
     private authUrl: string = "";
@@ -48,15 +45,15 @@ export class SemrushWorkspaceElement extends UmbLitElement {
 	private _tableColumns: Array<UmbTableColumn> = [];
 
     @state()
-    private selectedproperty: string = "";
-    @state()
-    private propertyList: Array<ContentPropertyDtoModel> = [];
-
-    @state()
     private keywordList: RelatedPhrasesDtoModel | undefined = undefined;
 
     @state()
     private searchPhrase: string = "";
+
+    @state()
+    private selectedproperty: string = "";
+    @state()
+    private propertyList: Array<ContentPropertyDtoModel> = [];
 
     @state()
     private selectedDatasource: string = "";
@@ -121,10 +118,12 @@ export class SemrushWorkspaceElement extends UmbLitElement {
     async connectedCallback() {
         super.connectedCallback();
 
+        this._loading = true;
         await this.#validateToken();
         await this.#getDatasource();
         await this.#getAuthUrl();
         await this.#getContentProperties();
+        this._loading = false;
     }
 
     async #getContentProperties(){
@@ -136,43 +135,45 @@ export class SemrushWorkspaceElement extends UmbLitElement {
     }
 
     async #getDatasource(){
-        var result = await this.#semrushContext.getDataSources();
-        if (!result) return;
+        var { data } = await this.#semrushContext.getDataSources();
+        if (!data) return;
 
-        this.datasourceList = result.data?.items;
+        this.datasourceList = data.items;
     }
 
     async #getAuthUrl(){
-        var result = await this.#semrushContext.getAuthorizationUrl();
-        if (!result) return;
+        var { data } = await this.#semrushContext.getAuthorizationUrl();
+        if (!data) return;
 
-        this.authUrl = result.data!;
+        this.authUrl = data;
     }
 
     async #validateToken(){
-        var result = await this.#semrushContext.validateToken();
-        if (!result) return;
+        var { data } = await this.#semrushContext.validateToken();
+        if (!data) return;
 
-        if (result.data?.isAuthorized){
-            if (!result.data?.isValid){
+        if (data.isAuthorized){
+            if (!data.isValid){
                 await this.#semrushContext.refreshAccessToken();
                 return;
             }
 
-            this.account = result.data!;
+            this.account = data;
             this.requestUpdate();
             this.dispatchEvent(new CustomEvent('property-value-change'));
         }
     }
 
     async _search(){
-        const result = await this.#semrushContext.getRelatedPhrases(this.searchPhrase, this._currentPageNumber, this.selectedDatasource, this.selectedMethod);
-        if (!result) return;
+        const { data } = await this.#semrushContext.getRelatedPhrases(this.searchPhrase, this._currentPageNumber, this.selectedDatasource, this.selectedMethod);
+        if (!data) return;
 
-        this.keywordList = result.data;
-        this._totalPages = result.data?.totalPages!;
-        this.#createTableColumns(this.keywordList?.data!);
-        this.#createTableItems(this.keywordList?.data!);
+        this.keywordList = data;
+        this._totalPages = data.totalPages;
+        if(!!this.keywordList.data){
+            this.#createTableColumns(this.keywordList.data);
+            this.#createTableItems(this.keywordList.data);
+        }
     }
 
     _searchNew(){
@@ -215,10 +216,10 @@ export class SemrushWorkspaceElement extends UmbLitElement {
                 if (authWindow) authWindow.close();
 
                 var code = event.data.url.slice(event.data.url.indexOf(codeParam) + codeParam.length);
-                var result = await this.#semrushContext.getAccessToken(code);
-                if (!result) return;
+                var { data } = await this.#semrushContext.getAccessToken(code);
+                if (!data) return;
 
-                if (result.data !== "error"){
+                if (data !== "error"){
                     await this.#validateToken();
 
                     this._showSuccess("Access Approved.");
@@ -367,6 +368,7 @@ export class SemrushWorkspaceElement extends UmbLitElement {
                 <br/>
 
                 <uui-box headline="Keyword Search">
+                    ${this._loading ? html`<div class="center loader"><uui-loader></uui-loader></div>` : ""}
                     <uui-button 
                         slot="header-actions" 
                         look=${this.account.isAuthorized ? "secondary" : "primary"} 
@@ -402,31 +404,34 @@ export class SemrushWorkspaceElement extends UmbLitElement {
                         <uui-button label="Search keywords" look="primary" @click=${this._search} ?disabled=${!this.account.isAuthorized}></uui-button>
                     </div>
 
-                    ${when(this.keywordList?.data !== undefined, () => html`
-                        <div class="semrush-table">
-                            <umb-table 
-                                .columns=${this._tableColumns} 
-                                .items=${this._tableItems}></umb-table>
-                        </div>
+                    ${this.keywordList?.data !== undefined && !!this.keywordList?.data 
+                        ? html`
+                            <div class="semrush-table">
+                                <umb-table 
+                                    .columns=${this._tableColumns} 
+                                    .items=${this._tableItems}></umb-table>
+                            </div>
 
-                        ${(!this.account.isFreeAccount 
-                            ? html`
-                                <div>
-                                    <p>
-                                        Because you are using a free account, the number of results is limited to 10 records.
-                                        Please upgrade your subscription for enhanced results.
-                                    </p>
-                                </div> 
-                            `   
-                            : html`
-                                ${this.#renderPagination()}
-                            `
-                        )}
+                            ${(!this.account.isFreeAccount 
+                                ? html`
+                                    <div>
+                                        <p>
+                                            Because you are using a free account, the number of results is limited to 10 records.
+                                            Please upgrade your subscription for enhanced results.
+                                        </p>
+                                    </div> 
+                                `   
+                                : html`
+                                    ${this.#renderPagination()}
+                                `
+                            )}
 
-                        <a href="https://www.semrush.com/analytics/keywordoverview" target="_blank">
-                            Get more insights at Semrush
-                        </a>
-                    `)}
+                            <a href="https://www.semrush.com/analytics/keywordoverview" target="_blank">
+                                Get more insights at Semrush
+                            </a>
+                        `
+                        : html``
+                    }
                 </uui-box>
             </umb-body-layout>
         `;

@@ -49,25 +49,21 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                //var responseContent = await response.Content.ReadAsStringAsync();
-                using (StreamReader r = new StreamReader("temp.json"))
-                {
-                    var responseContent = r.ReadToEnd();
+                var responseContent = await response.Content.ReadAsStringAsync();
 
-                    var relatedPhrasesDeserialized = JsonSerializer.Deserialize<RelatedPhrasesDto>(responseContent);
+                var relatedPhrasesDeserialized = JsonSerializer.Deserialize<RelatedPhrasesDto>(responseContent);
 
-                    if (!relatedPhrasesDeserialized.IsSuccessful) return Ok(relatedPhrasesDeserialized);
+                if (!relatedPhrasesDeserialized.IsSuccessful) return Ok(relatedPhrasesDeserialized);
 
-                    _cacheHelper.AddCachedItem(cacheKey, responseContent);
+                _cacheHelper.AddCachedItem(cacheKey, responseContent);
 
-                    relatedPhrasesDeserialized.TotalPages = (int)Math.Ceiling((double)relatedPhrasesDeserialized.Data.Rows.Count / Constants.DefaultPageSize);
-                    relatedPhrasesDeserialized.Data.Rows = relatedPhrasesDeserialized.Data.Rows
-                        .Skip((pageNumber - 1) * Constants.DefaultPageSize)
-                        .Take(Constants.DefaultPageSize)
-                        .ToList();
+                relatedPhrasesDeserialized.TotalPages = (int)Math.Ceiling((double)relatedPhrasesDeserialized.Data.Rows.Count / Constants.DefaultPageSize);
+                relatedPhrasesDeserialized.Data.Rows = relatedPhrasesDeserialized.Data.Rows
+                    .Skip((pageNumber - 1) * Constants.DefaultPageSize)
+                    .Take(Constants.DefaultPageSize)
+                    .ToList();
 
-                    return Ok(relatedPhrasesDeserialized);
-                }
+                return Ok(relatedPhrasesDeserialized);
             }
 
             return Ok(relatedPhrasesDto);
