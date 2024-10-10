@@ -2,20 +2,12 @@
 
 using System;
 using System.Threading.Tasks;
-
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
 using System.Net.Http;
 using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
-using Newtonsoft.Json.Linq;
-
-using Newtonsoft.Json;
-
-
-#if NETCOREAPP
 using Microsoft.Extensions.Options;
-#else
-using System.Configuration;
-#endif
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
 {
@@ -23,18 +15,10 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
     {
         private readonly SemrushOAuthSettings _oauthSettings;
 
-#if NETCOREAPP
         public AuthorizationService(IOptions<SemrushOAuthSettings> options, TokenBuilder tokenBuilder, ISemrushTokenService semrushTokenService)
-#else
-        public AuthorizationService(TokenBuilder tokenBuilder, ISemrushTokenService semrushTokenService)
-#endif
             : base(tokenBuilder, semrushTokenService)
         {
-#if NETCOREAPP
             _oauthSettings = options.Value;
-#else
-            _oauthSettings = new SemrushOAuthSettings(ConfigurationManager.AppSettings);
-#endif
         }
 
         public string GetAccessToken(string code) => 
@@ -105,7 +89,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                var statusObject = (JObject)JsonConvert.DeserializeObject(responseContent);
+                var statusObject = JsonSerializer.Deserialize<JsonObject>(responseContent);
                 if (statusObject.ContainsKey("status") && statusObject["status"].ToString() == Constants.BadRefreshToken)
                 {
                     SemrushTokenService.RemoveParameters(Constants.TokenDbKey);

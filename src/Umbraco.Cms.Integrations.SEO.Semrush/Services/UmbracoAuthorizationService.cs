@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
 
@@ -85,7 +85,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                var statusObject = (JObject)JsonConvert.DeserializeObject(responseContent);
+                var statusObject = JsonSerializer.Deserialize<JsonObject>(responseContent);
                 if (statusObject.ContainsKey("status") && statusObject["status"].ToString() == Constants.BadRefreshToken)
                 {
                     SemrushTokenService.RemoveParameters(Constants.TokenDbKey);

@@ -37,5 +37,18 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush
 
             public const string UmbracoCmsIntegrationsSeoSemrushTokenEndpointKey = "Umbraco.Cms.Integrations.SEO.Semrush.TokenEndpoint";
         }
+
+        public static class ManagementApi
+        {
+            public const string RootPath = "semrush/management/api";
+
+            public const string ApiTitle = "Semrush Management API";
+
+            public const string ApiName = "semrush-management";
+
+            public const string SemrushGroupName = "Semrush";
+
+            public const string TokenName = "Access Token";
+        }
     }
 }
