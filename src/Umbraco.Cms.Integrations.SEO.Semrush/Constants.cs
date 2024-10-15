@@ -18,24 +18,6 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush
             public const string Settings = "Umbraco:Cms:Integrations:SEO:Semrush:Settings";
 
             public const string OAuthSettings = "Umbraco:Cms:Integrations:SEO:Semrush:OAuthSettings";
-
-            public const string UmbracoCmsIntegrationsSeoSemrushBaseUrlKey =
-                "Umbraco.Cms.Integrations.SEO.Semrush.BaseUrl";
-
-            public const string UmbracoCmsIntegrationsSeoSemrushUseUmbracoAuthorizationKey =
-                "Umbraco.Cms.Integrations.SEO.Semrush.UseUmbracoAuthorization";
-
-            public const string UmbracoCmsIntegrationsSeoSemrushRefKey = "Umbraco.Cms.Integrations.SEO.Semrush.Ref";
-
-            public const string UmbracoCmsIntegrationsSeoSemrushClientIdKey = "Umbraco.Cms.Integrations.SEO.Semrush.ClientId";
-
-            public const string UmbracoCmsIntegrationsSeoSemrushClientSecretKey = "Umbraco.Cms.Integrations.SEO.Semrush.ClientSecret";
-
-            public const string UmbracoCmsIntegrationsSeoSemrushRedirectUriKey = "Umbraco.Cms.Integrations.SEO.Semrush.RedirectUri";
-
-            public const string UmbracoCmsIntegrationsSeoSemrushScopesKey = "Umbraco.Cms.Integrations.SEO.Semrush.Scopes";
-
-            public const string UmbracoCmsIntegrationsSeoSemrushTokenEndpointKey = "Umbraco.Cms.Integrations.SEO.Semrush.TokenEndpoint";
         }
 
         public static class ManagementApi

@@ -3,12 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
 using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
 using Umbraco.Cms.Integrations.SEO.Semrush.Services;
@@ -19,7 +14,14 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
     [ApiExplorerSettings(GroupName = Constants.ManagementApi.SemrushGroupName)]
     public class GetColumnsController : SemrushControllerBase
     {
-        public GetColumnsController(IOptions<SemrushSettings> options, IWebHostEnvironment webHostEnvironment, ISemrushTokenService semrushTokenService, ICacheHelper cacheHelper, TokenBuilder tokenBuilder, SemrushComposer.AuthorizationImplementationFactory authorizationImplementationFactory) : base(options, webHostEnvironment, semrushTokenService, cacheHelper, tokenBuilder, authorizationImplementationFactory)
+        public GetColumnsController(
+            IOptions<SemrushSettings> options,
+            IWebHostEnvironment webHostEnvironment,
+            ISemrushTokenService semrushTokenService,
+            ICacheHelper cacheHelper,
+            TokenBuilder tokenBuilder,
+            SemrushComposer.AuthorizationImplementationFactory authorizationImplementationFactory,
+            IHttpClientFactory httpClientFactory) : base(options, webHostEnvironment, semrushTokenService, cacheHelper, tokenBuilder, authorizationImplementationFactory, httpClientFactory)
         {
         }
 
@@ -27,7 +29,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
         [ProducesResponseType(typeof(IEnumerable<ColumnDto>), StatusCodes.Status200OK)]
         public IActionResult GetColumns()
         {
-            string semrushColumnsPath = $"{_webHostEnvironment.ContentRootPath}/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/semrushColumns.json";
+            string semrushColumnsPath = "semrushColumns.json";
 
             _lock.EnterReadLock();
 

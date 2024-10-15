@@ -19,8 +19,6 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush
             var oauthOptions = builder.Services.AddOptions<SemrushOAuthSettings>()
                 .Bind(builder.Config.GetSection(Constants.Configuration.OAuthSettings));
 
-            //builder.ContentApps().Append<SemrushContentApp>();
-
             builder.Services.AddSingleton<ISemrushTokenService, SemrushTokenService>();
             builder.Services.AddSingleton<ICacheHelper, CacheHelper>();
 

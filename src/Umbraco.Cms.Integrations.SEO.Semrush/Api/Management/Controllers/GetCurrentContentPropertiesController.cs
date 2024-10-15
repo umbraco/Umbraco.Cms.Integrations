@@ -15,15 +15,19 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
     public class GetCurrentContentPropertiesController : SemrushControllerBase
     {
         private readonly IContentService _contentService;
-        public GetCurrentContentPropertiesController(IOptions<SemrushSettings> options, 
-            IWebHostEnvironment webHostEnvironment, 
-            ISemrushTokenService semrushTokenService, 
-            ICacheHelper cacheHelper, 
-            TokenBuilder tokenBuilder, 
+        private readonly IContentTypeService _contentTypeService;
+        public GetCurrentContentPropertiesController(IOptions<SemrushSettings> options,
+            IWebHostEnvironment webHostEnvironment,
+            ISemrushTokenService semrushTokenService,
+            ICacheHelper cacheHelper,
+            TokenBuilder tokenBuilder,
             SemrushComposer.AuthorizationImplementationFactory authorizationImplementationFactory,
-            IContentService contentService) : base(options, webHostEnvironment, semrushTokenService, cacheHelper, tokenBuilder, authorizationImplementationFactory)
+            IContentService contentService,
+            IContentTypeService contentTypeService,
+            IHttpClientFactory httpClientFactory) : base(options, webHostEnvironment, semrushTokenService, cacheHelper, tokenBuilder, authorizationImplementationFactory, httpClientFactory)
         {
             _contentService = contentService;
+            _contentTypeService = contentTypeService;
         }
 
         [HttpGet("content-properties")]
@@ -31,13 +35,31 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
         public async Task<IActionResult> GetCurrentContentProperties(string contentId)
         {
             var propertyList = new List<ContentPropertyDto>();
+            var currentContent = _contentService.GetById(Guid.Parse(contentId));
+            var propertiesInCurrentContent = currentContent.Properties.ToList();
+            var contentTypeOfCurrentContent = _contentTypeService.Get(currentContent.ContentType.Id);
+            var contentGroupsOfCurrentContentType = contentTypeOfCurrentContent.PropertyGroups.ToList();
 
-            var content = _contentService.GetById(Guid.Parse(contentId));
-            if (content != null)
+            for(int i = 0; i < contentGroupsOfCurrentContentType.Count; i++)
             {
-                propertyList = content.Properties.Select(s => new ContentPropertyDto { PropertyName = s.PropertyType.Name, PropertyValue = s.Values.ToList()[0].PublishedValue.ToString() }).ToList();
+                var properties = contentGroupsOfCurrentContentType[i].PropertyTypes.ToList();
+
+                for(int j = 0; j < properties.Count; j++)
+                {
+                    var property = properties[j];
+                    var value = propertiesInCurrentContent.Where(p => p.PropertyTypeId == property.Id).FirstOrDefault().Values;
+                    if(value != null && value.Count > 0)
+                    {
+                        propertyList.Add(new ContentPropertyDto
+                        {
+                            PropertyName = property.Name,
+                            PropertyGroup = contentGroupsOfCurrentContentType[i].Name,
+                            PropertyValue = value.FirstOrDefault().PublishedValue.ToString()
+                        });
+                    }
+                }
             }
-            
+
             return Ok(propertyList);
         }
     }

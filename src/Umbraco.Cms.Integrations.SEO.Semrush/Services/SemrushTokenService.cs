@@ -1,6 +1,6 @@
-﻿using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
+﻿using System.Text.Json;
 using Umbraco.Cms.Core.Services;
-using System.Text.Json;
+using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
 {

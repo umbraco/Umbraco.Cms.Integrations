@@ -1,16 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Umbraco.Cms.Api.Common.Attributes;
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
-using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
 using Umbraco.Cms.Integrations.SEO.Semrush.Services;
 using Umbraco.Cms.Web.Common.Authorization;
 using Umbraco.Cms.Web.Common.Routing;
@@ -24,12 +17,13 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
     [MapToApi(Constants.ManagementApi.ApiName)]
     public class SemrushControllerBase : Controller
     {
-        // Using a static HttpClient (see: https://www.aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/).
-        protected readonly static HttpClient s_client = new HttpClient();
-
-        // Access to the client within the class is via ClientFactory(), allowing us to mock the responses in tests.
-        protected static Func<HttpClient> ClientFactory = () => s_client;
-
+        protected static IHttpClientFactory _clientFactory;
+        private IOptions<SemrushSettings> options;
+        private IWebHostEnvironment webHostEnvironment;
+        private ISemrushTokenService semrushTokenService;
+        private ICacheHelper cacheHelper;
+        private TokenBuilder tokenBuilder;
+        private AuthorizationImplementationFactory authorizationImplementationFactory;
         protected static readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
         protected readonly ISemrushTokenService _semrushTokenService;
@@ -48,7 +42,8 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
             IWebHostEnvironment webHostEnvironment,
             ISemrushTokenService semrushTokenService,
             ICacheHelper cacheHelper, TokenBuilder tokenBuilder,
-            AuthorizationImplementationFactory authorizationImplementationFactory)
+            AuthorizationImplementationFactory authorizationImplementationFactory,
+            IHttpClientFactory clientFactory)
         {
             _settings = options.Value;
             _webHostEnvironment = webHostEnvironment;
@@ -56,6 +51,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
             _cacheHelper = cacheHelper;
             _tokenBuilder = tokenBuilder;
             _authorizationService = authorizationImplementationFactory(_settings.UseUmbracoAuthorization);
+            _clientFactory = clientFactory;
         }
     }
 }

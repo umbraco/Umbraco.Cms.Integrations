@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.Http;
-
-namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
+﻿namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
 {
     public class BaseAuthorizationService
     {

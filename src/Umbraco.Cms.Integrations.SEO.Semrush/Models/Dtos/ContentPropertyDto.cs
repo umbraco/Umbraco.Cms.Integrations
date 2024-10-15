@@ -9,5 +9,8 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos
 
         [JsonPropertyName("propertyValue")]
         public string PropertyValue { get; set; }
+
+        [JsonPropertyName("propertyGroup")]
+        public string PropertyGroup { get; set; }
     }
 }

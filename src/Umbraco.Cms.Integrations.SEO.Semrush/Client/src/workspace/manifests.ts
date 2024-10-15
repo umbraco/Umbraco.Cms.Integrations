@@ -11,8 +11,8 @@ const workspaceView: Array<ManifestWorkspaceView> = [
         weight: 30,
         meta: {
           label: "Semrush",
-          pathname: "/semrush",
-          icon: "icon-book-alt",
+          pathname: "semrush",
+          icon: "icon-files",
         },
         conditions: [
           {

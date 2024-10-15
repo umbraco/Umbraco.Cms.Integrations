@@ -1,5 +1,4 @@
-﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -12,11 +11,18 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers.Token
 {
     public class ValidateTokenController : TokenControllerBase
     {
-        public ValidateTokenController(IOptions<SemrushSettings> options, IWebHostEnvironment webHostEnvironment, ISemrushTokenService semrushTokenService, ICacheHelper cacheHelper, TokenBuilder tokenBuilder, SemrushComposer.AuthorizationImplementationFactory authorizationImplementationFactory) : base(options, webHostEnvironment, semrushTokenService, cacheHelper, tokenBuilder, authorizationImplementationFactory)
+        public ValidateTokenController(
+            IOptions<SemrushSettings> options,
+            IWebHostEnvironment webHostEnvironment,
+            ISemrushTokenService semrushTokenService,
+            ICacheHelper cacheHelper,
+            TokenBuilder tokenBuilder,
+            SemrushComposer.AuthorizationImplementationFactory authorizationImplementationFactory,
+            IHttpClientFactory httpClientFactory) : base(options, webHostEnvironment, semrushTokenService, cacheHelper, tokenBuilder, authorizationImplementationFactory, httpClientFactory)
         {
         }
 
-        [HttpGet("validate")]
+        [HttpGet("token/validate")]
         [ProducesResponseType(typeof(AuthorizationResponseDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> ValidateToken()
         {
@@ -24,7 +30,8 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers.Token
 
             if (!token.IsAccessTokenAvailable) return Ok(new AuthorizationResponseDto { IsAuthorized = false });
 
-            var response = await ClientFactory()
+            var client = _clientFactory.CreateClient();
+            var response = await client
                 .GetAsync(string.Format(Constants.SemrushKeywordsEndpoint, _settings.BaseUrl, "phrase_related", token.AccessToken, "ping", "us"));
 
             if (response.StatusCode == HttpStatusCode.Unauthorized)

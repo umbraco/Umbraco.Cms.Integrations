@@ -3,12 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
 using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
 using Umbraco.Cms.Integrations.SEO.Semrush.Services;
@@ -19,15 +14,20 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
     [ApiExplorerSettings(GroupName = Constants.ManagementApi.SemrushGroupName)]
     public class GetDataSourcesController : SemrushControllerBase
     {
-        public GetDataSourcesController(IOptions<SemrushSettings> options, IWebHostEnvironment webHostEnvironment, ISemrushTokenService semrushTokenService, ICacheHelper cacheHelper, TokenBuilder tokenBuilder, SemrushComposer.AuthorizationImplementationFactory authorizationImplementationFactory) : base(options, webHostEnvironment, semrushTokenService, cacheHelper, tokenBuilder, authorizationImplementationFactory)
+        public GetDataSourcesController(IOptions<SemrushSettings> options,
+            IWebHostEnvironment webHostEnvironment,
+            ISemrushTokenService semrushTokenService,
+            ICacheHelper cacheHelper,
+            TokenBuilder tokenBuilder,
+            SemrushComposer.AuthorizationImplementationFactory authorizationImplementationFactory,
+            IHttpClientFactory httpClientFactory) : base(options, webHostEnvironment, semrushTokenService, cacheHelper, tokenBuilder, authorizationImplementationFactory, httpClientFactory)
         {
         }
 
-        [HttpGet("datasources")]
+        [HttpGet("data-sources")]
         [ProducesResponseType(typeof(DataSourceDto), StatusCodes.Status200OK)]
         public IActionResult GetDataSources()
         {
-            //string semrushDataSourcesPath = $"{_webHostEnvironment.ContentRootPath}/App_Plugins/UmbracoCms.Integrations/SEO/Semrush/semrushDataSources.json";
             string semrushDataSourcesPath = "semrushDataSources.json";
 
             _lock.EnterReadLock();

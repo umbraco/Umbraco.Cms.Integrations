@@ -13,7 +13,7 @@ export class AccessTokenService {
     public static getTokenDetails(): CancelablePromise<GetTokenDetailsResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/umbraco/semrush/management/api/v1/detail'
+            url: '/umbraco/semrush/management/api/v1/token/details'
         });
     }
     
@@ -26,9 +26,12 @@ export class AccessTokenService {
     public static getAccessToken(data: GetAccessTokenData = {}): CancelablePromise<GetAccessTokenResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/umbraco/semrush/management/api/v1/get',
+            url: '/umbraco/semrush/management/api/v1/token/get',
             body: data.requestBody,
-            mediaType: 'application/json'
+            mediaType: 'application/json',
+            errors: {
+                500: 'Internal Server Error'
+            }
         });
     }
     
@@ -39,7 +42,7 @@ export class AccessTokenService {
     public static refreshAccessToken(): CancelablePromise<RefreshAccessTokenResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/umbraco/semrush/management/api/v1/refresh'
+            url: '/umbraco/semrush/management/api/v1/token/refresh'
         });
     }
     
@@ -50,7 +53,7 @@ export class AccessTokenService {
     public static revokeToken(): CancelablePromise<RevokeTokenResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/umbraco/semrush/management/api/v1/revoke',
+            url: '/umbraco/semrush/management/api/v1/token/revoke',
             responseHeader: 'Umb-Notifications'
         });
     }
@@ -62,7 +65,10 @@ export class AccessTokenService {
     public static validateToken(): CancelablePromise<ValidateTokenResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/umbraco/semrush/management/api/v1/validate'
+            url: '/umbraco/semrush/management/api/v1/token/validate',
+            errors: {
+                401: 'Unauthorized'
+            }
         });
     }
     
@@ -92,7 +98,7 @@ export class SemrushService {
     public static getAuthorizationUrl(): CancelablePromise<GetAuthorizationUrlResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/umbraco/semrush/management/api/v1/auth-url'
+            url: '/umbraco/semrush/management/api/v1/auth/url'
         });
     }
     
@@ -130,7 +136,7 @@ export class SemrushService {
     public static getDataSources(): CancelablePromise<GetDataSourcesResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/umbraco/semrush/management/api/v1/datasources'
+            url: '/umbraco/semrush/management/api/v1/data-sources'
         });
     }
     

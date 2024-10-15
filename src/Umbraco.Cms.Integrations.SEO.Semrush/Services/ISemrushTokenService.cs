@@ -1,5 +1,4 @@
-﻿
-using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
+﻿using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
 {

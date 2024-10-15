@@ -19,6 +19,7 @@ export type ColumnDtoModel = {
 export type ContentPropertyDtoModel = {
     propertyName: string;
     propertyValue: string;
+    propertyGroup: string;
 };
 
 export type ContentResult = {
@@ -117,7 +118,7 @@ export type GetRelatedPhrasesData = {
 export type GetRelatedPhrasesResponse = RelatedPhrasesDtoModel;
 
 export type $OpenApiTs = {
-    '/umbraco/semrush/management/api/v1/detail': {
+    '/umbraco/semrush/management/api/v1/token/details': {
         get: {
             res: {
                 /**
@@ -127,7 +128,7 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/umbraco/semrush/management/api/v1/get': {
+    '/umbraco/semrush/management/api/v1/token/get': {
         post: {
             req: GetAccessTokenData;
             res: {
@@ -135,10 +136,14 @@ export type $OpenApiTs = {
                  * OK
                  */
                 200: string;
+                /**
+                 * Internal Server Error
+                 */
+                500: string;
             };
         };
     };
-    '/umbraco/semrush/management/api/v1/refresh': {
+    '/umbraco/semrush/management/api/v1/token/refresh': {
         post: {
             res: {
                 /**
@@ -148,7 +153,7 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/umbraco/semrush/management/api/v1/revoke': {
+    '/umbraco/semrush/management/api/v1/token/revoke': {
         post: {
             res: {
                 /**
@@ -158,13 +163,17 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/umbraco/semrush/management/api/v1/validate': {
+    '/umbraco/semrush/management/api/v1/token/validate': {
         get: {
             res: {
                 /**
                  * OK
                  */
                 200: AuthorizationResponseDtoModel;
+                /**
+                 * Unauthorized
+                 */
+                401: AuthorizationResponseDtoModel;
             };
         };
     };
@@ -179,7 +188,7 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/umbraco/semrush/management/api/v1/auth-url': {
+    '/umbraco/semrush/management/api/v1/auth/url': {
         get: {
             res: {
                 /**
@@ -210,7 +219,7 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/umbraco/semrush/management/api/v1/datasources': {
+    '/umbraco/semrush/management/api/v1/data-sources': {
         get: {
             res: {
                 /**

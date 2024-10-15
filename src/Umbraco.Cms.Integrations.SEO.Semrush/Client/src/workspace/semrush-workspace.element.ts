@@ -1,16 +1,15 @@
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { css, html, nothing, customElement, state, when } from '@umbraco-cms/backoffice/external/lit';
 import { SEMRUSH_CONTEXT_TOKEN } from '../context/semrush.context';
-import type { UmbTableColumn, UmbTableItem } from '@umbraco-cms/backoffice/components';
 import { UUIInputEvent, UUIPaginationEvent, UUISelectEvent } from '@umbraco-cms/backoffice/external/uui';
 import { UmbPaginationManager } from "@umbraco-cms/backoffice/utils";
 import {type Phrase} from "../model/semrush-phrase.model"
-import { AuthorizationResponseDtoModel, ContentPropertyDtoModel, DataSourceItemDtoModel, RelatedPhrasesDataDtoModel, RelatedPhrasesDtoModel } from '@umbraco-integrations/semrush/generated';
+import { AuthorizationResponseDtoModel, ColumnDtoModel, ContentPropertyDtoModel, DataSourceItemDtoModel, RelatedPhrasesDtoModel } from '@umbraco-integrations/semrush/generated';
 import { UMB_MODAL_MANAGER_CONTEXT } from '@umbraco-cms/backoffice/modal';
 import { SEMRUSH_MODAL_TOKEN } from '../modal/semrush-modal.token';
 import { UMB_CURRENT_USER_CONTEXT } from '@umbraco-cms/backoffice/current-user';
 import { UMB_NOTIFICATION_CONTEXT, UmbNotificationColor } from '@umbraco-cms/backoffice/notification';
-import { UMB_CONTENT_WORKSPACE_CONTEXT } from '@umbraco-cms/backoffice/content';
+import {createRef, ref, Ref} from 'lit/directives/ref.js';
 
 const elementName = "semrush-workspace-view";
 @customElement(elementName)
@@ -20,8 +19,30 @@ export class SemrushWorkspaceElement extends UmbLitElement {
     #currentUserContext!: typeof UMB_CURRENT_USER_CONTEXT.TYPE;
     #paginationManager = new UmbPaginationManager();
 
+    dsRef: Ref<HTMLSelectElement> = createRef();
+    methodRef: Ref<HTMLSelectElement> = createRef();
+    columnRef: Ref<HTMLSpanElement> = createRef();
+
+    @state()
+	private _searchKeywordsBoxVisible: boolean = false;
+
+    @state()
+	private dsSearchDomainTooltip: string = "";
+
+    @state()
+	private dsSearchTypeTooltip: string = "";
+
+    @state()
+	private methodTooltip: string = "";
+    
+    @state()
+	private _columns: Array<ColumnDtoModel> = [];
+
     @state()
     private _loading = false;
+
+    @state()
+    private _searchLoading = false;
 
     @state()
     private _currentPageNumber = 1;
@@ -38,12 +59,6 @@ export class SemrushWorkspaceElement extends UmbLitElement {
         isValid: false,
         isFreeAccount: true
     };
-
-    @state()
-	private _tableItems: Array<UmbTableItem> = [];
-
-    @state()
-	private _tableColumns: Array<UmbTableColumn> = [];
 
     @state()
     private keywordList: RelatedPhrasesDtoModel | undefined = undefined;
@@ -124,6 +139,7 @@ export class SemrushWorkspaceElement extends UmbLitElement {
         await this.#getDatasource();
         await this.#getAuthUrl();
         await this.#getContentProperties();
+        await this.#getColumns();
         this._loading = false;
     }
 
@@ -165,16 +181,31 @@ export class SemrushWorkspaceElement extends UmbLitElement {
         }
     }
 
+    async #getColumns(){
+        var { data } = await this.#semrushContext.getColumns();
+        if (!data) return;
+
+        this._columns = data;
+    }
+
+    _getColumnDescription(name: string){
+        return this._columns.find(x => x.name == name)?.description;
+    }
+
     async _search(){
+        this._searchLoading = true;
+
         const { data } = await this.#semrushContext.getRelatedPhrases(this.searchPhrase, this._currentPageNumber, this.selectedDatasource, this.selectedMethod);
         if (!data) return;
 
-        this.keywordList = data;
-        this._totalPages = data.totalPages;
-        if(!!this.keywordList.data){
-            this.#createTableColumns(this.keywordList.data);
-            this.#createTableItems(this.keywordList.data);
+        if (data.isSuccessful){
+            this.keywordList = data;
+            this._totalPages = data.totalPages;            
+        } else{
+            this._showError(data.error);
         }
+
+        this._searchLoading = false;
     }
 
     _searchNew(){
@@ -182,33 +213,15 @@ export class SemrushWorkspaceElement extends UmbLitElement {
         this.selectedDatasource = "";
         this.selectedMethod = "";
         this.selectedproperty = "";
+        this.dsSearchDomainTooltip = "";
+        this.dsSearchTypeTooltip = "";
+        this.methodTooltip = "";
         this.keywordList = undefined;
+        this._searchKeywordsBoxVisible = true;
     }
 
-    #createTableColumns(phraseList: RelatedPhrasesDataDtoModel) {
-        const tableColumns = phraseList.columnNames.map((c) => ({
-            name: c,
-            alias: c.toLowerCase().trim(),
-          }));
-    
-        this._tableColumns = tableColumns;
-      }
-
-    #createTableItems(phraseList: RelatedPhrasesDataDtoModel) {
-		this._tableItems = phraseList.rows.map((entry) => {
-            const fields = entry.map((f, idx) => ({
-                columnAlias: this._tableColumns[idx].alias,
-                value: f,
-            }));
-      
-            return {
-                id: "",
-                data: fields,
-            };
-        });
-	}
-
     async _onConnect(){
+        this._loading = true;
         var authWindow = window.open(this.authUrl, "Semrush_Authorize", "width=900,height=700,modal=yes,alwaysRaised=yes");
         window.addEventListener("message", async (event: MessageEvent) => {
             if (event.data.type === "semrush:oauth:success") {
@@ -232,9 +245,11 @@ export class SemrushWorkspaceElement extends UmbLitElement {
                 authWindow!.close();
             }
         }, false);
+        this._loading = false;
     }
 
     #onPropertySelectChange(e: UUISelectEvent) {
+        this._searchKeywordsBoxVisible = true;
         this.selectedproperty = e.target.value.toString();
         this.searchPhrase = this.selectedproperty;
         this.requestUpdate();
@@ -315,9 +330,45 @@ export class SemrushWorkspaceElement extends UmbLitElement {
         `;
     }
 
+    _onDataSourceMouseOver(e: UUISelectEvent){
+        var value = e.target.value.toString();
+        
+        if(value !== undefined && value !== ""){
+            this.dsSearchDomainTooltip = this.datasourceList?.find(e => e.code == value)?.googleSearchDomain!;
+            this.dsSearchTypeTooltip = this.datasourceList?.find(e => e.code == value)?.researchTypes!;
+            const tooltipToggle = this.shadowRoot?.getElementById('tooltip-toggle');
+            const tooltipPopover = this.shadowRoot?.getElementById('tooltip-popover');
+
+            tooltipToggle?.addEventListener('mouseenter', () => tooltipPopover?.showPopover());
+            tooltipToggle?.addEventListener('mouseleave', () => tooltipPopover?.hidePopover());
+        }
+    }
+
+    _onMethodMouseOver(e: UUISelectEvent){
+        var value = e.target.value.toString();
+        if(value !== undefined && value !== ""){
+            this.methodTooltip = this.methodList?.find(e => e.value == value)?.description!;
+
+            const tooltipToggle = this.shadowRoot?.getElementById('method-tooltip-toggle');
+            const tooltipPopover = this.shadowRoot?.getElementById('method-tooltip-popover');
+
+            tooltipToggle?.addEventListener('mouseenter', () => tooltipPopover?.showPopover());
+            tooltipToggle?.addEventListener('mouseleave', () => tooltipPopover?.hidePopover());
+        }
+    }
+
+    _onColumnMouseOver(e: MouseEvent, idx: number) {
+        const tooltipToggle = this.shadowRoot?.getElementById('column-' + idx);
+        const tooltipPopover = this.shadowRoot?.getElementById('column-tooltip-popover-' + idx);
+
+        tooltipToggle?.addEventListener('mouseenter', () => tooltipPopover?.showPopover());
+        tooltipToggle?.addEventListener('mouseleave', () => tooltipPopover?.hidePopover());
+    }
+
     render(){
         return html`
             <umb-body-layout>
+                ${this._loading ? html`<div class="center loader"><uui-loader></uui-loader></div>` : ""}
                 <uui-box headline="Content Properties">
                     <div class="semrush-content">
                         <p>
@@ -360,7 +411,9 @@ export class SemrushWorkspaceElement extends UmbLitElement {
                                   name: ft.propertyName,
                                   value: ft.propertyValue,
                                   selected: ft.propertyValue === this.selectedproperty,
-                                }))}></uui-select>
+                                  group: ft.propertyGroup
+                                }))}>
+                        </uui-select>
                         <span>or</span>
                         <uui-button label="Search new" look="secondary" @click=${this._searchNew}></uui-button>
                     </div>
@@ -368,72 +421,110 @@ export class SemrushWorkspaceElement extends UmbLitElement {
 
                 <br/>
 
-                <uui-box headline="Keyword Search">
-                    ${this._loading ? html`<div class="center loader"><uui-loader></uui-loader></div>` : ""}
-                    <uui-button 
-                        slot="header-actions" 
-                        look=${this.account.isAuthorized ? "secondary" : "primary"} 
-                        @click=${this._onConnect} 
-                        ?disabled=${this.account.isAuthorized} 
-                        class="semrush-connect-button">Connect</uui-button>
+                ${when(this._searchKeywordsBoxVisible, () => html`
+                    <uui-box headline="Keyword Search">
+                        <uui-button 
+                            slot="header-actions" 
+                            look=${this.account.isAuthorized ? "secondary" : "primary"} 
+                            @click=${this._onConnect} 
+                            ?disabled=${this.account.isAuthorized} 
+                            class="semrush-connect-button">Connect</uui-button>
 
-                    <uui-button 
-                        slot="header-actions" 
-                        look=${!this.account.isAuthorized ? "secondary" : "primary"} 
-                        @click=${this._openModal}>Status</uui-button>
+                        <uui-button 
+                            slot="header-actions" 
+                            look=${!this.account.isAuthorized ? "secondary" : "primary"} 
+                            @click=${this._openModal}>Status</uui-button>
 
-                    <div>
-                        <uui-input .value=${this.searchPhrase} @change=${(e : UUIInputEvent) => this.#onInputChange(e)}></uui-input>
-                        <uui-select 
-                            placeholder="Please select a data source"
-                            @change=${(e : UUISelectEvent) => this.#onDatasourceSelectChange(e)}
-                            .options=${
-                                this.datasourceList?.map((ft) => ({
-                                  name: ft.region,
-                                  value: ft.code,
-                                  selected: ft.code === this.selectedDatasource,
-                                })) ?? []}></uui-select>
-                        <uui-select 
-                            placeholder="Please select a method"
-                            @change=${(e : UUISelectEvent) => this.#onMethodSelectChange(e)}
-                            .options=${
-                                this.methodList?.map((ft) => ({
-                                  name: ft.key,
-                                  value: ft.value,
-                                  selected: ft.value === this.selectedMethod,
-                                }))}></uui-select>
-                        <uui-button label="Search keywords" look="primary" @click=${this._search} ?disabled=${!this.account.isAuthorized}></uui-button>
-                    </div>
+                        <div>
+                            <uui-input .value=${this.searchPhrase} @change=${(e : UUIInputEvent) => this.#onInputChange(e)}></uui-input>
 
-                    ${this.keywordList?.data !== undefined && !!this.keywordList?.data 
-                        ? html`
-                            <div class="semrush-table">
-                                <umb-table 
-                                    .columns=${this._tableColumns} 
-                                    .items=${this._tableItems}></umb-table>
-                            </div>
+                            <uui-select id="tooltip-toggle" popovertarget="tooltip-popover" @mouseover=${(e : UUISelectEvent) => this._onDataSourceMouseOver(e)} ${ref(this.dsRef)}
+                                placeholder="Please select a data source"
+                                @change=${(e : UUISelectEvent) => this.#onDatasourceSelectChange(e)}
+                                .options=${
+                                    this.datasourceList?.map((ft) => ({
+                                    name: ft.region,
+                                    value: ft.code,
+                                    selected: ft.code === this.selectedDatasource,
+                                    })) ?? []}>
+                            </uui-select>
+                            <uui-popover-container placement="bottom-start" id="tooltip-popover">
+                                <div class="semrush-tooltip">
+                                    <span><b>Research Types:</b> ${this.dsSearchTypeTooltip}</span><br />
+                                    <span><b>Google Search Domain:</b> ${this.dsSearchDomainTooltip}</span>
+                                </div>
+                            </uui-popover-container>
 
-                            ${(!this.account.isFreeAccount 
-                                ? html`
-                                    <div>
-                                        <p>
-                                            Because you are using a free account, the number of results is limited to 10 records.
-                                            Please upgrade your subscription for enhanced results.
-                                        </p>
-                                    </div> 
-                                `   
-                                : html`
-                                    ${this.#renderPagination()}
-                                `
-                            )}
+                            <uui-select id="method-tooltip-toggle" popovertarget="method-tooltip-popover" @mouseover=${(e : UUISelectEvent) => this._onMethodMouseOver(e)} ${ref(this.methodRef)}
+                                placeholder="Please select a method"
+                                @change=${(e : UUISelectEvent) => this.#onMethodSelectChange(e)}
+                                .options=${
+                                    this.methodList?.map((ft) => ({
+                                    name: ft.key,
+                                    value: ft.value,
+                                    selected: ft.value === this.selectedMethod
+                                    }))}>
+                            </uui-select>
+                            <uui-popover-container placement="bottom-start" id="method-tooltip-popover">
+                                <div class="semrush-tooltip">
+                                    <span>${this.methodTooltip}</span>
+                                </div>
+                            </uui-popover-container>
 
-                            <a href="https://www.semrush.com/analytics/keywordoverview" target="_blank">
-                                Get more insights at Semrush
-                            </a>
-                        `
-                        : html``
-                    }
-                </uui-box>
+                            <uui-button label="Search keywords" look="primary" @click=${this._search} ?disabled=${!this.account.isAuthorized}></uui-button>
+                        </div>
+
+                        ${this.keywordList?.data !== undefined && !!this.keywordList?.data 
+                            ? html`
+                                ${this._searchLoading ? html`<div class="center loader"><uui-loader></uui-loader></div>` : ""}
+                                <div class="semrush-table">
+                                    <uui-table>
+                                        <uui-table-head style="background-color: ; color: ">
+                                            ${this.keywordList.data.columnNames.map((c, idx) => html`
+                                                <uui-table-head-cell>
+                                                    <span id="column-${idx}" popovertarget="column-tooltip-popover-${idx}" @mouseover=${(e : MouseEvent) => this._onColumnMouseOver(e, idx)} ${ref(this.columnRef)}>${c}</span>
+                                                    <uui-popover-container placement="bottom-start" id="column-tooltip-popover-${idx}">
+                                                        <div class="semrush-tooltip">
+                                                            ${this._getColumnDescription(c)}
+                                                        </div>
+                                                    </uui-popover-container>
+                                                </uui-table-head-cell>
+                                            `)}
+                                        </uui-table-head>
+                                        ${this.keywordList.data.rows.map(rows => html`
+                                            <uui-table-row>
+                                                ${rows.map(row => html`
+                                                    <uui-table-cell>
+                                                        <span>${row}</span>
+                                                    </uui-table-cell>
+                                                `)}
+                                            </uui-table-row>
+                                        `)}
+                                    </uui-table>
+                                </div>
+
+                                ${(!this.account.isFreeAccount 
+                                    ? html`
+                                        <div>
+                                            <p>
+                                                Because you are using a free account, the number of results is limited to 10 records.
+                                                Please upgrade your subscription for enhanced results.
+                                            </p>
+                                        </div> 
+                                    `   
+                                    : html`
+                                        ${this.#renderPagination()}
+                                    `
+                                )}
+
+                                <a href="https://www.semrush.com/analytics/keywordoverview" target="_blank">
+                                    Get more insights at Semrush
+                                </a>
+                            `
+                            : html``
+                        }
+                    </uui-box>    
+                `)}
             </umb-body-layout>
         `;
     }
@@ -454,6 +545,15 @@ export class SemrushWorkspaceElement extends UmbLitElement {
 
             .semrush-autofill-icon{
                 margin-bottom: 4px;
+            }
+
+            .semrush-tooltip{
+                background-color: var(--uui-color-surface); 
+                max-width: 150px; 
+                box-shadow: var(--uui-shadow-depth-4); 
+                padding: var(--uui-size-space-4); 
+                border-radius: var(--uui-border-radius); 
+                font-size: 0.9rem;
             }
         `];
 }

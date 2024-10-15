@@ -1,13 +1,8 @@
-﻿
-
-using System;
-using System.Threading.Tasks;
-using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
-using System.Net.Http;
-using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
+using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
 {

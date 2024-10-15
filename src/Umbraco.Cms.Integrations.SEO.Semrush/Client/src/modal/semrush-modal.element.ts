@@ -79,7 +79,7 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sem
                         `)}
                     </div>
 
-                    <uui-button label="Revoke" look="primary" ?disabled=${!this.isAuthorized()} @click=${this._revoke}></uui-button>
+                    <uui-button label="Revoke" look="primary" color="danger" ?disabled=${!this.isAuthorized()} @click=${this._revoke}></uui-button>
                 </uui-box>
 
                 <uui-button slot="actions" label="Close" @click=${this._rejectModal}></uui-button>
