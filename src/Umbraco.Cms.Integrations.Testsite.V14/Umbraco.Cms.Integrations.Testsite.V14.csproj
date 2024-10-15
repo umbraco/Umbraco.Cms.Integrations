@@ -4,14 +4,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  <ItemGroup>
-    <Content Remove="semrushColumns.json" />
-    <Content Remove="semrushDataSources.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="semrushColumns.json" />
-    <None Include="semrushDataSources.json" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Umbraco.Cms" Version="14.2.0" />

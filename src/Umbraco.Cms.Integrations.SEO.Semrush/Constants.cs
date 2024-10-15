@@ -13,6 +13,8 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush
 
         public const string BadRefreshToken = "BAD_REFRESH_TOKEN";
 
+        public const string EmbeddedResourceNamespace = "Umbraco.Cms.Integrations.SEO.Semrush.EmbeddedResources";
+
         public static class Configuration
         {
             public const string Settings = "Umbraco:Cms:Integrations:SEO:Semrush:Settings";

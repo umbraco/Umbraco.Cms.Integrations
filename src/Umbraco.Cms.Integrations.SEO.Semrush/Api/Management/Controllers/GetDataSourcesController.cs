@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Reflection;
 using System.Text.Json;
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
 using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
@@ -28,33 +29,39 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
         [ProducesResponseType(typeof(DataSourceDto), StatusCodes.Status200OK)]
         public IActionResult GetDataSources()
         {
-            string semrushDataSourcesPath = "semrushDataSources.json";
+            string semrushDataSourcesPath = $"{Constants.EmbeddedResourceNamespace}.semrushDataSources.json";
+            var assembly = Assembly.GetExecutingAssembly();
 
             _lock.EnterReadLock();
             try
             {
-                if (!System.IO.File.Exists(Path.Combine(Directory.GetCurrentDirectory(), semrushDataSourcesPath)))
+                using (Stream stream = assembly.GetManifestResourceStream(semrushDataSourcesPath))
                 {
-                    var fs = System.IO.File.Create(semrushDataSourcesPath);
-                    fs.Close();
-
-                    return Ok(new DataSourceDto());
-                }
-
-                var content = System.IO.File.ReadAllText(semrushDataSourcesPath);
-                var dataSourceDto = new DataSourceDto
-                {
-                    Items = JsonSerializer.Deserialize<List<DataSourceItemDto>>(content).Select(p =>
-                        new DataSourceItemDto
+                    if (stream != null)
+                    {
+                        using (StreamReader reader = new StreamReader(stream))
                         {
-                            Code = p.Code,
-                            Region = p.Region,
-                            ResearchTypes = p.ResearchTypes,
-                            GoogleSearchDomain = p.GoogleSearchDomain
-                        })
-                };
+                            string result = reader.ReadToEnd();
+                            var dataSourceDto = new DataSourceDto
+                            {
+                                Items = JsonSerializer.Deserialize<List<DataSourceItemDto>>(result).Select(p =>
+                                    new DataSourceItemDto
+                                    {
+                                        Code = p.Code,
+                                        Region = p.Region,
+                                        ResearchTypes = p.ResearchTypes,
+                                        GoogleSearchDomain = p.GoogleSearchDomain
+                                    })
+                            };
 
-                return Ok(dataSourceDto);
+                            return Ok(dataSourceDto);
+                        }
+                    }
+                    else 
+                    {
+                        return Ok(new DataSourceDto());
+                    }
+                }
             }
             catch (FileNotFoundException ex)
             {

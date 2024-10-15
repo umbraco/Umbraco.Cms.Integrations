@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Reflection;
 using System.Text.Json;
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
 using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
@@ -29,30 +30,36 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
         [ProducesResponseType(typeof(IEnumerable<ColumnDto>), StatusCodes.Status200OK)]
         public IActionResult GetColumns()
         {
-            string semrushColumnsPath = "semrushColumns.json";
+            string semrushColumnsPath = $"{Constants.EmbeddedResourceNamespace}.semrushColumns.json";
+            var assembly = Assembly.GetExecutingAssembly();
 
             _lock.EnterReadLock();
 
             try
             {
-                if (!System.IO.File.Exists(semrushColumnsPath))
+                using (Stream stream = assembly.GetManifestResourceStream(semrushColumnsPath))
                 {
-                    var fs = System.IO.File.Create(semrushColumnsPath);
-                    fs.Close();
-
-                    return Ok(Enumerable.Empty<ColumnDto>());
-                }
-
-                var content = System.IO.File.ReadAllText(semrushColumnsPath);
-                var deserializeContent = JsonSerializer.Deserialize<IEnumerable<ColumnDto>>(content).Select(p =>
-                    new ColumnDto
+                    if (stream != null)
                     {
-                        Name = p.Name,
-                        Value = p.Value,
-                        Description = p.Description
-                    });
+                        using (StreamReader reader = new StreamReader(stream))
+                        {
+                            string result = reader.ReadToEnd();
+                            var deserializeContent = JsonSerializer.Deserialize<IEnumerable<ColumnDto>>(result).Select(p =>
+                            new ColumnDto
+                            {
+                                Name = p.Name,
+                                Value = p.Value,
+                                Description = p.Description
+                            });
 
-                return Ok(deserializeContent);
+                            return Ok(deserializeContent);
+                        }
+                    }
+                    else
+                    {
+                        return Ok(Enumerable.Empty<ColumnDto>());
+                    }
+                }
 
             }
             catch (FileNotFoundException ex)
