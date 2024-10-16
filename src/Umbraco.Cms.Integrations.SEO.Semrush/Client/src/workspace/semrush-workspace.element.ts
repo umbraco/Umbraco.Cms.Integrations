@@ -503,7 +503,7 @@ export class SemrushWorkspaceElement extends UmbLitElement {
                                     </uui-table>
                                 </div>
 
-                                ${(!this.account.isFreeAccount 
+                                ${(this.account.isFreeAccount 
                                     ? html`
                                         <div>
                                             <p>
