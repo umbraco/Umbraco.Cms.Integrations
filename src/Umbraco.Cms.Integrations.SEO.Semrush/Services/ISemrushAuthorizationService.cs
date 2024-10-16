@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
+﻿namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
 {
     public interface ISemrushAuthorizationService
     {

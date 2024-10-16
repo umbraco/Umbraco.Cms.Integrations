@@ -15,9 +15,8 @@ src/Umbraco.Cms.Integrations.Crm.Dynamics/wwwroot/*
 src/Umbraco.Cms.Integrations.Crm.ActiveCampaign/wwwroot/*
 !src/Umbraco.Cms.Integrations.Crm.ActiveCampaign/wwwroot/umbraco-package.json
 src/Umbraco.Cms.Integrations.Automation.Zapier/wwwroot
-src/Umbraco.Cms.Integrations.Commerce.Shopify/wwwroot
-src/Umbraco.Cms.Integrations.Crm.Hubspot/wwwroot
-
+src/Umbraco.Cms.Integrations.SEO.Semrush/wwwroot/*
+!src/Umbraco.Cms.Integrations.SEO.Semrush/wwwroot/umbraco-package.json
 
 # User-specific files
 *.suo

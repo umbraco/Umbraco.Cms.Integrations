@@ -1,12 +1,6 @@
-﻿using Newtonsoft.Json;
-
-using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
-
-#if NETCOREAPP
+﻿using System.Text.Json;
 using Umbraco.Cms.Core.Services;
-#else
-using Umbraco.Core.Services;
-#endif
+using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
 {
@@ -25,7 +19,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
 
             if (string.IsNullOrEmpty(_kvService.GetValue(key))) return false;
 
-            tokenDto = JsonConvert.DeserializeObject<TokenDto>(_kvService.GetValue(key));
+            tokenDto = JsonSerializer.Deserialize<TokenDto>(_kvService.GetValue(key));
 
             return true;
         }

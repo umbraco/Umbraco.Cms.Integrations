@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
+﻿namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
 {
     public class TokenBuilder
     {
