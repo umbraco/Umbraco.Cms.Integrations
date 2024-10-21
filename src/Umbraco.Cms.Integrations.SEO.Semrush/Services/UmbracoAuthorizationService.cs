@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Options;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
 using Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos;
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
@@ -13,8 +12,8 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
 
         public const string AuthProxyTokenEndpoint = "oauth/v1/token";
 
-        public UmbracoAuthorizationService(TokenBuilder tokenBuilder, ISemrushTokenService semrushTokenService) 
-            : base(tokenBuilder, semrushTokenService)
+        public UmbracoAuthorizationService(IOptions<SemrushOAuthSettings> options, TokenBuilder tokenBuilder, ISemrushTokenService semrushTokenService, IHttpClientFactory httpClientFactory)
+            : base(tokenBuilder, semrushTokenService, httpClientFactory)
         {
         }
 
@@ -33,7 +32,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
             };
             requestMessage.Headers.Add("service_name", "Semrush");
 
-            var response = await ClientFactory().SendAsync(requestMessage);
+            var response = await HttpClientFactory.CreateClient().SendAsync(requestMessage);
 
             var result = await response.Content.ReadAsStringAsync();
 
@@ -71,7 +70,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
             };
             requestMessage.Headers.Add("service", "Semrush");
 
-            var response = await ClientFactory().SendAsync(requestMessage);
+            var response = await HttpClientFactory.CreateClient().SendAsync(requestMessage);
             
             if (response.IsSuccessStatusCode)
             {
@@ -85,7 +84,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                var statusObject = (JObject)JsonConvert.DeserializeObject(responseContent);
+                var statusObject = JsonSerializer.Deserialize<JsonObject>(responseContent);
                 if (statusObject.ContainsKey("status") && statusObject["status"].ToString() == Constants.BadRefreshToken)
                 {
                     SemrushTokenService.RemoveParameters(Constants.TokenDbKey);

@@ -8,21 +8,6 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Configuration
         public SemrushOAuthSettings()
         { }
 
-        public SemrushOAuthSettings(NameValueCollection appSettings)
-        {
-            Ref = appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoSemrushRefKey];
-
-            ClientId = appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoSemrushClientIdKey];
-
-            ClientSecret = appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoSemrushClientSecretKey];
-
-            RedirectUri = appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoSemrushRedirectUriKey];
-
-            Scopes = appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoSemrushScopesKey];
-
-            TokenEndpoint = appSettings[Constants.Configuration.UmbracoCmsIntegrationsSeoSemrushTokenEndpointKey];
-        }
-
         public string Ref { get; set; }
 
         public string ClientId { get; set; }

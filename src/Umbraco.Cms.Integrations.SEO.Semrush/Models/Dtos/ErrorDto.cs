@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos
 {
     public class ErrorDto
     {
-        [JsonProperty("isSuccessful")]
+        [JsonPropertyName("isSuccessful")]
         public bool IsSuccessful => string.IsNullOrWhiteSpace(Error);
 
-        [JsonProperty("error")]
+        [JsonPropertyName("error")]
         public string Error { get; set; }
 
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; }
     }
 }

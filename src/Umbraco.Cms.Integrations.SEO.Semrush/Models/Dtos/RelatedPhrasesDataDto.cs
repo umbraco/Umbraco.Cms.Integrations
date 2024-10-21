@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Umbraco.Cms.Integrations.SEO.Semrush.Models.Dtos
 {
     public class RelatedPhrasesDataDto
     {
-        [JsonProperty("columnNames")]
+        [JsonPropertyName("columnNames")]
         public string[] ColumnNames { get; set; }
 
-        [JsonProperty("rows")]
+        [JsonPropertyName("rows")]
         public List<string[]> Rows { get; set; }
     }
 

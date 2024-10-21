@@ -1,0 +1,61 @@
+﻿<Project>
+	<!--
+        Copied from: https://github.com/aspnet/AspLabs/blob/main/src/ClientAssets/Microsoft.AspNetCore.ClientAssets/build/netstandard2.0/Microsoft.AspNetCore.ClientAssets.targets
+
+        More information:
+        - https://devblogs.microsoft.com/dotnet/build-client-web-assets-for-your-razor-class-library/
+        - https://github.com/dotnet/aspnetcore/issues/38445
+    -->
+	<PropertyGroup>
+		<ClientAssetsDirectory Condition="'$(ClientAssetsDirectory)' == ''">Client\</ClientAssetsDirectory>
+		<ClientAssetsRestoreInputs Condition="'$(ClientAssetsRestoreInputs)' == ''">$(ClientAssetsDirectory)\package-lock.json;$(ClientAssetsDirectory)\package.json</ClientAssetsRestoreInputs>
+		<ClientAssetsRestoreOutputs Condition="'$(ClientAssetsRestoreOutputs)' == ''">$(ClientAssetsDirectory)node_modules\.package-lock.json</ClientAssetsRestoreOutputs>
+		<ClientAssetsRestoreCommand Condition="'$(ClientAssetsRestoreCommand)' == ''">npm ci --no-fund --no-audit --prefer-offline</ClientAssetsRestoreCommand>
+		<ClientAssetsBuildCommand Condition="'$(ClientAssetsBuildCommand)' == ''">npm run build</ClientAssetsBuildCommand>
+
+		<!-- Include project file to pick up changes in the above values -->
+		<ClientAssetsRestoreInputs>$(MSBuildProjectFile);$(ClientAssetsRestoreInputs)</ClientAssetsRestoreInputs>
+		<!-- Run restore only once for multi targeting builds -->
+		<ClientAssetsRestoreBeforeTargets Condition="'$(TargetFramework)' == ''">DispatchToInnerBuilds</ClientAssetsRestoreBeforeTargets>
+		<!-- Allow multitargeting projects to choose the target framework in which they run by setting this value to true only for a given target framework -->
+		<ShouldRunClientAssetsBuild Condition="'$(ShouldRunClientAssetsBuild)' == ''">true</ShouldRunClientAssetsBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ClientAssetsInputs Include="$(ClientAssetsDirectory)**" Exclude="$(DefaultItemExcludes)" />
+	</ItemGroup>
+
+	<Target Name="ClientAssetsRestore" BeforeTargets="$(ClientAssetsRestoreBeforeTargets)" Inputs="$(ClientAssetsRestoreInputs)" Outputs="$(ClientAssetsRestoreOutputs)">
+		<Message Text="Restoring NPM packages" Importance="high" />
+		<Exec Command="$(ClientAssetsRestoreCommand)" WorkingDirectory="$(ClientAssetsDirectory)"/>
+	</Target>
+
+	<Target Name="ClientAssetsBuild" Condition="'$(ShouldRunClientAssetsBuild)' == 'true'" DependsOnTargets="ClientAssetsRestore" BeforeTargets="AssignTargetPaths" Inputs="@(ClientAssetsInputs)" Outputs="$(IntermediateOutputPath)clientassetsbuild.complete.txt">
+		<PropertyGroup>
+			<_ClientAssetsOutputFullPath>$([System.IO.Path]::GetFullPath('$(IntermediateOutputPath)clientassets'))</_ClientAssetsOutputFullPath>
+		</PropertyGroup>
+
+		<Message Text="Executing NPM build script" Importance="High" />
+
+		<MakeDir Directories="$(_ClientAssetsOutputFullPath)" />
+		<Exec Command="$(ClientAssetsBuildCommand)" WorkingDirectory="$(ClientAssetsDirectory)" />
+
+		<ItemGroup>
+			<_ClientAssetsBuildOutput Include="$(IntermediateOutputPath)clientassets\**"></_ClientAssetsBuildOutput>
+		</ItemGroup>
+
+		<WriteLinesToFile File="$(IntermediateOutputPath)clientassetsbuild.complete.txt" Lines="@(_ClientAssetsBuildOutput)" />
+	</Target>
+
+	<Target Name="DefineClientAssets" AfterTargets="ClientAssetsBuild" DependsOnTargets="ResolveStaticWebAssetsConfiguration">
+		<ItemGroup>
+			<FileWrites Include="@(_ClientAssetsBuildOutput)" />
+			<FileWrites Include="$(IntermediateOutputPath)clientassetsbuild.complete.txt" />
+		</ItemGroup>
+
+		<DefineStaticWebAssets CandidateAssets="@(_ClientAssetsBuildOutput)" SourceId="$(PackageId)" SourceType="Computed" ContentRoot="$(_ClientAssetsOutputFullPath)" BasePath="$(StaticWebAssetBasePath)">
+			<Output TaskParameter="Assets" ItemName="StaticWebAsset" />
+		</DefineStaticWebAssets>
+	</Target>
+
+</Project>

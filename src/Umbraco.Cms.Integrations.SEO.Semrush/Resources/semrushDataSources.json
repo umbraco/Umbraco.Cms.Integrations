@@ -1,0 +1,812 @@
+[
+  {
+    "code": "us",
+    "region": "United States",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.com"
+  },
+  {
+    "code": "uk",
+    "region": "United Kingdom",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.co.uk"
+  },
+  {
+    "code": "ca",
+    "region": "Canada",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.ca"
+  },
+  {
+    "code": "ru",
+    "region": "Russia",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.ru"
+  },
+  {
+    "code": "de",
+    "region": "Germany",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.de"
+  },
+  {
+    "code": "fr",
+    "region": "France",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.fr"
+  },
+  {
+    "code": "es",
+    "region": "Spain",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.es"
+  },
+  {
+    "code": "it",
+    "region": "Italy",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.it"
+  },
+  {
+    "code": "br",
+    "region": "Brazil",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.com.br"
+  },
+  {
+    "code": "au",
+    "region": "Australia",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.com.au"
+  },
+  {
+    "code": "ar",
+    "region": "Argentina",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.com.ar"
+  },
+  {
+    "code": "be",
+    "region": "Belgium",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.be"
+  },
+  {
+    "code": "ch",
+    "region": "Switzerland",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.ch"
+  },
+  {
+    "code": "dk",
+    "region": "Denmark",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.dk"
+  },
+  {
+    "code": "fi",
+    "region": "Finland",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.fi"
+  },
+  {
+    "code": "hk",
+    "region": "Hong Kong",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.com.hk"
+  },
+  {
+    "code": "ie",
+    "region": "Ireland",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.ie"
+  },
+  {
+    "code": "il",
+    "region": "Israel",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.co.il"
+  },
+  {
+    "code": "mx",
+    "region": "Mexico",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.com.mx"
+  },
+  {
+    "code": "nl",
+    "region": "Netherlands",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.nl"
+  },
+  {
+    "code": "no",
+    "region": "Norway",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.no"
+  },
+  {
+    "code": "pl",
+    "region": "Poland",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.pl"
+  },
+  {
+    "code": "se",
+    "region": "Sweden",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.se"
+  },
+  {
+    "code": "sg",
+    "region": "Singapore",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.com.sg"
+  },
+  {
+    "code": "tr",
+    "region": "Turkey",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.com.tr"
+  },
+  {
+    "code": "jp",
+    "region": "Japan",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.co.jp"
+  },
+  {
+    "code": "in",
+    "region": "India",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.co.in"
+  },
+  {
+    "code": "hu",
+    "region": "Hungary",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.hu"
+  },
+  {
+    "code": "af",
+    "region": "Afghanistan",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.af"
+  },
+  {
+    "code": "al",
+    "region": "Albania",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.al"
+  },
+  {
+    "code": "dz",
+    "region": "Algeria",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.dz"
+  },
+  {
+    "code": "ao",
+    "region": "Angola",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.co.ao"
+  },
+  {
+    "code": "am",
+    "region": "Armenia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.am"
+  },
+  {
+    "code": "at",
+    "region": "Austria",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.at"
+  },
+  {
+    "code": "az",
+    "region": "Azerbaijan",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.az"
+  },
+  {
+    "code": "bh",
+    "region": "Bahrain",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.bh"
+  },
+  {
+    "code": "bd",
+    "region": "Bangladesh",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.bd"
+  },
+  {
+    "code": "by",
+    "region": "Belarus",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.by"
+  },
+  {
+    "code": "bz",
+    "region": "Belize",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.bz"
+  },
+  {
+    "code": "bo",
+    "region": "Bolivia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.bo"
+  },
+  {
+    "code": "ba",
+    "region": "Bosnia and Herzegovina",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.ba"
+  },
+  {
+    "code": "bw",
+    "region": "Botswana",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.co.bw"
+  },
+  {
+    "code": "bn",
+    "region": "Brunei",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.bn"
+  },
+  {
+    "code": "bg",
+    "region": "Bulgaria",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.bg"
+  },
+  {
+    "code": "cv",
+    "region": "Cabo Verde",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.cv"
+  },
+  {
+    "code": "kh",
+    "region": "Cambodia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.kh"
+  },
+  {
+    "code": "cm",
+    "region": "Cameroon",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.cm"
+  },
+  {
+    "code": "cl",
+    "region": "Chile",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.cl"
+  },
+  {
+    "code": "co",
+    "region": "Colombia",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.com.co"
+  },
+  {
+    "code": "cr",
+    "region": "Costa Rica",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.co.cr"
+  },
+  {
+    "code": "hr",
+    "region": "Croatia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.hr"
+  },
+  {
+    "code": "cy",
+    "region": "Cyprus",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.cy"
+  },
+  {
+    "code": "cz",
+    "region": "Czech Republic",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.cz"
+  },
+  {
+    "code": "cd",
+    "region": "Congo",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.cd"
+  },
+  {
+    "code": "do",
+    "region": "Dominican Republic",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.do"
+  },
+  {
+    "code": "ec",
+    "region": "Ecuador",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.ec"
+  },
+  {
+    "code": "eg",
+    "region": "Egypt",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.eg"
+  },
+  {
+    "code": "sv",
+    "region": "El Salvador",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.sv"
+  },
+  {
+    "code": "ee",
+    "region": "Estonia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.ee"
+  },
+  {
+    "code": "et",
+    "region": "Ethiopia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.et"
+  },
+  {
+    "code": "ge",
+    "region": "Georgia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.ge"
+  },
+  {
+    "code": "gh",
+    "region": "Ghana",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.gh"
+  },
+  {
+    "code": "gr",
+    "region": "Greece",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.gr"
+  },
+  {
+    "code": "gt",
+    "region": "Guatemala",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.gt"
+  },
+  {
+    "code": "gy",
+    "region": "Guyana",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.gy"
+  },
+  {
+    "code": "ht",
+    "region": "Haiti",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.ht"
+  },
+  {
+    "code": "hn",
+    "region": "Honduras",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.hn"
+  },
+  {
+    "code": "is",
+    "region": "Iceland",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.is"
+  },
+  {
+    "code": "id",
+    "region": "Indonesia",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.co.id"
+  },
+  {
+    "code": "jm",
+    "region": "Jamaica",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.jm"
+  },
+  {
+    "code": "jo",
+    "region": "Jordan",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.jo"
+  },
+  {
+    "code": "kz",
+    "region": "Kazakhstan",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.kz"
+  },
+  {
+    "code": "kw",
+    "region": "Kuwait",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.kw"
+  },
+  {
+    "code": "lv",
+    "region": "Latvia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.lv"
+  },
+  {
+    "code": "lb",
+    "region": "Lebanon",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.lb"
+  },
+  {
+    "code": "lt",
+    "region": "Lithuania",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.lt"
+  },
+  {
+    "code": "lu",
+    "region": "Luxembourg",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.lu"
+  },
+  {
+    "code": "mg",
+    "region": "Madagascar",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.mg"
+  },
+  {
+    "code": "my",
+    "region": "Malaysia",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.com.my"
+  },
+  {
+    "code": "mt",
+    "region": "Malta",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.mt"
+  },
+  {
+    "code": "mu",
+    "region": "Mauritius",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.mu"
+  },
+  {
+    "code": "md",
+    "region": "Moldova",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.md"
+  },
+  {
+    "code": "mn",
+    "region": "Mongolia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.mn"
+  },
+  {
+    "code": "me",
+    "region": "Montenegro",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.me"
+  },
+  {
+    "code": "ma",
+    "region": "Morocco",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.co.ma"
+  },
+  {
+    "code": "mz",
+    "region": "Mozambique",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.co.mz"
+  },
+  {
+    "code": "na",
+    "region": "Namibia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.na"
+  },
+  {
+    "code": "np",
+    "region": "Nepal",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.np"
+  },
+  {
+    "code": "nz",
+    "region": "New Zealand",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.co.nz"
+  },
+  {
+    "code": "ni",
+    "region": "Nicaragua",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.ni"
+  },
+  {
+    "code": "ng",
+    "region": "Nigeria",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.ng"
+  },
+  {
+    "code": "om",
+    "region": "Oman",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.om"
+  },
+  {
+    "code": "py",
+    "region": "Paraguay",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.py"
+  },
+  {
+    "code": "pe",
+    "region": "Peru",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.pe"
+  },
+  {
+    "code": "ph",
+    "region": "Philippines",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.com.ph"
+  },
+  {
+    "code": "pt",
+    "region": "Portugal",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.pt"
+  },
+  {
+    "code": "ro",
+    "region": "Romania",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.ro"
+  },
+  {
+    "code": "sa",
+    "region": "Saudi Arabia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.sa"
+  },
+  {
+    "code": "sn",
+    "region": "Senegal",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.sn"
+  },
+  {
+    "code": "rs",
+    "region": "Serbia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.rs"
+  },
+  {
+    "code": "sk",
+    "region": "Slovakia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.sk"
+  },
+  {
+    "code": "si",
+    "region": "Slovenia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.si"
+  },
+  {
+    "code": "za",
+    "region": "South Africa",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.co.za"
+  },
+  {
+    "code": "kr",
+    "region": "South Korea",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.co.kr"
+  },
+  {
+    "code": "lk",
+    "region": "Sri Lanka",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.lk"
+  },
+  {
+    "code": "th",
+    "region": "Thailand",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.co.th"
+  },
+  {
+    "code": "bs",
+    "region": "Bahamas",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.bs"
+  },
+  {
+    "code": "tt",
+    "region": "Trinidad and Tobago",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.tt"
+  },
+  {
+    "code": "tn",
+    "region": "Tunisia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.tn"
+  },
+  {
+    "code": "ua",
+    "region": "Ukraine",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.ua"
+  },
+  {
+    "code": "ae",
+    "region": "United Arab Emirates",
+    "researchTypes": "Organic, Adwords, PLA, Keywords",
+    "googleSearchDomain": "google.ae"
+  },
+  {
+    "code": "uy",
+    "region": "Uruguay",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.uy"
+  },
+  {
+    "code": "ve",
+    "region": "Venezuela",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.co.ve"
+  },
+  {
+    "code": "vn",
+    "region": "Vietnam",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.vn"
+  },
+  {
+    "code": "zm",
+    "region": "Zambia",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.co.zm"
+  },
+  {
+    "code": "zw",
+    "region": "Zimbabwe",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.co.zw"
+  },
+  {
+    "code": "ly",
+    "region": "Libya",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.ly"
+  },
+  {
+    "code": "mobile-us",
+    "region": "United States",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.com"
+  },
+  {
+    "code": "mobile-uk",
+    "region": "United Kingdom",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.com"
+  },
+  {
+    "code": "mobile-ca",
+    "region": "Canada",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.ca"
+  },
+  {
+    "code": "mobile-de",
+    "region": "Germany",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.de"
+  },
+  {
+    "code": "mobile-fr",
+    "region": "France",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.fr"
+  },
+  {
+    "code": "mobile-es",
+    "region": "Spain",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.es"
+  },
+  {
+    "code": "mobile-it",
+    "region": "Italy",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.it"
+  },
+  {
+    "code": "mobile-br",
+    "region": "Brazil",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.com.br"
+  },
+  {
+    "code": "mobile-au",
+    "region": "Australia",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.com.au"
+  },
+  {
+    "code": "mobile-dk",
+    "region": "Denmark",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.dk"
+  },
+  {
+    "code": "mobile-mx",
+    "region": "Mexico",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.com.mx"
+  },
+  {
+    "code": "mobile-nl",
+    "region": "Netherlands",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.nl"
+  },
+  {
+    "code": "mobile-se",
+    "region": "Sweden",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.se"
+  },
+  {
+    "code": "mobile-tr",
+    "region": "Turkey",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.com.tr"
+  },
+  {
+    "code": "mobile-in",
+    "region": "India",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.co.in"
+  },
+  {
+    "code": "mobile-id",
+    "region": "Indonesia",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.co.id"
+  },
+  {
+    "code": "mobile-il",
+    "region": "Israel",
+    "researchTypes": "Organic, Adwords",
+    "googleSearchDomain": "google.co.il"
+  },
+  {
+    "code": "pk",
+    "region": "Pakistan",
+    "researchTypes": "Organic, Adwords, Keywords",
+    "googleSearchDomain": "google.com.pk"
+  }
+]

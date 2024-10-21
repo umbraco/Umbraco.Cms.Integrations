@@ -13,29 +13,26 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush
 
         public const string BadRefreshToken = "BAD_REFRESH_TOKEN";
 
+        public const string EmbeddedResourceNamespace = "Umbraco.Cms.Integrations.SEO.Semrush.EmbeddedResources";
+
         public static class Configuration
         {
             public const string Settings = "Umbraco:Cms:Integrations:SEO:Semrush:Settings";
 
             public const string OAuthSettings = "Umbraco:Cms:Integrations:SEO:Semrush:OAuthSettings";
+        }
 
-            public const string UmbracoCmsIntegrationsSeoSemrushBaseUrlKey =
-                "Umbraco.Cms.Integrations.SEO.Semrush.BaseUrl";
+        public static class ManagementApi
+        {
+            public const string RootPath = "semrush/management/api";
 
-            public const string UmbracoCmsIntegrationsSeoSemrushUseUmbracoAuthorizationKey =
-                "Umbraco.Cms.Integrations.SEO.Semrush.UseUmbracoAuthorization";
+            public const string ApiTitle = "Semrush Management API";
 
-            public const string UmbracoCmsIntegrationsSeoSemrushRefKey = "Umbraco.Cms.Integrations.SEO.Semrush.Ref";
+            public const string ApiName = "semrush-management";
 
-            public const string UmbracoCmsIntegrationsSeoSemrushClientIdKey = "Umbraco.Cms.Integrations.SEO.Semrush.ClientId";
+            public const string SemrushGroupName = "Semrush";
 
-            public const string UmbracoCmsIntegrationsSeoSemrushClientSecretKey = "Umbraco.Cms.Integrations.SEO.Semrush.ClientSecret";
-
-            public const string UmbracoCmsIntegrationsSeoSemrushRedirectUriKey = "Umbraco.Cms.Integrations.SEO.Semrush.RedirectUri";
-
-            public const string UmbracoCmsIntegrationsSeoSemrushScopesKey = "Umbraco.Cms.Integrations.SEO.Semrush.Scopes";
-
-            public const string UmbracoCmsIntegrationsSeoSemrushTokenEndpointKey = "Umbraco.Cms.Integrations.SEO.Semrush.TokenEndpoint";
+            public const string TokenName = "Access Token";
         }
     }
 }
