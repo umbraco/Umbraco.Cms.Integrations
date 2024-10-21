@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
@@ -20,6 +21,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers.Token
         }
 
         [HttpPost("token/revoke")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public IActionResult RevokeToken()
         {
             _semrushTokenService.RemoveParameters(Constants.TokenDbKey);

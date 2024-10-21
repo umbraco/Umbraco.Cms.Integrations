@@ -18,12 +18,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers
     public class SemrushControllerBase : Controller
     {
         protected static IHttpClientFactory _clientFactory;
-        private IOptions<SemrushSettings> options;
-        private IWebHostEnvironment webHostEnvironment;
-        private ISemrushTokenService semrushTokenService;
-        private ICacheHelper cacheHelper;
-        private TokenBuilder tokenBuilder;
-        private AuthorizationImplementationFactory authorizationImplementationFactory;
+
         protected static readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
         protected readonly ISemrushTokenService _semrushTokenService;

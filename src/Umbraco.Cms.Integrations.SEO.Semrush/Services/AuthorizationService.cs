@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
@@ -10,8 +11,8 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
     {
         private readonly SemrushOAuthSettings _oauthSettings;
 
-        public AuthorizationService(IOptions<SemrushOAuthSettings> options, TokenBuilder tokenBuilder, ISemrushTokenService semrushTokenService)
-            : base(tokenBuilder, semrushTokenService)
+        public AuthorizationService(IOptions<SemrushOAuthSettings> options, TokenBuilder tokenBuilder, ISemrushTokenService semrushTokenService, IHttpClientFactory httpClientFactory)
+            : base(tokenBuilder, semrushTokenService, httpClientFactory)
         {
             _oauthSettings = options.Value;
         }
@@ -33,7 +34,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
                 Content = new FormUrlEncodedContent(requestData),
             };
             
-            var response = await ClientFactory().SendAsync(requestMessage);
+            var response = await HttpClientFactory.CreateClient().SendAsync(requestMessage);
 
             var result = await response.Content.ReadAsStringAsync();
 
@@ -71,7 +72,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Services
             };
             requestMessage.Headers.Add("service", "Semrush");
 
-            var response = await ClientFactory().SendAsync(requestMessage);
+            var response = await HttpClientFactory.CreateClient().SendAsync(requestMessage);
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();

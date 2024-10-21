@@ -368,7 +368,7 @@ export class SemrushWorkspaceElement extends UmbLitElement {
     render(){
         return html`
             <umb-body-layout>
-                ${this._loading ? html`<div class="center loader"><uui-loader></uui-loader></div>` : ""}
+                ${this._loading ? html`<div class="semrush-loader"><uui-loader></uui-loader></div>` : ""}
                 <uui-box headline="Content Properties">
                     <div class="semrush-content">
                         <p>
@@ -476,7 +476,7 @@ export class SemrushWorkspaceElement extends UmbLitElement {
 
                         ${this.keywordList?.data !== undefined && !!this.keywordList?.data 
                             ? html`
-                                ${this._searchLoading ? html`<div class="center loader"><uui-loader></uui-loader></div>` : ""}
+                                ${this._searchLoading ? html`<div class="semrush-loader"><uui-loader></uui-loader></div>` : ""}
                                 <div class="semrush-table">
                                     <uui-table>
                                         <uui-table-head style="background-color: ; color: ">
@@ -554,6 +554,10 @@ export class SemrushWorkspaceElement extends UmbLitElement {
                 padding: var(--uui-size-space-4); 
                 border-radius: var(--uui-border-radius); 
                 font-size: 0.9rem;
+            }
+
+            .semrush-loader{
+                text-align: center;
             }
         `];
 }

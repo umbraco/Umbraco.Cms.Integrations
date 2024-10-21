@@ -23,7 +23,7 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush.Api.Management.Controllers.Token
 
         [HttpPost("token/get")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAccessToken([FromBody] AuthorizationRequestDto request)
         {
             var result = await _authorizationService.GetAccessTokenAsync(request.Code);
