@@ -9,7 +9,6 @@
             "&response_type=code" +
             "&scope={3}";
 
-        // Using a static HttpClient (see: https://www.aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/).
         protected readonly IHttpClientFactory HttpClientFactory;
 
         protected readonly TokenBuilder TokenBuilder;
