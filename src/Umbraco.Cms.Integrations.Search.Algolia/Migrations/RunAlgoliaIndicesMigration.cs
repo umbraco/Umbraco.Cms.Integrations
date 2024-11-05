@@ -43,7 +43,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Migrations
             var migrationPlan = new MigrationPlan("AlgoliaIndices");
 
             migrationPlan.From(string.Empty)
-                .To<AddAlgoliaIndicesTable>("algoliaindices-db");
+                .To<AddAlgoliaIndicesTable>("algoliaindices-db")
+                .To<UpdateAlgoliaIndicesPostUpgrade>("algoliaindices-update-db");
 
             var upgrader = new Upgrader(migrationPlan);
             upgrader.Execute(_migrationPlanExecutor, _coreScopeProvider, _keyValueService);
