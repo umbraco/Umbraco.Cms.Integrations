@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using Umbraco.Cms.Integrations.Search.Algolia.Extensions;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Integrations.Search.Algolia.Services;
@@ -31,8 +32,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers
             {
                 Id = index.Id,
                 Name = index.Name,
-                SerializedData = JsonSerializer.Serialize(index.ContentData
-                        .Where(p => p.Selected && p.Properties.Any(q => q.Selected))),
+                SerializedData = JsonSerializer.Serialize(index.ContentData.FilterByPropertySelected()),
                 Date = DateTime.Now
             });
 
