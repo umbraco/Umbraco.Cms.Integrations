@@ -68,7 +68,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Migrations
             public IEnumerable<AlgoliaMigrationIndexProperty> Properties { get; set; }
         }
 
-        public class AlgoliaMigrationIndexContentType
+        private class AlgoliaMigrationIndexContentType
         {
             [JsonPropertyName("alias")]
             public string Alias { get; set; }
@@ -80,7 +80,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Migrations
             public string Icon { get; set; }
         }
 
-        public class AlgoliaMigrationIndexProperty
+        private class AlgoliaMigrationIndexProperty
         {
             [JsonPropertyName("alias")]
             public string Alias { get; set; }

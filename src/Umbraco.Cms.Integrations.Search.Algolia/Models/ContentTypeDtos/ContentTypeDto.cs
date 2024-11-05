@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Umbraco.Cms.Integrations.Search.Algolia.Models.ContentTypeDtos
+﻿namespace Umbraco.Cms.Integrations.Search.Algolia.Models.ContentTypeDtos
 {
     public class ContentTypeDto
     {
