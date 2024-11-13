@@ -144,8 +144,11 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Services
                 };
 
                 var pageInfoDetails = response.GetPageInfo();
-                responseDto.PreviousPageInfo = pageInfoDetails.Item1;
-                responseDto.NextPageInfo = pageInfoDetails.Item2;
+                if (pageInfoDetails != null)
+                {
+                    responseDto.PreviousPageInfo = pageInfoDetails.Item1;
+                    responseDto.NextPageInfo = pageInfoDetails.Item2;
+                }
 
                 return responseDto;
             }

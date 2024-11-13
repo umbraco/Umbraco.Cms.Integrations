@@ -98,6 +98,9 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 		},
 	];
 
+    private _selectedItems: Array<string | null> = [];
+    private _selectedProducts: Array<ProductDtoModel> = [];
+
     constructor() {
         super();
 
@@ -215,7 +218,9 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 	}
 
     async #loadSelectionItems() {
-        this._selection = this.data!.selectedItemIdList;
+        this._selection = this._selectedItems.length > 0
+            ? this._selectedItems
+            : this.data!.selectedItemIdList;
         this._addUpToItems = (this.data?.config?.maxItems ? this.data?.config?.maxItems : 0) - (this.data?.config?.minItems ? this.data?.config?.minItems : 0);
     }
 
@@ -227,27 +232,64 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 		this.#onEventRun(event);
 	}
 
-    #onEventRun(event: UmbTableSelectedEvent | UmbTableDeselectedEvent){
+    #onEventRun(event: UmbTableSelectedEvent | UmbTableDeselectedEvent) {
+
         event.stopPropagation();
 		const table = event.target as UmbTableElement;
 		const selection = table.selection;
         const items = table.items;
-		this.#collectionContext?.selection.setSelection(selection);
+
+        this.saveSelectedItems(items, selection);
+
+        this.#collectionContext?.selection.setSelection(selection);
 
         this.#getSelectedProduct(selection, items);
         this._numberOfSelection = selection.length;
+    }
+
+    private saveSelectedItems(items: UmbTableItem[], selection: string[]) {
+        // remove current table view items from the selected array to cover the deselect action.
+        this._selectedItems = this._selectedItems.filter(obj => {
+            if (!items.some(item => item.id == obj)) {
+                return obj;
+            }
+        });
+        selection.forEach(obj => {
+            if (this._selectedItems.indexOf(obj) == -1) {
+                this._selectedItems.push(obj);
+            }
+        });
     }
 
     #getSelectedProduct(selectedRows: Array<string>, allRows: Array<UmbTableItem>){
         let lst: Array<UmbTableItem[]> = [];
         selectedRows.forEach(selectedRow => {
             const selectedProduct = allRows.filter(r => r.id == selectedRow);
-            lst.push(selectedProduct); 
+            if (selectedProduct && selectedProduct.length > 0) {
+                lst.push(selectedProduct);
+            }
         });
 
         let lstData = lst.map(l => l[0].data);
         let lstId = lst.map(l => l[0].id);
         this._modalSelectedProducts = this.#mapToDto(lstData, lstId);
+
+        this.saveSelectedProducts(allRows);
+    }
+
+    private saveSelectedProducts(allRows: Array<UmbTableItem>) {
+        // clear items of current table view
+        this._selectedProducts = this._selectedProducts.filter(obj => {
+            if (!allRows.some(row => row.id == obj.id.toString())) {
+                return obj;
+            }
+        });
+
+        this._modalSelectedProducts.forEach(obj => {
+            if (!this._selectedProducts.some(product => product.id == obj.id)) {
+                this._selectedProducts.push(obj);
+            }
+        });
     }
 
     #mapToDto(lstData: UmbTableItemData[][], lstId: string[]){
@@ -280,7 +322,7 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
                 this._rejectModal();
             }
 
-            this.value = {productList: this._modalSelectedProducts};
+            this.value = { productList: this._selectedProducts };
             this._submitModal();
         }
     }
