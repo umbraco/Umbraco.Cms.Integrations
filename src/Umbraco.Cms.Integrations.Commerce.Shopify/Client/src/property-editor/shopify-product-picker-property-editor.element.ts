@@ -123,7 +123,7 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
 
     deleteProduct(id: number) {
         var index = this.products.map(p => p.id).indexOf(id);
-        this.products.splice(index);
+        this.products = this.products.filter(product => product.id != id);
         this.value = JSON.stringify(this.products.map(product => product.id));
         this.dispatchEvent(new CustomEvent('property-value-change'));
     }
