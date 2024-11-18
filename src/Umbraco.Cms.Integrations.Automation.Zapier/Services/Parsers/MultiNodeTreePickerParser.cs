@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Umbraco.Cms.Core.Models.PublishedContent;
+﻿using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Services.Parsers
 {
@@ -12,7 +10,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services.Parsers
 
             var items = contentProperty.GetValue() as IEnumerable<IPublishedContent>;
 
-            return items.Any()
+            return items != null && items.Any()
                 ? string.Join(", ", items.Select(p => p.Name))
                 : string.Empty;
         }
