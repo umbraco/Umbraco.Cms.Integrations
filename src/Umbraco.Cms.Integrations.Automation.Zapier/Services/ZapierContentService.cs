@@ -41,6 +41,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 
                 var parser = _zapierContentFactory.Create(contentProperty.PropertyType.EditorAlias);
 
+                if (contentDict.ContainsKey(propertyType.Alias))
+                {
+                    continue;
+                }
+
                 contentDict.Add(propertyType.Alias, parser.GetValue(contentProperty));
             }
 
@@ -58,6 +63,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 
             foreach (var prop in contentNode.Properties)
             {
+                if (contentDict.ContainsKey(prop.Alias))
+                {
+                    continue;
+                }
+
                 contentDict.Add(prop.Alias, prop.Id == 0 || prop.Values.Count == 0 ? string.Empty : prop.GetValue().ToString());
             }
 
