@@ -17,7 +17,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services.Parsers
 
             var items = contentProperty.GetValue() as IEnumerable<IPublishedContent>;
 
-            return items.Any()
+            return items != null && items.Any()
                 ? string.Join(", ", items.Select(p => p.Name))
                 : string.Empty;
         }
