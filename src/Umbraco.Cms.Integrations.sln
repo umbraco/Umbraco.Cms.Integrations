@@ -5,7 +5,6 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2801CB6C-78DE-4129-B5C6-D349F47F9B5C}"
 	ProjectSection(SolutionItems) = preProject
-		..\azure-pipeline - Commerce.CommerceTools.yml = ..\azure-pipeline - Commerce.CommerceTools.yml
 		..\azure-pipeline - Crm.ActiveCampaign.yml = ..\azure-pipeline - Crm.ActiveCampaign.yml
 		..\azure-pipeline - Crm.Hubspot.yml = ..\azure-pipeline - Crm.Hubspot.yml
 		..\azure-pipeline - SEO.SemrushTools.yml = ..\azure-pipeline - SEO.SemrushTools.yml
@@ -18,8 +17,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Algolia", "Algolia", "{F2CAA1F7-9BED-4EB6-8875-D176B92D393A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Search.Algolia", "Umbraco.Cms.Integrations.Search.Algolia\Umbraco.Cms.Integrations.Search.Algolia.csproj", "{434608E7-143B-4761-A7E9-328DF0CFAB89}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Testsite.V14", "Umbraco.Cms.Integrations.Testsite.V14\Umbraco.Cms.Integrations.Testsite.V14.csproj", "{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Automation", "Automation", "{6A1E1D13-8EDE-4016-9355-4C59807701DE}"
 EndProject
