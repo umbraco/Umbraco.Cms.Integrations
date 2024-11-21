@@ -50,6 +50,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Semrush", "Semrush", "{C46C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.SEO.Semrush", "Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj", "{07922A29-9776-4377-A500-2540E56AA3EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Testsite.V15", "Umbraco.Cms.Integrations.Testsite.V15\Umbraco.Cms.Integrations.Testsite.V15.csproj", "{64093A3C-4152-49BB-AA21-5F2E567694A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,10 +62,6 @@ Global
 		{434608E7-143B-4761-A7E9-328DF0CFAB89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{434608E7-143B-4761-A7E9-328DF0CFAB89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{434608E7-143B-4761-A7E9-328DF0CFAB89}.Release|Any CPU.Build.0 = Release|Any CPU
-		{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63DFF70E-5566-4FBC-94B1-9778BD4B8DA6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5EED84C5-432F-49F2-A119-3FE6D3E6BBDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5EED84C5-432F-49F2-A119-3FE6D3E6BBDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EED84C5-432F-49F2-A119-3FE6D3E6BBDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -88,6 +86,10 @@ Global
 		{07922A29-9776-4377-A500-2540E56AA3EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07922A29-9776-4377-A500-2540E56AA3EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07922A29-9776-4377-A500-2540E56AA3EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64093A3C-4152-49BB-AA21-5F2E567694A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64093A3C-4152-49BB-AA21-5F2E567694A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64093A3C-4152-49BB-AA21-5F2E567694A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64093A3C-4152-49BB-AA21-5F2E567694A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
