@@ -4,7 +4,7 @@
     "experimentalDecorators": true,
     "useDefineForClassFields": false,
     "module": "ESNext",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [ "ES2020", "DOM", "DOM.Iterable" ],
     "skipLibCheck": true,
 
     /* Bundler mode */
@@ -19,7 +19,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-
+    "types": [
+      "@umbraco-cms/backoffice/extension-registry",
+      "@umbraco-cms/backoffice/extension-types"
+    ],
     "paths": {
       "@umbraco-integrations/algolia/generated": [
         "./generated/index.ts"

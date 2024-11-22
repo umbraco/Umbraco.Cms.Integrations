@@ -1,12 +1,12 @@
 ﻿{
   "id": "Umbraco.Cms.Integrations.Search.Algolia",
   "name": "Umbraco CMS Integrations: Search - Algolia",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "extensions": [
     {
       "name": "Umbraco EntryPoint",
       "alias": "Umb.Algolia.EntryPoint",
-      "type": "entryPoint",
+      "type": "backofficeEntryPoint",
       "js": "/App_Plugins/Algolia/algolia.js"
     }
   ]

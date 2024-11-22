@@ -1,11 +1,8 @@
-﻿import type { ManifestDashboard } from "@umbraco-cms/backoffice/extension-registry";
-
-const dashboardManifest: ManifestDashboard = {
+﻿const dashboardManifest: UmbExtensionManifest = {
     type: "dashboard",
-    name: "Algolia Search Management",
     alias: "Algolia.Dashboard",
-    elementName: "algolia-dashboard-element",
-    js: () => import('./search-management-dashboard/algolia-dashboard.element.js'),
+    name: "Algolia Search Management",
+    element: () => import('./search-management-dashboard/algolia-dashboard.element.js'),
     meta: {
         label: "Algolia Search Management",
         pathname: "algolia-search-management"
