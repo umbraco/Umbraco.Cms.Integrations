@@ -22,7 +22,8 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
     #paginationManager = new UmbPaginationManager();
     _modalSelectedProducts: Array<ProductDtoModel> = [];
     _numberOfSelection: number = 0;
-    _addUpToItems: number = 0;
+    _maximumItems: number = 0;
+    _minimumItems: number = 0;
     _selectionIdList: Array<string | null> = [];
 
     @state()
@@ -221,7 +222,8 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         this._selection = this._selectedItems.length > 0
             ? this._selectedItems
             : this.data!.selectedItemIdList;
-        this._addUpToItems = (this.data?.config?.maxItems ? this.data?.config?.maxItems : 0) - (this.data?.config?.minItems ? this.data?.config?.minItems : 0);
+        this._maximumItems = this.data?.config?.maxItems ?? 0;
+        this._minimumItems = this.data?.config?.minItems ?? 0;
     }
 
     #onSelected(event: UmbTableSelectedEvent) {
@@ -315,16 +317,20 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
     }
 
     _onSubmit() {
-        if (this._addUpToItems != 0 && this._numberOfSelection > this._addUpToItems) {
-            this._showError("Please select the amount of items that has been configured in the setting.");
+        if (this._numberOfSelection == 0){
+            this._rejectModal();
         } else {
-            if(this._numberOfSelection == 0){
-                this._rejectModal();
+            if (!this.checkNumberOfSelection()) {
+                this._showError("Please select the amount of items that has been configured in the setting.");
+            } else {
+                this.value = { productList: this._selectedProducts };
+                this._submitModal();
             }
-
-            this.value = { productList: this._selectedProducts };
-            this._submitModal();
         }
+    }
+
+    private checkNumberOfSelection(){
+        return this._numberOfSelection >= this._minimumItems && this._numberOfSelection <= this._maximumItems;
     }
 
     #onPageChange(event: UUIPaginationEvent) {
@@ -361,11 +367,11 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
                     ${this.#renderPagination()}
                 </uui-box>
 
-                ${this._addUpToItems > 0
+                ${this._maximumItems > 0
                     ? html`
                         <div class="maximum-selection">
                             <span>
-                                Add up to ${this._addUpToItems} items(s)
+                                Add up to ${this._maximumItems} items(s)
                             </span>
                         </div>
                     `

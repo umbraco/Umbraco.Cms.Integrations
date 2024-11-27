@@ -1,4 +1,4 @@
-import { ManifestTypes, type ManifestPropertyEditorUi } from "@umbraco-cms/backoffice/extension-registry";
+import { type ManifestPropertyEditorUi } from "@umbraco-cms/backoffice/property-editor";
 import { manifests as amountManifest } from "../config/amount/manifests.js";
 import { manifests as authorizationManifest } from "../config/authorization/manifests.js";
 
@@ -41,7 +41,7 @@ export const propertyEditorUiManifest : ManifestPropertyEditorUi = {
     }
 };
 
-export const manifests : Array<ManifestTypes> = [
+export const manifests = [
     propertyEditorUiManifest,
     amountManifest,
     authorizationManifest

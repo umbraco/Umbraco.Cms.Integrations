@@ -1,15 +1,12 @@
 import { customElement, html, css, property, state, repeat } from "@umbraco-cms/backoffice/external/lit";
 import { UMB_MODAL_MANAGER_CONTEXT } from "@umbraco-cms/backoffice/modal";
-import {
-    UMB_NOTIFICATION_CONTEXT,
-} from "@umbraco-cms/backoffice/notification";
+import { UMB_NOTIFICATION_CONTEXT } from "@umbraco-cms/backoffice/notification";
 import { SHOPIFY_MODAL_TOKEN } from "../modal/shopify.modal-token";
 import { ConfigDescription, type ShopifyServiceStatus } from "../models/shopify-service.model";
 import { SHOPIFY_CONTEXT_TOKEN } from "../context/shopify.context";
 import type { EditorSettingsModel, ProductDtoModel, RequestDtoModel } from "@umbraco-integrations/shopify/generated";
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
-import { UmbPropertyEditorUiElement } from '@umbraco-cms/backoffice/extension-registry';
-import type { UmbPropertyEditorConfigCollection } from "@umbraco-cms/backoffice/property-editor";
+import { type UmbPropertyEditorConfigCollection, UmbPropertyEditorUiElement } from "@umbraco-cms/backoffice/property-editor";
 import { ShopifyProductPickerConfiguration } from "../types/types";
 
 const elementName = "shopify-product-picker";
