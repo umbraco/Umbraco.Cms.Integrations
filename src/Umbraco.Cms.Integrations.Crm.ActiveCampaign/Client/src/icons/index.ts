@@ -1,6 +1,4 @@
-﻿import type { ManifestTypes } from '@umbraco-cms/backoffice/extension-registry';
-
-export const manifest: Array<ManifestTypes> = [{
+﻿export const manifest = [{
 	type: 'icons',
 	name: 'ActiveCampaign Icon',
 	alias: 'activecampaign.icon',
