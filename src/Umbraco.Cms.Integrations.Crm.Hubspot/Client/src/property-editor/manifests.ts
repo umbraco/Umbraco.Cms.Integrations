@@ -1,4 +1,4 @@
-﻿import type { ManifestPropertyEditorUi, ManifestPropertyEditorSchema } from "@umbraco-cms/backoffice/extension-registry";
+﻿import type { ManifestPropertyEditorUi, ManifestPropertyEditorSchema } from "@umbraco-cms/backoffice/property-editor";
 
 export const propertyEditorUiManifest : ManifestPropertyEditorUi = {
     type: "propertyEditorUi",
