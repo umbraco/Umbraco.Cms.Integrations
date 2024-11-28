@@ -41,7 +41,7 @@ export const propertyEditorUiManifest : ManifestPropertyEditorUi = {
     }
 };
 
-export const manifests = [
+export const manifests : Array<UmbExtensionManifest> = [
     propertyEditorUiManifest,
     amountManifest,
     authorizationManifest
