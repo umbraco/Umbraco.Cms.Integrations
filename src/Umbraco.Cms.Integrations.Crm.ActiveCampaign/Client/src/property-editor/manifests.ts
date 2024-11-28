@@ -54,7 +54,7 @@ const propertyEditorIcon: ManifestIcons = {
     js: () => import("../icons/icons-dictionary.js")
 }
 
-export const manifests = [
+export const manifests : Array<UmbExtensionManifest> = [
     propertyEditorUiManifest,
     propertyEditorSchema,
     configurationPropertyEditorUiManifest,
