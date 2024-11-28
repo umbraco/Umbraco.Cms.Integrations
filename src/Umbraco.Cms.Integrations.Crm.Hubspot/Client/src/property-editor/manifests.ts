@@ -46,7 +46,7 @@ const authorizationPropertyEditorUiManifest: ManifestPropertyEditorUi = {
     }
 }
 
-export const manifests = [
+export const manifests : Array<UmbExtensionManifest> = [
     propertyEditorUiManifest,
     propertyEditorSchema,
     authorizationPropertyEditorUiManifest
