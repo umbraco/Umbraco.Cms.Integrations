@@ -52,6 +52,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.SE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Testsite.V15", "Umbraco.Cms.Integrations.Testsite.V15\Umbraco.Cms.Integrations.Testsite.V15.csproj", "{64093A3C-4152-49BB-AA21-5F2E567694A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Analytics.Cookiebot", "Umbraco.Cms.Integrations.Analytics.Cookiebot\Umbraco.Cms.Integrations.Analytics.Cookiebot.csproj", "{78E58D2E-A1E4-439B-AE6B-780EC6505C00}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analytics", "Analytics", "{D9850A88-AFE1-48DC-B7CE-79A4F9E96300}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +94,10 @@ Global
 		{64093A3C-4152-49BB-AA21-5F2E567694A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64093A3C-4152-49BB-AA21-5F2E567694A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64093A3C-4152-49BB-AA21-5F2E567694A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78E58D2E-A1E4-439B-AE6B-780EC6505C00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78E58D2E-A1E4-439B-AE6B-780EC6505C00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78E58D2E-A1E4-439B-AE6B-780EC6505C00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78E58D2E-A1E4-439B-AE6B-780EC6505C00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +117,7 @@ Global
 		{02566D6E-91EB-47AD-9964-9A8FC1837F4B} = {BF22D815-616E-49D5-93EB-18FCE975D3BE}
 		{C46C55B4-4AA8-47F1-BAFE-B06161A10E9A} = {50F83E07-6690-4EF2-AF4D-A1DE8C73E409}
 		{07922A29-9776-4377-A500-2540E56AA3EB} = {C46C55B4-4AA8-47F1-BAFE-B06161A10E9A}
+		{78E58D2E-A1E4-439B-AE6B-780EC6505C00} = {D9850A88-AFE1-48DC-B7CE-79A4F9E96300}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FB51E08-A3C8-4DFF-B3CB-E99C2ED021D5}
