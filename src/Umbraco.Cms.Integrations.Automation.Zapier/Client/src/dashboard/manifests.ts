@@ -1,4 +1,4 @@
-import type { ManifestDashboard, ManifestTypes } from '@umbraco-cms/backoffice/extension-registry';
+import type { ManifestDashboard } from '@umbraco-cms/backoffice/dashboard';
 
 const dashboards: Array<ManifestDashboard> = [
 	{
@@ -6,7 +6,7 @@ const dashboards: Array<ManifestDashboard> = [
 		alias: 'Zapier.Management.Dashboard',
 		name: 'Zapier Management Dashboard',
 		element: () => import('./zapier-management-dashboard.element'),
-		weight: 20,
+		weight: 5,
 		meta: {
 			label: 'Zapier Integrations',
 			pathname: 'zapier-management',
@@ -20,4 +20,4 @@ const dashboards: Array<ManifestDashboard> = [
 	},
 ];
 
-export const manifests: Array<ManifestTypes> = [...dashboards];
+export const manifests: Array<UmbExtensionManifest> = [...dashboards];
