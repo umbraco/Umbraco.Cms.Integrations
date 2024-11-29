@@ -1,9 +1,9 @@
-import { customElement, html, css, property, state, repeat } from "@umbraco-cms/backoffice/external/lit";
+import { customElement, html, css, property, state } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
-import { UmbPropertyEditorUiElement } from '@umbraco-cms/backoffice/extension-registry';
+import { UmbPropertyEditorUiElement } from '@umbraco-cms/backoffice/property-editor';
 import { DYNAMICS_CONTEXT_TOKEN } from "../context/dynamics.context";
 import { UMB_MODAL_MANAGER_CONTEXT } from "@umbraco-cms/backoffice/modal";
-import { DynamicsModuleModel, FormDtoModel, OAuthConfigurationDtoModel } from "@umbraco-integrations/dynamics/generated";
+import { FormDtoModel, OAuthConfigurationDtoModel } from "@umbraco-integrations/dynamics/generated";
 import { DynamicsFormPickerConfiguration } from "../types/types";
 import { UmbPropertyEditorConfigCollection } from "@umbraco-cms/backoffice/property-editor";
 import { DYNAMICS_MODAL_TOKEN } from "../modal/dynamics.modal-token";
