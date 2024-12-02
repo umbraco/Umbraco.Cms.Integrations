@@ -6,6 +6,7 @@
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
+    
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -20,6 +21,11 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
+
+    "types": [
+      "@umbraco-cms/backoffice/extension-registry",
+      "@umbraco-cms/backoffice/extension-types"
+    ],
 
     "paths": {
       "@umbraco-integrations/zapier/generated": [

@@ -1,7 +1,7 @@
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { css, html, nothing, customElement, state } from '@umbraco-cms/backoffice/external/lit';
 import { ZAPIER_CONTEXT_TOKEN } from '../context/zapier.context';
-import { GetAllResponse, SubscriptionDtoModel } from '@umbraco-integrations/zapier/generated';
+import { SubscriptionDtoModel } from '@umbraco-integrations/zapier/generated';
 import type { UmbTableColumn, UmbTableItem } from '@umbraco-cms/backoffice/components';
 import { UUIPaginationEvent } from '@umbraco-cms/backoffice/external/uui';
 import { UmbPaginationManager } from "@umbraco-cms/backoffice/utils";

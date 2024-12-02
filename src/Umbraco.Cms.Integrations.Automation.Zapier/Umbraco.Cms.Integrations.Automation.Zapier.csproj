@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
@@ -17,7 +17,7 @@
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main/src/Umbraco.Cms.Integrations.Automation.Zapier</PackageProjectUrl>
 		<Product>Umbraco.Cms.Integrations.Automation.Zapier</Product>
-		<Version>2.0.1</Version>
+		<Version>3.0.0</Version>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
 		<PackageIcon>zapier.png</PackageIcon>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
@@ -29,9 +29,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Api.Common" Version="[14.0.0, 15)" />
-		<PackageReference Include="Umbraco.Cms.Api.Management" Version="[14.0.0, 15)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[14.0.0, 15)" />
+		<PackageReference Include="Umbraco.Cms.Api.Common" Version="[15.0.0, 16)" />
+		<PackageReference Include="Umbraco.Cms.Api.Management" Version="[15.0.0, 16)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[15.0.0, 16)" />
 	</ItemGroup>
 	
 	<ItemGroup>
