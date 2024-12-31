@@ -27,19 +27,19 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Configuration
             switch (appSettings[Constants.Configuration.UmbracoCmsIntegrationsCommerceShopifyPropertyCacheLevel])
             {
                 case "Unknown":
-                    CacheLevel = PropertyCacheLevel.Unknown;
+                    PropertyCacheLevel = PropertyCacheLevel.Unknown;
                     break;
                 case "Element":
-                    CacheLevel = PropertyCacheLevel.Element;
+                    PropertyCacheLevel = PropertyCacheLevel.Element;
                     break;
                 case "Elements":
-                    CacheLevel = PropertyCacheLevel.Elements;
+                    PropertyCacheLevel = PropertyCacheLevel.Elements;
                     break;
                 case "None":
-                    CacheLevel = PropertyCacheLevel.None;
+                    PropertyCacheLevel = PropertyCacheLevel.None;
                     break;
                 default:
-                    CacheLevel = PropertyCacheLevel.Snapshot;
+                    PropertyCacheLevel = PropertyCacheLevel.Snapshot;
                     break;
             }
         }
@@ -52,6 +52,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Configuration
 
         public bool UseUmbracoAuthorization { get; set; } = true;
 
-        public PropertyCacheLevel CacheLevel { get; set; } = PropertyCacheLevel.Snapshot;
+        public PropertyCacheLevel PropertyCacheLevel { get; set; } = PropertyCacheLevel.Snapshot;
     }
 }

@@ -43,7 +43,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
         public override Type GetPropertyValueType(IPublishedPropertyType propertyType) => typeof(List<ProductViewModel>);
 
         public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType) =>
-            _settings.CacheLevel;
+            _settings.PropertyCacheLevel;
 
         public override object ConvertSourceToIntermediate(IPublishedElement owner, IPublishedPropertyType propertyType, object source,
             bool preview)
