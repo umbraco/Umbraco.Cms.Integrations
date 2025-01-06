@@ -1,6 +1,7 @@
-﻿using System.Text.Json;
+﻿using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Models.ViewModels;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
 
@@ -8,10 +9,12 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
 {
     public class ShopifyProductPickerValueConverter : PropertyValueConverterBase
     {
+        private readonly ShopifySettings _settings;
         private readonly IShopifyService _apiService;
 
-        public ShopifyProductPickerValueConverter(IShopifyService apiService)
+        public ShopifyProductPickerValueConverter(IOptions<ShopifySettings> options, IShopifyService apiService)
         {
+            _settings = options.Value;
             _apiService = apiService;
         }
 
@@ -21,7 +24,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Editors
         public override Type GetPropertyValueType(IPublishedPropertyType propertyType) => typeof(List<ProductViewModel>);
 
         public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType) =>
-            PropertyCacheLevel.Snapshot;
+            _settings.PropertyCacheLevel;
 
         public override object ConvertSourceToIntermediate(IPublishedElement owner, IPublishedPropertyType propertyType, object source,
             bool preview)
