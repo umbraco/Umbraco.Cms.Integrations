@@ -47,6 +47,9 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify
             public const string UmbracoCmsIntegrationsCommerceShopifyScopesKey = "Umbraco.Cms.Integrations.Commerce.Shopify.Scopes";
 
             public const string UmbracoCmsIntegrationsCommerceShopifyTokenEndpointKey = "Umbraco.Cms.Integrations.Commerce.Shopify.TokenEndpoint";
+
+            public const string UmbracoCmsIntegrationsCommerceShopifyPropertyCacheLevel =
+                "Umbraco.Cms.Integrations.Commerce.Shopify.PropertyCacheLevel";
         }
 
         public static class PropertyEditors
