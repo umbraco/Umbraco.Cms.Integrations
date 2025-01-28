@@ -19,7 +19,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics
         {
             public const string DefaultViewPath = AppPluginFolderPath + "/Render/DynamicsForm.cshtml";
 
-            public const string DefaultV8ViewPath = AppPluginFolderPath + "/Render/DynamicsFormV8.cshtml";
+            public const string DefaultV8ViewPath = AppPluginFolderPath + "/RenderV8/DynamicsFormV8.cshtml";
         }
 
         public static class EmbedAttribute

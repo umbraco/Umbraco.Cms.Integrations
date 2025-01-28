@@ -4,23 +4,23 @@
 			$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\**\*.*
 		</DynamicsPropertyEditorFilesPath>
 	</PropertyGroup>
-	<Target Name="CopyDynamicsPropertyEditorAssets" BeforeTargets="Build">
+
+	<Target Condition=" '$(TargetFramework)' != 'net472' " Name="CopyDynamicsPropertyEditorAssets" BeforeTargets="Build">
 		<ItemGroup>
-			<DynamicsPropertyEditorFiles Include="$(DynamicsPropertyEditorFilesPath)" />
+			<DynamicsPropertyEditorFiles Include="$(DynamicsPropertyEditorFilesPath)" 
+										 Exclude="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\RenderV8\*.*" />
 		</ItemGroup>
-		<Message
-			Text="Copying Dynamics Property Editor files: $(DynamicsPropertyEditorFilesPath) - #@(DynamicsPropertyEditorFiles->Count()) files"
+		<Message Text="Copying Dynamics Property Editor files: $(DynamicsPropertyEditorFilesPath) - #@(DynamicsPropertyEditorFiles->Count()) files"
 			Importance="high" />
 		<Copy SourceFiles="@(DynamicsPropertyEditorFiles)"
 		      DestinationFiles="@(DynamicsPropertyEditorFiles->'$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\%(RecursiveDir)%(Filename)%(Extension)')"
 		      SkipUnchangedFiles="true" />
-
 	</Target>
 
 	<Target Name="ClearDynamicsPropertyEditorAssets" BeforeTargets="Clean">
 		<ItemGroup>
 			<DynamicsPropertyEditorDir
-				Include="$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms\Crm\Dynamics\" />
+				Include="$(MSBuildProjectDirectory)..\App_Plugins\UmbracoCms\Crm\Dynamics\" />
 		</ItemGroup>
 		<Message Text="Clear old Dynamics Property Editor data"  Importance="high" />
 		<RemoveDir Directories="@(DynamicsPropertyEditorDir)"  />
