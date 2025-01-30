@@ -6,8 +6,9 @@
 
 	<Target Condition=" '$(TargetFramework)' != 'net472' " Name="CopyShopifyPropertyEditorAssets" BeforeTargets="Build">
 		<ItemGroup>
-			<ShopifyPropertyEditorFiles Include="$(ShopifyPropertyEditorFiles)"
-										Exclude="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\RenderV8\*.*"/>
+			<ShopifyPropertyEditorFiles Include="$(ShopifyPropertyEditorFiles)" />
+			<ShopifyPropertyEditorFiles Condition="'$(TargetFramework)' != 'net472'" Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\RenderV8\*.*" />
+			<ShopifyPropertyEditorFiles Condition="'$(TargetFramework)' == 'net472'" Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\Render\*.*" />
 		</ItemGroup>
 		<Message Text="Copying Shopify Property Editor files: $(ShopifyPropertyEditorFiles) - #@(ShopifyPropertyEditorFiles->Count()) files" Importance="high" />
 		<Copy

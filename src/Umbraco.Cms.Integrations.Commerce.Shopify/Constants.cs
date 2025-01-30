@@ -17,7 +17,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify
         {
             public const string DefaultV8ViewPath = AppPluginFolderPath + "/RenderV8/Products.cshtml";
 
-            public const string DefaultV9ViewPath = AppPluginFolderPath + "/Render/ProductsV9.cshtml";
+            public const string DefaultV9ViewPath = AppPluginFolderPath + "/Render/Products.cshtml";
         }
 
         public static class Configuration

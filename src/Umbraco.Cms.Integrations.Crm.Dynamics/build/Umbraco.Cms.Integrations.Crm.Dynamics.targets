@@ -5,10 +5,11 @@
 		</DynamicsPropertyEditorFilesPath>
 	</PropertyGroup>
 
-	<Target Condition=" '$(TargetFramework)' != 'net472' " Name="CopyDynamicsPropertyEditorAssets" BeforeTargets="Build">
+	<Target Name="CopyDynamicsPropertyEditorAssets" BeforeTargets="Build">
 		<ItemGroup>
-			<DynamicsPropertyEditorFiles Include="$(DynamicsPropertyEditorFilesPath)" 
-										 Exclude="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\RenderV8\*.*" />
+			<DynamicsPropertyEditorFiles Include="$(ShopifyPropertyEditorFiles)" />
+			<DynamicsPropertyEditorFiles Condition="'$(TargetFramework)' != 'net472'" Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\RenderV8\*.*" />
+			<DynamicsPropertyEditorFiles Condition="'$(TargetFramework)' == 'net472'" Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\*.*" />
 		</ItemGroup>
 		<Message Text="Copying Dynamics Property Editor files: $(DynamicsPropertyEditorFilesPath) - #@(DynamicsPropertyEditorFiles->Count()) files"
 			Importance="high" />
