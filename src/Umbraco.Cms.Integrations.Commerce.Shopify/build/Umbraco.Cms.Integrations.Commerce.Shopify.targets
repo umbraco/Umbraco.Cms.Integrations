@@ -6,8 +6,15 @@
 	<Target Name="CopyShopifyPropertyEditorAssets" BeforeTargets="BeforeBuild">
 		<ItemGroup>
 			<ShopifyPropertyEditorFiles Include="$(ShopifyPropertyEditorFilesPath)" />
-			<ShopifyPropertyEditorFiles Condition="'$(TargetFramework)' != 'net472'" Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\RenderV8\*.*" />
-			<ShopifyPropertyEditorFiles Condition="'$(TargetFramework)' == 'net472'" Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\Render\*.*" />
+			<!-- Remove incompatible views based on TFM -->
+			<Choose>
+				<When Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+					<ShopifyPropertyEditorFiles Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\Render\*.*" />
+				</When>
+				<Otherwise>
+					<ShopifyPropertyEditorFiles Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\RenderV8\*.*" />
+				</Otherwise>
+			</Choose>
 		</ItemGroup>
 		<Message Text="Copying Shopify Property Editor files: $(ShopifyPropertyEditorFilesPath) - #@(ShopifyPropertyEditorFiles->Count()) files" Importance="high" />
 		<Copy SourceFiles="@(ShopifyPropertyEditorFiles)" DestinationFiles="@(ShopifyPropertyEditorFiles->'$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
@@ -18,6 +25,6 @@
 			<ShopifyPropertyEditorDir Include="$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\" />
 		</ItemGroup>
 		<Message Text="Clear old Shopify Property Editor data" Importance="high" />
-		<RemoveDir Directories="@(ShopifyPropertyEditorDir)"  />
+		<RemoveDir Directories="@(ShopifyPropertyEditorDir)" />
 	</Target>
 </Project>

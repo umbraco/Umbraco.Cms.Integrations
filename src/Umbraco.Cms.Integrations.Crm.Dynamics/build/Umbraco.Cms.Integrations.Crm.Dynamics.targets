@@ -6,18 +6,25 @@
 	<Target Name="CopyDynamicsPropertyEditorAssets" BeforeTargets="BeforeBuild">
 		<ItemGroup>
 			<DynamicsPropertyEditorFiles Include="$(DynamicsPropertyEditorFilesPath)" />
-			<DynamicsPropertyEditorFiles Condition="'$(TargetFramework)' != 'net472'" Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\RenderV8\*.*" />
-			<DynamicsPropertyEditorFiles Condition="'$(TargetFramework)' == 'net472'" Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\*.*" />
+			<!-- Remove incompatible views based on TFM -->
+			<Choose>
+				<When Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+					<DynamicsPropertyEditorFiles Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\*.*" />
+				</When>
+				<Otherwise>
+					<DynamicsPropertyEditorFiles Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\RenderV8\*.*" />
+				</Otherwise>
+			</Choose>
 		</ItemGroup>
 		<Message Text="Copying Dynamics Property Editor files: $(DynamicsPropertyEditorFilesPath) - #@(DynamicsPropertyEditorFiles->Count()) files" Importance="high" />
 		<Copy SourceFiles="@(DynamicsPropertyEditorFiles)" DestinationFiles="@(DynamicsPropertyEditorFiles->'$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
 	</Target>
-
+	
 	<Target Name="ClearDynamicsPropertyEditorAssets" BeforeTargets="Clean">
 		<ItemGroup>
-			<DynamicsPropertyEditorDir Include="$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms\Crm\Dynamics\" />
+			<DynamicsPropertyEditorDir Include="$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\" />
 		</ItemGroup>
-		<Message Text="Clear old Dynamics Property Editor data"  Importance="high" />
-		<RemoveDir Directories="@(DynamicsPropertyEditorDir)"  />
+		<Message Text="Clear old Dynamics Property Editor data" Importance="high" />
+		<RemoveDir Directories="@(DynamicsPropertyEditorDir)" />
 	</Target>
 </Project>
