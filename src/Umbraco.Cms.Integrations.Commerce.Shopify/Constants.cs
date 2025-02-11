@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace Umbraco.Cms.Integrations.Commerce.Shopify
 {
     public static class Constants
@@ -15,9 +16,12 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify
 
         public static class RenderingComponent
         {
+            public const string DefaultViewPath = AppPluginFolderPath + "/Render/Products.cshtml";
+
             public const string DefaultV8ViewPath = AppPluginFolderPath + "/RenderV8/Products.cshtml";
 
-            public const string DefaultV9ViewPath = AppPluginFolderPath + "/Render/Products.cshtml";
+            [Obsolete("Use DefaultViewPath instead. This will be removed in a future version.")]
+            public const string DefaultV9ViewPath = DefaultViewPath;
         }
 
         public static class Configuration
