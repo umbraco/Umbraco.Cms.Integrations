@@ -7,14 +7,8 @@
 		<ItemGroup>
 			<ShopifyPropertyEditorFiles Include="$(ShopifyPropertyEditorFilesPath)" />
 			<!-- Remove incompatible views based on TFM -->
-			<Choose>
-				<When Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
-					<ShopifyPropertyEditorFiles Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\Render\*.*" />
-				</When>
-				<Otherwise>
-					<ShopifyPropertyEditorFiles Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\RenderV8\*.*" />
-				</Otherwise>
-			</Choose>
+			<ShopifyPropertyEditorFiles Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'" Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\Render\*.*" />
+			<ShopifyPropertyEditorFiles Condition="'$(TargetFrameworkIdentifier)' != '.NETFramework'" Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\RenderV8\*.*" />
 		</ItemGroup>
 		<Message Text="Copying Shopify Property Editor files: $(ShopifyPropertyEditorFilesPath) - #@(ShopifyPropertyEditorFiles->Count()) files" Importance="high" />
 		<Copy SourceFiles="@(ShopifyPropertyEditorFiles)" DestinationFiles="@(ShopifyPropertyEditorFiles->'$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\Commerce\Shopify\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />

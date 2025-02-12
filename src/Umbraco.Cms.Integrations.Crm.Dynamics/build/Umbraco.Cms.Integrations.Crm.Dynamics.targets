@@ -7,14 +7,8 @@
 		<ItemGroup>
 			<DynamicsPropertyEditorFiles Include="$(DynamicsPropertyEditorFilesPath)" />
 			<!-- Remove incompatible views based on TFM -->
-			<Choose>
-				<When Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
-					<DynamicsPropertyEditorFiles Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\*.*" />
-				</When>
-				<Otherwise>
-					<DynamicsPropertyEditorFiles Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\RenderV8\*.*" />
-				</Otherwise>
-			</Choose>
+			<DynamicsPropertyEditorFiles Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'" Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\Render\*.*" />
+			<DynamicsPropertyEditorFiles Condition="'$(TargetFrameworkIdentifier)' != '.NETFramework'" Remove="$(MSBuildThisFileDirectory)..\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\RenderV8\*.*" />
 		</ItemGroup>
 		<Message Text="Copying Dynamics Property Editor files: $(DynamicsPropertyEditorFilesPath) - #@(DynamicsPropertyEditorFiles->Count()) files" Importance="high" />
 		<Copy SourceFiles="@(DynamicsPropertyEditorFiles)" DestinationFiles="@(DynamicsPropertyEditorFiles->'$(MSBuildProjectDirectory)\App_Plugins\UmbracoCms.Integrations\Crm\Dynamics\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
