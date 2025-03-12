@@ -15,7 +15,16 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
                 return Enumerable.Empty<string>();
             }
 
-            var valuesArr = JsonSerializer.Deserialize<List<string>>(value);
+            List<string> valuesArr;
+            try
+            {
+                valuesArr = JsonSerializer.Deserialize<List<string>>(value);
+            }
+            catch (JsonException)
+            {
+                // Fallback: Split the comma-separated string manually
+                valuesArr = value?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList() ?? new List<string>();
+            }
             if (valuesArr != null && valuesArr.Any())
             {
                 return valuesArr.Select(p => p);
