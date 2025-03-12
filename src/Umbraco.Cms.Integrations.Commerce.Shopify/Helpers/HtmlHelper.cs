@@ -19,7 +19,7 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Helpers
 #if NETCOREAPP
         public static IHtmlContent RenderShopifyProductsList(this IHtmlHelper<dynamic> htmlHelper, List<ProductViewModel> vm, string renderingViewPath = "")
         {
-            return htmlHelper.Partial(string.IsNullOrEmpty(renderingViewPath) ? Constants.RenderingComponent.DefaultV9ViewPath : renderingViewPath, vm);
+            return htmlHelper.Partial(string.IsNullOrEmpty(renderingViewPath) ? Constants.RenderingComponent.DefaultViewPath : renderingViewPath, vm);
         }
 #else
         public static IHtmlString RenderShopifyProductsList(this HtmlHelper htmlHelper, List<ProductViewModel> vm, string renderingViewPath = "")
