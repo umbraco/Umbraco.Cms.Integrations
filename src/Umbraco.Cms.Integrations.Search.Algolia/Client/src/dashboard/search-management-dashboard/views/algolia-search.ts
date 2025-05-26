@@ -47,6 +47,8 @@ export class AlgoliaSearchElement extends UmbElementMixin(LitElement) {
         super();
         
         this.consumeContext(ALGOLIA_CONTEXT_TOKEN, (context) => {
+            if (!context) return;
+
             this.#algoliaIndexContext = context;
         });
     }    

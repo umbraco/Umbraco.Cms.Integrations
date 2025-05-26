@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using Umbraco.Cms.Core;
+using Umbraco.Cms.Core.PublishedCache;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
@@ -15,12 +17,12 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers;
 
 [ApiVersion("1.0")]
-[ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
 public class BuildIndexController : SearchControllerBase
 {
     private readonly IAlgoliaIndexDefinitionStorage<AlgoliaIndex> _indexStorage;
     private readonly IAlgoliaIndexService _indexService;
     private readonly IUmbracoContextFactory _umbracoContextFactory;
+    private readonly IContentTypeService _contentTypeService;
     private readonly IContentService _contentService;
     private readonly ILogger<BuildIndexController> _logger;
     private readonly IUserService _userService;
@@ -32,6 +34,7 @@ public class BuildIndexController : SearchControllerBase
     public BuildIndexController(
         IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage,
         IUmbracoContextFactory umbracoContextFactory,
+        IContentTypeService contentTypeService,
         IContentService contentService,
         ILogger<BuildIndexController> logger,
         IAlgoliaIndexService indexService,
@@ -39,10 +42,12 @@ public class BuildIndexController : SearchControllerBase
         IPublishedUrlProvider urlProvider,
         IAlgoliaSearchPropertyIndexValueFactory algoliaSearchPropertyIndexValueFactory,
         IRecordBuilderFactory recordBuilderFactory,
-        IAlgoliaGeolocationProvider algoliaGeolocationProvider)
+        IAlgoliaGeolocationProvider algoliaGeolocationProvider,
+        IPublishedContentTypeCache contentTypeCache)
     {
         _indexStorage = indexStorage;
         _umbracoContextFactory = umbracoContextFactory;
+        _contentTypeService = contentTypeService;
         _contentService = contentService;
         _logger = logger;
         _indexService = indexService;
@@ -53,7 +58,7 @@ public class BuildIndexController : SearchControllerBase
         _algoliaGeolocationProvider = algoliaGeolocationProvider;
     }
 
-    [HttpPost("index/build")]
+    [HttpPost("index/build", Name = Constants.OperationIds.BuildSearchIndex)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
     public async Task<IActionResult> BuildIndex([FromBody] IndexConfiguration indexConfiguration)
     {
@@ -69,8 +74,9 @@ public class BuildIndexController : SearchControllerBase
 
         foreach (var contentDataItem in indexContentData)
         {
-            using var ctx = _umbracoContextFactory.EnsureUmbracoContext();
-            var contentType = ctx.UmbracoContext.Content?.GetContentType(contentDataItem.Alias);
+            using UmbracoContextReference ctx = _umbracoContextFactory.EnsureUmbracoContext();
+
+            var contentType = _contentTypeService.Get(contentDataItem.Alias);
 
             if (contentType is null)
             {

@@ -10,7 +10,6 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers;
 
 [ApiVersion("1.0")]
-[ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
 public class GetIndicesController : SearchControllerBase
 {
     private readonly IAlgoliaIndexDefinitionStorage<AlgoliaIndex> _indexStorage;
@@ -18,7 +17,7 @@ public class GetIndicesController : SearchControllerBase
     public GetIndicesController(
         IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage) => _indexStorage = indexStorage;
 
-    [HttpGet("index")]
+    [HttpGet("index", Name = Constants.OperationIds.GetIndices)]
     [ProducesResponseType(typeof(IEnumerable<IndexConfiguration>), StatusCodes.Status200OK)]
     public IActionResult GetIndices()
     {

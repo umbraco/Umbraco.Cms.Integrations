@@ -1,6 +1,6 @@
 ﻿import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
-import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
+import { tryExecute } from "@umbraco-cms/backoffice/resources";
 import {
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
@@ -14,7 +14,7 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async getIndices() {
-        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.getIndices());
+        const { data, error } = await tryExecute(this, AlgoliaSearchService.getIndices());
 
         if (error || !data) {
             return { error }
@@ -24,8 +24,10 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async getIndexById(id: number) {
-        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.getIndexById({
-            id: id
+        const { data, error } = await tryExecute(this, AlgoliaSearchService.getSearchIndexById({
+            path: {
+                id: id
+            }
         }));
 
         if (error || !data) {
@@ -36,7 +38,7 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async getContentTypes() {
-        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.getContentTypes());
+        const { data, error } = await tryExecute(this, AlgoliaSearchService.getContentTypes());
 
         if (error || !data) {
             return { error };
@@ -46,8 +48,10 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async getContentTypesWithIndex(id: number) {
-        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.getContentTypesByIndexId({
-            id: id
+        const { data, error } = await tryExecute(this, AlgoliaSearchService.getSearchContentTypeIndexById({
+            path: {
+                id: id
+            }
         }));
 
         if (error || !data) {
@@ -58,8 +62,12 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async saveIndex(indexConfiguration: IndexConfigurationModel) {
-        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.saveIndex({
-            requestBody: indexConfiguration
+        const { data, error } = await tryExecute(this, AlgoliaSearchService.postSaveIndex({
+            body: {
+                id: indexConfiguration.id,
+                name: indexConfiguration.name,
+                contentData: indexConfiguration.contentData
+            }
         }));
 
         if (error || !data) {
@@ -78,8 +86,12 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async buildIndex(indexConfiguration: IndexConfigurationModel) {
-        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.buildIndex({
-            requestBody: indexConfiguration
+        const { data, error } = await tryExecute(this, AlgoliaSearchService.postBuildSearchIndex({
+            body: {
+                id: indexConfiguration.id,
+                name: indexConfiguration.name,
+                contentData: indexConfiguration.contentData
+            }
         }));
 
         if (error || !data) {
@@ -92,8 +104,10 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async deleteIndex(id: number) {
-        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.deleteIndex({
-            id: id
+        const { data, error } = await tryExecute(this, AlgoliaSearchService.deleteSearchIndex({
+            path: {
+                id: id
+            }
         }));
 
         if (error || !data) {
@@ -106,9 +120,13 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async searchIndex(id: number, query: string) {
-        const { data, error } = await tryExecuteAndNotify(this, AlgoliaSearchService.search({
-            indexId: id,
-            query: query
+        const { data, error } = await tryExecute(this, AlgoliaSearchService.getSearchIndex({
+            path: {
+                indexId: id
+            },
+            query: {
+                query
+            }
         }));
 
         if (error || !data) {
