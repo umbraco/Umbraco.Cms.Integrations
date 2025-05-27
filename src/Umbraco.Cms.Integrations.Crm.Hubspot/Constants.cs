@@ -40,5 +40,24 @@
 
             public const string GroupName = "Forms";
         }
+
+        public static class OperationIdentifiers
+        {
+            public const string CheckConfiguration = "CheckConfiguration";
+
+            public const string GetAccessToken = "GetAccessToken";
+
+            public const string GetFormsByApiKey = "GetFormsByApiKey";
+
+            public const string GetFormsOAuth = "GetFormsOAuth";
+
+            public const string GetAuthorizationUrl = "GetAuthorizationUrl";
+
+            public const string RefreshAccessToken = "RefreshAccessToken";
+
+            public const string RevokeAccessToken = "RevokeAccessToken";
+
+            public const string ValidateAccessToken = "ValidateAccessToken";
+        }
     }
 }

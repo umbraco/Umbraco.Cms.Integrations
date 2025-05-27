@@ -10,7 +10,6 @@ using static Umbraco.Cms.Integrations.Crm.Hubspot.HubspotComposer;
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
 {
     [ApiVersion("1.0")]
-    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
     public class GetAccessTokenController : HubspotFormsControllerBase
     {
         private readonly IHubspotAuthorizationService _authorizationService;
@@ -21,7 +20,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
             : base(settingsOptions) 
             => _authorizationService = authorizationImplementationFactory(Settings.UseUmbracoAuthorization);
 
-        [HttpPost("access-token")]
+        [HttpPost("access-token", Name = Constants.OperationIdentifiers.GetAccessToken)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAccessToken([FromBody] OAuthRequestDto authRequestDto)
         {

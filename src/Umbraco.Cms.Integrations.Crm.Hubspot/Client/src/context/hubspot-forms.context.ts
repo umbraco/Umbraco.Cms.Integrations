@@ -3,13 +3,13 @@ import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 
 import { HubspotFormsRepository } from "../repository/hubspot-forms.repository.js";
-import { HubspotFormPickerSettingsModel, type OAuthRequestDtoModel } from "../../generated/types.gen.js";
+import { HubspotFormPickerSettingsModelReadable, type OAuthRequestDtoModel } from "../../generated/types.gen.js";
 import { UmbObjectState } from "@umbraco-cms/backoffice/observable-api";
 
 export class HubspotFormsContext extends UmbControllerBase {
     #repository: HubspotFormsRepository;
 
-    #settingsModel = new UmbObjectState<HubspotFormPickerSettingsModel | undefined>(undefined);
+    #settingsModel = new UmbObjectState<HubspotFormPickerSettingsModelReadable | undefined>(undefined);
     settingsModel = this.#settingsModel.asObservable();
 
     constructor(host: UmbControllerHost) {

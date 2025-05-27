@@ -11,7 +11,6 @@ using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
 {
     [ApiVersion("1.0")]
-    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
     public class ValidateAccessTokenController : HubspotFormsControllerBase
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -27,7 +26,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
             _tokenService = tokenService;
         }
 
-        [HttpGet("validate")]
+        [HttpGet("validate", Name = Constants.OperationIdentifiers.ValidateAccessToken)]
         [ProducesResponseType(typeof(ResponseDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> ValidateAccessToken()
         {
