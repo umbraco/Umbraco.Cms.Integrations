@@ -20,6 +20,15 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
             public const string GroupName = "Zapier";
         }
 
+        public static class OperationIdentifiers
+        {
+            public const string GetContentByType = "GetContentByType";
+
+            public const string GetSubscriptionHooks = "GetSubscriptionHooks";
+
+            public const string UpdateSubscription = "UpdateSubscription";
+        }
+
         public static class ZapierAppConfiguration
         {
             public const string UsernameHeaderKey = "X-USERNAME";

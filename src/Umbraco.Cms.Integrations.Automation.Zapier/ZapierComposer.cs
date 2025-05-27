@@ -4,9 +4,11 @@ global using System.Text.Json.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
+using Umbraco.Cms.Integrations.Automation.Zapier.Api.Configuration;
 using Umbraco.Cms.Integrations.Automation.Zapier.Components;
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
 using Umbraco.Cms.Integrations.Automation.Zapier.Migrations;
@@ -51,10 +53,9 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
                         Version = "Latest",
                         Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Zapier automation and configuration."
                     });
-                // remove this as Swagger throws an ArgumentException: An item with the same key has already been added. Key: 401
-                //options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
-                options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
-            });
+                options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
+            })
+            .AddSingleton<IOperationIdHandler, ZapierOperationIdHandler>();
         }
     }
 }

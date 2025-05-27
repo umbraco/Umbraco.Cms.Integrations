@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=22",
+    "npm": ">=10.9"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -11,13 +15,13 @@
     "lint:errors": "npm run lint -- --quiet",
     "lint:fix": "npm run lint -- --fix",
     "lint": "eslint src",
-    "generate:api": "openapi-ts"
+    "generate:api": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 openapi-ts -f openapi-ts.config.ts"
   },
   "devDependencies": {
-    "@hey-api/openapi-ts": "^0.46.3",
-    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@hey-api/client-fetch": "^0.10.0",
+    "@hey-api/openapi-ts": "0.67.6",
     "@typescript-eslint/parser": "^7.13.0",
-    "@umbraco-cms/backoffice": "^15.0.0",
+    "@umbraco-cms/backoffice": "^16.0.0-rc2",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
@@ -27,7 +31,10 @@
     "eslint-plugin-local-rules": "^2.0.1",
     "eslint-plugin-wc": "^2.0.4",
     "typescript": "^5.2.2",
-    "vite": "^5.2.0",
-    "vite-tsconfig-paths": "^4.3.1"
+    "vite": "^6.3.2",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3"
   }
 }
