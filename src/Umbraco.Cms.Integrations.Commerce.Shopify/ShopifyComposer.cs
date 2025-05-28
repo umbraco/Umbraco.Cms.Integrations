@@ -4,6 +4,7 @@ global using System.Text.Json.Serialization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Api.Configuration;
@@ -44,8 +45,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify
                     });
 
                 options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
-                options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
-            });
+            })
+            .AddSingleton<IOperationIdHandler, ShopifyOperationIdHandler>();
         }
     }
 }

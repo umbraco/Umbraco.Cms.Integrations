@@ -2,13 +2,13 @@ import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { ShopifyRepository } from "../repository/shopify.repository";
-import { EditorSettingsModel, RequestDtoModel, type OAuthRequestDtoModel } from "@umbraco-integrations/shopify/generated";
+import { EditorSettingsModelReadable, RequestDtoModel, type OAuthRequestDtoModel } from "@umbraco-integrations/shopify/generated";
 import { UmbObjectState } from "@umbraco-cms/backoffice/observable-api";
 
 export class ShopifyContext extends UmbControllerBase{
     #repository: ShopifyRepository;
     #data = new UmbObjectState<string | undefined>(undefined);
-    #settingsModel = new UmbObjectState<EditorSettingsModel | undefined>(undefined);
+    #settingsModel = new UmbObjectState<EditorSettingsModelReadable | undefined>(undefined);
     settingsModel = this.#settingsModel.asObservable();
 
     constructor(host: UmbControllerHost){

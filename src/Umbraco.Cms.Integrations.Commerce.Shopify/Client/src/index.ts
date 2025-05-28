@@ -3,7 +3,7 @@ import { UMB_AUTH_CONTEXT } from "@umbraco-cms/backoffice/auth";
 import { manifest as shopifyContext } from "./context/manifests";
 import { manifests as picker } from "./property-editor/manifests.js";
 import { manifest as shopifyModal } from "./modal/manifests.js";
-import { OpenAPI } from "@umbraco-integrations/shopify/generated";
+import { client } from "@umbraco-integrations/shopify/generated";
 
 export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
     extensionRegistry.registerMany([
@@ -12,10 +12,13 @@ export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
         shopifyContext
     ]);
   
-    host.consumeContext(UMB_AUTH_CONTEXT, async (instance) => {
-      const umbOpenApi = instance.getOpenApiConfiguration();
-      OpenAPI.TOKEN = umbOpenApi.token;
-      OpenAPI.BASE = umbOpenApi.base;
-      OpenAPI.WITH_CREDENTIALS = true;
+    host.consumeContext(UMB_AUTH_CONTEXT, async (auth) => {
+        const config = auth?.getOpenApiConfiguration();
+
+        client.setConfig({
+            auth: config?.token ?? undefined,
+            baseUrl: config?.base ?? "",
+            credentials: config?.credentials ?? "same-origin",
+        });
     });
   };

@@ -1,6 +1,6 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
-import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
+import { tryExecute } from "@umbraco-cms/backoffice/resources";
 import { ShopifyService, type OAuthRequestDtoModel, RequestDtoModel } from "@umbraco-integrations/shopify/generated";
 
 export class ShopifyRepository extends UmbControllerBase {
@@ -8,8 +8,8 @@ export class ShopifyRepository extends UmbControllerBase {
         super(host);
     }
 
-    async checkConfiguration(){
-        const { data, error } = await tryExecuteAndNotify(this, ShopifyService.checkConfiguration());
+    async checkConfiguration() {
+        const { data, error } = await tryExecute(this, ShopifyService.getCheckConfiguration());
 
         if (error || !data) {
             return { error };
@@ -18,8 +18,8 @@ export class ShopifyRepository extends UmbControllerBase {
         return { data };
     }
 
-    async getAccessToken(oAuthRequestDtoModel: OAuthRequestDtoModel){
-        const { data, error } = await tryExecuteAndNotify(this, ShopifyService.getAccessToken({requestBody: oAuthRequestDtoModel}));
+    async getAccessToken(oAuthRequestDtoModel: OAuthRequestDtoModel) {
+        const { data, error } = await tryExecute(this, ShopifyService.postAccessToken({ body: oAuthRequestDtoModel }));
 
         if (error || !data) {
             return { error };
@@ -28,8 +28,8 @@ export class ShopifyRepository extends UmbControllerBase {
         return { data };
     }
 
-    async validateAccessToken(){
-        const { data, error } = await tryExecuteAndNotify(this, ShopifyService.validateAccessToken());
+    async validateAccessToken() {
+        const { data, error } = await tryExecute(this, ShopifyService.getValidateAccessToken());
 
         if (error || !data) {
             return { error };
@@ -38,8 +38,8 @@ export class ShopifyRepository extends UmbControllerBase {
         return { data };
     }
 
-    async revokeAccessToken(){
-        const { data, error } = await tryExecuteAndNotify(this, ShopifyService.revokeAccessToken());
+    async revokeAccessToken() {
+        const { data, error } = await tryExecute(this, ShopifyService.postRevokeAccessToken());
 
         if (error || !data) {
             return { error };
@@ -48,8 +48,8 @@ export class ShopifyRepository extends UmbControllerBase {
         return { data };
     }
 
-    async getList(pageInfo?: string){
-        const { data, error } = await tryExecuteAndNotify(this, ShopifyService.getList({pageInfo: pageInfo}));
+    async getList(pageInfo?: string) {
+        const { data, error } = await tryExecute(this, ShopifyService.getList({ query: { pageInfo: pageInfo } }));
 
         if (error || !data) {
             return { error };
@@ -59,8 +59,8 @@ export class ShopifyRepository extends UmbControllerBase {
     }
 
     async getListByIds(model: RequestDtoModel) {
-        const { data, error } = await tryExecuteAndNotify(this, ShopifyService.getListByIds({
-            requestBody: model
+        const { data, error } = await tryExecute(this, ShopifyService.postListByIds({
+            body: model
         }));
 
         if (error || !data) {
@@ -71,7 +71,7 @@ export class ShopifyRepository extends UmbControllerBase {
     }
 
     async getTotalPages(){
-        const { data, error } = await tryExecuteAndNotify(this, ShopifyService.getTotalPages());
+        const { data, error } = await tryExecute(this, ShopifyService.getTotalPages());
 
         if (error || !data) {
             return { error };
@@ -81,7 +81,7 @@ export class ShopifyRepository extends UmbControllerBase {
     }
 
     async getAuthorizationUrl(){
-        const { data, error } = await tryExecuteAndNotify(this, ShopifyService.getAuthorizationUrl());
+        const { data, error } = await tryExecute(this, ShopifyService.getAuthorizationUrl());
 
         if (error || !data) {
             return { error };
@@ -90,8 +90,8 @@ export class ShopifyRepository extends UmbControllerBase {
         return { data };
     }
 
-    async refreshAccessToken(){
-        const { data, error } = await tryExecuteAndNotify(this, ShopifyService.refreshAccessToken());
+    async refreshAccessToken() {
+        const { data, error } = await tryExecute(this, ShopifyService.postRefreshAccessToken());
 
         if (error || !data) {
             return { error };
