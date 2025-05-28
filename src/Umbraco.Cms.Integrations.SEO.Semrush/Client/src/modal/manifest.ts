@@ -1,6 +1,4 @@
-import type { ManifestModal } from "@umbraco-cms/backoffice/extension-registry";
-
-export const manifest: ManifestModal = {
+export const manifest = {
     type: "modal",
     alias: "Semrush.Modal",
     name: "Semrush Modal",

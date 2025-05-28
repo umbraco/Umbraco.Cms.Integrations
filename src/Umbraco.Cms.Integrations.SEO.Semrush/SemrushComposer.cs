@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Integrations.SEO.Semrush.Api.Configuration;
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
 using Umbraco.Cms.Integrations.SEO.Semrush.Services;
 
@@ -46,9 +48,9 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush
                         Version = "Latest",
                         Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Semrush and configuration."
                     });
-
-                options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
-            });
+                options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
+            })
+            .AddSingleton<IOperationIdHandler, SemrushOperationIdHandler>();
         }
     }
 }

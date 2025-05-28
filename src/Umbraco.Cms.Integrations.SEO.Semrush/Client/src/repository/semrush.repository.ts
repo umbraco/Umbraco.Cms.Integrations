@@ -1,7 +1,7 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
-import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
-import { AccessTokenService, RelatedPhrasesDtoModel, SemrushService } from "@umbraco-integrations/semrush/generated";
+import { tryExecute } from "@umbraco-cms/backoffice/resources";
+import { AccessTokenService, RelatedPhrasesDtoModelReadable, SemrushService } from "@umbraco-integrations/semrush/generated";
 
 export class SemrushRepository extends UmbControllerBase {
     constructor(host: UmbControllerHost) {
@@ -9,7 +9,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async getTokenDetails(){
-        const { data, error } = await tryExecuteAndNotify(this, AccessTokenService.getTokenDetails());
+        const { data, error } = await tryExecute(this, AccessTokenService.getTokenDetails());
 
         if (error || !data) {
             return { error };
@@ -18,8 +18,8 @@ export class SemrushRepository extends UmbControllerBase {
         return { data };
     }
 
-    async getAccessToken(code: string){
-        const { data, error } = await tryExecuteAndNotify(this, AccessTokenService.getAccessToken({requestBody:{code: code}}));
+    async getAccessToken(code: string) {
+        const { data, error } = await tryExecute(this, AccessTokenService.postTokenGet({ body: { code: code } }));
 
         if (error || !data) {
             return { error };
@@ -28,8 +28,8 @@ export class SemrushRepository extends UmbControllerBase {
         return { data };
     }
 
-    async refreshAccessToken(){
-        const { data, error } = await tryExecuteAndNotify(this, AccessTokenService.refreshAccessToken());
+    async refreshAccessToken() {
+        const { data, error } = await tryExecute(this, AccessTokenService.postTokenRefresh());
 
         if (error || !data) {
             return { error };
@@ -38,8 +38,8 @@ export class SemrushRepository extends UmbControllerBase {
         return { data };
     }
 
-    async revokeToken(){
-        const { data, error } = await tryExecuteAndNotify(this, AccessTokenService.revokeToken());
+    async revokeToken() {
+        const { data, error } = await tryExecute(this, AccessTokenService.postTokenRevoke());
 
         if (error || !data) {
             return { error };
@@ -48,8 +48,8 @@ export class SemrushRepository extends UmbControllerBase {
         return { data };
     }
 
-    async validateToken(){
-        const { data, error } = await tryExecuteAndNotify(this, AccessTokenService.validateToken());
+    async validateToken() {
+        const { data, error } = await tryExecute(this, AccessTokenService.getTokenValidate());
 
         if (error || !data) {
             return { error };
@@ -58,8 +58,8 @@ export class SemrushRepository extends UmbControllerBase {
         return { data };
     }
 
-    async oauth(code: string){
-        const { data, error } = await tryExecuteAndNotify(this, SemrushService.oauth({code: code}));
+    async oauth(code: string) {
+        const { data, error } = await tryExecute(this, SemrushService.getAuth({ query: { code: code } }));
 
         if (error || !data) {
             return { error };
@@ -68,8 +68,8 @@ export class SemrushRepository extends UmbControllerBase {
         return { data };
     }
 
-    async getAuthorizationUrl(){
-        const { data, error } = await tryExecuteAndNotify(this, SemrushService.getAuthorizationUrl());
+    async getAuthorizationUrl() {
+        const { data, error } = await tryExecute(this, SemrushService.getAuthUrl());
 
         if (error || !data) {
             return { error };
@@ -79,7 +79,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async getColumns(){
-        const { data, error } = await tryExecuteAndNotify(this, SemrushService.getColumns());
+        const { data, error } = await tryExecute(this, SemrushService.getColumns());
 
         if (error || !data) {
             return { error };
@@ -89,7 +89,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async getDataSources(){
-        const { data, error } = await tryExecuteAndNotify(this, SemrushService.getDataSources());
+        const { data, error } = await tryExecute(this, SemrushService.getDataSources());
 
         if (error || !data) {
             return { error };
@@ -99,11 +99,13 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async getRelatedPhrases(phrase: string, pageNumber: number, dataSource: string, method: string){
-        const { data, error } = await tryExecuteAndNotify(this, SemrushService.getRelatedPhrases({
-            phrase: phrase,
-            pageNumber: pageNumber,
-            dataSource: dataSource,
-            method: method
+        const { data, error } = await tryExecute(this, SemrushService.getRelatedPhrases({
+            query: {
+                phrase: phrase,
+                pageNumber: pageNumber,
+                dataSource: dataSource,
+                method: method
+            }
         }));
 
         if (error || !data) {
@@ -113,8 +115,8 @@ export class SemrushRepository extends UmbControllerBase {
         return { data };
     }
 
-    async ping(){
-        const { data, error } = await tryExecuteAndNotify(this, SemrushService.ping());
+    async ping() {
+        const { data, error } = await tryExecute(this, SemrushService.getPing());
 
         if (error || !data) {
             return { error };
@@ -123,8 +125,8 @@ export class SemrushRepository extends UmbControllerBase {
         return { data };
     }
 
-    async getCurrentContentProperties(contentId: string){
-        const { data, error } = await tryExecuteAndNotify(this, SemrushService.getCurrentContentProperties({contentId: contentId}));
+    async getCurrentContentProperties(contentId: string) {
+        const { data, error } = await tryExecute(this, SemrushService.getContentProperties({ query: { contentId: contentId } }));
 
         if (error || !data) {
             return { error };
