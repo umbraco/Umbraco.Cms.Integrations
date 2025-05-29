@@ -1,15 +1,14 @@
-﻿using Asp.Versioning;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
+using Umbraco.Cms.Web.Common.Routing;
 using static Umbraco.Cms.Integrations.Crm.Dynamics.DynamicsComposer;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
 {
-    [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
-    [Route($"{Constants.ManagementApi.RootPath}/v{{version:apiVersion}}/forms")]
+    [BackOfficeRoute($"{Constants.ManagementApi.RootPath}/v{{version:apiVersion}}/forms")]
     public class FormsControllerBase : DynamicsControllerBase
     {
         protected readonly DynamicsSettings DynamicsSettings;

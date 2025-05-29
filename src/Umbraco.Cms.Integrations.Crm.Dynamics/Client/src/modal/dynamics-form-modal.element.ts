@@ -80,7 +80,7 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
     async _onSubmit() {
         if (this.renderWithIFrame && dynamicsModuleHelper.parseModule(this._selectedForm.module.toString()) == DynamicsModuleModel.OUTBOUND) {
             var { data } = await this.#dynamicsContext.getEmbedCode(this._selectedForm.id);
-            if (!data || data.result.length == 0) {
+            if (!data || data.result!.length == 0) {
                 this._showError("Unable to embed selected form. Please check if it is live.");
                 return false;
             }
