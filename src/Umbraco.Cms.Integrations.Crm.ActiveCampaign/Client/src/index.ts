@@ -4,7 +4,7 @@ import { manifests as activeCampaignPropertyEditor } from "./property-editor/man
 import { manifest as activecampaignContext } from "./context/manifest.js";
 import { manifest as activeCampaignModal } from "./modal/manifest.js";
 
-import { OpenAPI } from "@umbraco-integrations/activecampaign-forms/generated";
+import { client } from "@umbraco-integrations/activecampaign-forms/generated";
 
 export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
     extensionRegistry.registerMany([
@@ -13,10 +13,13 @@ export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
         activeCampaignModal
   ]);
 
-  host.consumeContext(UMB_AUTH_CONTEXT, async (instance) => {
-    const umbOpenApi = instance.getOpenApiConfiguration();
-    OpenAPI.TOKEN = umbOpenApi.token;
-    OpenAPI.BASE = umbOpenApi.base;
-    OpenAPI.WITH_CREDENTIALS = true;
+  host.consumeContext(UMB_AUTH_CONTEXT, async (auth) => {
+      const config = auth?.getOpenApiConfiguration();
+
+      client.setConfig({
+          auth: config?.token ?? undefined,
+          baseUrl: config?.base ?? "",
+          credentials: config?.credentials ?? "same-origin",
+      });
   });
 };

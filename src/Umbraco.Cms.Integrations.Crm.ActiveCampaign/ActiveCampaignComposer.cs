@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Configuration;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
 
 namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
@@ -34,8 +36,9 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
                         Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Active Campaign product(s) and configuration."
                     });
 
-                options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
-            });
+                options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
+            })
+            .AddSingleton<IOperationIdHandler, ActiveCampaignOperationIdHandler>();
         }
 
     }
