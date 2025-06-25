@@ -1,13 +1,13 @@
 ﻿{
     "id": "Umbraco.Cms.Integrations.Crm.HubSpot",
     "name": "Umbraco CMS Integrations: CRM - HubSpot",
-    "version": "5.0.0",
+    "version": "6.0.0",
     "extensions": [
-        {
-            "name": "Umbraco EntryPoint",
-            "alias": "Umb.Hubspot.EntryPoint",
-            "type": "entryPoint",
-            "js": "/App_Plugins/HubspotForms/hubspot.js"
-        }
+      {
+        "name": "Umbraco EntryPoint",
+        "alias": "Umb.Hubspot.EntryPoint",
+        "type": "backofficeEntryPoint",
+        "js": "/App_Plugins/HubspotForms/hubspot.js"
+      }
     ]
 }
