@@ -68,8 +68,7 @@ public class BuildIndexController : SearchControllerBase
         IEnumerable<ContentTypeDto>? indexContentData = JsonSerializer.Deserialize<IEnumerable<ContentTypeDto>>(index.SerializedData);
         if (indexContentData is null)
         {
-            // TODO => handle null result
-            return BadRequest();
+            return OperationStatusResult(OperationStatus.EmptyIndexData, "Index does not contain any data.");
         }
 
         foreach (var contentDataItem in indexContentData)
@@ -80,7 +79,6 @@ public class BuildIndexController : SearchControllerBase
 
             if (contentType is null)
             {
-                // TODO => handle null content type
                 continue;
             }
 

@@ -22,7 +22,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<UmbracoCmsPackageVersion>[16.0.0-rc3, 17)</UmbracoCmsPackageVersion>
+		<UmbracoCmsPackageVersion>[16.0.0, 17)</UmbracoCmsPackageVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Algolia.Search" Version="6.13.0" />
