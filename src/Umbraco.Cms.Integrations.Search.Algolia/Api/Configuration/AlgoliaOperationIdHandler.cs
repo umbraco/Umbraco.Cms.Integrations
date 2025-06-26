@@ -13,5 +13,5 @@ internal class AlgoliaOperationIdHandler : OperationIdHandler
     }
 
     protected override bool CanHandle(ApiDescription apiDescription, ControllerActionDescriptor controllerActionDescriptor)
-        => controllerActionDescriptor.ControllerTypeInfo.Namespace?.StartsWith("Umbraco.Cms.Integrations.Search.") is true;
+        => controllerActionDescriptor.ControllerTypeInfo.Namespace?.StartsWith("Umbraco.Cms.Integrations.Search.Algolia") is true;
 }
