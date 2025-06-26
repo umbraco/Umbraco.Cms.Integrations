@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Umbraco.Cms.Api.Common.Builders;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.Dtos;
 
@@ -20,23 +21,32 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetForms([FromQuery]int? page = 1)
+        public async Task<IActionResult> GetForms([FromQuery] int? page = 1)
         {
-            var client = HttpClientFactory.CreateClient(Constants.FormsHttpClient);
-
-            var requestUriString = page == 1
-                ? $"{client.BaseAddress}{ApiPath}&limit={Constants.DefaultPageSize}"
-                : $"{client.BaseAddress}{ApiPath}&limit={Constants.DefaultPageSize}&offset={(page - 1) * Constants.DefaultPageSize}";
-
-            var requestMessage = new HttpRequestMessage
+            try
             {
-                RequestUri = new Uri(requestUriString),
-                Method = HttpMethod.Get
-            };
+                var client = HttpClientFactory.CreateClient(Constants.FormsHttpClient);
 
-            var response = await client.SendAsync(requestMessage);
+                var requestUriString = page == 1
+                    ? $"{client.BaseAddress}{ApiPath}&limit={Constants.DefaultPageSize}"
+                    : $"{client.BaseAddress}{ApiPath}&limit={Constants.DefaultPageSize}&offset={(page - 1) * Constants.DefaultPageSize}";
 
-            return await HandleResponseAsync<FormCollectionResponseDto>(response);
+                var requestMessage = new HttpRequestMessage
+                {
+                    RequestUri = new Uri(requestUriString),
+                    Method = HttpMethod.Get
+                };
+
+                var response = await client.SendAsync(requestMessage);
+
+                return await HandleResponseAsync<FormCollectionResponseDto>(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetailsBuilder()
+                    .WithTitle(ex.Message)
+                    .Build());
+            }
         }
     }
 }

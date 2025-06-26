@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Umbraco.Cms.Api.Common.Builders;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.Dtos;
 
@@ -22,16 +23,25 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetForm(string id)
         {
-            var client = HttpClientFactory.CreateClient(Constants.FormsHttpClient);
+            try
+            {
+                var client = HttpClientFactory.CreateClient(Constants.FormsHttpClient);
 
-            var response = await client.SendAsync(
-                new HttpRequestMessage
-                {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri($"{client.BaseAddress}{ApiPath}/{id}")
-                });
+                var response = await client.SendAsync(
+                    new HttpRequestMessage
+                    {
+                        Method = HttpMethod.Get,
+                        RequestUri = new Uri($"{client.BaseAddress}{ApiPath}/{id}")
+                    });
 
-            return await HandleResponseAsync<FormResponseDto>(response);
+                return await HandleResponseAsync<FormResponseDto>(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetailsBuilder()
+                    .WithTitle(ex.Message)
+                    .Build());
+            }
         }
     }
 }
