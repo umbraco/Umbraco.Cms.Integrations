@@ -21,7 +21,10 @@ steps:
     feedsToUse: 'select'
     projects: '$(project)'
     includeNuGetOrg: true
-
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '9.0.203'
 - task: VSBuild@1
   displayName: 'Build Project'
   inputs:
