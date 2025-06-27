@@ -10,12 +10,14 @@ export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
     extensionRegistry.registerMany([algoliaDashboardManifest, algoliaContextManifest]);
 
     host.consumeContext(UMB_AUTH_CONTEXT, async (auth) => {
-        const config = auth?.getOpenApiConfiguration();
+        if (!auth) return;
+
+        const config = auth.getOpenApiConfiguration();
 
         client.setConfig({
-            auth: config?.token ?? undefined,
-            baseUrl: config?.base ?? "",
-            credentials: config?.credentials ?? "same-origin",
+            auth: config.token,
+            baseUrl: config.base,
+            credentials: config.credentials,
         });
     });
 };
