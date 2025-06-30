@@ -1,5 +1,12 @@
 trigger:
-- main-v16
+  branches:
+    include:
+    - main-v16
+    - v16/dev
+  paths:
+    include:
+    - src/Umbraco.Cms.Integrations.SEO.Semrush/**
+    - azure-pipeline - SEO.SemrushTools.yml
 
 pool:
   vmImage: 'windows-latest'
