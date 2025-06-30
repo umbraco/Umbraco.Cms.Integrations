@@ -5,6 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<StaticWebAssetBasePath>/App_Plugins/Algolia</StaticWebAssetBasePath>
 		<CompressionEnabled>false</CompressionEnabled>
+		<EnableDefaultContentItems>false</EnableDefaultContentItems>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -33,16 +34,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="algolia.png">
-			<Pack>true</Pack>
-			<PackagePath>\</PackagePath>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
+		<Content Include="algolia.png" Pack="true" PackagePath="\" />
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
-	
+
 	<!-- Build client assets using NPM -->
 	<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
 	<PropertyGroup>
