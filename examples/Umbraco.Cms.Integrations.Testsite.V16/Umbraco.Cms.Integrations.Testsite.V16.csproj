@@ -12,7 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="../Umbraco.Cms.Integrations.Search.Algolia/Umbraco.Cms.Integrations.Search.Algolia.csproj" />
+		<ProjectReference Include="../../src/Umbraco.Cms.Integrations.Search.Algolia/Umbraco.Cms.Integrations.Search.Algolia.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
