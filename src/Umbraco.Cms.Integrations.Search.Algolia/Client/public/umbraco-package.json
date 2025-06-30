@@ -1,7 +1,7 @@
 ﻿{
   "id": "Umbraco.Cms.Integrations.Search.Algolia",
   "name": "Umbraco CMS Integrations: Search - Algolia",
-  "version": "",
+  "version": "5.0.0",
   "extensions": [
     {
       "name": "Umbraco EntryPoint",
