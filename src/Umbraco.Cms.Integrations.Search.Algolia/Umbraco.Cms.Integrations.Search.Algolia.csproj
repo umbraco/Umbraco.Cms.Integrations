@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<StaticWebAssetBasePath>/</StaticWebAssetBasePath>
+		<StaticWebAssetBasePath>/App_Plugins/Algolia</StaticWebAssetBasePath>
+		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -42,15 +43,13 @@
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 	
-	<ItemGroup>
-	  <Folder Include="wwwroot\" />
-	</ItemGroup>
-
-	<!-- Update umbraco-package.json files with current build version after client assets build -->
-	<Target Name="UpdatePackageManifestVersion" DependsOnTargets="ClientAssetsBuild" AfterTargets="GetBuildVersion;GetUmbracoBuildVersion">
-		<ItemGroup>
-			<_PackageManifestFiles Include="$(IntermediateOutputPath)clientassets\**\umbraco-package.json" />
-		</ItemGroup>
-		<JsonPathUpdateValue JsonFile="%(_PackageManifestFiles.FullPath)" Path="$.version" Value="&quot;$(PackageVersion)&quot;" />
+	<!-- Build client assets using NPM -->
+	<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
+	<PropertyGroup>
+		<!-- Use this to (temporarily) disable building client assets, e.g. to start the project and generate updated API models -->
+		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
+	</PropertyGroup>
+	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
+		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
 	</Target>
 </Project>
