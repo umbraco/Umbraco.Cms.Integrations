@@ -4,6 +4,7 @@ import { UMB_AUTH_CONTEXT } from "@umbraco-cms/backoffice/auth";
 import { manifest as algoliaDashboardManifest } from './dashboard/manifest.js';
 import { manifest as algoliaContextManifest } from './context/manifest.js';
 import { client } from "@umbraco-integrations/algolia/generated";
+import { umbHttpClient } from "@umbraco-cms/backoffice/http-client";
 
 export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
 
@@ -12,12 +13,6 @@ export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
     host.consumeContext(UMB_AUTH_CONTEXT, async (auth) => {
         if (!auth) return;
 
-        const config = auth.getOpenApiConfiguration();
-
-        client.setConfig({
-            auth: config.token,
-            baseUrl: config.base,
-            credentials: config.credentials,
-        });
+        client.setConfig(umbHttpClient.getConfig());
     });
 };
