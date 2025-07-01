@@ -5,6 +5,7 @@ import { manifest as activecampaignContext } from "./context/manifest.js";
 import { manifest as activeCampaignModal } from "./modal/manifest.js";
 
 import { client } from "@umbraco-integrations/activecampaign-forms/generated";
+import { umbHttpClient } from "@umbraco-cms/backoffice/http-client";
 
 export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
     extensionRegistry.registerMany([
@@ -13,13 +14,9 @@ export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
         activeCampaignModal
   ]);
 
-  host.consumeContext(UMB_AUTH_CONTEXT, async (auth) => {
-      const config = auth?.getOpenApiConfiguration();
+    host.consumeContext(UMB_AUTH_CONTEXT, async (auth) => {
+      if (!auth) return;
 
-      client.setConfig({
-          auth: config?.token ?? undefined,
-          baseUrl: config?.base ?? "",
-          credentials: config?.credentials ?? "same-origin",
-      });
+      client.setConfig(umbHttpClient.getConfig());
   });
 };

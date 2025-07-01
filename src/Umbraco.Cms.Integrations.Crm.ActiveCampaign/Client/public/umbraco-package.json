@@ -1,7 +1,7 @@
 ﻿{
   "id": "Umbraco.Cms.Integrations.Crm.ActiveCampaign",
   "name": "Umbraco CMS Integrations: CRM - ActiveCampaign",
-  "version": "",
+  "version": "5.0.0",
   "extensions": [
     {
       "name": "Umbraco EntryPoint",
