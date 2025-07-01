@@ -4,6 +4,7 @@ import { manifest as dynamicsContext } from "./context/manifests";
 import { manifests as dynamicsFormPicker } from "./property-editor/manifests";
 import { manifest as dynamicsModal } from "./modal/manifests";
 import { client } from "@umbraco-integrations/dynamics/generated";
+import { umbHttpClient } from "@umbraco-cms/backoffice/http-client";
 
 export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
     extensionRegistry.registerMany([
@@ -13,13 +14,9 @@ export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
     ]);
 
     host.consumeContext(UMB_AUTH_CONTEXT, async (auth) => {
-        const config = auth?.getOpenApiConfiguration();
+        if (!auth) return;
 
-        client.setConfig({
-            auth: config?.token ?? undefined,
-            baseUrl: config?.base ?? "",
-            credentials: config?.credentials ?? "same-origin",
-        });
+        client.setConfig(umbHttpClient.getConfig());
     });
 }
 
