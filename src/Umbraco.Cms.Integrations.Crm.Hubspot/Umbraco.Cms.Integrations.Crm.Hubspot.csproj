@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
@@ -6,6 +6,7 @@
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<EnableDefaultContentItems>false</EnableDefaultContentItems>
 		<StaticWebAssetBasePath>/App_Plugins/HubspotForms</StaticWebAssetBasePath>
+		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -61,18 +62,6 @@
 		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
 	</PropertyGroup>
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
-		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '$(Configuration)' !== 'Release' ? '../wwwroot' : '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
+		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
 	</Target>
-	<ItemGroup>
-	  <ClientAssetsInputs Remove="Client\config.outputPath.js" />
-	</ItemGroup>
-
-	<!-- Update umbraco-package.json files with current build version after client assets build -->
-	<Target Name="UpdatePackageManifestVersion" DependsOnTargets="ClientAssetsBuild" AfterTargets="GetBuildVersion;GetUmbracoBuildVersion">
-		<ItemGroup>
-			<_PackageManifestFiles Include="$(IntermediateOutputPath)clientassets\**\umbraco-package.json" />
-		</ItemGroup>
-		<JsonPathUpdateValue JsonFile="%(_PackageManifestFiles.FullPath)" Path="$.version" Value="&quot;$(PackageVersion)&quot;" />
-	</Target>
-
 </Project>

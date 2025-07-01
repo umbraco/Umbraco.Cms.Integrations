@@ -1,7 +1,10 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Buffers;
 using System.Text.Json;
+using Umbraco.Cms.Api.Common.Builders;
 using Umbraco.Cms.Integrations.Search.Algolia.Migrations;
 using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Integrations.Search.Algolia.Models.ContentTypeDtos;
@@ -10,7 +13,6 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers;
 
 [ApiVersion("1.0")]
-[ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
 public class GetIndicesController : SearchControllerBase
 {
     private readonly IAlgoliaIndexDefinitionStorage<AlgoliaIndex> _indexStorage;
@@ -18,17 +20,25 @@ public class GetIndicesController : SearchControllerBase
     public GetIndicesController(
         IAlgoliaIndexDefinitionStorage<AlgoliaIndex> indexStorage) => _indexStorage = indexStorage;
 
-    [HttpGet("index")]
+    [HttpGet("index", Name = Constants.OperationIds.GetIndices)]
     [ProducesResponseType(typeof(IEnumerable<IndexConfiguration>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public IActionResult GetIndices()
     {
-        var indices = _indexStorage.Get().Select(p => new IndexConfiguration
+        try
         {
-            Id = p.Id,
-            Name = p.Name,
-            ContentData = JsonSerializer.Deserialize<IEnumerable<ContentTypeDto>>(p.SerializedData) ?? []
-        });
+            var indices = _indexStorage.Get().Select(p => new IndexConfiguration
+            {
+                Id = p.Id,
+                Name = p.Name,
+                ContentData = JsonSerializer.Deserialize<IEnumerable<ContentTypeDto>>(p.SerializedData) ?? []
+            });
 
-        return Ok(indices);
+            return Ok(indices);
+        }
+        catch (Exception ex) 
+        {
+            return OperationStatusResult(Models.OperationStatus.ApiException, ex.Message);
+        }
     }
 }

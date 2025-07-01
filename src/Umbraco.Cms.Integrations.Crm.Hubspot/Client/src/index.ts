@@ -6,6 +6,7 @@ import { manifest as hubspotContext } from "./context/manifest.js";
 import { manifest as hubspotModal } from "./modal/manifest.js";
 
 import { client } from "@umbraco-integrations/hubspot-forms/generated";
+import { umbHttpClient } from "@umbraco-cms/backoffice/http-client";
 
 export * from "./property-editor/index.js";
 
@@ -17,12 +18,8 @@ export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
   ]);
 
   host.consumeContext(UMB_AUTH_CONTEXT, async (auth) => {
-      const config = auth?.getOpenApiConfiguration();
+      if (!auth) return;
 
-      client.setConfig({
-          auth: config?.token ?? undefined,
-          baseUrl: config?.base ?? "",
-          credentials: config?.credentials ?? "same-origin",
-      });
+      client.setConfig(umbHttpClient.getConfig());
   });
 };
