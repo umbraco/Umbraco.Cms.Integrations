@@ -51,21 +51,6 @@ steps:
     packagesToPack: '$(project)'
     versioningScheme: 'off'
 
-- task: UseDotNet@2
-  displayName: 'Install .NET Core 3.x'
-  inputs:
-    packageType: 'sdk'
-    version: '3.x'
-    
-- task: CmdLine@2
-  displayName: 'Create Umbraco Package'
-  inputs:
-    script: |
-      dotnet tool install --global Umbraco.Tools.Packages
-      cd src/$(projectName)/
-      umbpack pack .\package.xml -o $(Build.ArtifactStagingDirectory)
-      cd ../../
-
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Build Artifacts'
   inputs:
