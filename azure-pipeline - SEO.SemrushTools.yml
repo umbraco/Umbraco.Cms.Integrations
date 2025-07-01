@@ -1,5 +1,12 @@
 trigger:
-- main-v16
+  branches:
+    include:
+    - main-v16
+    - v16/dev
+  paths:
+    include:
+    - src/Umbraco.Cms.Integrations.SEO.Semrush/**
+    - azure-pipeline - SEO.SemrushTools.yml
 
 pool:
   vmImage: 'windows-latest'
@@ -22,6 +29,12 @@ steps:
     projects: '$(project)'
     includeNuGetOrg: true
 
+- task: UseDotNet@2
+  displayName: 'Use SDK version 9.0.203'
+  inputs:
+    packageType: 'sdk'
+    version: '9.0.203'
+
 - task: VSBuild@1
   displayName: 'Build Project'
   inputs:
@@ -37,21 +50,6 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
     packagesToPack: '$(project)'
     versioningScheme: 'off'
-
-- task: UseDotNet@2
-  displayName: 'Install .NET Core 3.x'
-  inputs:
-    packageType: 'sdk'
-    version: '3.x'
-    
-- task: CmdLine@2
-  displayName: 'Create Umbraco Package'
-  inputs:
-    script: |
-      dotnet tool install --global Umbraco.Tools.Packages
-      cd src/$(projectName)/
-      umbpack pack .\package.xml -o $(Build.ArtifactStagingDirectory)
-      cd ../../
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Build Artifacts'
