@@ -1,7 +1,7 @@
 {
     "id": "Umbraco.Cms.Integrations.SEO.Semrush",
     "name": "Umbraco CMS Integrations: SEO - Semrush",
-    "version": "",
+    "version": "3.0.0",
     "extensions": [
       {
         "name": "Umbraco EntryPoint",

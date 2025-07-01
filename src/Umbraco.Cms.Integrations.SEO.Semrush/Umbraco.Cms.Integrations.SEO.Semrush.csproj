@@ -67,12 +67,4 @@
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
 		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
 	</Target>
-
-	<!-- Update umbraco-package.json files with current build version after client assets build -->
-	<Target Name="UpdatePackageManifestVersion" DependsOnTargets="ClientAssetsBuild" AfterTargets="GetBuildVersion;GetUmbracoBuildVersion">
-		<ItemGroup>
-			<_PackageManifestFiles Include="$(IntermediateOutputPath)clientassets\**\umbraco-package.json" />
-		</ItemGroup>
-		<JsonPathUpdateValue JsonFile="%(_PackageManifestFiles.FullPath)" Path="$.version" Value="&quot;$(PackageVersion)&quot;" />
-	</Target>
 </Project>
