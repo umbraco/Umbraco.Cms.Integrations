@@ -1,13 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
-
-  <PropertyGroup>
-	  <TargetFramework>net9.0</TargetFramework>
-	  <Nullable>enable</Nullable>
-	  <ImplicitUsings>enable</ImplicitUsings>
-	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-	  <EnableDefaultContentItems>false</EnableDefaultContentItems>
-	  <StaticWebAssetBasePath>/App_Plugins/ActiveCampaignForms</StaticWebAssetBasePath>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<EnableDefaultContentItems>false</EnableDefaultContentItems>
+		<StaticWebAssetBasePath>/App_Plugins/ActiveCampaignForms</StaticWebAssetBasePath>
+		<CompressionEnabled>false</CompressionEnabled>
+	</PropertyGroup>
 
 	<PropertyGroup>
 		<PackageId>Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageId>
@@ -62,7 +62,7 @@
 		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
 	</PropertyGroup>
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
-		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '$(Configuration)' !== 'Release' ? '../wwwroot' : '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
+		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
 	</Target>
 
 	<!-- Update umbraco-package.json files with current build version after client assets build -->
