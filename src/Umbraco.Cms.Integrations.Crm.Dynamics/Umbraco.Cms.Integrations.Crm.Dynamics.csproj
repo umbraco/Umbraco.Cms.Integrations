@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
-
   <PropertyGroup>
 	  <TargetFramework>net9.0</TargetFramework>
 	  <Nullable>enable</Nullable>
@@ -7,6 +6,7 @@
 	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 	  <EnableDefaultContentItems>false</EnableDefaultContentItems>
 	  <StaticWebAssetBasePath>/App_Plugins/Dynamics</StaticWebAssetBasePath>
+	  <CompressionEnabled>false</CompressionEnabled>
   </PropertyGroup>
 
 	<PropertyGroup>
@@ -61,7 +61,7 @@
 		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
 	</PropertyGroup>
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
-		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '$(Configuration)' !== 'Release' ? '../wwwroot' : '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
+		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
 	</Target>
 
 	<!-- Update umbraco-package.json files with current build version after client assets build -->

@@ -1,5 +1,12 @@
 trigger:
-- main-v16
+  branches:
+    include:
+    - main-v16
+    - v16/dev
+  paths:
+    include:
+    - src/Umbraco.Cms.Integrations.Commerce.Shopify/**
+    - azure-pipeline - Commerce.Shopify.yml
 
 pool:
   vmImage: 'windows-latest'
@@ -21,6 +28,12 @@ steps:
     feedsToUse: 'select'
     projects: '$(project)'
     includeNuGetOrg: true
+
+- task: UseDotNet@2
+  displayName: 'Use SDK version 9.0.203'
+  inputs:
+    packageType: 'sdk'
+    version: '9.0.203'
 
 - task: VSBuild@1
   displayName: 'Build Project'

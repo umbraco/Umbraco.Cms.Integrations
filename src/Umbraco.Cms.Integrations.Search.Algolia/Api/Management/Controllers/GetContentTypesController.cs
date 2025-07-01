@@ -12,7 +12,6 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers;
 
 [ApiVersion("1.0")]
-[ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
 public class GetContentTypesController : SearchControllerBase
 {
     private readonly IContentTypeService _contentTypeService;
@@ -26,7 +25,7 @@ public class GetContentTypesController : SearchControllerBase
         _contentTypeService = contentTypeService;
     }
 
-    [HttpGet("content-type")]
+    [HttpGet("content-type", Name = Constants.OperationIds.GetContentTypes)]
     [ProducesResponseType(typeof(List<ContentTypeDto>), StatusCodes.Status200OK)]
     public IActionResult Get() => Ok(GetContentTypes());
     
