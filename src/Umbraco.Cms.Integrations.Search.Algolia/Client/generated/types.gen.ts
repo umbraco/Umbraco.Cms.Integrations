@@ -7,7 +7,7 @@ export type ContentTypeDtoModel = {
     name: string;
     selected: boolean;
     allowRemove: boolean;
-    properties: Array<(ContentTypePropertyDtoModel)>;
+    properties: Array<ContentTypePropertyDtoModel>;
 };
 
 export type ContentTypePropertyDtoModel = {
@@ -30,7 +30,7 @@ export enum EventMessageTypeModel {
 export type IndexConfigurationModel = {
     id: number;
     name: string;
-    contentData: Array<(ContentTypeDtoModel)>;
+    contentData: Array<ContentTypeDtoModel>;
 };
 
 export type NotificationHeaderModel = {
@@ -44,138 +44,215 @@ export type ResponseModel = {
     pagesCount: number;
     itemsPerPage: number;
     hits: Array<{
-        [key: string]: (string);
+        [key: string]: string;
     }>;
 };
 
-export type ResultModel = {
+export type ResultModelReadable = {
     success: boolean;
     error: string;
     readonly failure: boolean;
 };
 
-export type GetContentTypesResponse = Array<(ContentTypeDtoModel)>;
-
-export type GetContentTypesByIndexIdData = {
-    id: number;
+export type ResultModelWritable = {
+    success: boolean;
+    error: string;
 };
 
-export type GetContentTypesByIndexIdResponse = Array<(ContentTypeDtoModel)>;
-
-export type GetIndicesResponse = Array<(IndexConfigurationModel)>;
-
-export type SaveIndexData = {
-    requestBody?: IndexConfigurationModel;
+export type GetContentTypesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/algolia-search/management/api/v1/search/content-type';
 };
 
-export type SaveIndexResponse = ResultModel;
-
-export type DeleteIndexData = {
-    id: number;
+export type GetContentTypesErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
 };
 
-export type DeleteIndexResponse = ResultModel;
-
-export type GetIndexByIdData = {
-    id: number;
+export type GetContentTypesResponses = {
+    /**
+     * OK
+     */
+    200: Array<ContentTypeDtoModel>;
 };
 
-export type GetIndexByIdResponse = IndexConfigurationModel;
+export type GetContentTypesResponse = GetContentTypesResponses[keyof GetContentTypesResponses];
 
-export type SearchData = {
-    indexId: number;
-    query?: string;
+export type GetSearchContentTypeIndexByIdData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/umbraco/algolia-search/management/api/v1/search/content-type/index/{id}';
 };
 
-export type SearchResponse = ResponseModel;
-
-export type BuildIndexData = {
-    requestBody?: IndexConfigurationModel;
+export type GetSearchContentTypeIndexByIdErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
 };
 
-export type BuildIndexResponse = ResultModel;
+export type GetSearchContentTypeIndexByIdResponses = {
+    /**
+     * OK
+     */
+    200: Array<ContentTypeDtoModel>;
+};
 
-export type $OpenApiTs = {
-    '/umbraco/algolia-search/management/api/v1/search/content-type': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: Array<(ContentTypeDtoModel)>;
-            };
-        };
+export type GetSearchContentTypeIndexByIdResponse = GetSearchContentTypeIndexByIdResponses[keyof GetSearchContentTypeIndexByIdResponses];
+
+export type GetIndicesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/algolia-search/management/api/v1/search/index';
+};
+
+export type GetIndicesErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetIndicesResponses = {
+    /**
+     * OK
+     */
+    200: Array<IndexConfigurationModel>;
+};
+
+export type GetIndicesResponse = GetIndicesResponses[keyof GetIndicesResponses];
+
+export type PostSaveIndexData = {
+    body?: IndexConfigurationModel;
+    path?: never;
+    query?: never;
+    url: '/umbraco/algolia-search/management/api/v1/search/index';
+};
+
+export type PostSaveIndexErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type PostSaveIndexResponses = {
+    /**
+     * OK
+     */
+    200: ResultModelReadable;
+};
+
+export type PostSaveIndexResponse = PostSaveIndexResponses[keyof PostSaveIndexResponses];
+
+export type DeleteSearchIndexData = {
+    body?: never;
+    path: {
+        id: number;
     };
-    '/umbraco/algolia-search/management/api/v1/search/content-type/index/{id}': {
-        get: {
-            req: GetContentTypesByIndexIdData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: Array<(ContentTypeDtoModel)>;
-            };
-        };
+    query?: never;
+    url: '/umbraco/algolia-search/management/api/v1/search/index/{id}';
+};
+
+export type DeleteSearchIndexErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type DeleteSearchIndexResponses = {
+    /**
+     * OK
+     */
+    200: ResultModelReadable;
+};
+
+export type DeleteSearchIndexResponse = DeleteSearchIndexResponses[keyof DeleteSearchIndexResponses];
+
+export type GetSearchIndexByIdData = {
+    body?: never;
+    path: {
+        id: number;
     };
-    '/umbraco/algolia-search/management/api/v1/search/index': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: Array<(IndexConfigurationModel)>;
-            };
-        };
-        post: {
-            req: SaveIndexData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: ResultModel;
-            };
-        };
+    query?: never;
+    url: '/umbraco/algolia-search/management/api/v1/search/index/{id}';
+};
+
+export type GetSearchIndexByIdErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetSearchIndexByIdResponses = {
+    /**
+     * OK
+     */
+    200: IndexConfigurationModel;
+};
+
+export type GetSearchIndexByIdResponse = GetSearchIndexByIdResponses[keyof GetSearchIndexByIdResponses];
+
+export type GetSearchIndexData = {
+    body?: never;
+    path: {
+        indexId: number;
     };
-    '/umbraco/algolia-search/management/api/v1/search/index/{id}': {
-        delete: {
-            req: DeleteIndexData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: ResultModel;
-            };
-        };
-        get: {
-            req: GetIndexByIdData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: IndexConfigurationModel;
-            };
-        };
+    query?: {
+        query?: string;
     };
-    '/umbraco/algolia-search/management/api/v1/search/index/{indexId}/search': {
-        get: {
-            req: SearchData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: ResponseModel;
-            };
-        };
-    };
-    '/umbraco/algolia-search/management/api/v1/search/index/build': {
-        post: {
-            req: BuildIndexData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: ResultModel;
-            };
-        };
-    };
+    url: '/umbraco/algolia-search/management/api/v1/search/index/{indexId}/search';
+};
+
+export type GetSearchIndexErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetSearchIndexResponses = {
+    /**
+     * OK
+     */
+    200: ResponseModel;
+};
+
+export type GetSearchIndexResponse = GetSearchIndexResponses[keyof GetSearchIndexResponses];
+
+export type PostBuildSearchIndexData = {
+    body?: IndexConfigurationModel;
+    path?: never;
+    query?: never;
+    url: '/umbraco/algolia-search/management/api/v1/search/index/build';
+};
+
+export type PostBuildSearchIndexErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type PostBuildSearchIndexResponses = {
+    /**
+     * OK
+     */
+    200: ResultModelReadable;
+};
+
+export type PostBuildSearchIndexResponse = PostBuildSearchIndexResponses[keyof PostBuildSearchIndexResponses];
+
+export type ClientOptions = {
+    baseUrl: 'http://localhost:58030' | (string & {});
 };

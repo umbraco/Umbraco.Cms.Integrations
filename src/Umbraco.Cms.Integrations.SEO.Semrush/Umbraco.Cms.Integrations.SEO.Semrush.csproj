@@ -58,14 +58,14 @@
 	  <EmbeddedResource Include="EmbeddedResources\semrushDataSources.json" />
 	</ItemGroup>
 
-	 <!--Build client assets using NPM--> 
+	<!-- Build client assets using NPM -->
 	<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
 	<PropertyGroup>
-		 <!--Use this to (temporarily) disable building client assets, e.g. to start the project and generate updated API models--> 
+		<!-- Use this to (temporarily) disable building client assets, e.g. to start the project and generate updated API models -->
 		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
 	</PropertyGroup>
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
-		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '$(Configuration)' !== 'Release' ? '../wwwroot' : '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
+		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
 	</Target>
 
 	<!-- Update umbraco-package.json files with current build version after client assets build -->

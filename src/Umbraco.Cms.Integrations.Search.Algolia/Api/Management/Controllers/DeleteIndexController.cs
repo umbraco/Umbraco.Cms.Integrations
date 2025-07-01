@@ -8,7 +8,6 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers;
 
 [ApiVersion("1.0")]
-[ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
 public class DeleteIndexController : SearchControllerBase
 {
     private readonly IAlgoliaIndexService _indexService;
@@ -22,7 +21,7 @@ public class DeleteIndexController : SearchControllerBase
         _indexStorage = indexStorage;
     }
 
-    [HttpDelete("index/{id:int}")]
+    [HttpDelete("index/{id:int}", Name = Constants.OperationIds.DeleteSearchIndex)]
     [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteIndex(int id)
     {
