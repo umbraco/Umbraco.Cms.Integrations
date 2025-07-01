@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
-
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
@@ -7,6 +6,7 @@
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<EnableDefaultContentItems>false</EnableDefaultContentItems>
 		<StaticWebAssetBasePath>/App_Plugins/Shopify</StaticWebAssetBasePath>
+		<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -14,17 +14,13 @@
 		<Title>Umbraco CMS Integrations: Commerce - Shopify</Title>
 		<Description>An extension for Umbraco CMS providing a products picker and rendering component for Shopify.</Description>
 		<PackageIconUrl></PackageIconUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main-v16/src/Umbraco.Cms.Integrations.Commerce.Shopify</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main-v14/src/Umbraco.Cms.Integrations.Commerce.Shopify</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>4.0.0</Version>
+		<Version>3.1.0</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageIcon>shopify.png</PackageIcon>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<UmbracoCmsPackageVersion>[16.0.0, 17)</UmbracoCmsPackageVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -33,9 +29,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Api.Common" Version="$(UmbracoCmsPackageVersion)" />
-		<PackageReference Include="Umbraco.Cms.Api.Management" Version="$(UmbracoCmsPackageVersion)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="$(UmbracoCmsPackageVersion)" />
+		<PackageReference Include="Umbraco.Cms.Api.Common" Version="[15.0.0, 16)" />
+		<PackageReference Include="Umbraco.Cms.Api.Management" Version="[15.0.0, 16)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[15.0.0, 16)" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -60,15 +56,6 @@
 		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
 	</PropertyGroup>
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
-		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '$(Configuration)' !== 'Release' ? '../wwwroot' : '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
+		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
 	</Target>
-
-	<!-- Update umbraco-package.json files with current build version after client assets build -->
-	<Target Name="UpdatePackageManifestVersion" DependsOnTargets="ClientAssetsBuild" AfterTargets="GetBuildVersion;GetUmbracoBuildVersion">
-		<ItemGroup>
-			<_PackageManifestFiles Include="$(IntermediateOutputPath)clientassets\**\umbraco-package.json" />
-		</ItemGroup>
-		<JsonPathUpdateValue JsonFile="%(_PackageManifestFiles.FullPath)" Path="$.version" Value="&quot;$(PackageVersion)&quot;" />
-	</Target>
-
 </Project>
