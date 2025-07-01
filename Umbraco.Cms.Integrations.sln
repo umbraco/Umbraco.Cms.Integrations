@@ -5,55 +5,55 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2801CB6C-78DE-4129-B5C6-D349F47F9B5C}"
 	ProjectSection(SolutionItems) = preProject
-		..\azure-pipeline - Crm.ActiveCampaign.yml = ..\azure-pipeline - Crm.ActiveCampaign.yml
-		..\azure-pipeline - Crm.Dynamics.yml = ..\azure-pipeline - Crm.Dynamics.yml
-		..\azure-pipeline - Crm.Hubspot.yml = ..\azure-pipeline - Crm.Hubspot.yml
-		..\azure-pipeline - Search.Algolia.yml = ..\azure-pipeline - Search.Algolia.yml
-		..\azure-pipeline - SEO.SemrushTools.yml = ..\azure-pipeline - SEO.SemrushTools.yml
-		..\azure-pipelines - Automation.Zapier.yml = ..\azure-pipelines - Automation.Zapier.yml
-		..\azure-pipelines - Commerce.Shopify.yml = ..\azure-pipelines - Commerce.Shopify.yml
-		..\README.md = ..\README.md
+		azure-pipeline - Crm.ActiveCampaign.yml = azure-pipeline - Crm.ActiveCampaign.yml
+		azure-pipeline - Crm.Dynamics.yml = azure-pipeline - Crm.Dynamics.yml
+		azure-pipeline - Crm.Hubspot.yml = azure-pipeline - Crm.Hubspot.yml
+		azure-pipeline - Search.Algolia.yml = azure-pipeline - Search.Algolia.yml
+		azure-pipeline - SEO.SemrushTools.yml = azure-pipeline - SEO.SemrushTools.yml
+		azure-pipelines - Automation.Zapier.yml = azure-pipelines - Automation.Zapier.yml
+		azure-pipelines - Commerce.Shopify.yml = azure-pipelines - Commerce.Shopify.yml
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Search", "Search", "{F56605AE-2258-4F61-B454-4247334DFC26}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Algolia", "Algolia", "{F2CAA1F7-9BED-4EB6-8875-D176B92D393A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Search.Algolia", "Umbraco.Cms.Integrations.Search.Algolia\Umbraco.Cms.Integrations.Search.Algolia.csproj", "{434608E7-143B-4761-A7E9-328DF0CFAB89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Search.Algolia", "src\Umbraco.Cms.Integrations.Search.Algolia\Umbraco.Cms.Integrations.Search.Algolia.csproj", "{434608E7-143B-4761-A7E9-328DF0CFAB89}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Automation", "Automation", "{6A1E1D13-8EDE-4016-9355-4C59807701DE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zapier", "Zapier", "{6AA47D4A-5876-4E66-982B-BA67AF6C5DF9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Automation.Zapier", "Umbraco.Cms.Integrations.Automation.Zapier\Umbraco.Cms.Integrations.Automation.Zapier.csproj", "{5EED84C5-432F-49F2-A119-3FE6D3E6BBDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Automation.Zapier", "src\Umbraco.Cms.Integrations.Automation.Zapier\Umbraco.Cms.Integrations.Automation.Zapier.csproj", "{5EED84C5-432F-49F2-A119-3FE6D3E6BBDF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Crm", "Crm", "{8736740E-72E9-4249-803C-7254D5F08BD4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HubSpot", "HubSpot", "{9D18B109-4E18-4EEC-B5BE-DAA27CADEAC0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.Hubspot", "Umbraco.Cms.Integrations.Crm.Hubspot\Umbraco.Cms.Integrations.Crm.Hubspot.csproj", "{3ACC56EC-1A65-4A63-8DB4-428D8D2A6380}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.Hubspot", "src\Umbraco.Cms.Integrations.Crm.Hubspot\Umbraco.Cms.Integrations.Crm.Hubspot.csproj", "{3ACC56EC-1A65-4A63-8DB4-428D8D2A6380}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commerce", "Commerce", "{712BCE87-E004-479D-BB49-6BA287ED1B5D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shopify", "Shopify", "{D04EE8B1-1354-4B59-A224-646643A4E345}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Commerce.Shopify", "Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj", "{1D1A9DC0-DB6B-4979-92B6-EAD1F992F1AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Commerce.Shopify", "src\Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj", "{1D1A9DC0-DB6B-4979-92B6-EAD1F992F1AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.ActiveCampaign", "Umbraco.Cms.Integrations.Crm.ActiveCampaign\Umbraco.Cms.Integrations.Crm.ActiveCampaign.csproj", "{82B04954-4701-4518-B2A3-B8B4A37A416C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.ActiveCampaign", "src\Umbraco.Cms.Integrations.Crm.ActiveCampaign\Umbraco.Cms.Integrations.Crm.ActiveCampaign.csproj", "{82B04954-4701-4518-B2A3-B8B4A37A416C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ActiveCampaign", "ActiveCampaign", "{2D127526-7EC2-4D3A-96D3-6F063403E493}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dynamics", "Dynamics", "{BF22D815-616E-49D5-93EB-18FCE975D3BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.Dynamics", "Umbraco.Cms.Integrations.Crm.Dynamics\Umbraco.Cms.Integrations.Crm.Dynamics.csproj", "{02566D6E-91EB-47AD-9964-9A8FC1837F4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Umbraco.Cms.Integrations.Crm.Dynamics", "src\Umbraco.Cms.Integrations.Crm.Dynamics\Umbraco.Cms.Integrations.Crm.Dynamics.csproj", "{02566D6E-91EB-47AD-9964-9A8FC1837F4B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SEO", "SEO", "{50F83E07-6690-4EF2-AF4D-A1DE8C73E409}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Semrush", "Semrush", "{C46C55B4-4AA8-47F1-BAFE-B06161A10E9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.SEO.Semrush", "Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj", "{07922A29-9776-4377-A500-2540E56AA3EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.SEO.Semrush", "src\Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj", "{07922A29-9776-4377-A500-2540E56AA3EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Testsite.V16", "Umbraco.Cms.Integrations.Testsite.V16\Umbraco.Cms.Integrations.Testsite.V16.csproj", "{B7C9C7C5-E354-4080-A74D-AD8BC6C397DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Testsite.V16", "examples\Umbraco.Cms.Integrations.Testsite.V16\Umbraco.Cms.Integrations.Testsite.V16.csproj", "{B7C9C7C5-E354-4080-A74D-AD8BC6C397DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
