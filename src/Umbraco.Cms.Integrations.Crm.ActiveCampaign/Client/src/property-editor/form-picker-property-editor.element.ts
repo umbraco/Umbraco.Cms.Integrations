@@ -46,8 +46,6 @@ export default class ActiveCampaignFormPickerElement extends UmbElementMixin(Lit
         const { data } = await this.#activecampaignFormsContext.getForm(this.value);
         if (!data) return;
 
-        console.log(data);
-
         this._form = {
             id: data.form.id,
             name: data.form.name
