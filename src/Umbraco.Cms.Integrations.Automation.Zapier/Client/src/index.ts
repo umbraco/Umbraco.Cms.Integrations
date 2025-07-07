@@ -2,7 +2,8 @@ import type { UmbEntryPointOnInit } from "@umbraco-cms/backoffice/extension-api"
 import { UMB_AUTH_CONTEXT } from "@umbraco-cms/backoffice/auth";
 import { manifest as zapierContext } from "./context/manifests";
 import { manifests as zapierDashboard } from "./dashboard/manifests";
-import { OpenAPI } from "@umbraco-integrations/zapier/generated";
+import { client } from "@umbraco-integrations/zapier/generated";
+import { umbHttpClient } from "@umbraco-cms/backoffice/http-client";
 
 export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
     extensionRegistry.registerMany([
@@ -10,10 +11,9 @@ export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
         ...zapierDashboard
     ]);
 
-    host.consumeContext(UMB_AUTH_CONTEXT, async (instance) => {
-        const umbOpenApi = instance.getOpenApiConfiguration();
-        OpenAPI.TOKEN = umbOpenApi.token;
-        OpenAPI.BASE = umbOpenApi.base;
-        OpenAPI.WITH_CREDENTIALS = true;
-      });
+    host.consumeContext(UMB_AUTH_CONTEXT, async (auth) => {
+        if (!auth) return;
+
+        client.setConfig(umbHttpClient.getConfig());
+    });
 }

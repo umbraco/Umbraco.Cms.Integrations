@@ -39,9 +39,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
             _umbracoHelper = umbracoHelper;
         }
 
-        [HttpGet("content-type/{alias}/content")]
+        [HttpGet("content-type/{alias}/content", Name = Constants.OperationIdentifiers.GetContentByType)]
         [ProducesResponseType(typeof(List<Dictionary<string, string>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetContentByContentType(string alias)
         {
             if (!IsAccessValid())
