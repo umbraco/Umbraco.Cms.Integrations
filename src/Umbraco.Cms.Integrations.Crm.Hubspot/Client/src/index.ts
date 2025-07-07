@@ -5,7 +5,8 @@ import { manifests as hubspotPropertyEditor } from "./property-editor/manifests.
 import { manifest as hubspotContext } from "./context/manifest.js";
 import { manifest as hubspotModal } from "./modal/manifest.js";
 
-import { OpenAPI } from "@umbraco-integrations/hubspot-forms/generated";
+import { client } from "@umbraco-integrations/hubspot-forms/generated";
+import { umbHttpClient } from "@umbraco-cms/backoffice/http-client";
 
 export * from "./property-editor/index.js";
 
@@ -16,10 +17,9 @@ export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
     hubspotModal,
   ]);
 
-  host.consumeContext(UMB_AUTH_CONTEXT, async (instance) => {
-    const umbOpenApi = instance.getOpenApiConfiguration();
-    OpenAPI.TOKEN = umbOpenApi.token;
-    OpenAPI.BASE = umbOpenApi.base;
-    OpenAPI.WITH_CREDENTIALS = true;
+  host.consumeContext(UMB_AUTH_CONTEXT, async (auth) => {
+      if (!auth) return;
+
+      client.setConfig(umbHttpClient.getConfig());
   });
 };

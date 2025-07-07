@@ -1,6 +1,6 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
-import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
+import { tryExecute } from "@umbraco-cms/backoffice/resources";
 import { ZapierService } from "@umbraco-integrations/zapier/generated";
 
 export class ZapierRepository extends UmbControllerBase {
@@ -8,8 +8,8 @@ export class ZapierRepository extends UmbControllerBase {
         super(host);
     }
 
-    async getAll(){
-        const { data, error } = await tryExecuteAndNotify(this, ZapierService.getAll());
+    async getAll() {
+        const { data, error } = await tryExecute(this, ZapierService.getSubscriptionHooks());
 
         if (error || !data) {
             return { error };
@@ -19,8 +19,10 @@ export class ZapierRepository extends UmbControllerBase {
     }
 
     async getContentByType(alias: string) {
-        const { data, error } = await tryExecuteAndNotify(this, ZapierService.getContentByContentType({
-            alias: alias
+        const { data, error } = await tryExecute(this, ZapierService.getContentByType({
+            path: {
+                alias
+            }
         }));
 
         if (error || !data) {
@@ -31,7 +33,7 @@ export class ZapierRepository extends UmbControllerBase {
     }
 
     async getContentTypes() {
-        const { data, error } = await tryExecuteAndNotify(this, ZapierService.getContentTypes());
+        const { data, error } = await tryExecute(this, ZapierService.getContentTypes());
 
         if (error || !data) {
             return { error };
@@ -41,7 +43,7 @@ export class ZapierRepository extends UmbControllerBase {
     }
 
     async checkFormsExtensionInstalled() {
-        const { data, error } = await tryExecuteAndNotify(this, ZapierService.checkFormsExtensionInstalled());
+        const { data, error } = await tryExecute(this, ZapierService.getCheckFormExtension());
 
         if (error || !data) {
             return { error };
@@ -50,8 +52,8 @@ export class ZapierRepository extends UmbControllerBase {
         return { data };
     }
 
-    async updatePreferences(){
-        const { data, error } = await tryExecuteAndNotify(this, ZapierService.updatePreferences());
+    async updatePreferences() {
+        const { data, error } = await tryExecute(this, ZapierService.postUpdateSubscription());
 
         if (error || !data) {
             return { error };
@@ -61,7 +63,7 @@ export class ZapierRepository extends UmbControllerBase {
     }
 
     async validateUser() {
-        const { data, error } = await tryExecuteAndNotify(this, ZapierService.validate());
+        const { data, error } = await tryExecute(this, ZapierService.postValidateUser());
 
         if (error || !data) {
             return { error };

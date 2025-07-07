@@ -4,9 +4,13 @@ export type ConfigurationTypeModel = {
     readonly value: string;
 };
 
-export type EditorSettingsModel = {
+export type EditorSettingsModelReadable = {
     isValid: boolean;
     type: ConfigurationTypeModel;
+};
+
+export type EditorSettingsModelWritable = {
+    isValid: boolean;
 };
 
 export enum EventMessageTypeModel {
@@ -30,16 +34,20 @@ export type OAuthRequestDtoModel = {
 export type ProductDtoModel = {
     id: number;
     title: string;
-    body: string;
+    body_html: string;
     vendor: string;
     status: string;
     tags: string;
-    variants: Array<(ProductVariantDtoModel)>;
+    variants: Array<ProductVariantDtoModel>;
     image: ProductImageDtoModel;
+    product_type: string;
+    published_scope: string;
+    handle: string;
 };
 
 export type ProductImageDtoModel = {
     src: string;
+    alt: string;
 };
 
 export type ProductVariantDtoModel = {
@@ -47,16 +55,17 @@ export type ProductVariantDtoModel = {
     sku: string;
     position: number;
     barcode: string;
-    inventoryQuantity: number;
+    inventory_quantity: number;
+    taxable: boolean;
 };
 
 export type ProductsListDtoModel = {
-    products: Array<(ProductDtoModel)>;
+    products: Array<ProductDtoModel>;
     totalPages: number;
 };
 
 export type RequestDtoModel = {
-    ids: Array<(string)>;
+    ids: Array<number>;
 };
 
 export type ResponseDtoProductsListDtoModel = {
@@ -70,164 +79,213 @@ export type ResponseDtoProductsListDtoModel = {
     take: number;
 };
 
-export type GetAccessTokenData = {
-    requestBody?: OAuthRequestDtoModel;
+export type PostAccessTokenData = {
+    body?: OAuthRequestDtoModel;
+    path?: never;
+    query?: never;
+    url: '/umbraco/shopify/management/api/v1/access-token';
 };
 
-export type GetAccessTokenResponse = string;
+export type PostAccessTokenErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
 
-export type GetAuthorizationUrlResponse = string;
+export type PostAccessTokenResponses = {
+    /**
+     * OK
+     */
+    200: string;
+};
 
-export type CheckConfigurationResponse = EditorSettingsModel;
+export type PostAccessTokenResponse = PostAccessTokenResponses[keyof PostAccessTokenResponses];
+
+export type GetAuthorizationUrlData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/shopify/management/api/v1/authorization-url';
+};
+
+export type GetAuthorizationUrlErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetAuthorizationUrlResponses = {
+    /**
+     * OK
+     */
+    200: string;
+};
+
+export type GetAuthorizationUrlResponse = GetAuthorizationUrlResponses[keyof GetAuthorizationUrlResponses];
+
+export type GetCheckConfigurationData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/shopify/management/api/v1/check-configuration';
+};
+
+export type GetCheckConfigurationErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetCheckConfigurationResponses = {
+    /**
+     * OK
+     */
+    200: EditorSettingsModelReadable;
+};
+
+export type GetCheckConfigurationResponse = GetCheckConfigurationResponses[keyof GetCheckConfigurationResponses];
 
 export type GetListData = {
-    pageInfo?: string;
+    body?: never;
+    path?: never;
+    query?: {
+        pageInfo?: string;
+    };
+    url: '/umbraco/shopify/management/api/v1/list';
 };
 
-export type GetListResponse = ResponseDtoProductsListDtoModel;
-
-export type GetListByIdsData = {
-    requestBody?: RequestDtoModel;
+export type GetListErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
 };
 
-export type GetListByIdsResponse = ResponseDtoProductsListDtoModel;
+export type GetListResponses = {
+    /**
+     * OK
+     */
+    200: ResponseDtoProductsListDtoModel;
+};
 
-export type RefreshAccessTokenResponse = string;
+export type GetListResponse = GetListResponses[keyof GetListResponses];
 
-export type RevokeAccessTokenResponse = string;
+export type PostListByIdsData = {
+    body?: RequestDtoModel;
+    path?: never;
+    query?: never;
+    url: '/umbraco/shopify/management/api/v1/list-by-ids';
+};
 
-export type GetTotalPagesResponse = number;
+export type PostListByIdsErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
 
-export type ValidateAccessTokenResponse = ResponseDtoProductsListDtoModel;
+export type PostListByIdsResponses = {
+    /**
+     * OK
+     */
+    200: ResponseDtoProductsListDtoModel;
+};
 
-export type $OpenApiTs = {
-    '/umbraco/shopify/management/api/v1/access-token': {
-        post: {
-            req: GetAccessTokenData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: string;
-                /**
-                 * The resource is protected and requires an authentication token
-                 */
-                401: unknown;
-            };
-        };
-    };
-    '/umbraco/shopify/management/api/v1/authorization-url': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: string;
-                /**
-                 * The resource is protected and requires an authentication token
-                 */
-                401: unknown;
-            };
-        };
-    };
-    '/umbraco/shopify/management/api/v1/check-configuration': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: EditorSettingsModel;
-                /**
-                 * The resource is protected and requires an authentication token
-                 */
-                401: unknown;
-            };
-        };
-    };
-    '/umbraco/shopify/management/api/v1/list': {
-        get: {
-            req: GetListData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: ResponseDtoProductsListDtoModel;
-                /**
-                 * The resource is protected and requires an authentication token
-                 */
-                401: unknown;
-            };
-        };
-    };
-    '/umbraco/shopify/management/api/v1/list-by-ids': {
-        post: {
-            req: GetListByIdsData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: ResponseDtoProductsListDtoModel;
-                /**
-                 * The resource is protected and requires an authentication token
-                 */
-                401: unknown;
-            };
-        };
-    };
-    '/umbraco/shopify/management/api/v1/refresh-access-token': {
-        post: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: string;
-                /**
-                 * The resource is protected and requires an authentication token
-                 */
-                401: unknown;
-            };
-        };
-    };
-    '/umbraco/shopify/management/api/v1/revoke-access-token': {
-        post: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: string;
-                /**
-                 * The resource is protected and requires an authentication token
-                 */
-                401: unknown;
-            };
-        };
-    };
-    '/umbraco/shopify/management/api/v1/total-pages': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: number;
-                /**
-                 * The resource is protected and requires an authentication token
-                 */
-                401: unknown;
-            };
-        };
-    };
-    '/umbraco/shopify/management/api/v1/validate-access-token': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: ResponseDtoProductsListDtoModel;
-                /**
-                 * The resource is protected and requires an authentication token
-                 */
-                401: unknown;
-            };
-        };
-    };
+export type PostListByIdsResponse = PostListByIdsResponses[keyof PostListByIdsResponses];
+
+export type PostRefreshAccessTokenData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/shopify/management/api/v1/refresh-access-token';
+};
+
+export type PostRefreshAccessTokenErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type PostRefreshAccessTokenResponses = {
+    /**
+     * OK
+     */
+    200: string;
+};
+
+export type PostRefreshAccessTokenResponse = PostRefreshAccessTokenResponses[keyof PostRefreshAccessTokenResponses];
+
+export type PostRevokeAccessTokenData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/shopify/management/api/v1/revoke-access-token';
+};
+
+export type PostRevokeAccessTokenErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type PostRevokeAccessTokenResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
+
+export type GetTotalPagesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/shopify/management/api/v1/total-pages';
+};
+
+export type GetTotalPagesErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetTotalPagesResponses = {
+    /**
+     * OK
+     */
+    200: number;
+};
+
+export type GetTotalPagesResponse = GetTotalPagesResponses[keyof GetTotalPagesResponses];
+
+export type GetValidateAccessTokenData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/shopify/management/api/v1/validate-access-token';
+};
+
+export type GetValidateAccessTokenErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetValidateAccessTokenResponses = {
+    /**
+     * OK
+     */
+    200: ResponseDtoProductsListDtoModel;
+};
+
+export type GetValidateAccessTokenResponse = GetValidateAccessTokenResponses[keyof GetValidateAccessTokenResponses];
+
+export type ClientOptions = {
+    baseUrl: 'http://localhost:30450' | (string & {});
 };

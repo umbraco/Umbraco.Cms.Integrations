@@ -5,10 +5,16 @@ export type ApiAccessDtoModel = {
     readonly isApiConfigurationValid: boolean;
 };
 
-export type FormCollectionResponseDtoModel = {
+export type FormCollectionResponseDtoModelReadable = {
     message: string;
-    forms: Array<(FormDtoModel)>;
-    meta: MetaDtoModel;
+    forms: Array<FormDtoModel>;
+    meta: MetaDtoModelReadable;
+};
+
+export type FormCollectionResponseDtoModelWritable = {
+    message: string;
+    forms: Array<FormDtoModel>;
+    meta: MetaDtoModelWritable;
 };
 
 export type FormDtoModel = {
@@ -21,56 +27,116 @@ export type FormResponseDtoModel = {
     form: FormDtoModel;
 };
 
-export type MetaDtoModel = {
+export type MetaDtoModelReadable = {
     total: string;
     readonly totalPages: number;
 };
 
-export type CheckApiAccessResponse = ApiAccessDtoModel;
+export type MetaDtoModelWritable = {
+    total: string;
+};
+
+export type GetApiAccessData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/activecampaign-forms/management/api/v1/api-access';
+};
+
+export type GetApiAccessErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetApiAccessResponses = {
+    /**
+     * OK
+     */
+    200: ApiAccessDtoModel;
+};
+
+export type GetApiAccessResponse = GetApiAccessResponses[keyof GetApiAccessResponses];
 
 export type GetFormsData = {
-    page?: number;
+    body?: never;
+    path?: never;
+    query?: {
+        page?: number;
+    };
+    url: '/umbraco/activecampaign-forms/management/api/v1/forms';
 };
 
-export type GetFormsResponse = FormCollectionResponseDtoModel;
-
-export type GetFormData = {
-    id: string;
+export type GetFormsErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+    /**
+     * Payment Required
+     */
+    402: unknown;
+    /**
+     * Forbidden
+     */
+    403: unknown;
+    /**
+     * Not Found
+     */
+    404: unknown;
+    /**
+     * Internal Server Error
+     */
+    500: unknown;
 };
 
-export type GetFormResponse = FormResponseDtoModel;
+export type GetFormsResponses = {
+    /**
+     * OK
+     */
+    200: FormCollectionResponseDtoModelReadable;
+};
 
-export type $OpenApiTs = {
-    '/umbraco/activecampaign-forms/management/api/v1/api-access': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: ApiAccessDtoModel;
-            };
-        };
+export type GetFormsResponse = GetFormsResponses[keyof GetFormsResponses];
+
+export type GetFormsByIdData = {
+    body?: never;
+    path: {
+        id: string;
     };
-    '/umbraco/activecampaign-forms/management/api/v1/forms': {
-        get: {
-            req: GetFormsData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: FormCollectionResponseDtoModel;
-            };
-        };
-    };
-    '/umbraco/activecampaign-forms/management/api/v1/forms/{id}': {
-        get: {
-            req: GetFormData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: FormResponseDtoModel;
-            };
-        };
-    };
+    query?: never;
+    url: '/umbraco/activecampaign-forms/management/api/v1/forms/{id}';
+};
+
+export type GetFormsByIdErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+    /**
+     * Forbidden
+     */
+    403: unknown;
+    /**
+     * Not Found
+     */
+    404: unknown;
+    /**
+     * Internal Server Error
+     */
+    500: unknown;
+};
+
+export type GetFormsByIdResponses = {
+    /**
+     * OK
+     */
+    200: FormResponseDtoModel;
+};
+
+export type GetFormsByIdResponse = GetFormsByIdResponses[keyof GetFormsByIdResponses];
+
+export type ClientOptions = {
+    baseUrl: 'http://localhost:30450' | (string & {});
 };

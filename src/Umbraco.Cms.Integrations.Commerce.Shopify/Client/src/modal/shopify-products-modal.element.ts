@@ -2,7 +2,7 @@ import { UmbModalBaseElement } from "@umbraco-cms/backoffice/modal";
 import { SHOPIFY_CONTEXT_TOKEN } from "../context/shopify.context.js";
 import { UMB_NOTIFICATION_CONTEXT } from "@umbraco-cms/backoffice/notification";
 import { html, state, customElement, css, nothing } from "@umbraco-cms/backoffice/external/lit";
-import type { EditorSettingsModel, ProductDtoModel } from "../../generated";
+import type { EditorSettingsModelReadable, ProductDtoModel } from "../../generated";
 import type { ShopifyProductPickerModalData, ShopifyProductPickerModalValue } from "./shopify.modal-token.js";
 import type { ShopifyServiceStatus } from "../models/shopify-service.model.js";
 import type { UmbTableColumn, UmbTableConfig, UmbTableItem, UmbTableSelectedEvent, UmbTableElement, UmbTableDeselectedEvent, UmbTableItemData } from '@umbraco-cms/backoffice/components';
@@ -17,7 +17,7 @@ const elementName = "shopify-products-modal";
 @customElement(elementName)
 export default class ShopifyProductsModalElement extends UmbModalBaseElement<ShopifyProductPickerModalData, ShopifyProductPickerModalValue>{
     #shopifyContext!: typeof SHOPIFY_CONTEXT_TOKEN.TYPE;
-    #settingsModel?: EditorSettingsModel;
+    #settingsModel?: EditorSettingsModelReadable;
     #collectionContext!: UmbDefaultCollectionContext<ShopifyCollectionModel>;
     #paginationManager = new UmbPaginationManager();
     _modalSelectedProducts: Array<ProductDtoModel> = [];
@@ -114,6 +114,8 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         });
 
         this.consumeContext(UMB_COLLECTION_CONTEXT, (instance) => {
+            if (!instance) return;
+
 			this.#collectionContext = instance;
             this.observe(
 				this.#collectionContext.selection.selection,
@@ -301,13 +303,17 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
                 title: lstData[i].find(x => x.columnAlias == "productName")?.value,
                 vendor: lstData[i].find(x => x.columnAlias == "vendor")?.value,
                 id: Number(lstId[i]),
-                body: "",
+                body_html: "",
                 status: lstData[i].find(x => x.columnAlias == "status")?.value,
                 tags: lstData[i].find(x => x.columnAlias == "tags")?.value,
                 variants: [],
                 image: {
-                    src: ""
-                }
+                    src: "",
+                    alt: ""
+                },
+                product_type: "",
+                published_scope: "",
+                handle: "",
             }
 
             productList.push(dto);

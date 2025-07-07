@@ -29,6 +29,8 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
         super();
 
         this.consumeContext(ALGOLIA_CONTEXT_TOKEN, (context) => {
+            if (!context) return;
+
             this.#algoliaIndexContext = context;
         });
     }
@@ -51,6 +53,8 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
 
     async #onBuildIndex(index: IndexConfigurationModel) {
         const modalManagerContext = await this.getContext(UMB_MODAL_MANAGER_CONTEXT);
+        if (!modalManagerContext) return;
+
         const modalContext = modalManagerContext.open(
             this, UMB_CONFIRM_MODAL,
             {
@@ -78,6 +82,8 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
 
     async #onDeleteIndex(index: IndexConfigurationModel) {
         const modalManagerContext = await this.getContext(UMB_MODAL_MANAGER_CONTEXT);
+        if (!modalManagerContext) return;
+
         const modalContext = modalManagerContext.open(
             this, UMB_CONFIRM_MODAL,
             {

@@ -1,27 +1,31 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
-
-  <PropertyGroup>
-	  <TargetFramework>net9.0</TargetFramework>
-	  <Nullable>enable</Nullable>
-	  <ImplicitUsings>enable</ImplicitUsings>
-	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-	  <EnableDefaultContentItems>false</EnableDefaultContentItems>
-	  <StaticWebAssetBasePath>/App_Plugins/ActiveCampaignForms</StaticWebAssetBasePath>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<EnableDefaultContentItems>false</EnableDefaultContentItems>
+		<StaticWebAssetBasePath>/App_Plugins/ActiveCampaignForms</StaticWebAssetBasePath>
+		<CompressionEnabled>false</CompressionEnabled>
+	</PropertyGroup>
 
 	<PropertyGroup>
 		<PackageId>Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageId>
 		<Title>Umbraco CMS Integrations: CRM - ActiveCampaign</Title>
 		<Description>An extension for Umbraco CMS providing a form picker and rendering component for ActiveCampaign.</Description>
 		<PackageIconUrl></PackageIconUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main-v14/src/Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main-v16/src/Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>4.0.0</Version>
+		<Version>5.0.0</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
 		<PackageIcon>activecampaign.png</PackageIcon>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<UmbracoCmsPackageVersion>[16.0.0, 17)</UmbracoCmsPackageVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -30,9 +34,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Api.Common" Version="[15.0.0, 16)" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[15.0.0, 16)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[15.0.0, 16)" />
+		<PackageReference Include="Umbraco.Cms.Api.Common" Version="$(UmbracoCmsPackageVersion)" />
+		<PackageReference Include="Umbraco.Cms.Api.Management" Version="$(UmbracoCmsPackageVersion)"/>
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="$(UmbracoCmsPackageVersion)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="$(UmbracoCmsPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -57,6 +62,6 @@
 		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
 	</PropertyGroup>
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
-		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '$(Configuration)' !== 'Release' ? '../wwwroot' : '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
+		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
 	</Target>
 </Project>

@@ -1,7 +1,7 @@
 import { UmbLitElement } from '@umbraco-cms/backoffice/lit-element';
 import { css, html, nothing, customElement, state } from '@umbraco-cms/backoffice/external/lit';
 import { ZAPIER_CONTEXT_TOKEN } from '../context/zapier.context';
-import { SubscriptionDtoModel } from '@umbraco-integrations/zapier/generated';
+import { SubscriptionDtoModelReadable } from '@umbraco-integrations/zapier/generated';
 import type { UmbTableColumn, UmbTableItem } from '@umbraco-cms/backoffice/components';
 import { UUIPaginationEvent } from '@umbraco-cms/backoffice/external/uui';
 import { UmbPaginationManager } from "@umbraco-cms/backoffice/utils";
@@ -11,7 +11,7 @@ const elementName = "zapier-management-dashboard";
 export class ZapierManagementDashboardElement extends UmbLitElement {
     #zapierContext?: typeof ZAPIER_CONTEXT_TOKEN.TYPE;
     #paginationManager = new UmbPaginationManager();
-    #itemList: Array<SubscriptionDtoModel> = [];
+    #itemList: Array<SubscriptionDtoModelReadable> = [];
     #isFormsExtensionInstalled: boolean | undefined = false;
 
     @state()
@@ -75,7 +75,7 @@ export class ZapierManagementDashboardElement extends UmbLitElement {
         this.#isFormsExtensionInstalled = data.data;
     }
 
-    #createTableItems(subscriptionHooks: Array<SubscriptionDtoModel>) {
+    #createTableItems(subscriptionHooks: Array<SubscriptionDtoModelReadable>) {
         this._tableItems = subscriptionHooks.map((subscriptionHook) => {
 			return {
                 id: subscriptionHook.id.toString(),

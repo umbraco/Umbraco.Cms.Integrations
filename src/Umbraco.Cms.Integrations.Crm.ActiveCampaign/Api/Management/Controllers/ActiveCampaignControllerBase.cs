@@ -5,8 +5,8 @@ using System.Net;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Umbraco.Cms.Api.Common.Attributes;
+using Umbraco.Cms.Api.Common.Builders;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
-using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.Dtos;
 using Umbraco.Cms.Web.Common.Authorization;
 using Umbraco.Cms.Web.Common.Routing;
 
@@ -14,7 +14,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
 {
     [ApiController]
     [BackOfficeRoute($"{Constants.ManagementApi.RootPath}/v{{version:apiVersion}}")]
-    //[Authorize(Policy = AuthorizationPolicies.BackOfficeAccess)]
+    [Authorize(Policy = AuthorizationPolicies.BackOfficeAccess)]
     [MapToApi(Constants.ManagementApi.ApiName)]
     public class ActiveCampaignControllerBase : Controller
     {
@@ -55,7 +55,9 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
                     ? Constants.Resources.ApiAccessFailed
                     : responseMessage;
 
-            return StatusCode((int)httpResponse.StatusCode, message);
+            return StatusCode((int)httpResponse.StatusCode, new ProblemDetailsBuilder()
+                .WithTitle(message)
+                .Build());
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
             AuthorizationImplementationFactory authorizationImplementationFactory) 
             : base(settingsOptions) => _authorizationService = authorizationImplementationFactory(Settings.UseUmbracoAuthorization);
 
-        [HttpGet("authorization-url")]
+        [HttpGet("authorization-url", Name = Constants.OperationIdentifiers.GetAuthorizationUrl)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public IActionResult GetAuthorizationUrl() => Ok(_authorizationService.GetAuthorizationUrl());
     }

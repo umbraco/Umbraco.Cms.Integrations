@@ -12,6 +12,7 @@ using Umbraco.Cms.Web.Common.Routing;
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
 {
     [ApiController]
+    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
     [BackOfficeRoute($"{Constants.ManagementApi.RootPath}/v{{version:apiVersion}}/forms")]
     [Authorize(Policy = AuthorizationPolicies.BackOfficeAccess)]
     [MapToApi(Constants.ManagementApi.ApiName)]

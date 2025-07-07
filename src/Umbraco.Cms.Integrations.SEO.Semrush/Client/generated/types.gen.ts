@@ -29,7 +29,7 @@ export type ContentResult = {
 };
 
 export type DataSourceDtoModel = {
-    items: Array<(DataSourceItemDtoModel)>;
+    items: Array<DataSourceItemDtoModel>;
 };
 
 export type DataSourceItemDtoModel = {
@@ -54,11 +54,11 @@ export type NotificationHeaderModel = {
 };
 
 export type RelatedPhrasesDataDtoModel = {
-    columnNames: Array<(string)>;
-    rows: Array<Array<(string)>>;
+    columnNames: Array<string>;
+    rows: Array<Array<string>>;
 };
 
-export type RelatedPhrasesDtoModel = {
+export type RelatedPhrasesDtoModelReadable = {
     readonly isSuccessful: boolean;
     error: string;
     status: number;
@@ -66,7 +66,14 @@ export type RelatedPhrasesDtoModel = {
     totalPages: number;
 };
 
-export type TokenDtoModel = {
+export type RelatedPhrasesDtoModelWritable = {
+    error: string;
+    status: number;
+    data: RelatedPhrasesDataDtoModel;
+    totalPages: number;
+};
+
+export type TokenDtoModelReadable = {
     access_token: string;
     token_type: string;
     expires_in: number;
@@ -74,180 +81,304 @@ export type TokenDtoModel = {
     readonly isAccessTokenAvailable: boolean;
 };
 
-export type GetTokenDetailsResponse = TokenDtoModel;
-
-export type GetAccessTokenData = {
-    requestBody?: AuthorizationRequestDtoModel;
+export type TokenDtoModelWritable = {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    refresh_token: string;
 };
 
-export type GetAccessTokenResponse = string;
-
-export type RefreshAccessTokenResponse = string;
-
-export type RevokeTokenResponse = string;
-
-export type ValidateTokenResponse = AuthorizationResponseDtoModel;
-
-export type OauthData = {
-    code?: string;
+export type GetTokenDetailsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/semrush/management/api/v1/token/details';
 };
 
-export type OauthResponse = ContentResult;
-
-export type GetAuthorizationUrlResponse = string;
-
-export type GetColumnsResponse = Array<(ColumnDtoModel)>;
-
-export type GetCurrentContentPropertiesData = {
-    contentId?: string;
+export type GetTokenDetailsErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
 };
 
-export type GetCurrentContentPropertiesResponse = Array<(ContentPropertyDtoModel)>;
+export type GetTokenDetailsResponses = {
+    /**
+     * OK
+     */
+    200: TokenDtoModelReadable;
+};
 
-export type GetDataSourcesResponse = DataSourceDtoModel;
+export type GetTokenDetailsResponse = GetTokenDetailsResponses[keyof GetTokenDetailsResponses];
 
-export type PingResponse = string;
+export type PostTokenGetData = {
+    body?: AuthorizationRequestDtoModel;
+    path?: never;
+    query?: never;
+    url: '/umbraco/semrush/management/api/v1/token/get';
+};
+
+export type PostTokenGetErrors = {
+    /**
+     * Bad Request
+     */
+    400: string;
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type PostTokenGetError = PostTokenGetErrors[keyof PostTokenGetErrors];
+
+export type PostTokenGetResponses = {
+    /**
+     * OK
+     */
+    200: string;
+};
+
+export type PostTokenGetResponse = PostTokenGetResponses[keyof PostTokenGetResponses];
+
+export type PostTokenRefreshData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/semrush/management/api/v1/token/refresh';
+};
+
+export type PostTokenRefreshErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type PostTokenRefreshResponses = {
+    /**
+     * OK
+     */
+    200: string;
+};
+
+export type PostTokenRefreshResponse = PostTokenRefreshResponses[keyof PostTokenRefreshResponses];
+
+export type PostTokenRevokeData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/semrush/management/api/v1/token/revoke';
+};
+
+export type PostTokenRevokeErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type PostTokenRevokeResponses = {
+    /**
+     * OK
+     */
+    200: string;
+};
+
+export type PostTokenRevokeResponse = PostTokenRevokeResponses[keyof PostTokenRevokeResponses];
+
+export type GetTokenValidateData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/semrush/management/api/v1/token/validate';
+};
+
+export type GetTokenValidateErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetTokenValidateResponses = {
+    /**
+     * OK
+     */
+    200: AuthorizationResponseDtoModel;
+};
+
+export type GetTokenValidateResponse = GetTokenValidateResponses[keyof GetTokenValidateResponses];
+
+export type GetAuthData = {
+    body?: never;
+    path?: never;
+    query?: {
+        code?: string;
+    };
+    url: '/umbraco/semrush/management/api/v1/auth';
+};
+
+export type GetAuthErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetAuthResponses = {
+    /**
+     * OK
+     */
+    200: ContentResult;
+};
+
+export type GetAuthResponse = GetAuthResponses[keyof GetAuthResponses];
+
+export type GetAuthUrlData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/semrush/management/api/v1/auth/url';
+};
+
+export type GetAuthUrlErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetAuthUrlResponses = {
+    /**
+     * OK
+     */
+    200: string;
+};
+
+export type GetAuthUrlResponse = GetAuthUrlResponses[keyof GetAuthUrlResponses];
+
+export type GetColumnsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/semrush/management/api/v1/columns';
+};
+
+export type GetColumnsErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetColumnsResponses = {
+    /**
+     * OK
+     */
+    200: Array<ColumnDtoModel>;
+};
+
+export type GetColumnsResponse = GetColumnsResponses[keyof GetColumnsResponses];
+
+export type GetContentPropertiesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        contentId?: string;
+    };
+    url: '/umbraco/semrush/management/api/v1/content-properties';
+};
+
+export type GetContentPropertiesErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetContentPropertiesResponses = {
+    /**
+     * OK
+     */
+    200: Array<ContentPropertyDtoModel>;
+};
+
+export type GetContentPropertiesResponse = GetContentPropertiesResponses[keyof GetContentPropertiesResponses];
+
+export type GetDataSourcesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/semrush/management/api/v1/data-sources';
+};
+
+export type GetDataSourcesErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetDataSourcesResponses = {
+    /**
+     * OK
+     */
+    200: DataSourceDtoModel;
+};
+
+export type GetDataSourcesResponse = GetDataSourcesResponses[keyof GetDataSourcesResponses];
+
+export type GetPingData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/umbraco/semrush/management/api/v1/ping';
+};
+
+export type GetPingErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
+
+export type GetPingResponses = {
+    /**
+     * OK
+     */
+    200: string;
+};
+
+export type GetPingResponse = GetPingResponses[keyof GetPingResponses];
 
 export type GetRelatedPhrasesData = {
-    dataSource?: string;
-    method?: string;
-    pageNumber?: number;
-    phrase?: string;
+    body?: never;
+    path?: never;
+    query?: {
+        phrase?: string;
+        pageNumber?: number;
+        dataSource?: string;
+        method?: string;
+    };
+    url: '/umbraco/semrush/management/api/v1/related-phrases';
 };
 
-export type GetRelatedPhrasesResponse = RelatedPhrasesDtoModel;
+export type GetRelatedPhrasesErrors = {
+    /**
+     * The resource is protected and requires an authentication token
+     */
+    401: unknown;
+};
 
-export type $OpenApiTs = {
-    '/umbraco/semrush/management/api/v1/token/details': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: TokenDtoModel;
-            };
-        };
-    };
-    '/umbraco/semrush/management/api/v1/token/get': {
-        post: {
-            req: GetAccessTokenData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: string;
-                /**
-                 * Internal Server Error
-                 */
-                500: string;
-            };
-        };
-    };
-    '/umbraco/semrush/management/api/v1/token/refresh': {
-        post: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: string;
-            };
-        };
-    };
-    '/umbraco/semrush/management/api/v1/token/revoke': {
-        post: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: string;
-            };
-        };
-    };
-    '/umbraco/semrush/management/api/v1/token/validate': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: AuthorizationResponseDtoModel;
-                /**
-                 * Unauthorized
-                 */
-                401: AuthorizationResponseDtoModel;
-            };
-        };
-    };
-    '/umbraco/semrush/management/api/v1/auth': {
-        get: {
-            req: OauthData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: ContentResult;
-            };
-        };
-    };
-    '/umbraco/semrush/management/api/v1/auth/url': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: string;
-            };
-        };
-    };
-    '/umbraco/semrush/management/api/v1/columns': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: Array<(ColumnDtoModel)>;
-            };
-        };
-    };
-    '/umbraco/semrush/management/api/v1/content-properties': {
-        get: {
-            req: GetCurrentContentPropertiesData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: Array<(ContentPropertyDtoModel)>;
-            };
-        };
-    };
-    '/umbraco/semrush/management/api/v1/data-sources': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: DataSourceDtoModel;
-            };
-        };
-    };
-    '/umbraco/semrush/management/api/v1/ping': {
-        get: {
-            res: {
-                /**
-                 * OK
-                 */
-                200: string;
-            };
-        };
-    };
-    '/umbraco/semrush/management/api/v1/related-phrases': {
-        get: {
-            req: GetRelatedPhrasesData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: RelatedPhrasesDtoModel;
-            };
-        };
-    };
+export type GetRelatedPhrasesResponses = {
+    /**
+     * OK
+     */
+    200: RelatedPhrasesDtoModelReadable;
+};
+
+export type GetRelatedPhrasesResponse = GetRelatedPhrasesResponses[keyof GetRelatedPhrasesResponses];
+
+export type ClientOptions = {
+    baseUrl: 'http://localhost:30450' | (string & {});
 };

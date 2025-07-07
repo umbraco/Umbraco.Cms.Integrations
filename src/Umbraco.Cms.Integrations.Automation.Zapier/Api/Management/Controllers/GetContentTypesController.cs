@@ -25,7 +25,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
 
         [HttpGet("content-types")]
         [ProducesResponseType(typeof(IEnumerable<ContentTypeDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult GetContentTypes()
         {
             if (!IsAccessValid()) 

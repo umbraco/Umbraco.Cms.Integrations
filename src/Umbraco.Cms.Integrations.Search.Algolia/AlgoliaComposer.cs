@@ -2,9 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
+using Umbraco.Cms.Integrations.Search.Algolia.Api.Configuration;
 using Umbraco.Cms.Integrations.Search.Algolia.Builders;
 using Umbraco.Cms.Integrations.Search.Algolia.Configuration;
 using Umbraco.Cms.Integrations.Search.Algolia.Extensions;
@@ -51,9 +53,9 @@ namespace Umbraco.Cms.Integrations.Search.Algolia
                         Version = "Latest",
                         Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling indices."
                     });
-
-                options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
-            });
+                options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
+            })
+            .AddSingleton<IOperationIdHandler, AlgoliaOperationIdHandler>(); ;
         }
 
     }

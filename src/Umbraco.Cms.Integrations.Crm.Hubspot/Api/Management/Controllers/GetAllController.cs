@@ -12,7 +12,6 @@ using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
 {
     [ApiVersion("1.0")]
-    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
     public class GetAllController : HubspotFormsControllerBase
     {
         private readonly ILogger<GetAllController> _logger;
@@ -31,7 +30,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        [HttpGet("get")]
+        [HttpGet("get", Name = Constants.OperationIdentifiers.GetFormsByApiKey)]
         [ProducesResponseType(typeof(ResponseDto), StatusCodes.Status200OK)]
         public async Task<ResponseDto> GetAll()
         {

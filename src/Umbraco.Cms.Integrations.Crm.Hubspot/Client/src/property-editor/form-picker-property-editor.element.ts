@@ -7,7 +7,7 @@ import {
 import { HUBSPOT_FORMS_MODAL_TOKEN } from "../modal/hubspot.modal-token.js";
 import { ConfigDescription, type HubspotServiceStatus } from "../models/hubspot-service.model.js";
 import { HUBSPOT_FORMS_CONTEXT_TOKEN } from "@umbraco-integrations/hubspot-forms/context";
-import type { HubspotFormDtoModel, HubspotFormPickerSettingsModel } from "@umbraco-integrations/hubspot-forms/generated";
+import type { HubspotFormDtoModel, HubspotFormPickerSettingsModelReadable } from "@umbraco-integrations/hubspot-forms/generated";
 
 const elementName = "hubspot-form-picker";
 
@@ -15,13 +15,19 @@ const elementName = "hubspot-form-picker";
 export class HubspotFormPickerElement extends UmbElementMixin(LitElement) {
 
     #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
-    #settingsModel?: HubspotFormPickerSettingsModel;
+    #settingsModel?: HubspotFormPickerSettingsModelReadable;
 
     @property({ type: String })
     public value = "";
 
     @state()
-    private _form: HubspotFormDtoModel = {};
+    private _form: HubspotFormDtoModel = {
+        name: "",
+        id: "",
+        fields: "",
+        portalId: "",
+        region: ""
+    };
 
     @state()
     private _serviceStatus: HubspotServiceStatus = {
@@ -66,7 +72,9 @@ export class HubspotFormPickerElement extends UmbElementMixin(LitElement) {
         this._form = {
             id: dto.id,
             name: dto.name,
-            fields: dto.fields
+            fields: dto.fields,
+            portalId: dto.portalId,
+            region: dto.region
         };
     }
 
@@ -88,7 +96,9 @@ export class HubspotFormPickerElement extends UmbElementMixin(LitElement) {
         this._form = {
             id: data.form.id,
             name: data.form.name,
-            fields: data.form.fields
+            fields: data.form.fields,
+            portalId: data.form.portalId,
+            region: data.form.region
         };
 
         this.value = JSON.stringify(data.form);

@@ -1,10 +1,12 @@
-﻿using Umbraco.Cms.Core.Composing;
-using Umbraco.Cms.Core.DependencyInjection;
-using Umbraco.Cms.Integrations.Crm.Hubspot.Configuration;
-using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Umbraco.Cms.Api.Common.OpenApi;
+using Umbraco.Cms.Core.Composing;
+using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Integrations.Crm.Hubspot.Api.Configuration;
+using Umbraco.Cms.Integrations.Crm.Hubspot.Configuration;
+using Umbraco.Cms.Integrations.Crm.Hubspot.Services;
 
 namespace Umbraco.Cms.Integrations.Crm.Hubspot
 {
@@ -42,9 +44,9 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot
                         Version = "Latest",
                         Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for managing forms."
                     });
-
-                options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
-            });
+                options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
+            })
+            .AddSingleton<IOperationIdHandler, HubspotOperationIdHandler>();
         }
     }
 }

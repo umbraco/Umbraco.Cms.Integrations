@@ -20,7 +20,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Api.Management.Controllers
             ZapierSubscriptionHookService zapierSubscriptionHookService)
             : base(options, userValidationService) => _zapierSubscriptionHookService = zapierSubscriptionHookService;
 
-        [HttpGet("subscription-hooks")]
+        [HttpGet("subscription-hooks", Name = Constants.OperationIdentifiers.GetSubscriptionHooks)]
         [ProducesResponseType(typeof(IEnumerable<SubscriptionDto>), StatusCodes.Status200OK)]
         public IActionResult GetAll() => Ok(_zapierSubscriptionHookService.GetAll());
     }

@@ -17,5 +17,22 @@ namespace Umbraco.Cms.Integrations.Search.Algolia
 
             public const string GroupName = "AlgoliaSearch";
         }
+
+        public static class OperationIds
+        {
+            public const string BuildSearchIndex = "BuildSearchIndex";
+
+            public const string DeleteSearchIndex = "DeleteSearchIndex";
+
+            public const string GetContentTypes = "GetContentTypes";
+
+            public const string GetSearchIndexById = "GetSearchIndexById";
+
+            public const string GetIndices = "GetIndices";
+
+            public const string SaveIndex = "SaveIndex";
+
+            public const string SearchIndex = "SearchIndex";
+        }
     }
 }

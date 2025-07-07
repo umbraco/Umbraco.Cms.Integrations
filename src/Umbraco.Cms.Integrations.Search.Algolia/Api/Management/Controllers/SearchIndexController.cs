@@ -9,7 +9,6 @@ using Umbraco.Cms.Integrations.Search.Algolia.Services;
 namespace Umbraco.Cms.Integrations.Search.Algolia.Api.Management.Controllers;
 
 [ApiVersion("1.0")]
-[ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
 public class SearchIndexController : SearchControllerBase
 {
     private readonly IAlgoliaIndexDefinitionStorage<AlgoliaIndex> _indexStorage;
@@ -23,7 +22,7 @@ public class SearchIndexController : SearchControllerBase
         _searchService = searchService;
     }
 
-    [HttpGet("index/{indexId:int}/search")]
+    [HttpGet("index/{indexId:int}/search", Name = Constants.OperationIds.SearchIndex)]
     [ProducesResponseType(typeof(Response), StatusCodes.Status200OK)]
     public IActionResult Search(int indexId, string query)
     {
