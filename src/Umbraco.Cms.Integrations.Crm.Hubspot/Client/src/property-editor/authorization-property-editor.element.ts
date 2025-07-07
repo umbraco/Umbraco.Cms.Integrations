@@ -241,6 +241,7 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
             }
             #authToken uui-input {
                 width: 50%;
+                vertical-align: middle;
             }
         `];
 }
