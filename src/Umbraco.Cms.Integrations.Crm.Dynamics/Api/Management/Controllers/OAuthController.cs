@@ -6,7 +6,7 @@ using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Api.Management.Controllers
 {
     [ApiVersion("1.0")]
-    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
+    [Route("/umbraco/api/dynamics")]
     public class OAuthController : DynamicsControllerBase
     {
         [HttpGet("authorization")]

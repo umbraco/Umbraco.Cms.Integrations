@@ -1,7 +1,7 @@
 {
     "id": "Umbraco.Cms.Integrations.Crm.Dynamics",
     "name": "Umbraco CMS Integrations: Crm - Dynamics",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "extensions": [
       {
         "name": "Umbraco EntryPoint",
