@@ -16,7 +16,7 @@
 		<PackageIconUrl></PackageIconUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main-v14/src/Umbraco.Cms.Integrations.Commerce.Shopify</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>3.1.0</Version>
+		<Version>4.0.0</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageIcon>shopify.png</PackageIcon>
@@ -28,10 +28,13 @@
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
 
+	<PropertyGroup>
+		<UmbracoCmsPackageVersion>[16.0.0, 17)</UmbracoCmsPackageVersion>
+	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Api.Common" Version="[15.0.0, 16)" />
-		<PackageReference Include="Umbraco.Cms.Api.Management" Version="[15.0.0, 16)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[15.0.0, 16)" />
+		<PackageReference Include="Umbraco.Cms.Api.Common" Version="$(UmbracoCmsPackageVersion)" />
+		<PackageReference Include="Umbraco.Cms.Api.Management" Version="$(UmbracoCmsPackageVersion)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="$(UmbracoCmsPackageVersion)" />
 	</ItemGroup>
 
 	<ItemGroup>
