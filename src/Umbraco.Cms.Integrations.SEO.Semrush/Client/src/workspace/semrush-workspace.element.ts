@@ -3,8 +3,14 @@ import { css, html, nothing, customElement, state, when } from '@umbraco-cms/bac
 import { SEMRUSH_CONTEXT_TOKEN } from '../context/semrush.context';
 import { UUIInputEvent, UUIPaginationEvent, UUISelectEvent } from '@umbraco-cms/backoffice/external/uui';
 import { UmbPaginationManager } from "@umbraco-cms/backoffice/utils";
-import {type Phrase} from "../model/semrush-phrase.model"
-import { AuthorizationResponseDtoModel, ColumnDtoModel, ContentPropertyDtoModel, DataSourceItemDtoModel, RelatedPhrasesDtoModel } from '@umbraco-integrations/semrush/generated';
+import { type Phrase } from "../model/semrush-phrase.model"
+import {
+    AuthorizationResponseDtoModel,
+    ColumnDtoModel,
+    ContentPropertyDtoModel,
+    DataSourceItemDtoModel,
+    RelatedPhrasesDtoModelReadable
+} from '@umbraco-integrations/semrush/generated';
 import { UMB_MODAL_MANAGER_CONTEXT } from '@umbraco-cms/backoffice/modal';
 import { SEMRUSH_MODAL_TOKEN } from '../modal/semrush-modal.token';
 import { UMB_CURRENT_USER_CONTEXT } from '@umbraco-cms/backoffice/current-user';
@@ -12,6 +18,7 @@ import { UMB_NOTIFICATION_CONTEXT, UmbNotificationColor } from '@umbraco-cms/bac
 import {createRef, ref, Ref} from 'lit/directives/ref.js';
 
 const elementName = "semrush-workspace-view";
+
 @customElement(elementName)
 export class SemrushWorkspaceElement extends UmbLitElement {
     #semrushContext!: typeof SEMRUSH_CONTEXT_TOKEN.TYPE;
@@ -61,7 +68,7 @@ export class SemrushWorkspaceElement extends UmbLitElement {
     };
 
     @state()
-    private keywordList: RelatedPhrasesDtoModel | undefined = undefined;
+    private keywordList: RelatedPhrasesDtoModelReadable | undefined = undefined;
 
     @state()
     private searchPhrase: string = "";

@@ -1,8 +1,6 @@
-import type { ManifestWorkspaceView, ManifestTypes, ManifestWorkspace } from '@umbraco-cms/backoffice/extension-registry';
-
 export const SEMRUSH_WORKSPACE_ALIAS = "Umb.Workspace.Semrush";
 
-const workspaceView: Array<ManifestWorkspaceView> = [
+const workspaceView: Array<UmbExtensionManifest> = [
     {
         type: "workspaceView",
         alias: "Umb.WorkspaceView.Semrush.View",
@@ -23,4 +21,4 @@ const workspaceView: Array<ManifestWorkspaceView> = [
       },
 ];
 
-export const manifests: Array<ManifestTypes> = [...workspaceView];
+export const manifests: Array<UmbExtensionManifest> = [...workspaceView];
