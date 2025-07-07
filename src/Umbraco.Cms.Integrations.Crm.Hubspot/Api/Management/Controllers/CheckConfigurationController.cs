@@ -8,7 +8,6 @@ using Umbraco.Cms.Integrations.Crm.Hubspot.Models;
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
 {
     [ApiVersion("1.0")]
-    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
     public class CheckConfigurationController : HubspotFormsControllerBase
     {
         private readonly HubspotOAuthSettings _oauthSettings;
@@ -20,7 +19,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
             _oauthSettings = oauthSettingsOptions.Value;
         }
 
-        [HttpGet("check-configuration")]
+        [HttpGet("check-configuration", Name = Constants.OperationIdentifiers.CheckConfiguration)]
         [ProducesResponseType(typeof(HubspotFormPickerSettings), StatusCodes.Status200OK)]
         public IActionResult CheckConfiguration()
         {

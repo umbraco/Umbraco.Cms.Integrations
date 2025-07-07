@@ -31,7 +31,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
             _tokenService = tokenService;
         }
 
-        [HttpGet("oauth/get")]
+        [HttpGet("oauth/get", Name = Constants.OperationIdentifiers.GetFormsOAuth)]
         [ProducesResponseType(typeof(ResponseDto), StatusCodes.Status200OK)]
         public async Task<ResponseDto> GetAllOAuth()
         {

@@ -9,7 +9,6 @@ using static Umbraco.Cms.Integrations.Crm.Hubspot.HubspotComposer;
 namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
 {
     [ApiVersion("1.0")]
-    [ApiExplorerSettings(GroupName = Constants.ManagementApi.GroupName)]
     public class RefreshAccessTokenController : HubspotFormsControllerBase
     {
         private readonly IHubspotAuthorizationService _authorizationService;
@@ -19,7 +18,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
             AuthorizationImplementationFactory authorizationImplementationFactory) 
             : base(settingsOptions) => _authorizationService = authorizationImplementationFactory(Settings.UseUmbracoAuthorization);
 
-        [HttpPost("refresh")]
+        [HttpPost("refresh", Name = Constants.OperationIdentifiers.RefreshAccessToken)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public async Task<IActionResult> RefreshAccessToken()
         {
