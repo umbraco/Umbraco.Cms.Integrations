@@ -3,5 +3,6 @@
 public enum OperationStatus
 {
     ApiException,
-    EmptyIndexData
+    EmptyIndexData,
+    Error
 }
