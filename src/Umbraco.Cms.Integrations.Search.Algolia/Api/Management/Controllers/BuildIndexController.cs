@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
@@ -57,50 +58,59 @@ public class BuildIndexController : SearchControllerBase
     [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
     public async Task<IActionResult> BuildIndex([FromBody] IndexConfiguration indexConfiguration)
     {
-        AlgoliaIndex index = _indexStorage.GetById(indexConfiguration.Id);
-        List<Record> payload = [];
-
-        IEnumerable<ContentTypeDto>? indexContentData = JsonSerializer.Deserialize<IEnumerable<ContentTypeDto>>(index.SerializedData);
-        if (indexContentData is null)
+        try
         {
-            // TODO => handle null result
-            return BadRequest();
-        }
+            AlgoliaIndex index = _indexStorage.GetById(indexConfiguration.Id);
+            List<Record> payload = [];
 
-        foreach (var contentDataItem in indexContentData)
-        {
-            using var ctx = _umbracoContextFactory.EnsureUmbracoContext();
-            var contentType = ctx.UmbracoContext.Content?.GetContentType(contentDataItem.Alias);
-
-            if (contentType is null)
+            IEnumerable<ContentTypeDto>? indexContentData = JsonSerializer.Deserialize<IEnumerable<ContentTypeDto>>(index.SerializedData);
+            if (indexContentData is null)
             {
-                // TODO => handle null content type
-                continue;
+                // TODO => handle null result
+                return BadRequest();
             }
 
-            // use GetPagedOfTypes as filter is nullable here, but not on GetPagedOfType
-            var contentItems = _contentService.GetPagedOfTypes([contentType.Id], 0, int.MaxValue, out _, null);
-
-            _logger.LogInformation("Building index for {ContentType} with {Count} items", contentDataItem.Alias, contentItems.Count());
-
-            foreach (var contentItem in contentItems.Where(p => !p.Trashed))
+            foreach (var contentDataItem in indexContentData)
             {
-                var record = new ContentRecordBuilder(
-                        _userService, 
-                        _urlProvider, 
-                        _algoliaSearchPropertyIndexValueFactory, 
-                        _recordBuilderFactory, 
-                        _umbracoContextFactory,
-                        _algoliaGeolocationProvider)
-                    .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
-                    .Build();
+                using var ctx = _umbracoContextFactory.EnsureUmbracoContext();
+                var contentType = ctx.UmbracoContext.Content?.GetContentType(contentDataItem.Alias);
 
-                payload.Add(record);
+                if (contentType is null)
+                {
+                    // TODO => handle null content type
+                    continue;
+                }
+
+                // use GetPagedOfTypes as filter is nullable here, but not on GetPagedOfType
+                var contentItems = _contentService.GetPagedOfTypes([contentType.Id], 0, int.MaxValue, out _, null);
+
+                _logger.LogInformation("Building index for {ContentType} with {Count} items", contentDataItem.Alias, contentItems.Count());
+
+                foreach (var contentItem in contentItems.Where(p => !p.Trashed))
+                {
+                    var record = new ContentRecordBuilder(
+                            _userService,
+                            _urlProvider,
+                            _algoliaSearchPropertyIndexValueFactory,
+                            _recordBuilderFactory,
+                            _umbracoContextFactory,
+                            _algoliaGeolocationProvider)
+                        .BuildFromContent(contentItem, (p) => contentDataItem.Properties.Any(q => q.Alias == p.Alias))
+                        .Build();
+
+                    payload.Add(record);
+                }
             }
+
+            var result = await _indexService.PushData(index.Name, payload);
+
+            return Ok(result);
         }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex, "Error building index {IndexName}", indexConfiguration.Name);
 
-        var result = await _indexService.PushData(index.Name, payload);
-
-        return Ok(result);
+            return StatusCode(StatusCodes.Status500InternalServerError,  Result.Fail($"An error occurred while building the index: {ex.Message}"));
+        }
     }
 }
