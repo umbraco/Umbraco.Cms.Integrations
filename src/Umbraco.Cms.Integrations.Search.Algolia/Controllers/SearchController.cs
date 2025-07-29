@@ -139,7 +139,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Controllers
 
                     _logger.LogInformation("Building index for {ContentType} with {Count} items", contentDataItem.ContentType.Alias, contentItems.Count());
 
-                    foreach (var contentItem in contentItems.Where(p => !p.Trashed))
+                    foreach (var contentItem in contentItems.Where(p => !p.Trashed && p.Published))
                     {
                         var record = new ContentRecordBuilder(
                                 _userService, 
