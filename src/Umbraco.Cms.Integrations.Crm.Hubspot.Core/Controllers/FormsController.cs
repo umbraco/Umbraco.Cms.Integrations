@@ -145,7 +145,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Controllers
                     Forms = ParseForms(forms).ToList()
                 };
             }
-            catch(HttpRequestException ex) when (ex.Message.Contains(HttpStatusCode.Unauthorized.ToString()))
+            catch (HttpRequestException ex) when (ex.Message.Contains(HttpStatusCode.Unauthorized.ToString()))
             {
                 _logger.LogError(string.Format(LoggingResources.OAuthFetchFormsFailed, responseContent));
 
@@ -236,6 +236,22 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Controllers
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             var response = await ClientFactory().SendAsync(requestMessage);
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                // Attempt to refresh the access token
+                await _authorizationService.RefreshAccessTokenAsync();
+
+                _tokenService.TryGetParameters(Constants.AccessTokenDbKey, out string newAccessToken);
+
+                // Retry the request with the new access token
+                requestMessage = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(HubspotFormsApiEndpoint)
+                };
+                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", newAccessToken);
+                response = await ClientFactory().SendAsync(requestMessage);
+            }
 
             return new ResponseDto
             {
