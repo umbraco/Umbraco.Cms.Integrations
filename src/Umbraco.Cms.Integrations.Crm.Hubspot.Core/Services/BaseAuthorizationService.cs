@@ -18,6 +18,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Services
 
         protected readonly ITokenService TokenService;
 
+        public const string ErrorPrefix = "Error";
+
         public BaseAuthorizationService(ITokenService tokenService)
         {
             TokenService = tokenService;
