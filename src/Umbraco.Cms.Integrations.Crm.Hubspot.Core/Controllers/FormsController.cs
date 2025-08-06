@@ -240,7 +240,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Controllers
             {
                 // Attempt to refresh the access token
                 var refreshAccessTokenResponse = await _authorizationService.RefreshAccessTokenAsync();
-                if (string.IsNullOrEmpty(refreshAccessTokenResponse) || refreshAccessTokenResponse == BaseAuthorizationService.ErrorPrefix)
+                if (string.IsNullOrEmpty(refreshAccessTokenResponse) || refreshAccessTokenResponse.StartsWith(BaseAuthorizationService.ErrorPrefix))
                 {
                     return new ResponseDto
                     {
