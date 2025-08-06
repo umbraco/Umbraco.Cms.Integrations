@@ -77,7 +77,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Controllers
             try
             {
                 var requestMessage = CreateRequest(hubspotApiKey);
-
+                
                 var response = await ClientFactory().SendAsync(requestMessage);
 
                 responseContent = await response.Content.ReadAsStringAsync();
@@ -240,7 +240,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Controllers
             {
                 // Attempt to refresh the access token
                 var refreshAccessTokenResponse = await _authorizationService.RefreshAccessTokenAsync();
-                if (string.IsNullOrEmpty(refreshAccessTokenResponse) || refreshAccessTokenResponse == "error")
+                if (string.IsNullOrEmpty(refreshAccessTokenResponse) || refreshAccessTokenResponse == BaseAuthorizationService.ErrorPrefix)
                 {
                     return new ResponseDto
                     {
