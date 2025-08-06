@@ -15,6 +15,8 @@
 
         protected readonly ITokenService TokenService;
 
+        public const string ErrorPrefix = "Error";
+
         public BaseAuthorizationService(ITokenService tokenService)
         {
             TokenService = tokenService;
