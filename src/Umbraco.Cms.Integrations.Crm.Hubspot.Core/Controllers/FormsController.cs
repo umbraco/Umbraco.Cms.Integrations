@@ -228,7 +228,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Controllers
                     Error = Constants.ErrorMessages.OAuthInvalidToken
                 };
 
-            var requestMessage = new HttpRequestMessage
+            using var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(HubspotFormsApiEndpoint)
@@ -239,18 +239,34 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Core.Controllers
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 // Attempt to refresh the access token
-                await _authorizationService.RefreshAccessTokenAsync();
+                var refreshAccessTokenResponse = await _authorizationService.RefreshAccessTokenAsync();
+                if (string.IsNullOrEmpty(refreshAccessTokenResponse) || refreshAccessTokenResponse == "error")
+                {
+                    return new ResponseDto
+                    {
+                        IsValid = false,
+                        Error = Constants.ErrorMessages.OAuthInvalidToken
+                    };
+                }
 
-                _tokenService.TryGetParameters(Constants.AccessTokenDbKey, out string newAccessToken);
+                if (!_tokenService.TryGetParameters(Constants.AccessTokenDbKey, out string newAccessToken) 
+                    || string.IsNullOrEmpty(newAccessToken))
+                {
+                    return new ResponseDto
+                    {
+                        IsValid = false,
+                        Error = Constants.ErrorMessages.OAuthInvalidToken
+                    };
+                }
 
                 // Retry the request with the new access token
-                requestMessage = new HttpRequestMessage
+                using var newRequestMessage = new HttpRequestMessage
                 {
                     Method = HttpMethod.Get,
                     RequestUri = new Uri(HubspotFormsApiEndpoint)
                 };
-                requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", newAccessToken);
-                response = await ClientFactory().SendAsync(requestMessage);
+                newRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", newAccessToken);
+                response = await ClientFactory().SendAsync(newRequestMessage);
             }
 
             return new ResponseDto
