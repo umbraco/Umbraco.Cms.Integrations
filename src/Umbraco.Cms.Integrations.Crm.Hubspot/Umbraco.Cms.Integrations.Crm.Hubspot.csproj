@@ -6,6 +6,7 @@
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<EnableDefaultContentItems>false</EnableDefaultContentItems>
 		<StaticWebAssetBasePath>/App_Plugins/HubspotForms</StaticWebAssetBasePath>
+    	<CompressionEnabled>false</CompressionEnabled>
 	</PropertyGroup>
 
 	<PropertyGroup>
