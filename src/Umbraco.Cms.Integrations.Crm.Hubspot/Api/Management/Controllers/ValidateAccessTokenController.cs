@@ -15,15 +15,18 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ITokenService _tokenService;
+        private readonly IHubspotAuthorizationService _authorizationService;
 
         public ValidateAccessTokenController(
             IOptions<HubspotSettings> settingsOptions,
             IHttpClientFactory httpClientFactory,
-            ITokenService tokenService) 
+            ITokenService tokenService,
+            IHubspotAuthorizationService authorizationService)
             : base(settingsOptions)
         {
             _httpClientFactory = httpClientFactory;
             _tokenService = tokenService;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet("validate", Name = Constants.OperationIdentifiers.ValidateAccessToken)]
@@ -41,7 +44,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
                     Error = Constants.ErrorMessages.OAuthInvalidToken
                 });
 
-            var requestMessage = new HttpRequestMessage
+            using var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
                 RequestUri = new Uri(HubspotFormsApiEndpoint)
@@ -49,6 +52,39 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             var response = await client.SendAsync(requestMessage);
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                // Attempt to refresh the access token
+                var refreshAccessTokenResponse = await _authorizationService.RefreshAccessTokenAsync();
+                if (string.IsNullOrEmpty(refreshAccessTokenResponse)
+                    || refreshAccessTokenResponse.StartsWith(BaseAuthorizationService.ErrorPrefix))
+                {
+                    return Ok(new ResponseDto
+                    {
+                        IsValid = false,
+                        Error = Constants.ErrorMessages.OAuthInvalidToken
+                    });
+                }
+
+                if (!_tokenService.TryGetParameters(Constants.AccessTokenDbKey, out string newAccessToken)
+                    || string.IsNullOrEmpty(newAccessToken))
+                {
+                    return Ok(new ResponseDto
+                    {
+                        IsValid = false,
+                        Error = Constants.ErrorMessages.OAuthInvalidToken
+                    });
+                }
+
+                // Retry the request with the new access token
+                using var newRequestMessage = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(HubspotFormsApiEndpoint)
+                };
+                newRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", newAccessToken);
+                response = await client.SendAsync(newRequestMessage);
+            }
 
             return Ok(new ResponseDto
             {

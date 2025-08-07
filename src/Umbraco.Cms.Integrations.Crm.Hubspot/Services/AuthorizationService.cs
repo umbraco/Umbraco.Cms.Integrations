@@ -61,10 +61,10 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Services
                 var errorResult = await response.Content.ReadAsStringAsync();
                 var errorDto = JsonSerializer.Deserialize<ErrorDto>(errorResult);
 
-                return "Error: " + errorDto.Message;
+                return string.Format("{0}: {1}", ErrorPrefix, errorDto.Message);
             }
 
-            return "Error: An unexpected error occurred.";
+            return string.Format("{0}: An unexpected error occurred.", ErrorPrefix);
         }
 
         public string RefreshAccessToken() =>
@@ -102,7 +102,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Services
                 return result;
             }
 
-            return "error";
+            return ErrorPrefix;
         }
     }
 }

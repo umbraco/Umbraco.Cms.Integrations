@@ -1,10 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Configuration;
 using Umbraco.Cms.Integrations.Crm.Hubspot.Models.Dtos;
 
@@ -74,10 +70,10 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Services
                 var errorResult = await response.Content.ReadAsStringAsync();
                 var errorDto = JsonSerializer.Deserialize<ErrorDto>(errorResult);
 
-                return "Error: " + errorDto.Message;
+                return string.Format("{0}: {1}", ErrorPrefix, errorDto.Message);
             }
 
-            return "Error: An unexpected error occurred.";
+            return string.Format("{0}: An unexpected error occurred.", ErrorPrefix);
         }
 
         public string RefreshAccessToken() =>
@@ -115,7 +111,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Services
                 return result;
             }
 
-            return "error";
+            return ErrorPrefix;
         }
     }
 }
