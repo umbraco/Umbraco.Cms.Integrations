@@ -54,7 +54,7 @@ public class GetContentTypesController : SearchControllerBase
         foreach (var contentType in contentTypes)
         {
             var properties = new List<ContentTypePropertyDto>();
-            foreach (var propertyGroup in contentType.PropertyGroups)
+            foreach (var propertyGroup in contentType.CompositionPropertyGroups)
             {
                 if (propertyGroup.PropertyTypes is null)
                 {
