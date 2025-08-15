@@ -121,6 +121,7 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
                   <uui-table-cell>${index.name}</uui-table-cell>
                   <uui-table-cell>
                         ${index.contentData.map((contentData) => {
+                            if (!contentData.properties) return;
                             return html`
                                 <uui-ref-node name=${contentData.name}
                                             detail=${contentData.properties.map(obj => obj.name).join(', ')}>
