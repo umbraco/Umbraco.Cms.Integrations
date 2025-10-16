@@ -5,7 +5,7 @@ import {
     UMB_NOTIFICATION_CONTEXT,
 } from "@umbraco-cms/backoffice/notification";
 
-import { type IndexConfigurationModel, AlgoliaSearchService } from "@umbraco-integrations/algolia/generated";
+import { type IndexConfigurationModel, AlgoliaSearch } from "@umbraco-integrations/algolia/generated";
 
 export class AlgoliaIndexRepository extends UmbControllerBase {
 
@@ -14,7 +14,7 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async getIndices() {
-        const { data, error } = await tryExecute(this, AlgoliaSearchService.getIndices());
+        const { data, error } = await tryExecute(this, AlgoliaSearch.getIndices());
 
         if (error || !data) {
             return { error }
@@ -24,7 +24,7 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async getIndexById(id: number) {
-        const { data, error } = await tryExecute(this, AlgoliaSearchService.getSearchIndexById({
+        const { data, error } = await tryExecute(this, AlgoliaSearch.getSearchIndexById({
             path: {
                 id: id
             }
@@ -38,7 +38,7 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async getContentTypes() {
-        const { data, error } = await tryExecute(this, AlgoliaSearchService.getContentTypes());
+        const { data, error } = await tryExecute(this, AlgoliaSearch.getContentTypes());
 
         if (error || !data) {
             return { error };
@@ -48,7 +48,7 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async getContentTypesWithIndex(id: number) {
-        const { data, error } = await tryExecute(this, AlgoliaSearchService.getSearchContentTypeIndexById({
+        const { data, error } = await tryExecute(this, AlgoliaSearch.getSearchContentTypeIndexById({
             path: {
                 id: id
             }
@@ -62,7 +62,7 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async saveIndex(indexConfiguration: IndexConfigurationModel) {
-        const { data, error } = await tryExecute(this, AlgoliaSearchService.postSaveIndex({
+        const { data, error } = await tryExecute(this, AlgoliaSearch.postSaveIndex({
             body: {
                 id: indexConfiguration.id,
                 name: indexConfiguration.name,
@@ -86,7 +86,7 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async buildIndex(indexConfiguration: IndexConfigurationModel) {
-        const { data, error } = await tryExecute(this, AlgoliaSearchService.postBuildSearchIndex({
+        const { data, error } = await tryExecute(this, AlgoliaSearch.postBuildSearchIndex({
             body: {
                 id: indexConfiguration.id,
                 name: indexConfiguration.name,
@@ -104,7 +104,7 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async deleteIndex(id: number) {
-        const { data, error } = await tryExecute(this, AlgoliaSearchService.deleteSearchIndex({
+        const { data, error } = await tryExecute(this, AlgoliaSearch.deleteSearchIndex({
             path: {
                 id: id
             }
@@ -120,7 +120,7 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     }
 
     async searchIndex(id: number, query: string) {
-        const { data, error } = await tryExecute(this, AlgoliaSearchService.getSearchIndex({
+        const { data, error } = await tryExecute(this, AlgoliaSearch.getSearchIndex({
             path: {
                 indexId: id
             },
