@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🔗 Submit an issue / feature request
+    url: https://github.com/umbraco/Umbraco.Integrations.Issues/issues/new/choose
+    about: Please submit all issues / feature requests related to this project on the central Umbraco Integrations issue tracker here.
