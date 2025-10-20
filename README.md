@@ -40,4 +40,6 @@ This repository houses open-source extensions, created for Umbraco CMS, that int
 ### DAM
 [Aprimo](./src/Umbraco.Cms.Integrations.DAM.Aprimo/) - a media picker for digital assets managed in an Aprimo workspace.
 
+## Issues
 
+Please raise all issues / feature requests on the central issue tracker at [https://github.com/umbraco/Umbraco.Integrations.Issues](https://github.com/umbraco/Umbraco.Integrations.Issues)
