@@ -19,6 +19,10 @@
     vm.changePage = goToPage;
     vm.goToPage = goToPage;
 
+    vm.filterForms = () => {
+        loadForms(vm.pagination.pageNumber, vm.searchTerm);
+    }
+
     umbracoCmsIntegrationsCrmActiveCampaignResource.checkApiAccess().then(function (response) {
         vm.isApiConfigurationValid = response.isApiConfigurationValid;
         if (response.isApiConfigurationValid) {
@@ -79,12 +83,10 @@
         });
     }
 
-    function loadForms(page) {
+    function loadForms(page, searchQuery) {
         vm.loading = true;
-        umbracoCmsIntegrationsCrmActiveCampaignResource.getForms(page).then(function (response) {
-
-            vm.formsList = [];
-
+        vm.formsList = [];
+        umbracoCmsIntegrationsCrmActiveCampaignResource.getForms(page ?? 1, searchQuery ?? "").then(function (response) {
             if (response.forms != null) {
 
                 vm.pagination.totalPages = response.meta.totalPages;
@@ -104,7 +106,7 @@
 
     // pagination events
     function goToPage(page) {
-        loadForms(page);
+        loadForms(page, vm.searchTerm);
     }
 }
 

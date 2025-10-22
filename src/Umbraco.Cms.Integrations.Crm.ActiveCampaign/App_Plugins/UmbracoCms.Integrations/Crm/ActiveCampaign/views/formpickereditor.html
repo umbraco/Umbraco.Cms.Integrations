@@ -11,12 +11,13 @@
                     <div class="acOverlayGroup" ng-if="vm.isApiConfigurationValid">
                         <div class="form-search">
                             <i class="icon-search"></i>
-                            <input type="text" class="-full-width-input" ng-model="vm.searchTerm" placeholder="Type to search..." umb-auto-focus="" aria-invalid="false">
+                            <input type="text" class="-full-width-input" ng-model="vm.searchTerm" placeholder="Type to search..." umb-auto-focus="" aria-invalid="false" 
+                                   ng-change="vm.filterForms()">
                         </div>
                     </div>
                     <div class="acOverlayGroup" ng-if="vm.isApiConfigurationValid">
                         <ul class="acFormsList">
-                            <li ng-repeat="form in vm.formsList | orderBy:'name' | filter:vm.searchTerm" ng-click="vm.selectedForm = form"
+                            <li ng-repeat="form in vm.formsList | orderBy:'name' " ng-click="vm.selectedForm = form"
                                 ng-class="{ 'acFormSelected': vm.selectedForm == form }" role="button" tabindex="0">
                                 <a href="" ng-attr-title="form.name">
                                     <i class="icon-umb-contour"></i>
@@ -25,7 +26,7 @@
                             </li>
                         </ul>
                         <!-- If list is empty, then display -->
-                        <umb-empty-state ng-if="!vm.formsList"
+                        <umb-empty-state ng-if="!vm.formsList || vm.formsList.length == 0"
                                          position="center">
                             <localize key="content_listViewNoItems">There are no forms in the list.</localize>
                         </umb-empty-state>

@@ -8,6 +8,6 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Models.Dtos
         public string Total { get; set; }
 
         [JsonPropertyName("totalPages")]
-        public int TotalPages => int.TryParse(Total, out var total) ? total / Constants.DefaultPageSize : 0;
+        public int TotalPages => int.TryParse(Total, out var total) ? (int)Math.Ceiling((double)total / Constants.DefaultPageSize) : 0;
     }
 }
