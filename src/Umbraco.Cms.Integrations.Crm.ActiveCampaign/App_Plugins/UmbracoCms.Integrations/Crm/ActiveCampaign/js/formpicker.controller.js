@@ -19,10 +19,6 @@
     vm.changePage = goToPage;
     vm.goToPage = goToPage;
 
-    vm.filterForms = () => {
-        loadForms(vm.pagination.pageNumber, vm.searchTerm);
-    }
-
     umbracoCmsIntegrationsCrmActiveCampaignResource.checkApiAccess().then(function (response) {
         vm.isApiConfigurationValid = response.isApiConfigurationValid;
         if (response.isApiConfigurationValid) {
@@ -70,6 +66,14 @@
 
         editorService.open(options);
     };
+
+    let timer;
+    vm.filterForms = () => {
+        if (timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(() => { loadForms(vm.pagination.pageNumber, vm.searchTerm); }, 500);
+    }
 
     function getFormDetails(id) {
         vm.loading = true;
