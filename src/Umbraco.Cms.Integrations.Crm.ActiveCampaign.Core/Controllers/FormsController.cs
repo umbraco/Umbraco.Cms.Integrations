@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-
-using System;
-using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 using System.Web;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Configuration;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Models.Dtos;
