@@ -28,7 +28,8 @@ export class ActiveCampaignFormsService {
             method: 'GET',
             url: '/umbraco/activecampaign-forms/management/api/v1/forms',
             query: {
-                page: data.page
+                page: data.page,
+                searchQuery: data.searchQuery
             }
         });
     }

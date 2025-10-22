@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Web;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.Dtos;
 
@@ -20,13 +21,11 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetForms([FromQuery]int? page = 1)
+        public async Task<IActionResult> GetForms([FromQuery] int? page = 1, string? searchQuery = "")
         {
             var client = HttpClientFactory.CreateClient(Constants.FormsHttpClient);
 
-            var requestUriString = page == 1
-                ? $"{client.BaseAddress}{ApiPath}&limit={Constants.DefaultPageSize}"
-                : $"{client.BaseAddress}{ApiPath}&limit={Constants.DefaultPageSize}&offset={(page - 1) * Constants.DefaultPageSize}";
+            var requestUriString = BuildRequestUri(client.BaseAddress.ToString(), page ?? 1, searchQuery);
 
             var requestMessage = new HttpRequestMessage
             {
@@ -37,6 +36,26 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
             var response = await client.SendAsync(requestMessage);
 
             return await HandleResponseAsync<FormCollectionResponseDto>(response);
+        }
+
+        private string BuildRequestUri(string baseAddress, int page, string searchQuery)
+        {
+            var uri = $"{baseAddress}{ApiPath}?limit={Constants.DefaultPageSize}";
+
+            Dictionary<string, string> queryParamsDictionary = new Dictionary<string, string>();
+            if (page > 1)
+            {
+                queryParamsDictionary.Add("offset", ((page - 1) * Constants.DefaultPageSize).ToString());
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                queryParamsDictionary.Add("search", HttpUtility.UrlEncode(searchQuery));
+            }
+
+            return queryParamsDictionary.Count == 0
+                ? uri
+                : string.Format("{0}&{1}", uri, string.Join("&", queryParamsDictionary.Select(kvp => $"{kvp.Key}={kvp.Value}")));
         }
     }
 }

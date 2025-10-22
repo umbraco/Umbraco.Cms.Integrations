@@ -30,6 +30,7 @@ export type CheckApiAccessResponse = ApiAccessDtoModel;
 
 export type GetFormsData = {
     page?: number;
+    searchQuery?: string;
 };
 
 export type GetFormsResponse = FormCollectionResponseDtoModel;

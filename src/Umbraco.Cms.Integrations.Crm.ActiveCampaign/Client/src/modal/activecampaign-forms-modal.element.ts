@@ -29,6 +29,9 @@ export default class ActiveCampaignFormsModalElement
     @state()
     _totalPages = 1;
 
+    @state()
+    _searchQuery = "";
+
     constructor() {
         super();
 
@@ -58,10 +61,10 @@ export default class ActiveCampaignFormsModalElement
         await this.#loadForms();
     }
 
-    async #loadForms(page?: number) {
+    async #loadForms(page?: number, searchQuery?: string) {
         this._loading = true;
 
-        const { data } = await this.#activecampaignFormsContext.getForms(page);
+        const { data } = await this.#activecampaignFormsContext.getForms(page, searchQuery);
         if (!data) {
             this._loading = false;
             return;
@@ -75,21 +78,20 @@ export default class ActiveCampaignFormsModalElement
         this._loading = false;
     }
 
-    #handleFilterInput(event: UUIInputEvent) {
+    async #handleFilterInput(event: UUIInputEvent) {
         let query = (event.target.value as string) || '';
         query = query.toLowerCase();
+        this._searchQuery = query;
 
-        const result = !query
-            ? this._forms
-            : this._forms.filter((form) => form.name.toLowerCase().includes(query));
+        console.log('Filter query:', this._searchQuery);
 
-        this._filteredForms = result;
+        await this.#loadForms(this._currentPageNumber, this._searchQuery);
     }
 
     async #onPageChange(event: UUIPaginationEvent) {
         this._currentPageNumber = event.target?.current;
 
-        await this.#loadForms(this._currentPageNumber);
+        await this.#loadForms(this._currentPageNumber, this._searchQuery);
     }
 
     #renderPagination() {
