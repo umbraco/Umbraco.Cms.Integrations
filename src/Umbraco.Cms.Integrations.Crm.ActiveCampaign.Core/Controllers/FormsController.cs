@@ -95,7 +95,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Core.Controllers
 
             if (!string.IsNullOrWhiteSpace(searchQuery))
             {
-                queryParamsDictionary.Add("search", HttpUtility.UrlEncode(searchQuery));
+                queryParamsDictionary.Add("search", searchQuery);
             }
 
             return queryParamsDictionary.Count == 0 
