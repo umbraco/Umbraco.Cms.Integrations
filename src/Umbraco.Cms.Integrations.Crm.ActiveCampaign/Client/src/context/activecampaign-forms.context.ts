@@ -28,8 +28,8 @@ export class ActiveCampaignFormsContext extends UmbControllerBase {
         this.#configurationModel.setValue(data);
     }
 
-    async getForms(page?: number) {
-        return await this.#repository.getForms(page);
+    async getForms(page?: number, searchQuery?: string) {
+        return await this.#repository.getForms(page, searchQuery);
     }
 
     async getForm(id: string) {

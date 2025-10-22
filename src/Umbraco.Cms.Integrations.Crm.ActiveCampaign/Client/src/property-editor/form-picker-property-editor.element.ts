@@ -15,7 +15,6 @@ export default class ActiveCampaignFormPickerElement extends UmbElementMixin(Lit
 
     @property({ type: String })
     public value = "";
-
     
     @state()
     private _form: FormDtoModel = {
