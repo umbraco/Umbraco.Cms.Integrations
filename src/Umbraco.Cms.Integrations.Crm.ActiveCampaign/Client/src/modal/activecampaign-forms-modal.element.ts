@@ -52,6 +52,10 @@ export default class ActiveCampaignFormsModalElement
         this.#checkApiAccess();
     }
 
+    disconnectedCallback() {
+        clearTimeout(this.#filterTimeout);
+    }
+
     async #checkApiAccess() {
         if (!this.#activecampaignFormsContext || !this.#configurationModel) return;
 
@@ -93,7 +97,7 @@ export default class ActiveCampaignFormsModalElement
         this.#filterTimeout = setTimeout(async () => {
             this._currentPageNumber = 1;
             await this.#loadForms(this._currentPageNumber, this._searchQuery);
-        }, 2000);
+        }, 500);
     }
 
     async #onPageChange(event: UUIPaginationEvent) {

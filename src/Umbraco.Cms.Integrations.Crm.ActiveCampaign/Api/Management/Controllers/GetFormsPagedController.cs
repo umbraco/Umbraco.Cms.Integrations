@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using System.Web;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
@@ -21,7 +22,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetForms([FromQuery] int? page = 1, string? searchQuery = "")
+        public async Task<IActionResult> GetForms([FromQuery] int? page = 1, [FromQuery] string? searchQuery = "")
         {
             var client = HttpClientFactory.CreateClient(Constants.FormsHttpClient);
 
@@ -42,20 +43,17 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
         {
             var uri = $"{baseAddress}{ApiPath}?limit={Constants.DefaultPageSize}";
 
-            Dictionary<string, string> queryParamsDictionary = new Dictionary<string, string>();
             if (page > 1)
             {
-                queryParamsDictionary.Add("offset", ((page - 1) * Constants.DefaultPageSize).ToString());
+                uri = QueryHelpers.AddQueryString(uri, "offset", ((page - 1) * Constants.DefaultPageSize).ToString());
             }
 
             if (!string.IsNullOrWhiteSpace(searchQuery))
             {
-                queryParamsDictionary.Add("search", HttpUtility.UrlEncode(searchQuery));
+                uri = QueryHelpers.AddQueryString(uri, "search", searchQuery);
             }
 
-            return queryParamsDictionary.Count == 0
-                ? uri
-                : string.Format("{0}&{1}", uri, string.Join("&", queryParamsDictionary.Select(kvp => $"{kvp.Key}={kvp.Value}")));
+            return uri;
         }
     }
 }
