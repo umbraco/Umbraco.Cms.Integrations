@@ -32,6 +32,8 @@ export default class ActiveCampaignFormsModalElement
     @state()
     _searchQuery = "";
 
+    #filterTimeout?: NodeJS.Timeout;
+
     constructor() {
         super();
 
@@ -83,7 +85,15 @@ export default class ActiveCampaignFormsModalElement
         query = query.toLowerCase();
         this._searchQuery = query;
 
-        await this.#loadForms(this._currentPageNumber, this._searchQuery);
+        // Clear existing timeout
+        if (this.#filterTimeout) {
+            clearTimeout(this.#filterTimeout);
+        }
+
+        this.#filterTimeout = setTimeout(async () => {
+            this._currentPageNumber = 1;
+            await this.#loadForms(this._currentPageNumber, this._searchQuery);
+        }, 2000);
     }
 
     async #onPageChange(event: UUIPaginationEvent) {
