@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
-using System.Web;
 using Umbraco.Cms.Api.Common.Builders;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Models.Dtos;
@@ -53,7 +52,6 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
         {
             var uri = $"{baseAddress}{ApiPath}?limit={Constants.DefaultPageSize}";
             
-            Dictionary<string, string> queryParamsDictionary = new();
             if (page > 1)
             {
                 uri = QueryHelpers.AddQueryString(uri, "offset", ((page - 1) * Constants.DefaultPageSize).ToString());
@@ -64,9 +62,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
                 uri = QueryHelpers.AddQueryString(uri, "search", searchQuery);
             }
 
-            return queryParamsDictionary.Count == 0
-                ? uri
-                : $"{uri}&{string.Join("&", queryParamsDictionary.Select(kvp => $"{kvp.Key}={kvp.Value}"))}";
+            return uri;
         }
     }
 }
