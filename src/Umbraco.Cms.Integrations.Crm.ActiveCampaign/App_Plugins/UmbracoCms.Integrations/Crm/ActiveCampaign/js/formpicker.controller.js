@@ -60,6 +60,7 @@
                 editorService.close();
             },
             close: function () {
+                clearTimeout(filterTimeout);
                 editorService.close();
             }
         };
@@ -76,7 +77,7 @@
             vm.pagination.pageNumber = 1;
             loadForms(vm.pagination.pageNumber, vm.searchTerm);
         }, 2000);
-    }
+    };
 
     function getFormDetails(id) {
         vm.loading = true;
