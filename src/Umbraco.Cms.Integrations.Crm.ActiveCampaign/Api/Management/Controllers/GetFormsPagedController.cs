@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using System.Web;
 using Umbraco.Cms.Api.Common.Builders;
@@ -51,21 +52,21 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
         private string BuildRequestUri(string baseAddress, int page, string searchQuery)
         {
             var uri = $"{baseAddress}{ApiPath}?limit={Constants.DefaultPageSize}";
-
-            Dictionary<string, string> queryParamsDictionary = new Dictionary<string, string>();
+            
+            Dictionary<string, string> queryParamsDictionary = new();
             if (page > 1)
             {
-                queryParamsDictionary.Add("offset", ((page - 1) * Constants.DefaultPageSize).ToString());
+                uri = QueryHelpers.AddQueryString(uri, "offset", ((page - 1) * Constants.DefaultPageSize).ToString());
             }
 
             if (!string.IsNullOrWhiteSpace(searchQuery))
             {
-                queryParamsDictionary.Add("search", HttpUtility.UrlEncode(searchQuery));
+                uri = QueryHelpers.AddQueryString(uri, "search", searchQuery);
             }
 
             return queryParamsDictionary.Count == 0
                 ? uri
-                : string.Format("{0}&{1}", uri, string.Join("&", queryParamsDictionary.Select(kvp => $"{kvp.Key}={kvp.Value}")));
+                : $"{uri}&{string.Join("&", queryParamsDictionary.Select(kvp => $"{kvp.Key}={kvp.Value}"))}";
         }
     }
 }
