@@ -53,6 +53,7 @@ export default class ActiveCampaignFormsModalElement
     }
 
     disconnectedCallback() {
+        super.disconnectedCallback();
         if (this.#filterTimeout) {
             clearTimeout(this.#filterTimeout);
         }
