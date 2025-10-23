@@ -67,12 +67,15 @@
         editorService.open(options);
     };
 
-    let timer;
+    let filterTimeout;
     vm.filterForms = () => {
-        if (timer) {
-            clearTimeout(timer);
+        if (filterTimeout) {
+            clearTimeout(filterTimeout);
         }
-        timer = setTimeout(() => { loadForms(vm.pagination.pageNumber, vm.searchTerm); }, 500);
+        filterTimeout = setTimeout(() => {
+            vm.pagination.pageNumber = 1;
+            loadForms(vm.pagination.pageNumber, vm.searchTerm);
+        }, 2000);
     }
 
     function getFormDetails(id) {
