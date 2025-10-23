@@ -76,7 +76,7 @@
             vm.pagination.pageNumber = 1;
             loadForms(vm.pagination.pageNumber, vm.searchTerm);
         }, 500);
-    }
+    };
 
     function getFormDetails(id) {
         vm.loading = true;
