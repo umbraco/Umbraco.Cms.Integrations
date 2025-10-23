@@ -33,7 +33,14 @@
     {
         @if (Model.IframeEmbedded)
         {
-            <iframe frameBorder="0" style="width:100%;height:100%;" id=@id src="@Model.StandaloneUrl"></iframe>
+            if (!string.IsNullOrEmpty(Model.StandaloneUrl))
+            {
+                <iframe frameBorder="0" style="width:100%;height:100%;" id=@id src="@Model.StandaloneUrl"></iframe>
+            }
+            else
+            {
+                <iframe frameBorder="0" style="width:100%;height:100%;" id=@id srcdoc="@Model.Html"></iframe>
+            }
         }
         else
         {
