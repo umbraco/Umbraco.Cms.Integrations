@@ -9,9 +9,9 @@
                     $http.get(`${apiEndpoint}/CheckApiAccess`),
                     "Failed");
             },
-            getForms: function (page) {
+            getForms: function (page, searchQuery) {
                 return umbRequestHelper.resourcePromise(
-                    $http.get(`${apiEndpoint}/GetForms?page=${page}`),
+                    $http.get(`${apiEndpoint}/GetForms?page=${page}&searchQuery=${encodeURIComponent(searchQuery)}`),
                     "Failed");
             },
             getForm: function (id) {

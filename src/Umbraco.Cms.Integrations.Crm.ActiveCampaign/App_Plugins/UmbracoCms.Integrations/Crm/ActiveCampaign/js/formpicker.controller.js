@@ -67,6 +67,17 @@
         editorService.open(options);
     };
 
+    let filterTimeout;
+    vm.filterForms = () => {
+        if (filterTimeout) {
+            clearTimeout(filterTimeout);
+        }
+        filterTimeout = setTimeout(() => {
+            vm.pagination.pageNumber = 1;
+            loadForms(vm.pagination.pageNumber, vm.searchTerm);
+        }, 500);
+    };
+
     function getFormDetails(id) {
         vm.loading = true;
         umbracoCmsIntegrationsCrmActiveCampaignResource.getForm(id).then(function (response) {
@@ -79,12 +90,10 @@
         });
     }
 
-    function loadForms(page) {
+    function loadForms(page, searchQuery) {
         vm.loading = true;
-        umbracoCmsIntegrationsCrmActiveCampaignResource.getForms(page).then(function (response) {
-
-            vm.formsList = [];
-
+        vm.formsList = [];
+        umbracoCmsIntegrationsCrmActiveCampaignResource.getForms(page ?? 1, searchQuery ?? "").then(function (response) {
             if (response.forms != null) {
 
                 vm.pagination.totalPages = response.meta.totalPages;
@@ -104,7 +113,7 @@
 
     // pagination events
     function goToPage(page) {
-        loadForms(page);
+        loadForms(page, vm.searchTerm);
     }
 }
 
