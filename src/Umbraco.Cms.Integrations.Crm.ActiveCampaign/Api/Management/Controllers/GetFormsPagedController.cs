@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Api.Common.Builders;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
@@ -21,15 +22,13 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetForms([FromQuery] int? page = 1)
+        public async Task<IActionResult> GetForms([FromQuery] int? page = 1, [FromQuery] string? searchQuery = "")
         {
             try
             {
                 var client = HttpClientFactory.CreateClient(Constants.FormsHttpClient);
 
-                var requestUriString = page == 1
-                    ? $"{client.BaseAddress}{ApiPath}&limit={Constants.DefaultPageSize}"
-                    : $"{client.BaseAddress}{ApiPath}&limit={Constants.DefaultPageSize}&offset={(page - 1) * Constants.DefaultPageSize}";
+                var requestUriString = BuildRequestUri(client.BaseAddress.ToString(), page ?? 1, searchQuery);
 
                 var requestMessage = new HttpRequestMessage
                 {
@@ -47,6 +46,23 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
                     .WithTitle(ex.Message)
                     .Build());
             }
+        }
+
+        private string BuildRequestUri(string baseAddress, int page, string searchQuery)
+        {
+            var uri = $"{baseAddress}{ApiPath}?limit={Constants.DefaultPageSize}";
+            
+            if (page > 1)
+            {
+                uri = QueryHelpers.AddQueryString(uri, "offset", ((page - 1) * Constants.DefaultPageSize).ToString());
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                uri = QueryHelpers.AddQueryString(uri, "search", searchQuery);
+            }
+
+            return uri;
         }
     }
 }

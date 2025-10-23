@@ -64,6 +64,7 @@ export type GetFormsData = {
     path?: never;
     query?: {
         page?: number;
+        searchQuery?: string;
     };
     url: '/umbraco/activecampaign-forms/management/api/v1/forms';
 };
@@ -73,10 +74,6 @@ export type GetFormsErrors = {
      * The resource is protected and requires an authentication token
      */
     401: unknown;
-    /**
-     * Payment Required
-     */
-    402: unknown;
     /**
      * Forbidden
      */
