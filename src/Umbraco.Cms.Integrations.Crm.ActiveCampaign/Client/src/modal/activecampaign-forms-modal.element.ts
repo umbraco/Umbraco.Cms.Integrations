@@ -53,7 +53,9 @@ export default class ActiveCampaignFormsModalElement
     }
 
     disconnectedCallback() {
-        clearTimeout(this.#filterTimeout);
+        if (this.#filterTimeout) {
+            clearTimeout(this.#filterTimeout);
+        }
     }
 
     async #checkApiAccess() {
