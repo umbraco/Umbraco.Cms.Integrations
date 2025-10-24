@@ -28,8 +28,8 @@ export class ActiveCampaignFormsRepository extends UmbControllerBase {
         return { data };
     }
 
-    async getForms(page?: number) {
-        const { data, error } = await tryExecuteAndNotify(this, ActiveCampaignFormsService.getForms({ page: page }));
+    async getForms(page?: number, searchQuery?: string) {
+        const { data, error } = await tryExecuteAndNotify(this, ActiveCampaignFormsService.getForms({ page: page, searchQuery: searchQuery }));
 
         if (error || !data) {
             return { error };
