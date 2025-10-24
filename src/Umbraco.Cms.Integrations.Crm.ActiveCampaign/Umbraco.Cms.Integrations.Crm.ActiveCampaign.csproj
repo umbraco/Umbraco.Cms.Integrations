@@ -60,4 +60,7 @@
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
 		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '$(Configuration)' !== 'Release' ? '../wwwroot' : '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
 	</Target>
+	<ItemGroup>
+	  <ClientAssetsInputs Remove="Client\config.outputPath.js" />
+	</ItemGroup>
 </Project>
