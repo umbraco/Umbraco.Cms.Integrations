@@ -2,8 +2,6 @@
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Sync;
-using Umbraco.Extensions;
-
 namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 {
     public class AlgoliaContentPublishedHandler : INotificationAsyncHandler<ContentPublishedNotification>
