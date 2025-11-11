@@ -19,13 +19,13 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
             _distributedCache = distributedCache;
         }
 
-        public async Task HandleAsync(ContentPublishedNotification notification, CancellationToken cancellationToken)
+        public Task HandleAsync(ContentPublishedNotification notification, CancellationToken cancellationToken)
         {
             if (_serverRoleAccessor.CurrentServerRole == ServerRole.SchedulingPublisher)
             {
                 _distributedCache.RefreshAllPublishedSnapshot();
             }
-            await Task.CompletedTask;
+            return Task.CompletedTask;
         }
     }
 }
