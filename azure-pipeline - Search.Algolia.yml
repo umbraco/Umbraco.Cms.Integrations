@@ -62,7 +62,7 @@ steps:
       --output $(Build.ArtifactStagingDirectory)/bom/bom.json \
       --json-pretty \
       --project-group "DXP" \
-      --project-name $(productName)" \
+      --project-name $(productName) \
       --project-version $(productVersion) \
       --server-url $(DT_BASE_URL) \
       --api-key $(DT_API_KEY)
