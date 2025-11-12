@@ -14,6 +14,8 @@ variables:
   DT_API_KEY: $(dtApiKey)
   DT_BASE_URL: https://ca-dev-global-dtrack-api.whitesea-2475732e.westeurope.azurecontainerapps.io
 
+Write-Host "DT test: $(dtTest)"
+
 steps:
 - task: NuGetToolInstaller@1
   displayName: 'Install NuGet'
