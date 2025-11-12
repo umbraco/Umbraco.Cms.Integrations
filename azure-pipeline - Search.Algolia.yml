@@ -9,6 +9,9 @@ variables:
   project: 'src/$(projectName)/$(projectName).csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  productVersion: 'main'
+  DT_API_KEY: $(dtApiKey)
+  DT_BASE_URL: https://ca-dev-global-dtrack-api.whitesea-2475732e.westeurope.azurecontainerapps.io
 
 steps:
 - task: NuGetToolInstaller@1
@@ -44,3 +47,31 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+ # Generate/upload SBOM with cdxgen
+- script: |
+    cd $(Build.SourcesDirectory)
+    npm install --global @cyclonedx/cdxgen
+  displayName: 'Install cdxgen'
+
+- script: |
+    mkdir -p $(Build.ArtifactStagingDirectory)/bom
+    cd $(Build.SourcesDirectory)
+    cdxgen --recurse \
+      --output $(Build.ArtifactStagingDirectory)/bom/bom.json \
+      --json-pretty \
+      --project-group "DXP" \
+      --project-name "$(projectName)" \
+      --project-version "$(productVersion)" \
+      --server-url "$(DT_BASE_URL)" \
+      --api-key "$(DT_API_KEY)"
+  displayName: 'Generate & upload SBOM with cdxgen'
+  env:
+    DT_API_KEY: $(DT_API_KEY)
+    DT_BASE_URL: "$(DT_BASE_URL)"
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish SBOM Artifact'
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)/bom
+    artifactName: SBOM
