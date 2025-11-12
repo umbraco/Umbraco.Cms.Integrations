@@ -55,24 +55,3 @@ steps:
     npm install --global @cyclonedx/cdxgen
   displayName: 'Install cdxgen'
 
-- script: |
-    mkdir -p $(Build.ArtifactStagingDirectory)/bom
-    cd $(Build.SourcesDirectory)
-    cdxgen --recurse \
-      --output $(Build.ArtifactStagingDirectory)/bom/bom.json \
-      --json-pretty \
-      --project-group "DXP" \
-      --project-name $(productName) \
-      --project-version $(productVersion) \
-      --server-url $(DT_BASE_URL) \
-      --api-key $(DT_API_KEY)
-  displayName: 'Generate & upload SBOM with cdxgen'
-  env:
-    DT_API_KEY: $(DT_API_KEY)
-    DT_BASE_URL: $(DT_BASE_URL)
-
-- task: PublishPipelineArtifact@1
-  displayName: 'Publish SBOM Artifact'
-  inputs:
-    targetPath: $(Build.ArtifactStagingDirectory)/bom
-    artifactName: SBOM
