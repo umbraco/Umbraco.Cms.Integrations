@@ -9,6 +9,7 @@ variables:
   project: 'src/$(projectName)/$(projectName).csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  productName: 'Umbraco Integrations - Algolia'
   productVersion: 'main'
   DT_API_KEY: $(dtApiKey)
   DT_BASE_URL: https://ca-dev-global-dtrack-api.whitesea-2475732e.westeurope.azurecontainerapps.io
@@ -61,7 +62,7 @@ steps:
       --output $(Build.ArtifactStagingDirectory)/bom/bom.json \
       --json-pretty \
       --project-group "DXP" \
-      --project-name "$(projectName)" \
+      --project-name "$(productName)" \
       --project-version "$(productVersion)" \
       --server-url "$(DT_BASE_URL)" \
       --api-key "$(DT_API_KEY)"
