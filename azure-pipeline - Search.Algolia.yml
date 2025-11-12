@@ -12,7 +12,7 @@ variables:
   productGroup: 'DXP'
   productVersion: 'main'
   DT_API_KEY: $(dtApiKey)
-  DT_BASE_URL: https://ca-dev-global-dtrack-api.whitesea-2475732e.westeurope.azurecontainerapps.io
+  DT_BASE_URL: 'https://ca-dev-global-dtrack-api.whitesea-2475732e.westeurope.azurecontainerapps.io'
 
 steps:
 - task: NuGetToolInstaller@1
