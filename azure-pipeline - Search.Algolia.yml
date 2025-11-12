@@ -10,7 +10,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   productGroup: 'DXP'
-  productVersion: 'main'
+  productVersion: '2.3.2'
   DT_API_KEY: $(dtApiKey)
   DT_BASE_URL: 'https://ca-dev-global-dtrack-api.whitesea-2475732e.westeurope.azurecontainerapps.io'
 
@@ -58,15 +58,15 @@ steps:
 - script: |
     mkdir -p $(Build.ArtifactStagingDirectory)/bom
     cd $(Build.SourcesDirectory)
-
     cdxgen --recurse \
       --output $(Build.ArtifactStagingDirectory)/bom/bom.json \
       --json-pretty \
-      --project-group '$(productGroup)' \
-      --project-name '$(projectName)' \
-      --project-version '$(productVersion)' \
-      --server-url '$(DT_BASE_URL)' \
-      --api-key '$(DT_API_KEY)'
+      --project-group "DXP" \
+      --project-name "Umbraco.Cms.Integrations.Search.Algolia" \
+      --project-version "2.3.2" \
+      --server-url "https://ca-dev-global-dtrack-api.whitesea-2475732e.westeurope.azurecontainerapps.io" \
+      --api-key "$(DT_API_KEY)"
+    
   displayName: 'Generate & Upload SBOM with cdxgen'
   env:
     DT_API_KEY: $(DT_API_KEY)
