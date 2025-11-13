@@ -7,6 +7,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 {
     public class UmbracoMediaPickerConverter : IAlgoliaIndexValueConverter
     {
+        const string udiPrefix = "umb://media/";
+
         private readonly IMediaService _mediaService;
 
         public UmbracoMediaPickerConverter(IMediaService mediaService) => _mediaService = mediaService;
@@ -22,36 +24,37 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
                 return list;
             }
 
-            var inputMedia = JsonSerializer.Deserialize<IEnumerable<MediaItem>>(value);
-
-            if (inputMedia == null) return string.Empty;
-
-            foreach (var item in inputMedia)
+            if (value.StartsWith(udiPrefix))
             {
-                if (item == null) continue;
+                var guidPart = value.Substring(udiPrefix.Length);
+                if (Guid.TryParse(guidPart, out Guid guid))
+                {
+                    var mediaItem = _mediaService.GetById(guid);
+                    if (mediaItem != null)
+                    {
+                        list.Add(mediaItem.GetValue("umbracoFile")?.ToString() ?? string.Empty);
+                    }
+                }
+            }
+            else
+            {
+                var inputMedia = JsonSerializer.Deserialize<IEnumerable<MediaItem>>(value);
 
-                var mediaItem = _mediaService.GetById(Guid.Parse(item.MediaKey));
+                if (inputMedia == null) return string.Empty;
 
-                if (mediaItem == null) continue;
+                foreach (var item in inputMedia)
+                {
+                    if (item == null) continue;
 
-                list.Add(mediaItem.GetValue("umbracoFile")?.ToString() ?? string.Empty);
+                    var mediaItem = _mediaService.GetById(Guid.Parse(item.MediaKey));
+
+                    if (mediaItem == null) continue;
+
+                    list.Add(mediaItem.GetValue("umbracoFile")?.ToString() ?? string.Empty);
+                }
             }
 
             return list;
-        }
-
-        private string ParseIndexValue(IEnumerable<object> values)
-        {
-            if (values != null && values.Any())
-            {
-                var value = values.FirstOrDefault();
-
-                if (value == null) return string.Empty;
-
-                return value.ToString();
-            }
-
-            return string.Empty;
         }
     }
 }
