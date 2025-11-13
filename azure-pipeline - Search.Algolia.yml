@@ -55,9 +55,9 @@ steps:
     npm install --global @cyclonedx/cdxgen
   displayName: 'Install cdxgen'
 
+- script: echo '$(DT_BASE_URL)'
+
 - script: |
-    echo "DT_BASE_URL (last 5 chars): $(echo "$DT_BASE_URL" | tail -c 6)"
-    echo "DT_API_KEY (last 5 chars): $(echo "$DT_API_KEY" | tail -c 6)"
     mkdir -p $(Build.ArtifactStagingDirectory)/bom
     cd $(Build.SourcesDirectory)
     cdxgen --recurse \
