@@ -2,17 +2,23 @@ trigger:
 - main
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
   projectName: 'Umbraco.Cms.Integrations.Search.Algolia'
   project: 'src/$(projectName)/$(projectName).csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  productGroup: 'DXP'
+  productVersion: '2.3.2'
+  DT_API_KEY: $(dtApiKey)
+  DT_BASE_URL: 'https://ca-live-global-dtrack-api.purplemoss-6e7d841c.westeurope.azurecontainerapps.io/api/v1/bom'
 
 steps:
-- task: NuGetToolInstaller@1
-  displayName: 'Install NuGet'
+- task: UseDotNet@2
+  displayName: 'Install .NET SDK'
+  inputs:
+    version: '8.x'  # Adjust to your required .NET version
 
 - task: DotNetCoreCLI@2
   displayName: 'NuGet Restore'
@@ -22,21 +28,21 @@ steps:
     projects: '$(project)'
     includeNuGetOrg: true
 
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
   displayName: 'Build Project'
   inputs:
-    solution: '$(project)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'build'
+    projects: '$(project)'
+    arguments: '--configuration $(buildConfiguration) --no-restore'
 
 - task: DotNetCoreCLI@2
   displayName: 'Create NuGet Package'
   inputs:
     command: 'pack'
-    arguments: '--configuration $(buildConfiguration)'
+    arguments: '--configuration $(buildConfiguration) --no-build'
     packagesToPack: '$(project)'
     versioningScheme: 'off'
+    nobuild: true
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Build Artifacts'
@@ -44,3 +50,26 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+# Generate/upload SBOM with cdxgen
+- script: |
+    cd $(Build.SourcesDirectory)
+    npm install --global @cyclonedx/cdxgen
+  displayName: 'Install cdxgen'
+
+- script: |
+    mkdir -p $(Build.ArtifactStagingDirectory)/bom
+    cd $(Build.SourcesDirectory)
+
+    cdxgen --recurse --output $(Build.ArtifactStagingDirectory)/bom/bom.json --json-pretty --project-group "$(productGroup)" --project-name "$(projectName)" --project-version "$(productVersion)" --server-url "$(DT_BASE_URL)" --api-key "$(DT_API_KEY)" --deep
+  displayName: 'Generate & Upload SBOM with cdxgen'
+  env:
+    DT_API_KEY: $(DT_API_KEY)
+    DT_BASE_URL: $(DT_BASE_URL)
+
+# Publish SBOM artifact
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish SBOM Artifact'
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)/bom
+    artifactName: SBOM
