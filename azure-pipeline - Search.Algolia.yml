@@ -12,7 +12,7 @@ parameters:
 
 variables:
   nodeVersion: 18.x
-  solution: Umbraco.Cms.Integrations.Search.Algolia.sln
+  solution: src/Umbraco.Cms.Integrations.Search.Algolia/Umbraco.Cms.Integrations.Search.Algolia.sln
   buildConfiguration: Release
   DOTNET_NOLOGO: true
   DOTNET_GENERATE_ASPNET_CERTIFICATE: false
