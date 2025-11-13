@@ -10,7 +10,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   productGroup: 'DXP'
-  productVersion: '2.3.2'
+  productVersion: 'v2.3.2'
   DT_API_KEY: $(dtApiKey)
   DT_BASE_URL: 'https://ca-live-global-dtrack-api.purplemoss-6e7d841c.westeurope.azurecontainerapps.io'
 
