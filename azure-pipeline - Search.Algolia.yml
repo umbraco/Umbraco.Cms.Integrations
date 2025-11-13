@@ -42,11 +42,6 @@ stages:
             inputs:
               versionSpec: $(nodeVersion)
 
-          - task: UseDotNet@2
-            displayName: Use .NET SDK from global.json
-            inputs:
-              useGlobalJson: true
-
           # Cache and restore NPM packages
           - task: Cache@2
             condition: ${{ parameters.cache_npm }}
