@@ -42,17 +42,6 @@ stages:
             inputs:
               versionSpec: $(nodeVersion)
 
-          # Cache and restore NPM packages
-          - task: Cache@2
-            condition: ${{ parameters.cache_npm }}
-            displayName: Cache NPM packages
-            inputs:
-              key: 'npm | "$(Agent.OS)" | **/package-lock.json, !**/node_modules/**'
-              restoreKeys: |
-                npm | "$(Agent.OS)"
-                npm
-              path: $(npm_config_cache)
-
           # Cache and restore NuGet packages
           - task: Cache@2
             condition: ${{ parameters.cache_nuget }}
