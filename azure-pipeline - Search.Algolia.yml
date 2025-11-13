@@ -58,14 +58,15 @@ steps:
 - script: |
     mkdir -p $(Build.ArtifactStagingDirectory)/bom
     cd $(Build.SourcesDirectory)
+
     cdxgen --recurse \
       --output $(Build.ArtifactStagingDirectory)/bom/bom.json \
       --json-pretty \
-      --project-group '$(productGroup)' \
-      --project-name '$(projectName)' \
-      --project-version '$(productVersion)' \
-      --server-url '$(DT_BASE_URL)' \
-      --api-key '$(DT_API_KEY)'
+      --project-group "$(productGroup)" \
+      --project-name "$(projectName)" \
+      --project-version "$(productVersion)" \
+      --server-url "$(DT_BASE_URL)" \
+      --api-key "$(DT_API_KEY)"
   displayName: 'Generate & Upload SBOM with cdxgen'
   env:
     DT_API_KEY: $(DT_API_KEY)
