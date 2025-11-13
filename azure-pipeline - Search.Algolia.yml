@@ -7,7 +7,7 @@ parameters:
     default: false
 
 variables:
-  nodeVersion: 18.x
+  nodeVersion: 20.x
   solution: src/Umbraco.Cms.Integrations.Search.Algolia/Umbraco.Cms.Integrations.Search.Algolia.csproj
   buildConfiguration: Release
   DOTNET_NOLOGO: true
