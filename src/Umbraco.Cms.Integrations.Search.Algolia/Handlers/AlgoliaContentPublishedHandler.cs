@@ -2,6 +2,8 @@
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Sync;
+using Umbraco.Extensions;
+
 namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 {
     public class AlgoliaContentPublishedHandler : INotificationAsyncHandler<ContentPublishedNotification>
@@ -21,7 +23,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
         {
             if (_serverRoleAccessor.CurrentServerRole == ServerRole.SchedulingPublisher)
             {
-                _distributedCache.RefreshAllPublishedSnapshot();
+                _distributedCache.RefreshAllContentCache();
             }
             return Task.CompletedTask;
         }
