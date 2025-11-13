@@ -18,6 +18,11 @@ variables:
   DOTNET_GENERATE_ASPNET_CERTIFICATE: false
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
+  productGroup: 'DXP'
+  productName: 'Umbraco.Cms.Integrations.Search.Algolia'
+  productVersion: '2.3.2'
+  DT_API_KEY: $(dtApiKey)
+  DT_BASE_URL: 'https://ca-live-global-dtrack-api.purplemoss-6e7d841c.westeurope.azurecontainerapps.io/api/v1/bom'
 
 stages: 
   - stage: Build
@@ -76,3 +81,33 @@ stages:
             inputs:
               targetPath: $(Build.SourcesDirectory)
               artifactName: build_output
+
+          # Generate/upload SBOM with cdxgen
+          - script: |
+              cd $(Build.SourcesDirectory)
+              npm install --global @cyclonedx/cdxgen
+            displayName: 'Install cdxgen'
+
+          - script: |
+              mkdir -p $(Build.ArtifactStagingDirectory)/bom
+              cd $(Build.SourcesDirectory)
+
+              cdxgen --recurse \
+              --output $(Build.ArtifactStagingDirectory)/bom/bom.json \
+              --json-pretty \
+              --project-group "$(productGroup)" \
+              --project-name "$(productName)" \
+              --project-version "$(productVersion)" \
+              --server-url "$(DT_BASE_URL)" \
+              --api-key "$(DT_API_KEY)"
+            displayName: 'Generate & Upload SBOM with cdxgen'
+            env:
+              DT_API_KEY: $(DT_API_KEY)
+              DT_BASE_URL: $(DT_BASE_URL)
+
+          # Publish SBOM artifact
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish SBOM Artifact'
+            inputs:
+              targetPath: $(Build.ArtifactStagingDirectory)/bom
+              artifactName: SBOM
