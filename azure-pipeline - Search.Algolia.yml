@@ -56,8 +56,8 @@ steps:
   displayName: 'Install cdxgen'
 
 - script: |
-    echo "DT_BASE_URL (last 5 chars): ${DT_BASE_URL: -5}"
-    echo "DT_API_KEY (last 5 chars): ${DT_API_KEY: -5}"
+    echo "DT_BASE_URL (last 5 chars): $(echo "$DT_BASE_URL" | tail -c 6)"
+    echo "DT_API_KEY (last 5 chars): $(echo "$DT_API_KEY" | tail -c 6)"
     mkdir -p $(Build.ArtifactStagingDirectory)/bom
     cd $(Build.SourcesDirectory)
     cdxgen --recurse \
