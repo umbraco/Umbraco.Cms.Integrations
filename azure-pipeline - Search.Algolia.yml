@@ -1,50 +1,94 @@
-trigger:
-- main
+name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
 
-pool:
-  vmImage: 'windows-latest'
+parameters:
+  - name: cache_npm
+    displayName: Cache NPM packages
+    type: boolean
+    default: true
+  - name: cache_nuget
+    displayName: Cache NuGet packages
+    type: boolean
+    default: false
 
 variables:
-  projectName: 'Umbraco.Cms.Integrations.Search.Algolia'
-  project: 'src/$(projectName)/$(projectName).csproj'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  productGroup: 'DXP'
-  productVersion: '2.3.2'
-  DT_API_KEY: $(dtApiKey)
-  DT_BASE_URL: 'https://ca-live-global-dtrack-api.purplemoss-6e7d841c.westeurope.azurecontainerapps.io/api/v1/bom'
+  nodeVersion: 18.x
+  solution: Umbraco.Cms.Integrations.Search.Algolia.sln
+  buildConfiguration: Release
+  DOTNET_NOLOGO: true
+  DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
 
-steps:
-- task: NuGetToolInstaller@1
-  displayName: 'Install NuGet'
+stages: 
+  - stage: Build
+    variables:
+      NUGET_PACKAGES: $(Pipeline.Workspace)/.nuget/packages
+      npm_config_cache: $(Pipeline.Workspace)/.npm_client
+    jobs:
+      - job: Build
+        pool: 
+          vmImage: ubuntu-latest
+        steps:
+          # Checkout source (avoid shallow clone to calculate version height)
+          - checkout: self
+            fetchDepth: 0
 
-- task: DotNetCoreCLI@2
-  displayName: 'NuGet Restore'
-  inputs:
-    command: 'restore'
-    feedsToUse: 'select'
-    projects: '$(project)'
-    includeNuGetOrg: true
+          # Setup build environment
+          - task: NuGetAuthenticate@1
+            displayName: Authenticate NuGet
 
-- task: VSBuild@1
-  displayName: 'Build Project'
-  inputs:
-    solution: '$(project)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+          - task: NodeTool@0
+            displayName: Use Node.js $(nodeVersion)
+            inputs:
+              versionSpec: $(nodeVersion)
 
-- task: DotNetCoreCLI@2
-  displayName: 'Create NuGet Package'
-  inputs:
-    command: 'pack'
-    arguments: '--configuration $(buildConfiguration)'
-    packagesToPack: '$(project)'
-    versioningScheme: 'off'
+          - task: UseDotNet@2
+            displayName: Use .NET SDK from global.json
+            inputs:
+              useGlobalJson: true
 
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Build Artifacts'
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+          # Cache and restore NPM packages
+          - task: Cache@2
+            condition: ${{ parameters.cache_npm }}
+            displayName: Cache NPM packages
+            inputs:
+              key: 'npm | "$(Agent.OS)" | **/package-lock.json, !**/node_modules/**'
+              restoreKeys: |
+                npm | "$(Agent.OS)"
+                npm
+              path: $(npm_config_cache)
+
+          # Cache and restore NuGet packages
+          - task: Cache@2
+            condition: ${{ parameters.cache_nuget }}
+            displayName: Cache NuGet packages
+            inputs:
+              key: 'nuget | "$(Agent.OS)" | **/packages.lock.json, !**/bin/**, !**/obj/**'
+              restoreKeys: |
+                nuget | "$(Agent.OS)"
+                nuget
+              path: $(NUGET_PACKAGES)
+
+          - script: dotnet restore $(solution) --locked-mode
+            displayName: Restore NuGet packages
+
+          # Build
+          - script: dotnet build $(solution) --configuration $(buildConfiguration) --no-restore -p:ContinuousIntegrationBuild=true
+            displayName: Run dotnet build
+
+          # Pack
+          - script: dotnet pack $(solution) --configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)/nupkg
+            displayName: Run dotnet pack
+
+          # Publish
+          - task: PublishPipelineArtifact@1
+            displayName: Publish NuGet packages
+            inputs:
+              targetPath: $(Build.ArtifactStagingDirectory)/nupkg
+              artifactName: nupkg
+
+          - task: PublishPipelineArtifact@1
+            displayName: Publish build output
+            inputs:
+              targetPath: $(Build.SourcesDirectory)
+              artifactName: build_output
