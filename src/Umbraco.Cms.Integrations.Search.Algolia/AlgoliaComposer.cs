@@ -23,8 +23,9 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
             builder.AddNotificationHandler<UmbracoApplicationStartingNotification, RunAlgoliaIndicesMigration>();
 
             builder.AddNotificationAsyncHandler<ContentCacheRefresherNotification, AlgoliaContentCacheRefresherHandler>();
-            
-           builder.Services.AddOptions<AlgoliaSettings>()
+            builder.AddNotificationAsyncHandler<ContentPublishedNotification, AlgoliaContentPublishedHandler>();
+
+            builder.Services.AddOptions<AlgoliaSettings>()
                 .Bind(builder.Config.GetSection(Constants.SettingsPath));
 
             builder.Services.AddSingleton<IAlgoliaIndexService, AlgoliaIndexService>();
