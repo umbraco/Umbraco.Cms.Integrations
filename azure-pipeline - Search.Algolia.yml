@@ -18,7 +18,7 @@ variables:
   productName: 'Umbraco.Cms.Integrations.Search.Algolia'
   productVersion: '2.3.2'
   DT_API_KEY: $(dtApiKey)
-  DT_BASE_URL: 'https://ca-live-global-dtrack-api.purplemoss-6e7d841c.westeurope.azurecontainerapps.io/api/v1/bom'
+  DT_BASE_URL: 'https://ca-live-global-dtrack-api.purplemoss-6e7d841c.westeurope.azurecontainerapps.io'
 
 stages: 
   - stage: Build
@@ -58,7 +58,7 @@ stages:
             displayName: Restore NuGet packages
 
           # Build
-          - script: dotnet build $(solution) --configuration $(buildConfiguration) --no-restore -p:ContinuousIntegrationBuild=true
+          - script: dotnet build $(solution) --configuration $(buildConfiguration) --no-restore -p:ContinuousIntegrationBuild=true -p:CopyLocalLockFileAssemblies=true
             displayName: Run dotnet build
 
           # Pack
