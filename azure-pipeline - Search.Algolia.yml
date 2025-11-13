@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  vmImage: 'ubuntu-24.04'
+  vmImage: 'windows-latest'
 
 variables:
   projectName: 'Umbraco.Cms.Integrations.Search.Algolia'
