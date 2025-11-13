@@ -1,16 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<WarningsAsErrors>Nullable</WarningsAsErrors>
 	</PropertyGroup>
-
-	<ItemDefinitionGroup>
-		<Reference>
-			<Private>True</Private>
-		</Reference>
-	</ItemDefinitionGroup>
 
 	<PropertyGroup>
 		<PackageId>Umbraco.Cms.Integrations.Search.Algolia</PackageId>
