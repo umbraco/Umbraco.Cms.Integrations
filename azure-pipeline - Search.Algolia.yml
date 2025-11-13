@@ -1,15 +1,5 @@
 name: $(TeamProject)_$(Build.DefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)$(Rev:.r)
 
-parameters:
-  - name: cache_npm
-    displayName: Cache NPM packages
-    type: boolean
-    default: true
-  - name: cache_nuget
-    displayName: Cache NuGet packages
-    type: boolean
-    default: false
-
 variables:
   nodeVersion: 18.x
   solution: src/Umbraco.Cms.Integrations.Search.Algolia/Umbraco.Cms.Integrations.Search.Algolia.csproj
@@ -41,11 +31,6 @@ stages:
           # Setup build environment
           - task: NuGetAuthenticate@1
             displayName: Authenticate NuGet
-
-          - task: NodeTool@0
-            displayName: Use Node.js $(nodeVersion)
-            inputs:
-              versionSpec: $(nodeVersion)
 
           # Cache and restore NuGet packages
           - task: Cache@2
