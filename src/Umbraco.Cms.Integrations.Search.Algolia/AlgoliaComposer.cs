@@ -24,6 +24,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia
             builder.AddNotificationHandler<UmbracoApplicationStartingNotification, RunAlgoliaIndicesMigration>();
 
             builder.AddNotificationAsyncHandler<ContentCacheRefresherNotification, AlgoliaContentCacheRefresherHandler>();
+            builder.AddNotificationAsyncHandler<ContentPublishedNotification, AlgoliaContentPublishedHandler>();
 
             builder.Services.AddOptions<AlgoliaSettings>()
                  .Bind(builder.Config.GetSection(Constants.SettingsPath));
