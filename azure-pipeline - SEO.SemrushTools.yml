@@ -10,10 +10,10 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   productGroup: 'DXP'
-	productVersion: 'v13'
-	DT_API_KEY: $(dtApiKey)
-	DT_BASE_URL: $(dtBaseUrl)
-  
+  productVersion: 'v13'
+  DT_API_KEY: $(dtApiKey)
+  DT_BASE_URL: $(dtBaseUrl)
+
 steps:
 - task: NuGetToolInstaller@1
   displayName: 'Install NuGet'
