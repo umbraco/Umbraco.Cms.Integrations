@@ -10,9 +10,9 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   productGroup: 'DXP'
-  productVersion: 'v2.3.2'
+  productVersion: 'v13'
   DT_API_KEY: $(dtApiKey)
-  DT_BASE_URL: 'https://ca-live-global-dtrack-api.purplemoss-6e7d841c.westeurope.azurecontainerapps.io'
+  DT_BASE_URL: $(dtBaseUrl)
 
 steps:
 - task: NuGetToolInstaller@1
