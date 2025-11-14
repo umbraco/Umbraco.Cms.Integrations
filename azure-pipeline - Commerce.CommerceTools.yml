@@ -14,7 +14,6 @@ variables:
   DT_API_KEY: $(dtApiKey)
   DT_BASE_URL: $(dtBaseUrl)
 
-
 steps:
 - task: NuGetToolInstaller@1
   displayName: 'Install NuGet'
