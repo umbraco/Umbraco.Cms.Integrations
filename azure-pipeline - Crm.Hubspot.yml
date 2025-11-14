@@ -16,6 +16,10 @@ variables:
   project: 'src/$(projectName)/$(projectName).csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  productGroup: 'DXP'
+  productVersion: 'v16'
+  DT_API_KEY: $(dtApiKey)
+  DT_BASE_URL: $(dtBaseUrl)
 
 steps:
 - task: NuGetToolInstaller@1
@@ -57,3 +61,26 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+# Generate/upload SBOM with cdxgen
+- script: |
+    cd $(Build.SourcesDirectory)
+    npm install --global @cyclonedx/cdxgen
+  displayName: 'Install cdxgen'
+
+- script: |
+    mkdir -p $(Build.ArtifactStagingDirectory)/bom
+    cd $(Build.SourcesDirectory)
+
+    cdxgen --recurse --output $(Build.ArtifactStagingDirectory)\bom\bom.json --json-pretty --project-group "$(productGroup)" --project-name "$(projectName)" --project-version "$(productVersion)" --server-url "$(DT_BASE_URL)" --api-key "$(DT_API_KEY)" --deep
+  displayName: 'Generate & Upload SBOM with cdxgen'
+  env:
+    DT_API_KEY: $(DT_API_KEY)
+    DT_BASE_URL: $(DT_BASE_URL)
+
+# Publish SBOM artifact
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish SBOM Artifact'
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)/bom
+    artifactName: SBOM    
