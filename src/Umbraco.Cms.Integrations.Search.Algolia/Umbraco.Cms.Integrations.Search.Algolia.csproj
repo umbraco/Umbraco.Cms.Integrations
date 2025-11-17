@@ -36,7 +36,7 @@
 	<ItemGroup>
 		<Content Include="algolia.png" Pack="true" PackagePath="\" />
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
-		<Content Include="wwwroot\clientassets\**\*" Pack="true" PackagePath="staticwebassets\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="wwwroot\**\*" Pack="true" PackagePath="staticwebassets\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
 	<!-- Build client assets using NPM -->
@@ -46,6 +46,6 @@
 		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
 	</PropertyGroup>
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
-		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../wwwroot/clientassets';" Overwrite="true" />
+		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../wwwroot';" Overwrite="true" />
 	</Target>
 </Project>
