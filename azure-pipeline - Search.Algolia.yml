@@ -48,7 +48,7 @@ steps:
   displayName: 'Create NuGet Package'
   inputs:
     command: 'pack'
-    arguments: '--configuration $(buildConfiguration)'
+    arguments: '--configuration $(buildConfiguration) --no-build --no-restore'
     packagesToPack: '$(project)'
     versioningScheme: 'off'
 
