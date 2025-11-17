@@ -36,14 +36,7 @@
 	<ItemGroup>
 		<Content Include="algolia.png" Pack="true" PackagePath="\" />
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Update="wwwroot\clientassets\**">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<Pack>true</Pack>
-			<PackagePath>staticwebassets</PackagePath>
-		</Content>
+		<Content Include="wwwroot\clientassets\**\*" Pack="true" PackagePath="staticwebassets" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
 	<!-- Build client assets using NPM -->
