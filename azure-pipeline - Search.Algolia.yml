@@ -27,8 +27,10 @@ steps:
   inputs:
     packageType: 'sdk'
     version: '10.0.100'
+
 - task: NuGetToolInstaller@1
   displayName: 'Install NuGet'
+
 - task: DotNetCoreCLI@2
   displayName: 'NuGet Restore'
   inputs:
@@ -36,18 +38,20 @@ steps:
     feedsToUse: 'select'
     projects: '$(project)'
     includeNuGetOrg: true
-- task: DotNetCoreCLI@2
+
+- task: VSBuild@1
   displayName: 'Build Project'
   inputs:
-    command: 'build'
-    projects: '$(project)'
-    arguments: '--configuration $(buildConfiguration)'
+    solution: '$(project)'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   displayName: 'Create NuGet Package'
   inputs:
     command: 'pack'
-    arguments: '--configuration $(buildConfiguration) /p:GenerateStaticWebAssetsPropsFile=false'
+    arguments: '--configuration $(buildConfiguration)'
     packagesToPack: '$(project)'
     versioningScheme: 'off'
 
