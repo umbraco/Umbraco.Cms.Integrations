@@ -36,18 +36,12 @@ steps:
     feedsToUse: 'select'
     projects: '$(project)'
     includeNuGetOrg: true
-- task: VSBuild@1
+- task: DotNetCoreCLI@2
   displayName: 'Build Project'
   inputs:
-    solution: '$(project)'
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-
-- script: |
-    rmdir /s /q "$(Build.SourcesDirectory)\src\$(projectName)\obj"
-  displayName: 'Clean obj folder'
-  continueOnError: true
+    command: 'build'
+    projects: '$(project)'
+    arguments: '--configuration $(buildConfiguration) /p:GenerateStaticWebAssetsPropsFile=false /p:GenerateStaticWebAssetsManifest=false'
 
 - task: DotNetCoreCLI@2
   displayName: 'Create NuGet Package'
