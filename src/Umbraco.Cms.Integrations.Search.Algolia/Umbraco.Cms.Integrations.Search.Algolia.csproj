@@ -41,6 +41,8 @@
 	<ItemGroup>
 		<Content Update="wwwroot\clientassets\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Pack>true</Pack>
+			<PackagePath>staticwebassets</PackagePath>
 		</Content>
 	</ItemGroup>
 
