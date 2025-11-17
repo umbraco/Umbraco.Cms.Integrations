@@ -22,9 +22,13 @@ variables:
   DT_BASE_URL: $(dtBaseUrl)
 
 steps:
+- task: UseDotNet@2
+  displayName: 'Use SDK version 10.0.100'
+  inputs:
+    packageType: 'sdk'
+    version: '10.0.100'
 - task: NuGetToolInstaller@1
   displayName: 'Install NuGet'
-
 - task: DotNetCoreCLI@2
   displayName: 'NuGet Restore'
   inputs:
@@ -32,11 +36,6 @@ steps:
     feedsToUse: 'select'
     projects: '$(project)'
     includeNuGetOrg: true
-- task: UseDotNet@2
-  displayName: 'Use SDK version 10.0.100'
-  inputs:
-    packageType: 'sdk'
-    version: '10.0.100'
 - task: VSBuild@1
   displayName: 'Build Project'
   inputs:
