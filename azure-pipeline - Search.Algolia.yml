@@ -44,6 +44,11 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- script: |
+    rmdir /s /q "$(Build.SourcesDirectory)\src\$(projectName)\obj"
+  displayName: 'Clean obj folder'
+  continueOnError: true
+
 - task: DotNetCoreCLI@2
   displayName: 'Create NuGet Package'
   inputs:
