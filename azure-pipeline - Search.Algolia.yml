@@ -43,11 +43,11 @@ steps:
     projects: '$(project)'
     arguments: '--configuration $(buildConfiguration)'
 
--task: DotNetCoreCLI@2
+- task: DotNetCoreCLI@2
   displayName: 'Create NuGet Package'
   inputs:
     command: 'pack'
-    arguments: '--configuration $(buildConfiguration) /p:GenerateStaticWebAssetsPropsFile=false /p:GenerateStaticWebAssetsManifest=false'
+    arguments: '--configuration $(buildConfiguration) /p:GenerateStaticWebAssetsPropsFile=false'
     packagesToPack: '$(project)'
     versioningScheme: 'off'
 
