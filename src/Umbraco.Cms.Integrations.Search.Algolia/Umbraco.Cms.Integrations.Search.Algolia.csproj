@@ -36,6 +36,7 @@
 	<ItemGroup>
 		<Content Include="algolia.png" Pack="true" PackagePath="\" />
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
+		<Content Include="wwwroot\clientassets\**\*" Pack="true" PackagePath="staticwebassets\$(StaticWebAssetBasePath.TrimStart('/'))" />
 	</ItemGroup>
 
 	<!-- Build client assets using NPM -->
