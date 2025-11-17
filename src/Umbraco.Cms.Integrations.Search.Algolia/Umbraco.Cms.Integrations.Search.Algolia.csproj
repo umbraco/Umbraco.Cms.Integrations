@@ -36,9 +36,11 @@
 	<ItemGroup>
 		<Content Include="algolia.png" Pack="true" PackagePath="\" />
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
-		<Content Include="wwwroot\clientassets\**\*" CopyToOutputDirectory="PreserveNewest">
-			<Pack>true</Pack>
-			<PackagePath>staticwebassets</PackagePath>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Update="wwwroot\clientassets\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 
