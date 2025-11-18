@@ -16,8 +16,8 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
 
         public GetAuthorizationUrlController(
             IOptions<HubspotSettings> settingsOptions,
-            AuthorizationImplementationFactory authorizationImplementationFactory) 
-            : base(settingsOptions) => _authorizationService = authorizationImplementationFactory(Settings.UseUmbracoAuthorization);
+            IHubspotAuthorizationServiceFactory authorizationServiceFactory) 
+            : base(settingsOptions) => _authorizationService = authorizationServiceFactory.GetAuthorizationService(Settings.UseUmbracoAuthorization);
 
         [HttpGet("authorization-url", Name = Constants.OperationIdentifiers.GetAuthorizationUrl)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]

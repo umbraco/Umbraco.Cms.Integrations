@@ -21,12 +21,12 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
             IOptions<HubspotSettings> settingsOptions,
             IHttpClientFactory httpClientFactory,
             ITokenService tokenService,
-            IHubspotAuthorizationService authorizationService)
+            IHubspotAuthorizationServiceFactory authorizationServiceFactory)
             : base(settingsOptions)
         {
             _httpClientFactory = httpClientFactory;
             _tokenService = tokenService;
-            _authorizationService = authorizationService;
+            _authorizationService = authorizationServiceFactory.GetAuthorizationService(settingsOptions.Value.UseUmbracoAuthorization);
         }
 
         [HttpGet("validate", Name = Constants.OperationIdentifiers.ValidateAccessToken)]

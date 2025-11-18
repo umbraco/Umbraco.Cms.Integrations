@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
@@ -16,7 +16,7 @@
 		<PackageIconUrl></PackageIconUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main-v16/src/Umbraco.Cms.Integrations.Crm.Hubspot</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>7.0.1</Version>
+		<Version>8.0.0</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
@@ -25,7 +25,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<UmbracoCmsPackageVersion>[16.0.0, 17)</UmbracoCmsPackageVersion>
+		<UmbracoCmsPackageVersion>[17.0.0-rc2, 18)</UmbracoCmsPackageVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
