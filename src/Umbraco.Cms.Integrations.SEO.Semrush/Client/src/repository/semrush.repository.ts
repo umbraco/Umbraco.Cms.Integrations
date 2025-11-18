@@ -1,7 +1,7 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { tryExecute } from "@umbraco-cms/backoffice/resources";
-import { AccessTokenService, RelatedPhrasesDtoModelReadable, SemrushService } from "@umbraco-integrations/semrush/generated";
+import { AccessToken, RelatedPhrasesDtoModel, Semrush } from "@umbraco-integrations/semrush/generated";
 
 export class SemrushRepository extends UmbControllerBase {
     constructor(host: UmbControllerHost) {
@@ -9,7 +9,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async getTokenDetails(){
-        const { data, error } = await tryExecute(this, AccessTokenService.getTokenDetails());
+        const { data, error } = await tryExecute(this, AccessToken.getTokenDetails());
 
         if (error || !data) {
             return { error };
@@ -19,7 +19,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async getAccessToken(code: string) {
-        const { data, error } = await tryExecute(this, AccessTokenService.postTokenGet({ body: { code: code } }));
+        const { data, error } = await tryExecute(this, AccessToken.postTokenGet({ body: { code: code } }));
 
         if (error || !data) {
             return { error };
@@ -29,7 +29,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async refreshAccessToken() {
-        const { data, error } = await tryExecute(this, AccessTokenService.postTokenRefresh());
+        const { data, error } = await tryExecute(this, AccessToken.postTokenRefresh());
 
         if (error || !data) {
             return { error };
@@ -39,7 +39,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async revokeToken() {
-        const { data, error } = await tryExecute(this, AccessTokenService.postTokenRevoke());
+        const { data, error } = await tryExecute(this, AccessToken.postTokenRevoke());
 
         if (error || !data) {
             return { error };
@@ -49,7 +49,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async validateToken() {
-        const { data, error } = await tryExecute(this, AccessTokenService.getTokenValidate());
+        const { data, error } = await tryExecute(this, AccessToken.getTokenValidate());
 
         if (error || !data) {
             return { error };
@@ -59,7 +59,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async oauth(code: string) {
-        const { data, error } = await tryExecute(this, SemrushService.getAuth({ query: { code: code } }));
+        const { data, error } = await tryExecute(this, Semrush.getAuth({ query: { code: code } }));
 
         if (error || !data) {
             return { error };
@@ -69,7 +69,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async getAuthorizationUrl() {
-        const { data, error } = await tryExecute(this, SemrushService.getAuthUrl());
+        const { data, error } = await tryExecute(this, Semrush.getAuthUrl());
 
         if (error || !data) {
             return { error };
@@ -79,7 +79,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async getColumns(){
-        const { data, error } = await tryExecute(this, SemrushService.getColumns());
+        const { data, error } = await tryExecute(this, Semrush.getColumns());
 
         if (error || !data) {
             return { error };
@@ -89,7 +89,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async getDataSources(){
-        const { data, error } = await tryExecute(this, SemrushService.getDataSources());
+        const { data, error } = await tryExecute(this, Semrush.getDataSources());
 
         if (error || !data) {
             return { error };
@@ -99,7 +99,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async getRelatedPhrases(phrase: string, pageNumber: number, dataSource: string, method: string){
-        const { data, error } = await tryExecute(this, SemrushService.getRelatedPhrases({
+        const { data, error } = await tryExecute(this, Semrush.getRelatedPhrases({
             query: {
                 phrase: phrase,
                 pageNumber: pageNumber,
@@ -116,7 +116,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async ping() {
-        const { data, error } = await tryExecute(this, SemrushService.getPing());
+        const { data, error } = await tryExecute(this, Semrush.getPing());
 
         if (error || !data) {
             return { error };
@@ -126,7 +126,7 @@ export class SemrushRepository extends UmbControllerBase {
     }
 
     async getCurrentContentProperties(contentId: string) {
-        const { data, error } = await tryExecute(this, SemrushService.getContentProperties({ query: { contentId: contentId } }));
+        const { data, error } = await tryExecute(this, Semrush.getContentProperties({ query: { contentId: contentId } }));
 
         if (error || !data) {
             return { error };
