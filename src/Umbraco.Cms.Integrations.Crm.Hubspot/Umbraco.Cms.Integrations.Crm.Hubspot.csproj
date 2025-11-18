@@ -52,6 +52,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Content Include="wwwroot\**\*" Pack="true" PackagePath="staticwebassets\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Content Include="Views\**" />
 	</ItemGroup>
 
@@ -62,6 +66,6 @@
 		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
 	</PropertyGroup>
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
-		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
+		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../wwwroot';" Overwrite="true" />
 	</Target>
 </Project>
