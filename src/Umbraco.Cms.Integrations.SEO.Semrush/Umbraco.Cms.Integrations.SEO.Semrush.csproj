@@ -24,7 +24,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<UmbracoCmsPackageVersion>[17.0.0-rc2, 18)</UmbracoCmsPackageVersion>
+		<UmbracoCmsPackageVersion>[17.0.0-rc4, 18)</UmbracoCmsPackageVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -66,7 +66,7 @@
 	<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
 	<PropertyGroup>
 		<!-- Use this to (temporarily) disable building client assets, e.g. to start the project and generate updated API models -->
-		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
+		<ShouldRunClientAssetsBuild>false</ShouldRunClientAssetsBuild>
 	</PropertyGroup>
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
 		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../wwwroot';" Overwrite="true" />
