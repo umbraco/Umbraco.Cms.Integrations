@@ -29,7 +29,7 @@
 	</ItemGroup>
 
 	<PropertyGroup>
-		<UmbracoCmsPackageVersion>[17.0.0-rc2, 18)</UmbracoCmsPackageVersion>
+		<UmbracoCmsPackageVersion>[17.0.0-rc4, 18)</UmbracoCmsPackageVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Umbraco.Cms.Api.Common" Version="$(UmbracoCmsPackageVersion)" />

@@ -2,7 +2,7 @@
 global using System.Text.Json.Serialization;
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Core.Composing;
