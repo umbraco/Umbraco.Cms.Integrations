@@ -35,15 +35,9 @@ steps:
   displayName: 'NuGet Restore'
   inputs:
     command: 'restore'
-    feedsToUse: 'select'
+    feedsToUse: 'config'
     projects: '$(project)'
-    includeNuGetOrg: true
-
-- task: UseDotNet@2
-  displayName: 'Use SDK version 9.0.203'
-  inputs:
-    packageType: 'sdk'
-    version: '9.0.203'
+    nugetConfigPath: 'NuGet.config'
 
 - task: VSBuild@1
   displayName: 'Build Project'
