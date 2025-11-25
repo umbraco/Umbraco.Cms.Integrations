@@ -1,8 +1,8 @@
 trigger:
   branches:
     include:
-    - main-v16
-    - v16/dev
+    - main-v17
+    - v17/dev
   paths:
     include:
     - src/Umbraco.Cms.Integrations.Crm.Dynamics/**
@@ -17,11 +17,17 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   productGroup: 'DXP'
-  productVersion: 'v16'
+  productVersion: 'v17'
   DT_API_KEY: $(dtApiKey)
   DT_BASE_URL: $(dtBaseUrl)
 
 steps:
+- task: UseDotNet@2
+  displayName: 'Use SDK version 10.0.100'
+  inputs:
+    packageType: 'sdk'
+    version: '10.0.100'
+
 - task: NuGetToolInstaller@1
   displayName: 'Install NuGet'
 
@@ -29,15 +35,9 @@ steps:
   displayName: 'NuGet Restore'
   inputs:
     command: 'restore'
-    feedsToUse: 'select'
+    feedsToUse: 'config'
     projects: '$(project)'
-    includeNuGetOrg: true
-
-- task: UseDotNet@2
-  displayName: 'Use SDK version 9.0.203'
-  inputs:
-    packageType: 'sdk'
-    version: '9.0.203'
+    nugetConfigPath: 'NuGet.config'
 
 - task: VSBuild@1
   displayName: 'Build Project'
@@ -97,4 +97,4 @@ steps:
   displayName: 'Publish SBOM Artifact'
   inputs:
     targetPath: $(Build.ArtifactStagingDirectory)/bom
-    artifactName: SBOM    
+    artifactName: SBOM   
