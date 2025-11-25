@@ -35,9 +35,9 @@ steps:
   displayName: 'NuGet Restore'
   inputs:
     command: 'restore'
-    feedsToUse: 'select'
+    feedsToUse: 'config'
     projects: '$(project)'
-    includeNuGetOrg: true
+    nugetConfigPath: 'NuGet.config'
 
 - task: VSBuild@1
   displayName: 'Build Project'
