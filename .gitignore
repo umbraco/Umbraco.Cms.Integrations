@@ -487,3 +487,5 @@ $RECYCLE.BIN/
 # Umbraco specific gitignore
 #
 **/config.outputPath.js
+
+appsettings.Local.json
