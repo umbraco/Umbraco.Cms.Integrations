@@ -37,7 +37,7 @@ steps:
     command: 'restore'
     feedsToUse: 'config'
     projects: '$(project)'
-    nugetConfigPath: 'src/$(projectName)/NuGet.config'
+    nugetConfigPath: 'NuGet.config'
 
 - task: VSBuild@1
   displayName: 'Build Project'
