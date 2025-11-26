@@ -1,7 +1,7 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { tryExecute } from "@umbraco-cms/backoffice/resources";
-import { DynamicsService, OAuthRequestDtoModel, V1Service } from "@umbraco-integrations/dynamics/generated";
+import { Dynamics, OAuthRequestDtoModel, V1 } from "@umbraco-integrations/dynamics/generated";
 
 export class DynamicsRepository extends UmbControllerBase {
     constructor(host: UmbControllerHost) {
@@ -9,7 +9,7 @@ export class DynamicsRepository extends UmbControllerBase {
     }
 
     async getForms(module: string){
-        const { data, error } = await tryExecute(this, DynamicsService.getForms({
+        const { data, error } = await tryExecute(this, Dynamics.getForms({
             query: {
                 module
             }
@@ -23,7 +23,7 @@ export class DynamicsRepository extends UmbControllerBase {
     }
 
     async revokeAccessToken() {
-        const { data, error } = await tryExecute(this, DynamicsService.deleteFormsRevokeAccessToken());
+        const { data, error } = await tryExecute(this, Dynamics.deleteFormsRevokeAccessToken());
 
         if (error || !data) {
             return { error };
@@ -33,7 +33,7 @@ export class DynamicsRepository extends UmbControllerBase {
     }
 
     async getAuthorizationUrl() {
-        const { data, error } = await tryExecute(this, DynamicsService.getFormsAuthorizationUrl());
+        const { data, error } = await tryExecute(this, Dynamics.getFormsAuthorizationUrl());
 
         if (error || !data) {
             return { error };
@@ -43,7 +43,7 @@ export class DynamicsRepository extends UmbControllerBase {
     }
 
     async checkOauthConfiguration() {
-        const { data, error } = await tryExecute(this, DynamicsService.getFormsOauthConfiguration());
+        const { data, error } = await tryExecute(this, Dynamics.getFormsOauthConfiguration());
 
         if (error || !data) {
             return { error };
@@ -53,7 +53,7 @@ export class DynamicsRepository extends UmbControllerBase {
     }
 
     async getAccessToken(oAuthRequestDtoModel: OAuthRequestDtoModel) {
-        const { data, error } = await tryExecute(this, DynamicsService.postFormsAccessToken({ body: oAuthRequestDtoModel }));
+        const { data, error } = await tryExecute(this, Dynamics.postFormsAccessToken({ body: oAuthRequestDtoModel }));
 
         if (error || !data) {
             return { error };
@@ -63,7 +63,7 @@ export class DynamicsRepository extends UmbControllerBase {
     }
 
     async getEmbedCode(formId: string) {
-        const { data, error } = await tryExecute(this, DynamicsService.getFormsEmbedCode({
+        const { data, error } = await tryExecute(this, Dynamics.getFormsEmbedCode({
             query: {
                 formId
             }
@@ -77,7 +77,7 @@ export class DynamicsRepository extends UmbControllerBase {
     }
 
     async getSystemUserFullName() {
-        const { data, error } = await tryExecute(this, DynamicsService.getFormsSystemUserFullname());
+        const { data, error } = await tryExecute(this, Dynamics.getFormsSystemUserFullname());
 
         if (error || !data) {
             return { error };
@@ -87,7 +87,7 @@ export class DynamicsRepository extends UmbControllerBase {
     }
 
     async oauth(code: string) {
-        const { data, error } = await tryExecute(this, V1Service.getUmbracoApiDynamicsAuthorization({
+        const { data, error } = await tryExecute(this, V1.getUmbracoApiDynamicsAuthorization({
             query: {
                 code
             }
