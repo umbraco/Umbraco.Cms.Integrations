@@ -4,6 +4,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<StaticWebAssetBasePath>/App_Plugins/Algolia</StaticWebAssetBasePath>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 		<CompressionEnabled>false</CompressionEnabled>
 		<EnableDefaultContentItems>false</EnableDefaultContentItems>
 	</PropertyGroup>
