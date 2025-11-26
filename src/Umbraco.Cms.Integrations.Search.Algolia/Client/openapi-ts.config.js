@@ -4,7 +4,7 @@ export default defineConfig({
     logs: {
         level: 'debug',
     },
-    input: 'http://localhost:58030/umbraco/swagger/algolia-search-management/swagger.json',
+    input: 'http://localhost:28157/umbraco/swagger/algolia-search-management/swagger.json',
     output: {
         path: 'generated',
     },

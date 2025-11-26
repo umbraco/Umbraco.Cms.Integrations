@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Umbraco.Cms" Version="17.0.0" />
+    <ProjectReference Include="..\..\src\Umbraco.Cms.Integrations.Search.Algolia\Umbraco.Cms.Integrations.Search.Algolia.csproj" />
     <ProjectReference Include="..\..\src\Umbraco.Cms.Integrations.Crm.Hubspot\Umbraco.Cms.Integrations.Crm.Hubspot.csproj" />
     <ProjectReference Include="..\..\src\Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj" />
     <ProjectReference Include="..\..\src\Umbraco.Cms.Integrations.Automation.Zapier\Umbraco.Cms.Integrations.Automation.Zapier.csproj" />
