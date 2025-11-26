@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
@@ -15,9 +15,9 @@
 		<Title>Umbraco CMS Integrations: Automation - Zapier</Title>
 		<Description>An extension for Umbraco CMS providing an automation tool for calling Zapier triggers when specific content gets published.</Description>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main-v16/src/Umbraco.Cms.Integrations.Automation.Zapier</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main-v17/src/Umbraco.Cms.Integrations.Automation.Zapier</PackageProjectUrl>
 		<Product>Umbraco.Cms.Integrations.Automation.Zapier</Product>
-		<Version>4.0.0</Version>
+		<Version>5.0.0</Version>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
 		<PackageIcon>zapier.png</PackageIcon>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
@@ -29,7 +29,7 @@
 	</ItemGroup>
 
 	<PropertyGroup>
-		<UmbracoCmsPackageVersion>[16.0.0, 17)</UmbracoCmsPackageVersion>
+		<UmbracoCmsPackageVersion>[17.0.0, 18)</UmbracoCmsPackageVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Umbraco.Cms.Api.Common" Version="$(UmbracoCmsPackageVersion)" />
@@ -48,6 +48,10 @@
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Content Include="wwwroot\**\*" Pack="true" PackagePath="staticwebassets\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	
 	<!-- Build client assets using NPM -->
 	<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
 	<PropertyGroup>
@@ -55,6 +59,6 @@
 		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
 	</PropertyGroup>
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
-		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../$(IntermediateOutputPath.Replace('\', '/'))clientassets';" Overwrite="true" />
+		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../wwwroot';" Overwrite="true" />
 	</Target>
 </Project>

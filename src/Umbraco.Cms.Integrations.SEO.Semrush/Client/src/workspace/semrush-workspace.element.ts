@@ -9,7 +9,7 @@ import {
     ColumnDtoModel,
     ContentPropertyDtoModel,
     DataSourceItemDtoModel,
-    RelatedPhrasesDtoModelReadable
+    RelatedPhrasesDtoModel
 } from '@umbraco-integrations/semrush/generated';
 import { UMB_MODAL_MANAGER_CONTEXT } from '@umbraco-cms/backoffice/modal';
 import { SEMRUSH_MODAL_TOKEN } from '../modal/semrush-modal.token';
@@ -68,7 +68,7 @@ export class SemrushWorkspaceElement extends UmbLitElement {
     };
 
     @state()
-    private keywordList: RelatedPhrasesDtoModelReadable | undefined = undefined;
+    private keywordList: RelatedPhrasesDtoModel | undefined = undefined;
 
     @state()
     private searchPhrase: string = "";
@@ -443,10 +443,12 @@ export class SemrushWorkspaceElement extends UmbLitElement {
                             @click=${this._openModal}>Status</uui-button>
 
                         <div>
-                            <uui-input .value=${this.searchPhrase} @change=${(e : UUIInputEvent) => this.#onInputChange(e)}></uui-input>
+                            <uui-input .value=${this.searchPhrase} @change=${(e : UUIInputEvent) => this.#onInputChange(e)} class="semrush-input"></uui-input>
 
-                            <uui-select id="tooltip-toggle" popovertarget="tooltip-popover" @mouseover=${(e : UUISelectEvent) => this._onDataSourceMouseOver(e)} ${ref(this.dsRef)}
+                            <uui-select id="tooltip-toggle" popovertarget="tooltip-popover"
+                                @mouseover=${(e: UUISelectEvent) => this._onDataSourceMouseOver(e)} ${ref(this.dsRef)}
                                 placeholder="Please select a data source"
+                                class="semrush-select"
                                 @change=${(e : UUISelectEvent) => this.#onDatasourceSelectChange(e)}
                                 .options=${
                                     this.datasourceList?.map((ft) => ({
@@ -462,8 +464,10 @@ export class SemrushWorkspaceElement extends UmbLitElement {
                                 </div>
                             </uui-popover-container>
 
-                            <uui-select id="method-tooltip-toggle" popovertarget="method-tooltip-popover" @mouseover=${(e : UUISelectEvent) => this._onMethodMouseOver(e)} ${ref(this.methodRef)}
+                            <uui-select id="method-tooltip-toggle" popovertarget="method-tooltip-popover"
+                                @mouseover=${(e: UUISelectEvent) => this._onMethodMouseOver(e)} ${ref(this.methodRef)}
                                 placeholder="Please select a method"
+                                class="semrush-select"
                                 @change=${(e : UUISelectEvent) => this.#onMethodSelectChange(e)}
                                 .options=${
                                     this.methodList?.map((ft) => ({
@@ -538,23 +542,23 @@ export class SemrushWorkspaceElement extends UmbLitElement {
 
     static styles = [
         css`
-            .semrush-content p:first-child{
+            .semrush-content p:first-child {
                 margin-top: 0 !important;
             }
 
-            .semrush-table{
+            .semrush-table {
                 margin: 15px 0;
             }
 
-            .semrush-connect-button{
+            .semrush-connect-button {
                 margin-right: 2px;
             }
 
-            .semrush-autofill-icon{
+            .semrush-autofill-icon {
                 margin-bottom: 4px;
             }
 
-            .semrush-tooltip{
+            .semrush-tooltip {
                 background-color: var(--uui-color-surface); 
                 max-width: 150px; 
                 box-shadow: var(--uui-shadow-depth-4); 
@@ -563,8 +567,12 @@ export class SemrushWorkspaceElement extends UmbLitElement {
                 font-size: 0.9rem;
             }
 
-            .semrush-loader{
+            .semrush-loader {
                 text-align: center;
+            }
+
+            .semrush-input, .semrush-select { 
+                vertical-align: middle; 
             }
         `];
 }
