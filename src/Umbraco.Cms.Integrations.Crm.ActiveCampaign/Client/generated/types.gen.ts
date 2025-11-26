@@ -62,6 +62,7 @@ export type GetFormsData = {
     path?: never;
     query?: {
         page?: number;
+        searchQuery?: string;
     };
     url: '/umbraco/activecampaign-forms/management/api/v1/forms';
 };

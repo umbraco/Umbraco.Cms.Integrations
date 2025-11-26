@@ -19,7 +19,7 @@ import {
     type HubspotServiceStatus
 } from "../models/hubspot-service.model.js";
 import { HUBSPOT_FORMS_CONTEXT_TOKEN } from "@umbraco-integrations/hubspot-forms/context";
-import type { HubspotFormPickerSettingsModelReadable, OAuthRequestDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
+import type { HubspotFormPickerSettingsModel, OAuthRequestDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
 
 const elementName = "hubspot-authorization";
 
@@ -27,7 +27,7 @@ const elementName = "hubspot-authorization";
 export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
 
     #hubspotFormsContext!: typeof HUBSPOT_FORMS_CONTEXT_TOKEN.TYPE;
-    #settingsModel?: HubspotFormPickerSettingsModelReadable;
+    #settingsModel?: HubspotFormPickerSettingsModel;
 
     @state()
     private _serviceStatus: HubspotServiceStatus = {
