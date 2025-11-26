@@ -1,17 +1,16 @@
 ﻿global using System.Text.Json;
 global using System.Text.Json.Serialization;
-
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
 using Umbraco.Cms.Core.Notifications;
-using Umbraco.Cms.Integrations.Crm.Dynamics.Migrations;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Api.Configuration;
-using Umbraco.Cms.Api.Common.OpenApi;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Migrations;
+using Umbraco.Cms.Integrations.Crm.Dynamics.Services;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics
 {
