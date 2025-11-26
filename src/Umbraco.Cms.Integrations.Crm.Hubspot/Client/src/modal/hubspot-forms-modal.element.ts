@@ -6,7 +6,7 @@ import {
 import type { UUIInputEvent } from "@umbraco-cms/backoffice/external/uui";
 import type { HubspotServiceStatus } from "../models/hubspot-service.model.js";
 import type { HubspotFormPickerModalData, HubspotFormPickerModalValue } from "./hubspot.modal-token.js";
-import type { HubspotFormDtoModel, HubspotFormPickerSettingsModelReadable } from "@umbraco-integrations/hubspot-forms/generated";
+import type { HubspotFormDtoModel, HubspotFormPickerSettingsModel } from "@umbraco-integrations/hubspot-forms/generated";
 import { HUBSPOT_FORMS_CONTEXT_TOKEN } from "@umbraco-integrations/hubspot-forms/context";
 
 const elementName = "hubspot-forms-modal";
@@ -16,7 +16,7 @@ export default class HubspotFormsModalElement
     extends UmbModalBaseElement<HubspotFormPickerModalData, HubspotFormPickerModalValue> {
 
     #hubspotFormsContext!: typeof HUBSPOT_FORMS_CONTEXT_TOKEN.TYPE;
-    #settingsModel?: HubspotFormPickerSettingsModelReadable;
+    #settingsModel?: HubspotFormPickerSettingsModel;
 
     @state()
     private _serviceStatus: HubspotServiceStatus = {

@@ -1,7 +1,7 @@
 ﻿{
     "id": "Umbraco.Cms.Integrations.Crm.HubSpot",
     "name": "Umbraco CMS Integrations: CRM - HubSpot",
-    "version": "7.0.0",
+    "version": "8.0.0",
     "extensions": [
       {
         "name": "Umbraco EntryPoint",

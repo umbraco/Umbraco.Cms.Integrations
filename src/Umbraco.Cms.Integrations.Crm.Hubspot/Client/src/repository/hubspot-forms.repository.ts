@@ -1,7 +1,7 @@
 ﻿import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { tryExecute } from "@umbraco-cms/backoffice/resources";
-import { FormsService, type OAuthRequestDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
+import { Forms, type OAuthRequestDtoModel } from "@umbraco-integrations/hubspot-forms/generated";
 
 export class HubspotFormsRepository extends UmbControllerBase {
     constructor(host: UmbControllerHost) {
@@ -9,7 +9,7 @@ export class HubspotFormsRepository extends UmbControllerBase {
     }
 
     async getAuthorizationUrl() {
-        const { data, error } = await tryExecute(this, FormsService.getAuthorizationUrl());
+        const { data, error } = await tryExecute(this, Forms.getAuthorizationUrl());
 
         if (error || !data) {
             return { error };
@@ -19,7 +19,7 @@ export class HubspotFormsRepository extends UmbControllerBase {
     }
 
     async checkApiConfiguration() {
-        const { data, error } = await tryExecute(this, FormsService.getCheckConfiguration());
+        const { data, error } = await tryExecute(this, Forms.getCheckConfiguration());
 
         if (error || !data) {
             return { error };
@@ -29,7 +29,7 @@ export class HubspotFormsRepository extends UmbControllerBase {
     }
 
     async getAccessToken(oauthRequestDto: OAuthRequestDtoModel) {
-        const { data, error } = await tryExecute(this, FormsService.postGetAccessToken({
+        const { data, error } = await tryExecute(this, Forms.postGetAccessToken({
             body: oauthRequestDto
         }));
 
@@ -41,7 +41,7 @@ export class HubspotFormsRepository extends UmbControllerBase {
     }
 
     async validateAccessToken() {
-        const { data, error } = await tryExecute(this, FormsService.getValidateAccessToken());
+        const { data, error } = await tryExecute(this, Forms.getValidateAccessToken());
 
         if (error || !data) {
             return { error };
@@ -51,7 +51,7 @@ export class HubspotFormsRepository extends UmbControllerBase {
     }
 
     async refreshAccessToken() {
-        const { data, error } = await tryExecute(this, FormsService.postRefreshAccessToken());
+        const { data, error } = await tryExecute(this, Forms.postRefreshAccessToken());
 
         if (error || !data) {
             return { error };
@@ -61,7 +61,7 @@ export class HubspotFormsRepository extends UmbControllerBase {
     }
 
     async revokeAccessToken() {
-        const { data, error } = await tryExecute(this, FormsService.postRevokeAccessToken());
+        const { data, error } = await tryExecute(this, Forms.postRevokeAccessToken());
 
         if (error || !data) {
             return { error };
@@ -71,7 +71,7 @@ export class HubspotFormsRepository extends UmbControllerBase {
     }
 
     async getFormsByApiKey() {
-        const { data, error } = await tryExecute(this, FormsService.getFormsByApiKey());
+        const { data, error } = await tryExecute(this, Forms.getFormsByApiKey());
 
         if (error || !data) {
             return { error };
@@ -81,7 +81,7 @@ export class HubspotFormsRepository extends UmbControllerBase {
     }
 
     async getFormsOAuth() {
-        const { data, error } = await tryExecute(this, FormsService.getFormsOAuth());
+        const { data, error } = await tryExecute(this, Forms.getFormsOAuth());
 
         if (error || !data) {
             return { error };

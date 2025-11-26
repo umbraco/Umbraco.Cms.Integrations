@@ -7,7 +7,7 @@ import {
 import { HUBSPOT_FORMS_MODAL_TOKEN } from "../modal/hubspot.modal-token.js";
 import { ConfigDescription, type HubspotServiceStatus } from "../models/hubspot-service.model.js";
 import { HUBSPOT_FORMS_CONTEXT_TOKEN } from "@umbraco-integrations/hubspot-forms/context";
-import type { HubspotFormDtoModel, HubspotFormPickerSettingsModelReadable } from "@umbraco-integrations/hubspot-forms/generated";
+import type { HubspotFormDtoModel, HubspotFormPickerSettingsModel } from "@umbraco-integrations/hubspot-forms/generated";
 
 const elementName = "hubspot-form-picker";
 
@@ -15,7 +15,7 @@ const elementName = "hubspot-form-picker";
 export class HubspotFormPickerElement extends UmbElementMixin(LitElement) {
 
     #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
-    #settingsModel?: HubspotFormPickerSettingsModelReadable;
+    #settingsModel?: HubspotFormPickerSettingsModel;
 
     @property({ type: String })
     public value = "";

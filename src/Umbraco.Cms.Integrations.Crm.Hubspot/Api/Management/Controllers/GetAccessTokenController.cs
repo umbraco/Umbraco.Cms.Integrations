@@ -16,9 +16,9 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Api.Management.Controllers
 
         public GetAccessTokenController(
             IOptions<HubspotSettings> settingsOptions,
-            AuthorizationImplementationFactory authorizationImplementationFactory) 
+            IHubspotAuthorizationServiceFactory authorizationServiceFactory) 
             : base(settingsOptions) 
-            => _authorizationService = authorizationImplementationFactory(Settings.UseUmbracoAuthorization);
+            => _authorizationService = authorizationServiceFactory.GetAuthorizationService(Settings.UseUmbracoAuthorization);
 
         [HttpPost("access-token", Name = Constants.OperationIdentifiers.GetAccessToken)]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]

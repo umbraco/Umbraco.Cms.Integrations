@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Core.Composing;
@@ -12,8 +12,6 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot
 {
     public class HubspotComposer : IComposer
     {
-        public delegate IHubspotAuthorizationService AuthorizationImplementationFactory(bool useUmbracoAuthorization);
-
         public void Compose(IUmbracoBuilder builder)
         {
             var options = builder.Services.AddOptions<HubspotSettings>()
@@ -25,14 +23,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot
 
             builder.Services.AddSingleton<UmbracoAuthorizationService>();
             builder.Services.AddSingleton<AuthorizationService>();
-            builder.Services.AddSingleton<AuthorizationImplementationFactory>(f => useUmbracoAuthorization =>
-            {
-                return useUmbracoAuthorization switch
-                {
-                    true => f.GetService<UmbracoAuthorizationService>(),
-                    _ => f.GetService<AuthorizationService>()
-                };
-            });
+            builder.Services.AddSingleton<IHubspotAuthorizationServiceFactory, HubspotAuthorizationServiceFactory>();
 
             builder.Services.Configure<SwaggerGenOptions>(options =>
             {

@@ -1,7 +1,7 @@
 ﻿import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { tryExecute } from "@umbraco-cms/backoffice/resources";
-import { ActiveCampaignFormsService } from "@umbraco-integrations/activecampaign-forms/generated";
+import { ActiveCampaignForms } from "@umbraco-integrations/activecampaign-forms/generated";
 
 export class ActiveCampaignFormsRepository extends UmbControllerBase {
     constructor(host: UmbControllerHost) {
@@ -9,7 +9,7 @@ export class ActiveCampaignFormsRepository extends UmbControllerBase {
     }
 
     async checkApiAccess() {
-        const { data, error } = await tryExecute(this, ActiveCampaignFormsService.getApiAccess());
+        const { data, error } = await tryExecute(this, ActiveCampaignForms.getApiAccess());
 
         if (error || !data) {
             return { error };
@@ -19,7 +19,7 @@ export class ActiveCampaignFormsRepository extends UmbControllerBase {
     }
 
     async getForm(id: string) {
-        const { data, error } = await tryExecute(this, ActiveCampaignFormsService.getFormsById({ path: { id } }));
+        const { data, error } = await tryExecute(this, ActiveCampaignForms.getFormsById({ path: { id } }));
 
         if (error || !data) {
             return { error };
@@ -28,8 +28,8 @@ export class ActiveCampaignFormsRepository extends UmbControllerBase {
         return { data };
     }
 
-    async getForms(page?: number) {
-        const { data, error } = await tryExecute(this, ActiveCampaignFormsService.getForms({ query: { page } }));
+    async getForms(page?: number, searchQuery?: string) {
+        const { data, error } = await tryExecute(this, ActiveCampaignFormsService.getForms({ query: { page, searchQuery } }));
 
         if (error || !data) {
             return { error };
