@@ -2,7 +2,7 @@ import { UmbModalBaseElement } from "@umbraco-cms/backoffice/modal";
 import { SHOPIFY_CONTEXT_TOKEN } from "../context/shopify.context.js";
 import { UMB_NOTIFICATION_CONTEXT } from "@umbraco-cms/backoffice/notification";
 import { html, state, customElement, css, nothing } from "@umbraco-cms/backoffice/external/lit";
-import type { EditorSettingsModelReadable, ProductDtoModel } from "../../generated";
+import type { EditorSettingsModel, ProductDtoModel } from "../../generated";
 import type { ShopifyProductPickerModalData, ShopifyProductPickerModalValue } from "./shopify.modal-token.js";
 import type { ShopifyServiceStatus } from "../models/shopify-service.model.js";
 import type { UmbTableColumn, UmbTableConfig, UmbTableItem, UmbTableSelectedEvent, UmbTableElement, UmbTableDeselectedEvent, UmbTableItemData } from '@umbraco-cms/backoffice/components';
@@ -17,7 +17,7 @@ const elementName = "shopify-products-modal";
 @customElement(elementName)
 export default class ShopifyProductsModalElement extends UmbModalBaseElement<ShopifyProductPickerModalData, ShopifyProductPickerModalValue>{
     #shopifyContext!: typeof SHOPIFY_CONTEXT_TOKEN.TYPE;
-    #settingsModel?: EditorSettingsModelReadable;
+    #settingsModel?: EditorSettingsModel;
     #collectionContext!: UmbDefaultCollectionContext<ShopifyCollectionModel>;
     #paginationManager = new UmbPaginationManager();
     _modalSelectedProducts: Array<ProductDtoModel> = [];

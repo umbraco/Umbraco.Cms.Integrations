@@ -9,6 +9,9 @@
   <ItemGroup>
     <PackageReference Include="Umbraco.Cms" Version="17.0.0" />
     <ProjectReference Include="..\..\src\Umbraco.Cms.Integrations.Automation.Zapier\Umbraco.Cms.Integrations.Automation.Zapier.csproj" />
+    <ProjectReference Include="..\..\src\Umbraco.Cms.Integrations.Crm.Dynamics\Umbraco.Cms.Integrations.Crm.Dynamics.csproj" />
+    <ProjectReference Include="..\..\src\Umbraco.Cms.Integrations.Crm.ActiveCampaign\Umbraco.Cms.Integrations.Crm.ActiveCampaign.csproj" />
+    <ProjectReference Include="..\..\src\Umbraco.Cms.Integrations.Commerce.Shopify\Umbraco.Cms.Integrations.Commerce.Shopify.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +24,4 @@
     <!-- Razor files are needed for the backoffice to work correctly -->
     <CopyRazorGenerateFilesToPublishDirectory>true</CopyRazorGenerateFilesToPublishDirectory>
   </PropertyGroup>
-
-
 </Project>
