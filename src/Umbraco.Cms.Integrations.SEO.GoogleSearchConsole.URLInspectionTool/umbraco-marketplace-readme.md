@@ -18,7 +18,7 @@ By default, the inspection input fields are disabled and the values reflect the 
 
 The inspection result consists of these fields, but these can vary depending on the tracking level of your property:
 - Inspection Result Link - link to Search Console URL inspection. 
-- Index Status- the result of the index status analysis. For more information, please check the [Index coverage report documentation](https://support.google.com/webmasters/answer/7440203).
+- Index Status - the result of the index status analysis. For more information, please check the [Index coverage report documentation](https://support.google.com/webmasters/answer/7440203).
 - AMP - the result of the AMP analysis. Absent if the page is not an AMP page. Key elements returned include:
 - Mobile Usability- the result of the mobile usability analysis.
 - Rich Results - the result of the rich results analysis. Absent if there are no rich results found.
