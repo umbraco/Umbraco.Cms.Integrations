@@ -3,7 +3,7 @@ using Umbraco.Cms.Core.Services;
 
 namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Services
 {
-    public class TokenService: ITokenService
+    public class TokenService : ITokenService
     {
         private readonly IKeyValueService _kvService;
 
