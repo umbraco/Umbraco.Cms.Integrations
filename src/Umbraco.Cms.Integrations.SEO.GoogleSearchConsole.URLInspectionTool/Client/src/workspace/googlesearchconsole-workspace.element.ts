@@ -6,9 +6,6 @@ import { UMB_DOCUMENT_WORKSPACE_CONTEXT } from "@umbraco-cms/backoffice/document
 import { GoogleSearchConsoleRepository } from "../repository/googlesearchconsole.repository";
 import type { InspectionResultDtoModel } from "@umbraco-integrations/googlesearchconsole/generated";
 
-//import signInImage from "../images/btn_google_signin_dark_normal_web.png";
-//import signInDisabledImage from "../images/btn_google_signin_dark_disabled_web.png";
-
 import { UUISelectEvent } from "@umbraco-cms/backoffice/external/uui";
 
 import "./inspectresult-box.element";
@@ -98,12 +95,12 @@ export class GoogleSearchConsoleWorkspaceElement extends UmbLitElement {
                 var code = event.data.url.slice(event.data.url.indexOf(codeParam) + codeParam.length, event.data.url.indexOf(scopeParam));
 
                 const data = await this.#repository.getAccessToken(code);
-                const isError = data?.data && data?.data.includes("error");
+                const isError = data?.data && !data?.data.success;
                 const notification = {
                     data: {
                         title: "Google Search Console Authorization",
                         message: isError
-                            ? data?.data.substring(data?.data.indexOf("error: "))
+                            ? data?.data.errorMessage ?? "Access Denied"
                             : "Access Approved"
                     }
                 };

@@ -43,6 +43,12 @@ export enum EventMessageTypeModel {
     WARNING = 'Warning'
 }
 
+export type GoogleSearchConsoleResultModel = {
+    success: boolean;
+    errorMessage?: string | null;
+    tokenDto?: TokenDtoModel | null;
+};
+
 export type IndexStatusResultDtoModel = {
     verdict: string;
     coverageState: string;
@@ -109,10 +115,25 @@ export type RichResultsResultDtoModel = {
     verdict: string;
 };
 
+export type TokenDtoModel = {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    refresh_token: string;
+    readonly isAccessTokenAvailable: boolean;
+};
+
 export type UrlInspectionDtoModel = {
     inspectionUrl: string;
     siteUrl: string;
     languageCode: string;
+};
+
+export type TokenDtoModelWritable = {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    refresh_token: string;
 };
 
 export type GetAuthData = {
@@ -193,7 +214,7 @@ export type PostOauthAccessTokenResponses = {
     /**
      * OK
      */
-    200: string;
+    200: GoogleSearchConsoleResultModel;
 };
 
 export type PostOauthAccessTokenResponse = PostOauthAccessTokenResponses[keyof PostOauthAccessTokenResponses];

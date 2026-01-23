@@ -16,9 +16,9 @@ public class GoogleComposer : IComposer
 
     public void Compose(IUmbracoBuilder builder)
     {
-        var options = builder.Services.AddOptions<GoogleSearchConsoleSettings>()
+        builder.Services.AddOptions<GoogleSearchConsoleSettings>()
            .Bind(builder.Config.GetSection(Constants.Configuration.Settings));
-        var oauthOptions = builder.Services.AddOptions<GoogleSearchConsoleOAuthSettings>()
+        builder.Services.AddOptions<GoogleSearchConsoleOAuthSettings>()
             .Bind(builder.Config.GetSection(Constants.Configuration.OAuthSettings));
 
         builder.Services.AddSingleton<ITokenService, TokenService>();

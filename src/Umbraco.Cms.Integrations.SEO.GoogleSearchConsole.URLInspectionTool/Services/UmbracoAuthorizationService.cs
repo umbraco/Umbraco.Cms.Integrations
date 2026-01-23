@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
-
+﻿using System.Text.Json;
+using Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Models;
 using Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Models.Dtos;
 
 namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Services
@@ -29,10 +25,19 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Ser
         public string GetAuthorizationUrl() => 
             string.Format(SearchConsoleAuthorizationUrl, OAuthProxyRedirectUrl, ClientId, string.Join(" ", Scopes));
 
-        public string GetAccessToken(string code) =>
-            GetAccessTokenAsync(code).ConfigureAwait(false).GetAwaiter().GetResult();
+        public string GetAccessToken(string code)
+        {
+            var result = GetAccessTokenAsync(code).ConfigureAwait(false).GetAwaiter().GetResult();
 
-        public async Task<string> GetAccessTokenAsync(string code)
+            if (result.Success && result.TokenDto is not null)
+            {
+                return result.TokenDto.AccessToken;
+            }
+
+            return string.Empty;
+        }
+
+        public async Task<GoogleSearchConsoleResult> GetAccessTokenAsync(string code)
         {
             var client = HttpClientFactory.CreateClient();
 
@@ -61,15 +66,25 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Ser
                 TokenService.SaveParameters(Constants.TokenDbKey, tokenDto.AccessToken);
                 TokenService.SaveParameters(Constants.RefreshTokenDbKey, tokenDto.RefreshToken);
 
-                return result;
+                return new(true, TokenDto: tokenDto);
             }
 
-            return $"error: {result}";
+            return new(false, result);
         }
 
-        public string RefreshAccessToken() => RefreshAccessTokenAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        public string RefreshAccessToken()
+        {
+            var result = RefreshAccessTokenAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 
-        public async Task<string> RefreshAccessTokenAsync()
+            if (result.Success && result.TokenDto is not null)
+            {
+                return result.TokenDto.AccessToken;
+            }
+
+            return string.Empty;
+        }
+
+        public async Task<GoogleSearchConsoleResult> RefreshAccessTokenAsync()
         {
             var client = HttpClientFactory.CreateClient();
 
@@ -98,10 +113,10 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Ser
 
                 TokenService.SaveParameters(Constants.TokenDbKey, tokenDto.AccessToken);
 
-                return result;
+                return new(true, TokenDto: tokenDto);
             }
 
-            return $"error: {result}";
+            return new(false, result);
         }
     }
 }

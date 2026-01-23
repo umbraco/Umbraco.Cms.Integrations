@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Models;
 
 namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Services
 {
@@ -8,10 +8,10 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Ser
 
         string GetAccessToken(string code);
 
-        Task<string> GetAccessTokenAsync(string code);
+        Task<GoogleSearchConsoleResult> GetAccessTokenAsync(string code);
 
         string RefreshAccessToken();
 
-        Task<string> RefreshAccessTokenAsync();
+        Task<GoogleSearchConsoleResult> RefreshAccessTokenAsync();
     }
 }

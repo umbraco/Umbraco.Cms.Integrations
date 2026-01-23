@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Configuration;
+using Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Models;
 using Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Models.Dtos;
 using Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Services;
 
@@ -18,15 +19,15 @@ public class GetAccessTokenController : GoogleControllerBase
     }
 
     [HttpPost("oauth/access-token")]
-    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GoogleSearchConsoleResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Get([FromBody] AuthorizationRequestDto authorizationRequestDto)
     {
         var result = await AuthorizationService.GetAccessTokenAsync(authorizationRequestDto.Code);
 
-        if (result.Contains("error"))
+        if (!result.Success)
         {
-            return BadRequest(result.Substring(0, "error: ".Length));
+            return BadRequest(result.ErrorMessage);
         }
 
         return Ok(result);
