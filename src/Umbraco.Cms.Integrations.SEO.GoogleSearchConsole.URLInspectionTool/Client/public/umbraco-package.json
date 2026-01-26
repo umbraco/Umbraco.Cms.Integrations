@@ -1,0 +1,14 @@
+{
+    "id": "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool",
+    "name": "Umbraco CMS Integrations: SEO - GoogleSearchConsole.URLInspectionTool",
+    "version": "2.0.0",
+    "extensions": [
+      {
+        "name": "Umbraco EntryPoint",
+        "alias": "Umb.GoogleSearchConsole.EntryPoint",
+        "type": "backofficeEntryPoint",
+        "js": "/App_Plugins/GoogleSearchConsole/googlesearchconsole.js"
+      }
+    ]
+  }
+  

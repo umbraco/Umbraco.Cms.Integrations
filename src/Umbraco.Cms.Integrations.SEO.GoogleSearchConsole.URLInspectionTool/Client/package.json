@@ -1,0 +1,43 @@
+{
+  "name": "googlesearchconsole",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22",
+    "npm": ">=10.9"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "watch": "vite build --watch",
+    "lint:errors": "npm run lint -- --quiet",
+    "lint:fix": "npm run lint -- --fix",
+    "lint": "eslint src",
+    "generate:api": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 openapi-ts -f openapi-ts.config.ts"
+  },
+  "peerDependencies": {
+    "@umbraco-cms/backoffice": "17.0.0"
+  },
+  "devDependencies": {
+    "@hey-api/client-fetch": "^0.13.0",
+    "@hey-api/openapi-ts": "^0.85.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
+    "@umbraco-cms/backoffice": "^17.0.0",
+    "lit": "^3.2.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-lit": "^1.11.0",
+    "eslint-plugin-lit-a11y": "^4.1.1",
+    "eslint-plugin-local-rules": "^2.0.1",
+    "eslint-plugin-wc": "^2.0.4",
+    "typescript": "5.8.3",
+    "vite": "^6.3.2",
+    "vite-tsconfig-paths": "^5.0.1",
+    "cross-env": "^7.0.3"
+  }
+}
