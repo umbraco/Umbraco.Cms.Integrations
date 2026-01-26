@@ -164,11 +164,11 @@ export class GoogleSearchConsoleWorkspaceElement extends UmbLitElement {
     #renderHeaderActions() {
         return html`
             <div slot="header-actions">
-                 <a href="javascript:void(0)" class="signin"
-                    ?disabled=${this._isConnected}"
+                 <button type="button" class="signin" look="default"
+                    ?disabled=${this._isConnected}
                     @click=${this.#onConnect}>
                     <img src="${this._isConnected ? "/App_Plugins/GoogleSearchConsole/images/btn_google_signin_dark_disabled_web.png" : "/App_Plugins/GoogleSearchConsole/images/btn_google_signin_dark_normal_web.png"}" />
-                </a>
+                </button>
                 <uui-button label="Revoke" look="primary" color="danger"
                     ?disabled=${!this._isConnected} 
                     @click=${this.#onRevoke}></uui-button> 
@@ -303,6 +303,9 @@ export class GoogleSearchConsoleWorkspaceElement extends UmbLitElement {
                 display: inline-flex;
                 vertical-align: middle;
                 height: 37px;
+                background: none;
+                border: none;
+                cursor: pointer;
             }
             .row {
               display: flex;
