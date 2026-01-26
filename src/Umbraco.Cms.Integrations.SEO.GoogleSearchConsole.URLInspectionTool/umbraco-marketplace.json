@@ -44,7 +44,7 @@
     },
     {
       "PackageId": "Umbraco.Cms.Integrations.Automation.Zapier",
-      "Description": "A dashboard interface allowing users to vizualize registered subscription hooks for content types and to call Zapier triggers when content gets published."
+      "Description": "A dashboard interface allowing users to visualise registered subscription hooks for content types and to call Zapier triggers when content gets published."
     }
   ],
   "Screenshots": [

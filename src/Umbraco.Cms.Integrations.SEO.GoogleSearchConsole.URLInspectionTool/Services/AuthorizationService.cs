@@ -53,6 +53,10 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Ser
             if (response.IsSuccessStatusCode)
             {
                 var tokenDto = JsonSerializer.Deserialize<TokenDto>(result);
+                if (tokenDto is null)
+                {
+                    return new(false, "Failed to deserialize token response.");
+                }
 
                 TokenService.SaveParameters(Constants.TokenDbKey, tokenDto.AccessToken);
                 TokenService.SaveParameters(Constants.RefreshTokenDbKey, tokenDto.RefreshToken);
@@ -104,6 +108,10 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Ser
             if (response.IsSuccessStatusCode)
             {
                 var tokenDto = JsonSerializer.Deserialize<TokenDto>(result);
+                if (tokenDto is null)
+                {
+                    return new(false, "Failed to deserialize token response.");
+                }
 
                 TokenService.SaveParameters(Constants.TokenDbKey, tokenDto.AccessToken);
 
