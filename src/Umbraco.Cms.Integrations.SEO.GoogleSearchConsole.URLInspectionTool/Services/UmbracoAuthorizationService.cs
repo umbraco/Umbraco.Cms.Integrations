@@ -49,7 +49,7 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Ser
                 {"grant_type", "authorization_code" }
             };
 
-            var requestMessage = new HttpRequestMessage
+            using var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(OAuthProxyTokenUrl),
@@ -97,7 +97,7 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Ser
                 {"grant_type", "refresh_token" }
             };
 
-            var requestMessage = new HttpRequestMessage
+            using var requestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(OAuthProxyTokenUrl),

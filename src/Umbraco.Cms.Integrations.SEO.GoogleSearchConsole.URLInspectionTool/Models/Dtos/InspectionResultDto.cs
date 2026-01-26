@@ -11,7 +11,7 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Mod
         [JsonPropertyName("indexStatusResult")]
         public IndexStatusResultDto IndexingResult { get; set; }
 
-        [JsonPropertyName   ("ampResult")]
+        [JsonPropertyName("ampResult")]
         public AmpInspectionResultDto AmpResult { get; set; }
 
         [JsonPropertyName("mobileUsabilityResult")]

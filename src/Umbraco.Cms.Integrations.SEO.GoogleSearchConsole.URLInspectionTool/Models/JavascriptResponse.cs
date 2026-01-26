@@ -17,7 +17,7 @@ namespace Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.Mod
         {
             if (success && !string.IsNullOrEmpty(error))
             {
-                throw new ArgumentException("A succesful Response cannot have an error message.", error);
+                throw new ArgumentException("A successful Response cannot have an error message.", error);
             }
 
             if (!success && string.IsNullOrEmpty(error))

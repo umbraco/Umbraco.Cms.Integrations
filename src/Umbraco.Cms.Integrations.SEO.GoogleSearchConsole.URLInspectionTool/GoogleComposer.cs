@@ -34,7 +34,7 @@ public class GoogleComposer : IComposer
             };
         });
 
-        // Generate Swagger documentation for Shopify API
+        // Generate Swagger documentation for GoogleSearchConsole - URL Inspection Tool API
         builder.Services.Configure<SwaggerGenOptions>(options =>
         {
             options.SwaggerDoc(

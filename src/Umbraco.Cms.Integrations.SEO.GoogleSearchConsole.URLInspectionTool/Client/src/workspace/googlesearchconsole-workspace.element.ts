@@ -149,7 +149,6 @@ export class GoogleSearchConsoleWorkspaceElement extends UmbLitElement {
         const documentId = this.#workspaceContext!.getUnique();
         const documentUrls = await this.#repository.getUrls(documentId!);
 
-        console.log(documentUrls);
         if (documentUrls?.data?.length > 0) {
             documentUrls?.data[0].urlInfos.forEach((urlInfo) => {
                 if (inspectUrl === urlInfo.url) {
