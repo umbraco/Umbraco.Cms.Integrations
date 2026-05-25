@@ -4,13 +4,13 @@ using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Migrations
 {
-    public class AddAlgoliaIndicesTable : MigrationBase
+    public class AddAlgoliaIndicesTable : AsyncMigrationBase
     {
         public AddAlgoliaIndicesTable(IMigrationContext context) : base(context)
         {
         }
 
-        protected override void Migrate()
+        protected override Task MigrateAsync()
         {
             Logger.LogDebug("Running migration {MigrationStep}", nameof(AddAlgoliaIndicesTable));
 
@@ -18,6 +18,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Migrations
                 Logger.LogDebug("The database table {DbTable} already exists, skipping.", Constants.AlgoliaIndicesTableName);
             else
                 Create.Table<AlgoliaIndex>().Do();
+
+            return Task.CompletedTask;
         }
     }
 }

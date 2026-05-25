@@ -19,10 +19,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": [
-      "@umbraco-cms/backoffice/extension-registry",
-      "@umbraco-cms/backoffice/extension-types"
-    ],
+    "types": [ "@umbraco-cms/backoffice/extension-types" ],
     "paths": {
       "@umbraco-integrations/algolia/generated": [
         "./generated/index.ts"

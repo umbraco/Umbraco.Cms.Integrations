@@ -14,7 +14,7 @@ using Umbraco.Cms.Infrastructure.Migrations.Upgrade;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Migrations
 {
-    public class RunAlgoliaIndicesMigration : INotificationHandler<UmbracoApplicationStartingNotification>
+    public class RunAlgoliaIndicesMigration : INotificationAsyncHandler<UmbracoApplicationStartingNotification>
     {
         private readonly ICoreScopeProvider _coreScopeProvider;
         private readonly IMigrationPlanExecutor _migrationPlanExecutor;
@@ -22,9 +22,9 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Migrations
         private readonly IRuntimeState _runtimeState;
 
         public RunAlgoliaIndicesMigration(
-            ICoreScopeProvider coreScopeProvider, 
-            IMigrationPlanExecutor migrationPlanExecutor, 
-            IKeyValueService keyValueService, 
+            ICoreScopeProvider coreScopeProvider,
+            IMigrationPlanExecutor migrationPlanExecutor,
+            IKeyValueService keyValueService,
             IRuntimeState runtimeState)
         {
             _coreScopeProvider = coreScopeProvider;
@@ -36,7 +36,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Migrations
             _runtimeState = runtimeState;
         }
 
-        public void Handle(UmbracoApplicationStartingNotification notification)
+        public async Task HandleAsync(UmbracoApplicationStartingNotification notification, CancellationToken cancellationToken)
         {
             if (_runtimeState.Level < Core.RuntimeLevel.Run) return;
 
@@ -47,7 +47,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Migrations
                 .To<UpdateAlgoliaIndicesPostUpgrade>("algoliaindices-update-db");
 
             var upgrader = new Upgrader(migrationPlan);
-            upgrader.Execute(_migrationPlanExecutor, _coreScopeProvider, _keyValueService);
+            await upgrader.ExecuteAsync(_migrationPlanExecutor, _coreScopeProvider, _keyValueService);
         }
     }
 }

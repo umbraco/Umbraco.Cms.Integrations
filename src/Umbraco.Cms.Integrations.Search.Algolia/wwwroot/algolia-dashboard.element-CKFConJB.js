@@ -12,7 +12,7 @@ let o = class extends P(u) {
     super(...arguments), g(this, d), this._routes = [
       {
         path: "/index/:indexId",
-        component: () => import("./algolia-index-CAM396Gb.js"),
+        component: () => import("./algolia-index-BMZb9QPf.js"),
         setup: (t, e) => {
           const a = t;
           a.indexId = e.match.params.indexId;
@@ -20,7 +20,7 @@ let o = class extends P(u) {
       },
       {
         path: "/index",
-        component: () => import("./algolia-index-CAM396Gb.js"),
+        component: () => import("./algolia-index-BMZb9QPf.js"),
         setup: (t) => {
           const e = t;
           e.indexId = "";
@@ -28,7 +28,7 @@ let o = class extends P(u) {
       },
       {
         path: "/search/:indexId",
-        component: () => import("./algolia-search-BL7ARxTr.js"),
+        component: () => import("./algolia-search-DXNFXmcT.js"),
         setup: (t, e) => {
           const a = t;
           a.indexId = e.match.params.indexId;
@@ -36,7 +36,7 @@ let o = class extends P(u) {
       },
       {
         path: "",
-        component: () => import("./algolia-dashboard-overview-WRFAY24j.js")
+        component: () => import("./algolia-dashboard-overview-DgkZlk64.js")
       }
     ], this._activePath = "";
   }
@@ -83,4 +83,4 @@ export {
   o as AlgoliaDashboardElement,
   w as default
 };
-//# sourceMappingURL=algolia-dashboard.element-D4kmJ3GI.js.map
+//# sourceMappingURL=algolia-dashboard.element-CKFConJB.js.map

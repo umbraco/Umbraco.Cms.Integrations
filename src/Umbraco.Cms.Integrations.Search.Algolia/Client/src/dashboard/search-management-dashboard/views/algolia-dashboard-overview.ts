@@ -102,7 +102,7 @@ export class AlgoliaDashboardOverviewElement extends UmbElementMixin(LitElement)
         await modalContext.onSubmit().catch(() => undefined);
 
         this._loading = true;
-        await this.#algoliaIndexContext?.deleteIndex(index.id);
+        await this.#algoliaIndexContext?.deleteIndex(Number(index.id));
         this.#getIndices();
         this._loading = false;
     }

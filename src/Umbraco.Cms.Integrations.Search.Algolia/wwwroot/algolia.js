@@ -1,7 +1,6 @@
 import "@umbraco-cms/backoffice/auth";
-import { o as m } from "./index-DHm3D8am.js";
-import "@umbraco-cms/backoffice/http-client";
+import { o as i } from "./index-C_d55Deb.js";
 export {
-  m as onInit
+  i as onInit
 };
 //# sourceMappingURL=algolia.js.map

@@ -1,7 +1,7 @@
 import { LitElement as C, html as n, nothing as I, css as $, state as g, customElement as k } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin as O } from "@umbraco-cms/backoffice/element-api";
 import { UMB_MODAL_MANAGER_CONTEXT as w, UMB_CONFIRM_MODAL as _ } from "@umbraco-cms/backoffice/modal";
-import { ALGOLIA_CONTEXT_TOKEN as E } from "./algolia-index.context-FyjSKGue.js";
+import { ALGOLIA_CONTEXT_TOKEN as E } from "./algolia-index.context-B5xhfvsN.js";
 var M = Object.defineProperty, S = Object.getOwnPropertyDescriptor, v = (e) => {
   throw TypeError(e);
 }, h = (e, t, i, a) => {
@@ -101,7 +101,7 @@ x = async function(e) {
       }
     }
   ).onSubmit().catch(() => {
-  }), this._loading = !0, await ((a = m(this, r)) == null ? void 0 : a.deleteIndex(e.id)), s(this, l, p).call(this), this._loading = !1;
+  }), this._loading = !0, await ((a = m(this, r)) == null ? void 0 : a.deleteIndex(Number(e.id))), s(this, l, p).call(this), this._loading = !1;
 };
 A = function() {
   return this._indices.length == 0 ? I : n`
@@ -178,4 +178,4 @@ export {
   u as AlgoliaDashboardOverviewElement,
   G as default
 };
-//# sourceMappingURL=algolia-dashboard-overview-WRFAY24j.js.map
+//# sourceMappingURL=algolia-dashboard-overview-DgkZlk64.js.map

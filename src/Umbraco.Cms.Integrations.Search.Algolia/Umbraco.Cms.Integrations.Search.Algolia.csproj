@@ -14,9 +14,9 @@
 		<Title>Umbraco CMS Integrations: Search - Algolia</Title>
 		<Description>An extension for Umbraco CMS providing a custom search engine integration with Algolia.</Description>
 		<PackageIconUrl></PackageIconUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main-v17/src/Umbraco.Cms.Integrations.Search.Algolia</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main-v18/src/Umbraco.Cms.Integrations.Search.Algolia</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>6.1.0</Version>
+		<Version>7.0.0</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
@@ -25,7 +25,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<UmbracoCmsPackageVersion>[17.0.0, 18.0.0)</UmbracoCmsPackageVersion>
+		<UmbracoCmsPackageVersion>[18.0.0-beta2, 19.0.0)</UmbracoCmsPackageVersion>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Algolia.Search" Version="6.13.0" />

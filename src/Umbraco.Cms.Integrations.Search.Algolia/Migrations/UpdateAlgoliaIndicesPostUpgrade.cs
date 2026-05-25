@@ -7,7 +7,7 @@ using Umbraco.Cms.Integrations.Search.Algolia.Models.ContentTypeDtos;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Migrations
 {
-    public class UpdateAlgoliaIndicesPostUpgrade : MigrationBase
+    public class UpdateAlgoliaIndicesPostUpgrade : AsyncMigrationBase
     {
         private readonly IScopeProvider _scopeProvider;
         private readonly IContentTypeService _contentTypeService;
@@ -19,7 +19,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Migrations
             _contentTypeService = contentTypeService;
         }
 
-        protected override void Migrate()
+        protected override Task MigrateAsync()
         {
             using var scope = _scopeProvider.CreateScope();
 
@@ -57,6 +57,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Migrations
             }
 
             scope.Complete();
+
+            return Task.CompletedTask;
         }
 
         private class AlgoliaMigrationIndexData

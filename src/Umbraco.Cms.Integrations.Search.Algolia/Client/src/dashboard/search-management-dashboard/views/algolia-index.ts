@@ -187,8 +187,8 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
                         selectable
                         ?selected=${contentType.selected}
                         name=${contentType.name}
-                        @selected=${() => this.#contentTypeSelected(contentType.id)}
-                        @deselected=${() => this.#contentTypeDeselected(contentType.id)}>
+                        @selected=${() => this.#contentTypeSelected(Number(contentType.id))}
+                        @deselected=${() => this.#contentTypeDeselected(Number(contentType.id))}>
                         <umb-icon slot="icon" name=${contentType.icon}></umb-icon>
                         ${contentType.selected ? html`<uui-tag size="s" slot="tag" color="positive">Selected</uui-tag>` : ''}
                         <uui-action-bar slot="actions">
@@ -219,8 +219,8 @@ export class AlgoliaIndexElement extends UmbElementMixin(LitElement) {
                                     <uui-card-content-node 
                                         selectable
                                         ?selected=${property.selected}
-                                        @selected=${() => this.#contentTypePropertySelected(selectedContentType, property.id)}
-                                        @deselected=${() => this.#contentTypePropertyDeselected(selectedContentType, property.id)}
+                                        @selected=${() => this.#contentTypePropertySelected(selectedContentType, Number(property.id))}
+                                        @deselected=${() => this.#contentTypePropertyDeselected(selectedContentType, Number(property.id))}
                                         name=${property.name}>
                                         ${property.selected ? html`<uui-tag size="s" slot="tag" color="positive">Selected</uui-tag>` : ''}
                                         <ul style="list-style: none; padding-inline-start: 0px; margin: 0;">

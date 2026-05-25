@@ -4,15 +4,17 @@ import { UMB_AUTH_CONTEXT } from "@umbraco-cms/backoffice/auth";
 import { manifest as algoliaDashboardManifest } from './dashboard/manifest.js';
 import { manifest as algoliaContextManifest } from './context/manifest.js';
 import { client } from "@umbraco-integrations/algolia/generated";
-import { umbHttpClient } from "@umbraco-cms/backoffice/http-client";
 
 export const onInit: UmbEntryPointOnInit = (host, extensionRegistry) => {
-
     extensionRegistry.registerMany([algoliaDashboardManifest, algoliaContextManifest]);
 
     host.consumeContext(UMB_AUTH_CONTEXT, async (auth) => {
-        if (!auth) return;
+        const config = auth?.getOpenApiConfiguration();
 
-        client.setConfig(umbHttpClient.getConfig());
+        client.setConfig({
+            baseUrl: config?.base ?? "",
+            auth: config?.token ?? undefined,
+            credentials: config?.credentials ?? "same-origin",
+        });
     });
 };

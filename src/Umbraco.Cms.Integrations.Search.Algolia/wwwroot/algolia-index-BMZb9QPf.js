@@ -1,16 +1,16 @@
-import { LitElement as D, nothing as m, html as a, css as N, property as S, state as f, customElement as A } from "@umbraco-cms/backoffice/external/lit";
+import { LitElement as E, nothing as m, html as a, css as D, property as S, state as f, customElement as A } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin as W } from "@umbraco-cms/backoffice/element-api";
 import { UMB_NOTIFICATION_CONTEXT as k } from "@umbraco-cms/backoffice/notification";
-import { ALGOLIA_CONTEXT_TOKEN as M } from "./algolia-index.context-FyjSKGue.js";
+import { ALGOLIA_CONTEXT_TOKEN as M } from "./algolia-index.context-B5xhfvsN.js";
 var z = Object.defineProperty, F = Object.getOwnPropertyDescriptor, g = (e) => {
   throw TypeError(e);
 }, u = (e, t, n, i) => {
   for (var o = i > 1 ? void 0 : i ? F(t, n) : t, p = e.length - 1, h; p >= 0; p--)
     (h = e[p]) && (o = (i ? h(t, n, o) : h(o)) || o);
   return i && o && z(t, n, o), o;
-}, _ = (e, t, n) => t.has(e) || g("Cannot " + n), c = (e, t, n) => (_(e, t, "read from private field"), n ? n.call(e) : t.get(e)), y = (e, t, n) => t.has(e) ? g("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, n), G = (e, t, n, i) => (_(e, t, "write to private field"), t.set(e, n), n), r = (e, t, n) => (_(e, t, "access private method"), n), d, s, v, T, x, I, $, C, w, P, b, E;
+}, _ = (e, t, n) => t.has(e) || g("Cannot " + n), c = (e, t, n) => (_(e, t, "read from private field"), n ? n.call(e) : t.get(e)), y = (e, t, n) => t.has(e) ? g("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, n), G = (e, t, n, i) => (_(e, t, "write to private field"), t.set(e, n), n), r = (e, t, n) => (_(e, t, "access private method"), n), d, s, v, T, x, I, $, C, w, b, P, N;
 const L = "algolia-index";
-let l = class extends W(D) {
+let l = class extends W(E) {
   constructor() {
     super(), y(this, s), y(this, d), this._model = {
       id: 0,
@@ -31,8 +31,8 @@ let l = class extends W(D) {
                         selectable
                         ?selected=${e.selected}
                         name=${e.name}
-                        @selected=${() => r(this, s, $).call(this, e.id)}
-                        @deselected=${() => r(this, s, C).call(this, e.id)}>
+                        @selected=${() => r(this, s, $).call(this, Number(e.id))}
+                        @deselected=${() => r(this, s, C).call(this, Number(e.id))}>
                         <umb-icon slot="icon" name=${e.icon}></umb-icon>
                         ${e.selected ? a`<uui-tag size="s" slot="tag" color="positive">Selected</uui-tag>` : ""}
                         <uui-action-bar slot="actions">
@@ -56,8 +56,8 @@ let l = class extends W(D) {
                                     <uui-card-content-node 
                                         selectable
                                         ?selected=${n.selected}
-                                        @selected=${() => r(this, s, w).call(this, t, n.id)}
-                                        @deselected=${() => r(this, s, P).call(this, t, n.id)}
+                                        @selected=${() => r(this, s, w).call(this, t, Number(n.id))}
+                                        @deselected=${() => r(this, s, b).call(this, t, Number(n.id))}
                                         name=${n.name}>
                                         ${n.selected ? a`<uui-tag size="s" slot="tag" color="positive">Selected</uui-tag>` : ""}
                                         <ul style="list-style: none; padding-inline-start: 0px; margin: 0;">
@@ -74,7 +74,7 @@ let l = class extends W(D) {
     return a`
             <uui-box headline=${this.indexId.length > 0 ? "Create Index Definition" : "Edit Index Definition"}>
                 <uui-form>
-                    <form id="manageIndexFrm" name="manageIndexFrm" @submit=${r(this, s, b)}>
+                    <form id="manageIndexFrm" name="manageIndexFrm" @submit=${r(this, s, P)}>
                         <umb-property-layout 
                             label="Name" 
                             description="Please enter a name for the index. After save, you will not be able to change it."> 
@@ -127,13 +127,13 @@ C = async function(e) {
 w = async function(e, t) {
   e !== void 0 && (this._contentTypes = this._contentTypes.map((n) => (n.id != e.id || (n.properties = n.properties.map((i) => (i.id == t && (i.selected = !0), i))), n)));
 };
-P = async function(e, t) {
+b = async function(e, t) {
   e != null && (this._contentTypes = this._contentTypes.map((n) => (n.id != e.id || (n.properties = n.properties.map((i) => (i.id == t && (i.selected = !1), i))), n)));
 };
-b = async function(e) {
+P = async function(e) {
   var n, i;
   if (e.preventDefault(), this._model.name.length == 0 || this._contentTypes === void 0 || ((n = this._contentTypes) == null ? void 0 : n.filter((o) => o.selected).length) == 0) {
-    r(this, s, E).call(this, "Index name and content schema are required.");
+    r(this, s, N).call(this, "Index name and content schema are required.");
     return;
   }
   const t = {
@@ -143,14 +143,14 @@ b = async function(e) {
   };
   this.indexId.length > 0 && (t.id = Number(this.indexId)), t.contentData = this._contentTypes, await ((i = c(this, d)) == null ? void 0 : i.saveIndex(t));
 };
-E = async function(e) {
+N = async function(e) {
   const t = await this.getContext(k);
   t == null || t.peek("danger", {
     data: { message: e }
   });
 };
 l.styles = [
-  N`
+  D`
           #grid {
             display: grid;
             grid-template-columns: 33% 33% 33%;
@@ -178,4 +178,4 @@ export {
   l as AlgoliaIndexElement,
   q as default
 };
-//# sourceMappingURL=algolia-index-CAM396Gb.js.map
+//# sourceMappingURL=algolia-index-BMZb9QPf.js.map

@@ -1,12 +1,8 @@
 ﻿using Algolia.Search.Models.Search;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
-using Umbraco.Cms.Integrations.Search.Algolia.Api.Configuration;
 using Umbraco.Cms.Integrations.Search.Algolia.Builders;
 using Umbraco.Cms.Integrations.Search.Algolia.Configuration;
 using Umbraco.Cms.Integrations.Search.Algolia.Extensions;
@@ -21,7 +17,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia
     {
         public void Compose(IUmbracoBuilder builder)
         {
-            builder.AddNotificationHandler<UmbracoApplicationStartingNotification, RunAlgoliaIndicesMigration>();
+            builder.AddNotificationAsyncHandler<UmbracoApplicationStartingNotification, RunAlgoliaIndicesMigration>();
 
             builder.AddNotificationAsyncHandler<ContentCacheRefresherNotification, AlgoliaContentCacheRefresherHandler>();
             builder.AddNotificationAsyncHandler<ContentPublishedNotification, AlgoliaContentPublishedHandler>();
@@ -43,20 +39,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia
 
             builder.AddAlgoliaConverters();
 
-            // Generate Swagger documentation for Algolia Search API
-            builder.Services.Configure<SwaggerGenOptions>(options =>
-            {
-                options.SwaggerDoc(
-                    Constants.ManagementApi.ApiName,
-                    new OpenApiInfo
-                    {
-                        Title = Constants.ManagementApi.ApiTitle,
-                        Version = "Latest",
-                        Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling indices."
-                    });
-                options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
-            })
-            .AddSingleton<IOperationIdHandler, AlgoliaOperationIdHandler>(); ;
+            builder.AddAlgoliaOpenApi();
         }
 
     }

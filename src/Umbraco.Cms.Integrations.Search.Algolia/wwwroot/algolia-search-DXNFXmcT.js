@@ -1,6 +1,6 @@
 import { LitElement as S, html as c, css as C, property as I, query as E, state as x, customElement as P } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin as $ } from "@umbraco-cms/backoffice/element-api";
-import { ALGOLIA_CONTEXT_TOKEN as b } from "./algolia-index.context-FyjSKGue.js";
+import { ALGOLIA_CONTEXT_TOKEN as b } from "./algolia-index.context-B5xhfvsN.js";
 var w = Object.defineProperty, O = Object.getOwnPropertyDescriptor, f = (e) => {
   throw TypeError(e);
 }, l = (e, t, i, n) => {
@@ -112,4 +112,4 @@ export {
   a as AlgoliaSearchElement,
   L as default
 };
-//# sourceMappingURL=algolia-search-BL7ARxTr.js.map
+//# sourceMappingURL=algolia-search-DXNFXmcT.js.map
