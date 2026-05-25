@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		azure-pipeline - Crm.Dynamics.yml = azure-pipeline - Crm.Dynamics.yml
 		azure-pipeline - Crm.Hubspot.yml = azure-pipeline - Crm.Hubspot.yml
 		azure-pipeline - Search.Algolia.yml = azure-pipeline - Search.Algolia.yml
+		azure-pipeline - SEO.GoogleSearchConsole.URLInspectionTool.yml = azure-pipeline - SEO.GoogleSearchConsole.URLInspectionTool.yml
 		azure-pipeline - SEO.SemrushTools.yml = azure-pipeline - SEO.SemrushTools.yml
 		azure-pipelines - Automation.Zapier.yml = azure-pipelines - Automation.Zapier.yml
 		azure-pipelines - Commerce.Shopify.yml = azure-pipelines - Commerce.Shopify.yml
@@ -55,7 +56,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Semrush", "Semrush", "{C46C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.SEO.Semrush", "src\Umbraco.Cms.Integrations.SEO.Semrush\Umbraco.Cms.Integrations.SEO.Semrush.csproj", "{07922A29-9776-4377-A500-2540E56AA3EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Testsite.V17", "examples\Umbraco.Cms.Integrations.Testsite.V17\Umbraco.Cms.Integrations.Testsite.V17.csproj", "{1DC53DF8-F268-48B7-9CE7-ABDA08AB8DDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.Testsite.V18", "examples\Umbraco.Cms.Integrations.Testsite.V18\Umbraco.Cms.Integrations.Testsite.V18.csproj", "{7BA0A198-2820-4F28-98CB-FEA7161E5216}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GoogleSearchConsole", "GoogleSearchConsole", "{2CBA4AD1-43EF-4561-BAD8-8B3B79135B27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool", "src\Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool\Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.csproj", "{926A9B73-4478-23B1-E0E8-95517BFCDAFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,10 +96,14 @@ Global
 		{07922A29-9776-4377-A500-2540E56AA3EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07922A29-9776-4377-A500-2540E56AA3EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07922A29-9776-4377-A500-2540E56AA3EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1DC53DF8-F268-48B7-9CE7-ABDA08AB8DDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1DC53DF8-F268-48B7-9CE7-ABDA08AB8DDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1DC53DF8-F268-48B7-9CE7-ABDA08AB8DDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1DC53DF8-F268-48B7-9CE7-ABDA08AB8DDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BA0A198-2820-4F28-98CB-FEA7161E5216}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BA0A198-2820-4F28-98CB-FEA7161E5216}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BA0A198-2820-4F28-98CB-FEA7161E5216}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BA0A198-2820-4F28-98CB-FEA7161E5216}.Release|Any CPU.Build.0 = Release|Any CPU
+		{926A9B73-4478-23B1-E0E8-95517BFCDAFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{926A9B73-4478-23B1-E0E8-95517BFCDAFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{926A9B73-4478-23B1-E0E8-95517BFCDAFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{926A9B73-4478-23B1-E0E8-95517BFCDAFD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -114,6 +123,8 @@ Global
 		{02566D6E-91EB-47AD-9964-9A8FC1837F4B} = {BF22D815-616E-49D5-93EB-18FCE975D3BE}
 		{C46C55B4-4AA8-47F1-BAFE-B06161A10E9A} = {50F83E07-6690-4EF2-AF4D-A1DE8C73E409}
 		{07922A29-9776-4377-A500-2540E56AA3EB} = {C46C55B4-4AA8-47F1-BAFE-B06161A10E9A}
+		{2CBA4AD1-43EF-4561-BAD8-8B3B79135B27} = {50F83E07-6690-4EF2-AF4D-A1DE8C73E409}
+		{926A9B73-4478-23B1-E0E8-95517BFCDAFD} = {2CBA4AD1-43EF-4561-BAD8-8B3B79135B27}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FB51E08-A3C8-4DFF-B3CB-E99C2ED021D5}
