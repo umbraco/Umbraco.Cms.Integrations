@@ -1,8 +1,7 @@
 import "@umbraco-cms/backoffice/auth";
-import { a as m, o as n } from "./index-ClxzTTMf.js";
-import "@umbraco-cms/backoffice/http-client";
+import { a as i, o as n } from "./index-ya19u6ji.js";
 export {
-  m as DynamicsAuthorizationElement,
+  i as DynamicsAuthorizationElement,
   n as onInit
 };
 //# sourceMappingURL=dynamics.js.map

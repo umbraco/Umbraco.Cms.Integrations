@@ -2,14 +2,11 @@ import { css, customElement, html, nothing, property, repeat, state } from "@umb
 import { UmbModalBaseElement } from "@umbraco-cms/backoffice/modal";
 import { DynamicsFormPickerModalData, DynamicsFormPickerModalValue } from "./dynamics.modal-token";
 import { DYNAMICS_CONTEXT_TOKEN } from "../context/dynamics.context";
-import { DynamicsModuleModel, FormDtoModel, OAuthConfigurationDtoModel } from "@umbraco-integrations/dynamics/generated";
+import { FormDtoModel, OAuthConfigurationDtoModel } from "@umbraco-integrations/dynamics/generated";
 import { UMB_NOTIFICATION_CONTEXT, UmbNotificationColor } from "@umbraco-cms/backoffice/notification";
 import { UUIInputEvent } from "@umbraco-cms/backoffice/external/uui";
-import {
-    type UmbPropertyEditorConfigCollection,
-    UmbPropertyValueChangeEvent
-} from "@umbraco-cms/backoffice/property-editor";
 import * as dynamicsModuleHelper from "../helpers/dynamic-module.helper";
+import { DynamicsModule } from "../helpers/dynamic-module.helper";
 
 const elementName = "dynamics-forms-modal";
 
@@ -27,7 +24,7 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
     @state()
     private _selectedForm: FormDtoModel = {
         id: "",
-        module: DynamicsModuleModel.BOTH,
+        module: DynamicsModule.BOTH,
         name: "",
         rawHtml: "",
         standaloneHtml: "",
@@ -78,7 +75,7 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
     }
 
     async _onSubmit() {
-        if (this.renderWithIFrame && dynamicsModuleHelper.parseModule(this._selectedForm.module.toString()) == DynamicsModuleModel.OUTBOUND) {
+        if (this.renderWithIFrame && dynamicsModuleHelper.parseModule(this._selectedForm.module.toString()) == DynamicsModule.OUTBOUND) {
             var { data } = await this.#dynamicsContext.getEmbedCode(this._selectedForm.id);
             if (!data || data.result!.length == 0) {
                 this._showError("Unable to embed selected form. Please check if it is live.");

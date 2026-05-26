@@ -14,9 +14,9 @@
 		<Title>Umbraco CMS Integrations: CRM - Dynamics</Title>
 		<Description>An extension for Umbraco CMS providing a form picker and rendering component for Dynamics 365 Marketing.</Description>
 		<PackageIconUrl></PackageIconUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main-v17/src/Umbraco.Cms.Integrations.Crm.Dynamics</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main-v18/src/Umbraco.Cms.Integrations.Crm.Dynamics</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>5.0.0</Version>
+		<Version>6.0.0</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
@@ -25,7 +25,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<UmbracoCmsPackageVersion>[17.0.0, 18.0.0)</UmbracoCmsPackageVersion>
+		<UmbracoCmsPackageVersion>[18.0.0-beta2, 19.0.0)</UmbracoCmsPackageVersion>
 	</PropertyGroup>
 
 	<ItemGroup>

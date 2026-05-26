@@ -1,6 +1,6 @@
 import { html as l, css as T, state as g, property as C, customElement as b } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement as k } from "@umbraco-cms/backoffice/lit-element";
-import { D } from "./index-ClxzTTMf.js";
+import { D } from "./index-ya19u6ji.js";
 import { UmbModalToken as F, UMB_MODAL_MANAGER_CONTEXT as N } from "@umbraco-cms/backoffice/modal";
 import { UMB_NOTIFICATION_CONTEXT as P } from "@umbraco-cms/backoffice/notification";
 const A = new F("Dynamics.Modal", {
@@ -119,4 +119,4 @@ export {
   s as DynamicsFormPickerPropertyEditor,
   z as default
 };
-//# sourceMappingURL=dynamics-form-picker-property-editor.element-Mu40G-Yg.js.map
+//# sourceMappingURL=dynamics-form-picker-property-editor.element-B2xMC8sb.js.map

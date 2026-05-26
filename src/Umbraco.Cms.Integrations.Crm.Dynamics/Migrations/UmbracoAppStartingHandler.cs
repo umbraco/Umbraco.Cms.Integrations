@@ -8,7 +8,7 @@ using Umbraco.Cms.Infrastructure.Scoping;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
 {
-    public class UmbracoAppStartingHandler : INotificationHandler<UmbracoApplicationStartingNotification>
+    public class UmbracoAppStartingHandler : INotificationAsyncHandler<UmbracoApplicationStartingNotification>
     {
         private readonly IMigrationPlanExecutor _migrationPlanExecutor;
 
@@ -33,12 +33,12 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
             _runtimeState = runtimeState;
         }
 
-        public void Handle(UmbracoApplicationStartingNotification notification)
+        public async Task HandleAsync(UmbracoApplicationStartingNotification notification, CancellationToken cancellationToken)
         {
             if (_runtimeState.Level < RuntimeLevel.Run) return;
 
             var upgrader = new Upgrader(new DynamicsMigrationPlan());
-            upgrader.Execute(_migrationPlanExecutor, _scopeProvider, _keyValueService);
+            await upgrader.ExecuteAsync(_migrationPlanExecutor, _scopeProvider, _keyValueService);
         }
     }
 }

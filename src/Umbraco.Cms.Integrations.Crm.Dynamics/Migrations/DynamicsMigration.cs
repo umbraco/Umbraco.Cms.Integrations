@@ -5,7 +5,7 @@ using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
 {
-    public class DynamicsMigration : MigrationBase
+    public class DynamicsMigration : AsyncMigrationBase
     {
         public string MigrationLoggingMessage = $"Running migration {Constants.MigrationPlanName}";
 
@@ -16,7 +16,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
         {
         }
 
-        protected override void Migrate()
+        protected override Task MigrateAsync()
         {
             Logger.LogDebug(MigrationLoggingMessage);
 
@@ -28,6 +28,8 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
             {
                 Logger.LogDebug(DbTableExistsMessage);
             }
+
+            return Task.CompletedTask;
         }
     }
 
