@@ -1,8 +1,7 @@
 import "@umbraco-cms/backoffice/auth";
-import { a, o as m } from "./index-BT2389WJ.js";
-import "@umbraco-cms/backoffice/http-client";
+import { a as i, o as n } from "./index-Cm1-jVt_.js";
 export {
-  a as HubspotAuthorizationElement,
-  m as onInit
+  i as HubspotAuthorizationElement,
+  n as onInit
 };
 //# sourceMappingURL=hubspot.js.map

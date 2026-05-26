@@ -10,7 +10,7 @@
         <ClientAssetsDirectory Condition="'$(ClientAssetsDirectory)' == ''">Client\</ClientAssetsDirectory>
         <ClientAssetsRestoreInputs Condition="'$(ClientAssetsRestoreInputs)' == ''">$(ClientAssetsDirectory)\package-lock.json;$(ClientAssetsDirectory)\package.json</ClientAssetsRestoreInputs>
         <ClientAssetsRestoreOutputs Condition="'$(ClientAssetsRestoreOutputs)' == ''">$(ClientAssetsDirectory)node_modules\.package-lock.json</ClientAssetsRestoreOutputs>
-        <ClientAssetsRestoreCommand Condition="'$(ClientAssetsRestoreCommand)' == ''">npm ci --no-fund --no-audit --prefer-offline</ClientAssetsRestoreCommand>
+        <ClientAssetsRestoreCommand Condition="'$(ClientAssetsRestoreCommand)' == ''">npm install --no-fund --no-audit --prefer-offline</ClientAssetsRestoreCommand>
         <ClientAssetsBuildCommand Condition="'$(ClientAssetsBuildCommand)' == ''">npm run build</ClientAssetsBuildCommand>
 
         <!-- Include project file to pick up changes in the above values -->
