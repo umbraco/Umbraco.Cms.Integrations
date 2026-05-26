@@ -1,6 +1,6 @@
 import { UmbLitElement as x } from "@umbraco-cms/backoffice/lit-element";
 import { html as u, nothing as C, css as N, state as r, customElement as Z } from "@umbraco-cms/backoffice/external/lit";
-import { ZAPIER_CONTEXT_TOKEN as I } from "./zapier.context-Cl9nWOQ7.js";
+import { ZAPIER_CONTEXT_TOKEN as I } from "./zapier.context-X4E0FeNc.js";
 import { UmbPaginationManager as T } from "@umbraco-cms/backoffice/utils";
 var A = Object.defineProperty, M = Object.getOwnPropertyDescriptor, w = (t) => {
   throw TypeError(t);
@@ -157,4 +157,4 @@ export {
   n as ZapierManagementDashboardElement,
   S as default
 };
-//# sourceMappingURL=zapier-management-dashboard.element-Cjkxw8Gi.js.map
+//# sourceMappingURL=zapier-management-dashboard.element-DZFmtCWl.js.map

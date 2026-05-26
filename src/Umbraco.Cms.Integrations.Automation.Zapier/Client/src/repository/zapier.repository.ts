@@ -1,7 +1,7 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { tryExecute } from "@umbraco-cms/backoffice/resources";
-import { Zapier } from "@umbraco-integrations/zapier/generated";
+import { Zapier, type SubscriptionDtoModel, type UserModel } from "@umbraco-integrations/zapier/generated";
 
 export class ZapierRepository extends UmbControllerBase {
     constructor(host: UmbControllerHost) {
@@ -52,8 +52,8 @@ export class ZapierRepository extends UmbControllerBase {
         return { data };
     }
 
-    async updatePreferences() {
-        const { data, error } = await tryExecute(this, Zapier.postUpdateSubscription());
+    async updatePreferences(subscription: SubscriptionDtoModel) {
+        const { data, error } = await tryExecute(this, Zapier.postUpdateSubscription({ body: subscription }));
 
         if (error || !data) {
             return { error };
@@ -62,8 +62,8 @@ export class ZapierRepository extends UmbControllerBase {
         return { data };
     }
 
-    async validateUser() {
-        const { data, error } = await tryExecute(this, Zapier.postValidateUser());
+    async validateUser(user: UserModel) {
+        const { data, error } = await tryExecute(this, Zapier.postValidateUser({ body: user }));
 
         if (error || !data) {
             return { error };

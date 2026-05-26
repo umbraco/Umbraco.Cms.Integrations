@@ -5,7 +5,7 @@ using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
 namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
 {
-    public class ZapierMigration : MigrationBase
+    public class ZapierMigration : AsyncMigrationBase
     {
         public string MigrationLoggingMessage = $"Running migration {Constants.MigrationPlanName}";
 
@@ -16,7 +16,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
         {
         }
 
-        protected override void Migrate()
+        protected override Task MigrateAsync()
         {
             Logger.LogDebug(MigrationLoggingMessage);
 
@@ -28,6 +28,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
             {
                 Logger.LogDebug(ContentDbTableExistsMessage);
             }
+
+            return Task.CompletedTask;
         }
 
         [TableName(Constants.ZapierSubscriptionHookTable)]

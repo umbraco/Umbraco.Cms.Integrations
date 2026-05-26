@@ -23,7 +23,6 @@
     "noFallthroughCasesInSwitch": true,
 
     "types": [
-      "@umbraco-cms/backoffice/extension-registry",
       "@umbraco-cms/backoffice/extension-types"
     ],
 

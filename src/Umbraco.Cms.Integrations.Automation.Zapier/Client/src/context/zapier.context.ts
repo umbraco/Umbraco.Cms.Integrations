@@ -1,6 +1,7 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import type { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
+import type { SubscriptionDtoModel, UserModel } from "@umbraco-integrations/zapier/generated";
 import { ZapierRepository } from "../repository/zapier.repository";
 
 export class ZapierContext extends UmbControllerBase{
@@ -33,12 +34,12 @@ export class ZapierContext extends UmbControllerBase{
         return await this.#repository.checkFormsExtensionInstalled();
     }
 
-    async updatePreferences(){
-        return await this.#repository.updatePreferences();
+    async updatePreferences(subscription: SubscriptionDtoModel){
+        return await this.#repository.updatePreferences(subscription);
     }
 
-    async validateUser(){
-        return await this.#repository.validateUser();
+    async validateUser(user: UserModel){
+        return await this.#repository.validateUser(user);
     }
 }
 
