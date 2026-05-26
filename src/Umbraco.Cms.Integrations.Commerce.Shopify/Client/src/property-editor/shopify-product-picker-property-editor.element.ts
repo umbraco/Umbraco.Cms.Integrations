@@ -140,7 +140,7 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
                             html`
                                 <uui-ref-node-form name=${product.title} detail=${product.vendor}>
                                     <uui-action-bar slot="actions">
-                                        <uui-button label="Remove" @click=${() => this.deleteProduct(product.id)}>Remove</uui-button>
+                                        <uui-button label="Remove" @click=${() => this.deleteProduct(Number(product.id))}>Remove</uui-button>
                                     </uui-action-bar>
                                 </uui-ref-node-form>
                             `

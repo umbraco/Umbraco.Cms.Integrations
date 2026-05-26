@@ -1,10 +1,10 @@
-import { repeat as P, html as d, css as w, state as m, property as S, customElement as M } from "@umbraco-cms/backoffice/external/lit";
-import { UmbModalToken as T, UMB_MODAL_MANAGER_CONTEXT as N } from "@umbraco-cms/backoffice/modal";
+import { repeat as P, html as d, css as w, state as f, property as S, customElement as M } from "@umbraco-cms/backoffice/external/lit";
+import { UmbModalToken as N, UMB_MODAL_MANAGER_CONTEXT as T } from "@umbraco-cms/backoffice/modal";
 import { UMB_NOTIFICATION_CONTEXT as b } from "@umbraco-cms/backoffice/notification";
 import { C as I } from "./shopify-service.model-Nm90ruwK.js";
-import { SHOPIFY_CONTEXT_TOKEN as k } from "./shopify.context-CW9f65sx.js";
+import { SHOPIFY_CONTEXT_TOKEN as k } from "./shopify.context-Bjllc7Sq.js";
 import { UmbLitElement as A } from "@umbraco-cms/backoffice/lit-element";
-const V = new T("Shopify.Modal", {
+const V = new N("Shopify.Modal", {
   modal: {
     type: "sidebar",
     size: "large"
@@ -16,7 +16,7 @@ var $ = Object.defineProperty, L = Object.getOwnPropertyDescriptor, g = (t) => {
   for (var o = i > 1 ? void 0 : i ? L(e, s) : e, v = t.length - 1, _; v >= 0; v--)
     (_ = t[v]) && (o = (i ? _(e, s, o) : _(o)) || o);
   return i && o && $(e, s, o), o;
-}, y = (t, e, s) => e.has(t) || g("Cannot " + s), n = (t, e, s) => (y(t, e, "read from private field"), e.get(t)), u = (t, e, s) => e.has(t) ? g("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(t) : e.set(t, s), f = (t, e, s, i) => (y(t, e, "write to private field"), e.set(t, s), s), O = (t, e, s) => (y(t, e, "access private method"), s), c, l, a, h, C, E;
+}, y = (t, e, s) => e.has(t) || g("Cannot " + s), n = (t, e, s) => (y(t, e, "read from private field"), e.get(t)), u = (t, e, s) => e.has(t) ? g("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(t) : e.set(t, s), m = (t, e, s, i) => (y(t, e, "write to private field"), e.set(t, s), s), O = (t, e, s) => (y(t, e, "access private method"), s), c, l, a, h, C, E;
 const D = "shopify-product-picker";
 let r = class extends A {
   constructor() {
@@ -25,11 +25,11 @@ let r = class extends A {
       type: "",
       description: "",
       useOAuth: !1
-    }, this.consumeContext(N, (t) => {
-      f(this, l, t);
+    }, this.consumeContext(T, (t) => {
+      m(this, l, t);
     }), this.consumeContext(k, (t) => {
-      t && (f(this, c, t), this.observe(t.settingsModel, (e) => {
-        f(this, a, e);
+      t && (m(this, c, t), this.observe(t.settingsModel, (e) => {
+        m(this, a, e);
       }));
     });
   }
@@ -80,7 +80,7 @@ let r = class extends A {
       (t) => d`
                                 <uui-ref-node-form name=${t.title} detail=${t.vendor}>
                                     <uui-action-bar slot="actions">
-                                        <uui-button label="Remove" @click=${() => this.deleteProduct(t.id)}>Remove</uui-button>
+                                        <uui-button label="Remove" @click=${() => this.deleteProduct(Number(t.id))}>Remove</uui-button>
                                     </uui-action-bar>
                                 </uui-ref-node-form>
                             `
@@ -116,7 +116,7 @@ r.styles = [
         `
 ];
 p([
-  m()
+  f()
 ], r.prototype, "_config", 2);
 p([
   S({ attribute: !1 })
@@ -125,10 +125,10 @@ p([
   S({ type: String })
 ], r.prototype, "value", 2);
 p([
-  m()
+  f()
 ], r.prototype, "products", 2);
 p([
-  m()
+  f()
 ], r.prototype, "_serviceStatus", 2);
 r = p([
   M(D)
@@ -138,4 +138,4 @@ export {
   r as ShopifyProductPickerPropertyEditor,
   R as default
 };
-//# sourceMappingURL=shopify-product-picker-property-editor.element-DwRdl7bP.js.map
+//# sourceMappingURL=shopify-product-picker-property-editor.element-BVZYJZJD.js.map

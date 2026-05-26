@@ -1,6 +1,6 @@
 import { UmbElementMixin as g } from "@umbraco-cms/backoffice/element-api";
 import { LitElement as T, when as M, html as w, state as A, property as V, customElement as P } from "@umbraco-cms/backoffice/external/lit";
-import { SHOPIFY_CONTEXT_TOKEN as x } from "./shopify.context-CW9f65sx.js";
+import { SHOPIFY_CONTEXT_TOKEN as x } from "./shopify.context-Bjllc7Sq.js";
 import { C as c } from "./shopify-service.model-Nm90ruwK.js";
 import { UMB_NOTIFICATION_CONTEXT as I } from "@umbraco-cms/backoffice/notification";
 var $ = Object.defineProperty, b = Object.getOwnPropertyDescriptor, S = (t) => {
@@ -135,4 +135,4 @@ export {
   u as ShopifyAuthorizationElement,
   U as default
 };
-//# sourceMappingURL=authorization-property-editor.element-KLvidTXJ.js.map
+//# sourceMappingURL=authorization-property-editor.element-B67GD-4w.js.map

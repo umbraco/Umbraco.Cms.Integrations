@@ -1,132 +1,87 @@
-var m = (r) => {
+var l = (r) => {
   throw TypeError(r);
 };
-var o = (r, e, t) => e.has(r) || m("Cannot " + t);
-var a = (r, e, t) => (o(r, e, "read from private field"), t ? t.call(r) : e.get(r)), g = (r, e, t) => e.has(r) ? m("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(r) : e.set(r, t), l = (r, e, t, c) => (o(r, e, "write to private field"), c ? c.call(r, t) : e.set(r, t), t);
+var m = (r, e, t) => e.has(r) || l("Cannot " + t);
+var a = (r, e, t) => (m(r, e, "read from private field"), t ? t.call(r) : e.get(r)), y = (r, e, t) => e.has(r) ? l("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(r) : e.set(r, t), g = (r, e, t, c) => (m(r, e, "write to private field"), c ? c.call(r, t) : e.set(r, t), t);
 import { UmbControllerBase as d } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken as k } from "@umbraco-cms/backoffice/context-api";
 import { tryExecute as n } from "@umbraco-cms/backoffice/resources";
-import { c as i } from "./index-gYX5oh2M.js";
+import { c as i } from "./index-BjHisZi7.js";
 import { UmbObjectState as f } from "@umbraco-cms/backoffice/observable-api";
 class u {
   static postAccessToken(e) {
-    return ((e == null ? void 0 : e.client) ?? i).post({
-      security: [
-        {
-          scheme: "bearer",
-          type: "http"
-        }
-      ],
+    return (e.client ?? i).post({
+      security: [{ scheme: "bearer", type: "http" }],
       url: "/umbraco/shopify/management/api/v1/access-token",
       ...e,
       headers: {
         "Content-Type": "application/json",
-        ...e == null ? void 0 : e.headers
+        ...e.headers
       }
     });
   }
   static getAuthorizationUrl(e) {
     return ((e == null ? void 0 : e.client) ?? i).get({
-      security: [
-        {
-          scheme: "bearer",
-          type: "http"
-        }
-      ],
+      security: [{ scheme: "bearer", type: "http" }],
       url: "/umbraco/shopify/management/api/v1/authorization-url",
       ...e
     });
   }
   static getCheckConfiguration(e) {
     return ((e == null ? void 0 : e.client) ?? i).get({
-      security: [
-        {
-          scheme: "bearer",
-          type: "http"
-        }
-      ],
+      security: [{ scheme: "bearer", type: "http" }],
       url: "/umbraco/shopify/management/api/v1/check-configuration",
       ...e
     });
   }
   static getList(e) {
     return ((e == null ? void 0 : e.client) ?? i).get({
-      security: [
-        {
-          scheme: "bearer",
-          type: "http"
-        }
-      ],
+      security: [{ scheme: "bearer", type: "http" }],
       url: "/umbraco/shopify/management/api/v1/list",
       ...e
     });
   }
   static postListByIds(e) {
-    return ((e == null ? void 0 : e.client) ?? i).post({
-      security: [
-        {
-          scheme: "bearer",
-          type: "http"
-        }
-      ],
+    return (e.client ?? i).post({
+      security: [{ scheme: "bearer", type: "http" }],
       url: "/umbraco/shopify/management/api/v1/list-by-ids",
       ...e,
       headers: {
         "Content-Type": "application/json",
-        ...e == null ? void 0 : e.headers
+        ...e.headers
       }
     });
   }
   static postRefreshAccessToken(e) {
     return ((e == null ? void 0 : e.client) ?? i).post({
-      security: [
-        {
-          scheme: "bearer",
-          type: "http"
-        }
-      ],
+      security: [{ scheme: "bearer", type: "http" }],
       url: "/umbraco/shopify/management/api/v1/refresh-access-token",
       ...e
     });
   }
   static postRevokeAccessToken(e) {
     return ((e == null ? void 0 : e.client) ?? i).post({
-      security: [
-        {
-          scheme: "bearer",
-          type: "http"
-        }
-      ],
+      security: [{ scheme: "bearer", type: "http" }],
       url: "/umbraco/shopify/management/api/v1/revoke-access-token",
       ...e
     });
   }
   static getTotalPages(e) {
     return ((e == null ? void 0 : e.client) ?? i).get({
-      security: [
-        {
-          scheme: "bearer",
-          type: "http"
-        }
-      ],
+      security: [{ scheme: "bearer", type: "http" }],
       url: "/umbraco/shopify/management/api/v1/total-pages",
       ...e
     });
   }
   static getValidateAccessToken(e) {
     return ((e == null ? void 0 : e.client) ?? i).get({
-      security: [
-        {
-          scheme: "bearer",
-          type: "http"
-        }
-      ],
+      security: [{ scheme: "bearer", type: "http" }],
       url: "/umbraco/shopify/management/api/v1/validate-access-token",
       ...e
     });
   }
 }
-class T extends d {
+class p extends d {
   constructor(e) {
     super(e);
   }
@@ -169,14 +124,14 @@ class T extends d {
     return t || !e ? { error: t } : { data: e };
   }
 }
-var s, y, h;
-class b extends d {
+var s, o, h;
+class T extends d {
   constructor(t) {
     super(t);
-    g(this, s);
-    g(this, y);
-    g(this, h);
-    l(this, y, new f(void 0)), l(this, h, new f(void 0)), this.settingsModel = a(this, h).asObservable(), this.provideContext(A, this), l(this, s, new T(t));
+    y(this, s);
+    y(this, o);
+    y(this, h);
+    g(this, o, new f(void 0)), g(this, h, new f(void 0)), this.settingsModel = a(this, h).asObservable(), this.provideContext(b, this), g(this, s, new p(t));
   }
   async hostConnected() {
     super.hostConnected(), this.checkConfiguration();
@@ -210,14 +165,14 @@ class b extends d {
     return await a(this, s).refreshAccessToken();
   }
   getData() {
-    return a(this, y).getValue();
+    return a(this, o).getValue();
   }
 }
-s = new WeakMap(), y = new WeakMap(), h = new WeakMap();
-const A = new k(b.name);
+s = new WeakMap(), o = new WeakMap(), h = new WeakMap();
+const b = new k(T.name);
 export {
-  A as SHOPIFY_CONTEXT_TOKEN,
-  b as ShopifyContext,
-  b as default
+  b as SHOPIFY_CONTEXT_TOKEN,
+  T as ShopifyContext,
+  T as default
 };
-//# sourceMappingURL=shopify.context-CW9f65sx.js.map
+//# sourceMappingURL=shopify.context-Bjllc7Sq.js.map

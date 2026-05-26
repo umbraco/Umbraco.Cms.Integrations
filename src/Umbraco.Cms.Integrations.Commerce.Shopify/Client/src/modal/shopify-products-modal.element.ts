@@ -180,7 +180,7 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         const { data } = await this.#shopifyContext.getTotalPages();
         if (!data) return;
 
-        this._totalPages = data;
+        this._totalPages = Number(data);
     }
 
     #createTableItems(products: Array<ProductDtoModel>) {

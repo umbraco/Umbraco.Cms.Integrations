@@ -1,6 +1,7 @@
 import { customElement, html, property } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
-import { UmbPropertyValueChangeEvent, UmbPropertyEditorUiElement, type UmbPropertyEditorConfigCollection } from '@umbraco-cms/backoffice/property-editor';
+import { UmbPropertyEditorUiElement, type UmbPropertyEditorConfigCollection } from '@umbraco-cms/backoffice/property-editor';
+import { UmbChangeEvent } from '@umbraco-cms/backoffice/event';
 
 const elementName = "shopify-amount";
 
@@ -26,12 +27,12 @@ export class ShopifyAmountElement extends UmbLitElement implements UmbPropertyEd
 
     #onMinInput(e: InputEvent & { target: HTMLInputElement }) {
 		this.min = this.#parseInt(e.target.value);
-		this.dispatchEvent(new UmbPropertyValueChangeEvent());
+		this.dispatchEvent(new UmbChangeEvent());
 	}
 
     #onMaxInput(e: InputEvent & { target: HTMLInputElement }) {
 		this.max = this.#parseInt(e.target.value);
-		this.dispatchEvent(new UmbPropertyValueChangeEvent());
+		this.dispatchEvent(new UmbChangeEvent());
 	}
     
     override render() {

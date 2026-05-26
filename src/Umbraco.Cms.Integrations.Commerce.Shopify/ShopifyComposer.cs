@@ -1,13 +1,12 @@
 ﻿global using System.Text.Json;
 global using System.Text.Json.Serialization;
 
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using Umbraco.Cms.Api.Common.OpenApi;
+using Umbraco.Cms.Api.Management.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
-using Umbraco.Cms.Integrations.Commerce.Shopify.Api.Configuration;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
 
@@ -32,21 +31,17 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify
             builder.Services.AddSingleton<UmbracoAuthorizationService>();
             builder.Services.AddSingleton<AuthorizationService>();
 
-            // Generate Swagger documentation for Shopify API
-            builder.Services.Configure<SwaggerGenOptions>(options =>
-            {
-                options.SwaggerDoc(
-                    Constants.ManagementApi.ApiName,
-                    new OpenApiInfo
+            builder.AddBackOfficeOpenApiDocument(
+                Constants.ManagementApi.ApiName,
+                document => document
+                    .WithTitle(Constants.ManagementApi.ApiTitle)
+                    .WithBackOfficeAuthentication()
+                    .ConfigureOpenApiOptions(openApiOptions => openApiOptions.AddDocumentTransformer((doc, _, _) =>
                     {
-                        Title = Constants.ManagementApi.ApiTitle,
-                        Version = "Latest",
-                        Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Shopify product(s) and configuration."
-                    });
-
-                options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
-            })
-            .AddSingleton<IOperationIdHandler, ShopifyOperationIdHandler>();
+                        doc.Info.Version = "Latest";
+                        doc.Info.Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Shopify product(s) and configuration.";
+                        return Task.CompletedTask;
+                    })));
         }
     }
 }

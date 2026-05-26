@@ -1,16 +1,16 @@
 import { UmbModalBaseElement as U } from "@umbraco-cms/backoffice/modal";
-import { SHOPIFY_CONTEXT_TOKEN as B } from "./shopify.context-CW9f65sx.js";
+import { SHOPIFY_CONTEXT_TOKEN as B } from "./shopify.context-Bjllc7Sq.js";
 import { UMB_NOTIFICATION_CONTEXT as X } from "@umbraco-cms/backoffice/notification";
-import { nothing as w, html as v, css as D, state as h, customElement as F } from "@umbraco-cms/backoffice/external/lit";
+import { nothing as O, html as v, css as D, state as h, customElement as F } from "@umbraco-cms/backoffice/external/lit";
 import { UMB_COLLECTION_CONTEXT as K } from "@umbraco-cms/backoffice/collection";
 import { UmbPaginationManager as G } from "@umbraco-cms/backoffice/utils";
-var H = Object.defineProperty, Y = Object.getOwnPropertyDescriptor, x = (e) => {
+var H = Object.defineProperty, Y = Object.getOwnPropertyDescriptor, w = (e) => {
   throw TypeError(e);
 }, c = (e, t, s, i) => {
   for (var o = i > 1 ? void 0 : i ? Y(t, s) : t, r = e.length - 1, d; r >= 0; r--)
     (d = e[r]) && (o = (i ? d(t, s, o) : d(o)) || o);
   return i && o && H(t, s, o), o;
-}, I = (e, t, s) => t.has(e) || x("Cannot " + s), u = (e, t, s) => (I(e, t, "read from private field"), s ? s.call(e) : t.get(e)), g = (e, t, s) => t.has(e) ? x("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, s), P = (e, t, s, i) => (I(e, t, "write to private field"), t.set(e, s), s), n = (e, t, s) => (I(e, t, "access private method"), s), f, _, b, y, a, N, S, C, A, E, M, $, O, T, k, V, L;
+}, I = (e, t, s) => t.has(e) || w("Cannot " + s), u = (e, t, s) => (I(e, t, "read from private field"), s ? s.call(e) : t.get(e)), g = (e, t, s) => t.has(e) ? w("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, s), P = (e, t, s, i) => (I(e, t, "write to private field"), t.set(e, s), s), n = (e, t, s) => (I(e, t, "access private method"), s), f, _, b, y, a, x, S, C, A, E, M, $, N, T, k, V, L;
 const q = "shopify-products-modal";
 let l = class extends U {
   constructor() {
@@ -67,7 +67,7 @@ let l = class extends U {
     });
   }
   async connectedCallback() {
-    super.connectedCallback(), n(this, a, N).call(this);
+    super.connectedCallback(), n(this, a, x).call(this);
   }
   saveSelectedItems(e, t) {
     this._selectedItems = this._selectedItems.filter((s) => {
@@ -119,7 +119,7 @@ let l = class extends U {
                                 Add up to ${this._maximumItems} items(s)
                             </span>
                         </div>
-                    ` : w}
+                    ` : O}
                 <uui-button look="primary"  slot="actions" label="Submit" @click=${this._onSubmit}></uui-button>
                 <uui-button slot="actions" label="Close" @click=${this._rejectModal}></uui-button>
             </umb-body-layout>
@@ -131,7 +131,7 @@ _ = /* @__PURE__ */ new WeakMap();
 b = /* @__PURE__ */ new WeakMap();
 y = /* @__PURE__ */ new WeakMap();
 a = /* @__PURE__ */ new WeakSet();
-N = async function() {
+x = async function() {
   if (!(!u(this, f) || !u(this, _))) {
     if (this._serviceStatus = {
       isValid: u(this, _).isValid,
@@ -158,7 +158,7 @@ S = async function(e) {
 };
 C = async function() {
   const { data: e } = await u(this, f).getTotalPages();
-  e && (this._totalPages = e);
+  e && (this._totalPages = Number(e));
 };
 A = function(e) {
   this._tableItems = e.map((t) => ({
@@ -200,12 +200,12 @@ E = async function() {
   this._selection = this._selectedItems.length > 0 ? this._selectedItems : this.data.selectedItemIdList, this._maximumItems = ((t = (e = this.data) == null ? void 0 : e.config) == null ? void 0 : t.maxItems) ?? 0, this._minimumItems = ((i = (s = this.data) == null ? void 0 : s.config) == null ? void 0 : i.minItems) ?? 0;
 };
 M = function(e) {
-  n(this, a, O).call(this, e);
+  n(this, a, N).call(this, e);
 };
 $ = function(e) {
-  n(this, a, O).call(this, e);
+  n(this, a, N).call(this, e);
 };
-O = function(e) {
+N = function(e) {
   var o;
   e.stopPropagation();
   const t = e.target, s = t.selection, i = t.items;
@@ -259,7 +259,7 @@ L = function() {
 					    .total=${this._totalPages}
 					    @change=${n(this, a, V)}></uui-pagination>
                 </div>
-             ` : w}
+             ` : O}
         `;
 };
 l.styles = [D`
@@ -317,4 +317,4 @@ l = c([
 export {
   l as default
 };
-//# sourceMappingURL=shopify-products-modal.element-lOtPZy7y.js.map
+//# sourceMappingURL=shopify-products-modal.element-DEInVRT5.js.map

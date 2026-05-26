@@ -4,14 +4,13 @@ export default defineConfig({
     logs: {
         level: 'debug',
     },
-    input: 'http://localhost:28157/umbraco/swagger/shopify-management/swagger.json',
+    input: 'http://localhost:39509/umbraco/openapi/shopify-management.json',
     output: {
         path: 'generated',
     },
     plugins: [
         {
             name: '@hey-api/client-fetch',
-            bundle: false,
             exportFromIndex: true,
             throwOnError: true,
         },

@@ -1,7 +1,6 @@
 import "@umbraco-cms/backoffice/auth";
-import { o as m } from "./index-gYX5oh2M.js";
-import "@umbraco-cms/backoffice/http-client";
+import { o as i } from "./index-BjHisZi7.js";
 export {
-  m as onInit
+  i as onInit
 };
 //# sourceMappingURL=shopify.js.map

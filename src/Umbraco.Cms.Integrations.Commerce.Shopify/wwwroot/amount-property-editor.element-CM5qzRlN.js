@@ -1,6 +1,6 @@
 import { html as y, property as l, customElement as d } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement as E } from "@umbraco-cms/backoffice/lit-element";
-import { UmbPropertyValueChangeEvent as c } from "@umbraco-cms/backoffice/property-editor";
+import { UmbChangeEvent as c } from "@umbraco-cms/backoffice/event";
 var x = Object.defineProperty, N = Object.getOwnPropertyDescriptor, v = (t) => {
   throw TypeError(t);
 }, h = (t, e, n, p) => {
@@ -54,9 +54,9 @@ h([
 u = h([
   d(A)
 ], u);
-const P = u;
+const S = u;
 export {
   u as ShopifyAmountElement,
-  P as default
+  S as default
 };
-//# sourceMappingURL=amount-property-editor.element-D2I8ny88.js.map
+//# sourceMappingURL=amount-property-editor.element-CM5qzRlN.js.map
