@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi;
-using Swashbuckle.AspNetCore.SwaggerGen;
+﻿using Microsoft.AspNetCore.OpenApi;
+using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Api.Common.OpenApi;
+using Umbraco.Cms.Api.Management.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
-using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Configuration;
 using Umbraco.Cms.Integrations.Crm.ActiveCampaign.Configuration;
 
 namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
@@ -25,20 +24,17 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign
                             .Add("Api-Token", builder.Config.GetSection(Constants.SettingsPath)[nameof(ActiveCampaignSettings.ApiKey)]);
                     });
 
-            builder.Services.Configure<SwaggerGenOptions>(options =>
-            {
-                options.SwaggerDoc(
-                    Constants.ManagementApi.ApiName,
-                    new OpenApiInfo
+            builder.AddBackOfficeOpenApiDocument(
+                Constants.ManagementApi.ApiName,
+                document => document
+                    .WithTitle(Constants.ManagementApi.ApiTitle)
+                    .WithBackOfficeAuthentication()
+                    .ConfigureOpenApiOptions(openApiOptions => openApiOptions.AddDocumentTransformer((doc, _, _) =>
                     {
-                        Title = Constants.ManagementApi.ApiTitle,
-                        Version = "Latest",
-                        Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Active Campaign product(s) and configuration."
-                    });
-
-                options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
-            })
-            .AddSingleton<IOperationIdHandler, ActiveCampaignOperationIdHandler>();
+                        doc.Info.Version = "Latest";
+                        doc.Info.Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Active Campaign product(s) and configuration.";
+                        return Task.CompletedTask;
+                    })));
         }
 
     }

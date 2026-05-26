@@ -1,7 +1,6 @@
 import "@umbraco-cms/backoffice/auth";
-import { o as m } from "./index-DxsknWv0.js";
-import "@umbraco-cms/backoffice/http-client";
+import { o as i } from "./index-B_xpApWS.js";
 export {
-  m as onInit
+  i as onInit
 };
 //# sourceMappingURL=activecampaign.js.map

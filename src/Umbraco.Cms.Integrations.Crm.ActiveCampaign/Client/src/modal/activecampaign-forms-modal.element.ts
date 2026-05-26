@@ -79,7 +79,7 @@ export default class ActiveCampaignFormsModalElement
             return;
         }
 
-        this._totalPages = data.meta.totalPages;
+        this._totalPages = Number(data.meta.totalPages);
 
         this._forms = data.forms ?? [];
         this._filteredForms = this._forms;
