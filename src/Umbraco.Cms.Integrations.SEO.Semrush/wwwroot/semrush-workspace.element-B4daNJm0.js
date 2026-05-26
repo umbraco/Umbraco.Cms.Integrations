@@ -1,11 +1,11 @@
 import { UmbLitElement as q } from "@umbraco-cms/backoffice/lit-element";
 import { when as P, html as u, nothing as H, css as X, state as c, customElement as F } from "@umbraco-cms/backoffice/external/lit";
-import { SEMRUSH_CONTEXT_TOKEN as Y } from "./semrush.context-DpF4KTL0.js";
+import { SEMRUSH_CONTEXT_TOKEN as Y } from "./semrush.context-DrMVUcuj.js";
 import { UmbPaginationManager as Q } from "@umbraco-cms/backoffice/utils";
 import { UmbModalToken as J, UMB_MODAL_MANAGER_CONTEXT as Z } from "@umbraco-cms/backoffice/modal";
 import { UMB_CURRENT_USER_CONTEXT as j } from "@umbraco-cms/backoffice/current-user";
 import { UMB_NOTIFICATION_CONTEXT as ee } from "@umbraco-cms/backoffice/notification";
-import { E as D } from "./lit-html-CJZhbK-n.js";
+import { E as N } from "./lit-html-CJZhbK-n.js";
 const te = new J("Semrush.Modal", {
   modal: {
     type: "sidebar",
@@ -57,7 +57,7 @@ const f = (e, t) => {
     if ((t = e._$AM) === void 0) break;
     s = t._$AN, s.delete(e), e = t;
   } while ((s == null ? void 0 : s.size) === 0);
-}, N = (e) => {
+}, D = (e) => {
   for (let t; t = e._$AM; e = t) {
     let s = t._$AN;
     if (s === void 0) t._$AN = s = /* @__PURE__ */ new Set();
@@ -66,7 +66,7 @@ const f = (e, t) => {
   }
 };
 function re(e) {
-  this._$AN !== void 0 ? (b(this), this._$AM = e, N(this)) : this._$AM = e;
+  this._$AN !== void 0 ? (b(this), this._$AM = e, D(this)) : this._$AM = e;
 }
 function ne(e, t = !1, s = 0) {
   const i = this._$AH, a = this._$AN;
@@ -82,7 +82,7 @@ class ce extends ae {
     super(...arguments), this._$AN = void 0;
   }
   _$AT(t, s, i) {
-    super._$AT(t, s, i), N(this), this.isConnected = t._$AU;
+    super._$AT(t, s, i), D(this), this.isConnected = t._$AU;
   }
   _$AO(t, s = !0) {
     var i, a;
@@ -110,12 +110,12 @@ class ue {
 }
 const C = /* @__PURE__ */ new WeakMap(), S = oe(class extends ce {
   render(e) {
-    return D;
+    return N;
   }
   update(e, [t]) {
     var i;
     const s = t !== this.G;
-    return s && this.G !== void 0 && this.rt(void 0), (s || this.lt !== this.ct) && (this.G = t, this.ht = (i = e.options) == null ? void 0 : i.host, this.rt(this.ct = e.element)), D;
+    return s && this.G !== void 0 && this.rt(void 0), (s || this.lt !== this.ct) && (this.G = t, this.ht = (i = e.options) == null ? void 0 : i.host, this.rt(this.ct = e.element)), N;
   }
   rt(e) {
     if (this.isConnected || (e = void 0), typeof this.G == "function") {
@@ -198,7 +198,7 @@ let r = class extends q {
   async _search() {
     this._searchLoading = !0;
     const { data: e } = await m(this, v).getRelatedPhrases(this.searchPhrase, this._currentPageNumber, this.selectedDatasource, this.selectedMethod);
-    e && (e.isSuccessful ? (this.keywordList = e, this._totalPages = e.totalPages) : this._showError(e.error), this._searchLoading = !1);
+    e && (e.isSuccessful ? (this.keywordList = e, this._totalPages = Number(e.totalPages)) : this._showError(e.error), this._searchLoading = !1);
   }
   _searchNew() {
     this.searchPhrase = "", this.selectedDatasource = "", this.selectedMethod = "", this.selectedproperty = "", this.dsSearchDomainTooltip = "", this.dsSearchTypeTooltip = "", this.methodTooltip = "", this.keywordList = void 0, this._searchKeywordsBoxVisible = !0;
@@ -590,4 +590,4 @@ export {
   r as SemrushWorkspaceElement,
   be as default
 };
-//# sourceMappingURL=semrush-workspace.element-BfbQQ-l-.js.map
+//# sourceMappingURL=semrush-workspace.element-B4daNJm0.js.map

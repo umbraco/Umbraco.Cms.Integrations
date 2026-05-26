@@ -1,7 +1,6 @@
 import "@umbraco-cms/backoffice/auth";
-import { o as m } from "./index-m2GyFaVf.js";
-import "@umbraco-cms/backoffice/http-client";
+import { o as i } from "./index-DVRm0NsY.js";
 export {
-  m as onInit
+  i as onInit
 };
 //# sourceMappingURL=semrush.js.map

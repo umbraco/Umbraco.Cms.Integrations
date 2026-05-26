@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi;
-using Swashbuckle.AspNetCore.SwaggerGen;
+﻿using Microsoft.AspNetCore.OpenApi;
+using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Api.Common.OpenApi;
+using Umbraco.Cms.Api.Management.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
-using Umbraco.Cms.Integrations.SEO.Semrush.Api.Configuration;
 using Umbraco.Cms.Integrations.SEO.Semrush.Configuration;
 using Umbraco.Cms.Integrations.SEO.Semrush.Services;
 
@@ -37,20 +36,17 @@ namespace Umbraco.Cms.Integrations.SEO.Semrush
                 };
             });
 
-            // Generate Swagger documentation for Shopify API
-            builder.Services.Configure<SwaggerGenOptions>(options =>
-            {
-                options.SwaggerDoc(
-                    Constants.ManagementApi.ApiName,
-                    new OpenApiInfo
+            builder.AddBackOfficeOpenApiDocument(
+                Constants.ManagementApi.ApiName,
+                document => document
+                    .WithTitle(Constants.ManagementApi.ApiTitle)
+                    .WithBackOfficeAuthentication()
+                    .ConfigureOpenApiOptions(openApiOptions => openApiOptions.AddDocumentTransformer((doc, _, _) =>
                     {
-                        Title = Constants.ManagementApi.ApiTitle,
-                        Version = "Latest",
-                        Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Semrush and configuration."
-                    });
-                options.OperationFilter<BackOfficeSecurityRequirementsOperationFilter>();
-            })
-            .AddSingleton<IOperationIdHandler, SemrushOperationIdHandler>();
+                        doc.Info.Version = "Latest";
+                        doc.Info.Description = $"Describes the {Constants.ManagementApi.ApiTitle} available for handling Semrush and configuration.";
+                        return Task.CompletedTask;
+                    })));
         }
     }
 }

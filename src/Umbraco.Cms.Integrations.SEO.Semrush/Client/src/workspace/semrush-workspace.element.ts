@@ -207,7 +207,7 @@ export class SemrushWorkspaceElement extends UmbLitElement {
 
         if (data.isSuccessful){
             this.keywordList = data;
-            this._totalPages = data.totalPages;            
+            this._totalPages = Number(data.totalPages);
         } else{
             this._showError(data.error);
         }
