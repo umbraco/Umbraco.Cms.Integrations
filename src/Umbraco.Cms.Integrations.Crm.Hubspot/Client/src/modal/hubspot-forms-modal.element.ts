@@ -87,7 +87,7 @@ export default class HubspotFormsModalElement
 
         const result = !query
             ? this._forms
-            : this._forms.filter((form) => form.name?.includes(query));
+            : this._forms.filter((form) => form.name?.toLowerCase().includes(query));
 
         this._filteredForms = result;
     }
@@ -136,7 +136,7 @@ export default class HubspotFormsModalElement
                               selectable
                               name=${form.name ?? ""}
                               detail=${form.fields ?? ""}
-                              @selected=${() => this._onSelect(form)}>
+                              @click=${() => this._onSelect(form)}>
                             </uui-ref-node-form>
                         `;
                     })}
