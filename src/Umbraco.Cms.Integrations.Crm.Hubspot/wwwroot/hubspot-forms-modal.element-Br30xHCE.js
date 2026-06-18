@@ -1,7 +1,7 @@
 import { html as d, css as S, state as _, customElement as E } from "@umbraco-cms/backoffice/external/lit";
 import { UmbModalBaseElement as M } from "@umbraco-cms/backoffice/modal";
 import { UMB_NOTIFICATION_CONTEXT as T } from "@umbraco-cms/backoffice/notification";
-import { H as $ } from "./index-BT2389WJ.js";
+import { H as $ } from "./index-Du3AXIBs.js";
 var A = Object.defineProperty, x = Object.getOwnPropertyDescriptor, F = (t) => {
   throw TypeError(t);
 }, c = (t, e, i, n) => {
@@ -136,4 +136,4 @@ u = c([
 export {
   u as default
 };
-//# sourceMappingURL=hubspot-forms-modal.element-BPxig6w4.js.map
+//# sourceMappingURL=hubspot-forms-modal.element-Br30xHCE.js.map
