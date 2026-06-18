@@ -15,7 +15,7 @@ const qe = {
   type: "propertyEditorUi",
   alias: "HubSpot.PropertyEditorUi.FormPicker",
   name: "HubSpot Form Picker Property Editor UI",
-  js: () => import("./form-picker-property-editor.element-BlBI3ZKy.js"),
+  js: () => import("./form-picker-property-editor.element-BqTD1RUG.js"),
   elementName: "hubspot-form-picker",
   meta: {
     label: "HubSpot Form Picker",
@@ -64,7 +64,7 @@ const qe = {
   type: "modal",
   alias: "HubspotForms.Modal",
   name: "Hubspot Forms Modal",
-  js: () => import("./hubspot-forms-modal.element-CQ-RP_4i.js")
+  js: () => import("./hubspot-forms-modal.element-d8bjspnP.js")
 }, Ve = {
   bodySerializer: (r) => JSON.stringify(r, (e, t) => typeof t == "bigint" ? t.toString() : t)
 };
@@ -997,4 +997,4 @@ export {
   T as a,
   St as o
 };
-//# sourceMappingURL=index-Cm1-jVt_.js.map
+//# sourceMappingURL=index-B9Gl8fni.js.map
