@@ -18,7 +18,7 @@ const we = {
   type: "propertyEditorUi",
   alias: "HubSpot.PropertyEditorUi.FormPicker",
   name: "HubSpot Form Picker Property Editor UI",
-  js: () => import("./form-picker-property-editor.element-zQFjcuHH.js"),
+  js: () => import("./form-picker-property-editor.element-D4CCbJp4.js"),
   elementName: "hubspot-form-picker",
   meta: {
     label: "HubSpot Form Picker",
@@ -67,7 +67,7 @@ const we = {
   type: "modal",
   alias: "HubspotForms.Modal",
   name: "Hubspot Forms Modal",
-  js: () => import("./hubspot-forms-modal.element-BPxig6w4.js")
+  js: () => import("./hubspot-forms-modal.element-7OMgb7A_.js")
 };
 var Oe = async (t, e) => {
   let r = typeof e == "function" ? await e(t) : e;
@@ -672,4 +672,4 @@ export {
   m as a,
   ot as o
 };
-//# sourceMappingURL=index-BT2389WJ.js.map
+//# sourceMappingURL=index-sWuJTK-u.js.map

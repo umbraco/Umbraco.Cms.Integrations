@@ -1,15 +1,15 @@
 import { html as d, css as S, state as _, customElement as E } from "@umbraco-cms/backoffice/external/lit";
 import { UmbModalBaseElement as M } from "@umbraco-cms/backoffice/modal";
-import { UMB_NOTIFICATION_CONTEXT as T } from "@umbraco-cms/backoffice/notification";
-import { H as $ } from "./index-BT2389WJ.js";
-var A = Object.defineProperty, x = Object.getOwnPropertyDescriptor, F = (t) => {
+import { UMB_NOTIFICATION_CONTEXT as $ } from "@umbraco-cms/backoffice/notification";
+import { H as T } from "./index-sWuJTK-u.js";
+var k = Object.defineProperty, A = Object.getOwnPropertyDescriptor, w = (t) => {
   throw TypeError(t);
 }, c = (t, e, i, n) => {
-  for (var s = n > 1 ? void 0 : n ? x(e, i) : e, p = t.length - 1, f; p >= 0; p--)
+  for (var s = n > 1 ? void 0 : n ? A(e, i) : e, p = t.length - 1, f; p >= 0; p--)
     (f = t[p]) && (s = (n ? f(e, i, s) : f(s)) || s);
-  return n && s && A(e, i, s), s;
-}, v = (t, e, i) => e.has(t) || F("Cannot " + i), o = (t, e, i) => (v(t, e, "read from private field"), e.get(t)), m = (t, e, i) => e.has(t) ? F("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(t) : e.set(t, i), g = (t, e, i, n) => (v(t, e, "write to private field"), e.set(t, i), i), l = (t, e, i) => (v(t, e, "access private method"), i), h, a, r, y, b, w, O, C;
-const k = "hubspot-forms-modal";
+  return n && s && k(e, i, s), s;
+}, v = (t, e, i) => e.has(t) || w("Cannot " + i), o = (t, e, i) => (v(t, e, "read from private field"), e.get(t)), m = (t, e, i) => e.has(t) ? w("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(t) : e.set(t, i), g = (t, e, i, n) => (v(t, e, "write to private field"), e.set(t, i), i), l = (t, e, i) => (v(t, e, "access private method"), i), h, a, r, y, b, F, O, C;
+const x = "hubspot-forms-modal";
 let u = class extends M {
   constructor() {
     super(), m(this, r), m(this, h), m(this, a), this._serviceStatus = {
@@ -17,7 +17,7 @@ let u = class extends M {
       type: "",
       description: "",
       useOAuth: !1
-    }, this._loading = !1, this._forms = [], this._filteredForms = this._forms, this.consumeContext($, (t) => {
+    }, this._loading = !1, this._forms = [], this._filteredForms = this._forms, this.consumeContext(T, (t) => {
       t && (g(this, h, t), this.observe(t.settingsModel, (e) => {
         g(this, a, e);
       }));
@@ -30,7 +30,7 @@ let u = class extends M {
     return d` <uui-input
 			type="search"
 			id="filter"
-			@input="${l(this, r, w)}"
+			@input="${l(this, r, F)}"
 			placeholder="Type to filter..."
 			label="Type to filter forms">
 			<uui-icon name="search" slot="prepend" id="filter-icon"></uui-icon>
@@ -40,7 +40,7 @@ let u = class extends M {
     this.value = { form: t }, this._submitModal();
   }
   async _showError(t) {
-    const e = await this.getContext(T);
+    const e = await this.getContext($);
     e == null || e.peek("danger", {
       data: { message: t }
     });
@@ -56,7 +56,8 @@ let u = class extends M {
                               selectable
                               name=${t.name ?? ""}
                               detail=${t.fields ?? ""}
-                              @selected=${() => this._onSelect(t)}>
+                              @click=${() => this._onSelect(t)}
+                              @keydown=${(e) => e.key === " " && this._onSelect(t)}>
                             </uui-ref-node-form>
                         `)}
                 </uui-box>
@@ -86,12 +87,12 @@ b = async function() {
   const { data: t } = this._serviceStatus.useOAuth ? await o(this, h).getFormsOAuth() : await o(this, h).getFormsByApiKey();
   t && (this._forms = t.forms ?? [], this._filteredForms = t.forms ?? [], this._loading = !1, (!t.isValid || t.isExpired) && this._showError(t.error));
 };
-w = function(t) {
+F = function(t) {
   let e = t.target.value || "";
   e = e.toLowerCase();
   const i = e ? this._forms.filter((n) => {
     var s;
-    return (s = n.name) == null ? void 0 : s.includes(e);
+    return (s = n.name) == null ? void 0 : s.toLowerCase().includes(e);
   }) : this._forms;
   this._filteredForms = i;
 };
@@ -131,9 +132,9 @@ c([
   _()
 ], u.prototype, "_filteredForms", 2);
 u = c([
-  E(k)
+  E(x)
 ], u);
 export {
   u as default
 };
-//# sourceMappingURL=hubspot-forms-modal.element-BPxig6w4.js.map
+//# sourceMappingURL=hubspot-forms-modal.element-7OMgb7A_.js.map

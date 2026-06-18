@@ -2,7 +2,7 @@ import { UmbElementMixin as y } from "@umbraco-cms/backoffice/element-api";
 import { LitElement as E, html as h, css as b, property as M, state as v, customElement as S } from "@umbraco-cms/backoffice/external/lit";
 import { UmbModalToken as C, UMB_MODAL_MANAGER_CONTEXT as w } from "@umbraco-cms/backoffice/modal";
 import { UMB_NOTIFICATION_CONTEXT as T } from "@umbraco-cms/backoffice/notification";
-import { H as N, C as k } from "./index-BT2389WJ.js";
+import { H as N, C as k } from "./index-sWuJTK-u.js";
 const A = new C("HubspotForms.Modal", {
   modal: {
     type: "sidebar",
@@ -125,4 +125,4 @@ export {
   a as HubspotFormPickerElement,
   x as default
 };
-//# sourceMappingURL=form-picker-property-editor.element-zQFjcuHH.js.map
+//# sourceMappingURL=form-picker-property-editor.element-D4CCbJp4.js.map
