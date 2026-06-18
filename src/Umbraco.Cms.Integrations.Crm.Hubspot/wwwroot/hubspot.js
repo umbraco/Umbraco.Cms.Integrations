@@ -1,5 +1,5 @@
 import "@umbraco-cms/backoffice/auth";
-import { a as i, o as n } from "./index-Cm1-jVt_.js";
+import { a as i, o as n } from "./index-CmGrvIxE.js";
 export {
   i as HubspotAuthorizationElement,
   n as onInit
