@@ -1,6 +1,6 @@
-import { html as n, repeat as E, css as I, state as u, customElement as T } from "@umbraco-cms/backoffice/external/lit";
-import { UmbModalBaseElement as $ } from "@umbraco-cms/backoffice/modal";
-import { D as S } from "./index-ya19u6ji.js";
+import { html as n, repeat as E, css as $, state as c, customElement as I } from "@umbraco-cms/backoffice/external/lit";
+import { UmbModalBaseElement as T } from "@umbraco-cms/backoffice/modal";
+import { D as S } from "./index-BfjxV_Ia.js";
 import { UMB_NOTIFICATION_CONTEXT as k } from "@umbraco-cms/backoffice/notification";
 const _ = {
   OUTBOUND: 1,
@@ -21,9 +21,9 @@ var D = Object.defineProperty, N = Object.getOwnPropertyDescriptor, v = (e) => {
   for (var s = o > 1 ? void 0 : o ? N(t, i) : t, f = e.length - 1, p; f >= 0; f--)
     (p = e[f]) && (s = (o ? p(t, i, s) : p(s)) || s);
   return o && s && D(t, i, s), s;
-}, y = (e, t, i) => t.has(e) || v("Cannot " + i), c = (e, t, i) => (y(e, t, "read from private field"), i ? i.call(e) : t.get(e)), g = (e, t, i) => t.has(e) ? v("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), b = (e, t, i, o) => (y(e, t, "write to private field"), t.set(e, i), i), h = (e, t, i) => (y(e, t, "access private method"), i), d, m, a, w, F, O, C, M;
+}, y = (e, t, i) => t.has(e) || v("Cannot " + i), u = (e, t, i) => (y(e, t, "read from private field"), i ? i.call(e) : t.get(e)), g = (e, t, i) => t.has(e) ? v("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), b = (e, t, i, o) => (y(e, t, "write to private field"), t.set(e, i), i), h = (e, t, i) => (y(e, t, "access private method"), i), d, m, a, w, F, O, C, M;
 const U = "dynamics-forms-modal";
-let r = class extends $ {
+let r = class extends T {
   constructor() {
     super(), g(this, a), g(this, d), g(this, m), this._loading = !1, this._forms = [], this._filteredForms = [], this._selectedForm = {
       id: "",
@@ -46,7 +46,7 @@ let r = class extends $ {
   }
   async _onSubmit() {
     if (this.renderWithIFrame && W(this._selectedForm.module.toString()) == _.OUTBOUND) {
-      var { data: e } = await c(this, d).getEmbedCode(this._selectedForm.id);
+      var { data: e } = await u(this, d).getEmbedCode(this._selectedForm.id);
       if (!e || e.result.length == 0)
         return this._showError("Unable to embed selected form. Please check if it is live."), !1;
     }
@@ -86,7 +86,8 @@ let r = class extends $ {
                                             selectable
                                             ?selected=${this._selectedForm.id == e.id}
                                             name=${e.name ?? ""}
-                                            @selected=${() => this._onSelect(e)}>
+                                            @click=${() => this._onSelect(e)}
+                                            @keydown=${(t) => t.key === " " && this._onSelect(e)}>
                                         </uui-ref-node-form>
                                     `)}
                                     <uui-toggle
@@ -113,19 +114,19 @@ d = /* @__PURE__ */ new WeakMap();
 m = /* @__PURE__ */ new WeakMap();
 a = /* @__PURE__ */ new WeakSet();
 w = async function() {
-  c(this, m) && c(this, m).isAuthorized && await h(this, a, F).call(this);
+  u(this, m) && u(this, m).isAuthorized && await h(this, a, F).call(this);
 };
 F = async function() {
   var t;
   this._loading = !0;
-  const { data: e } = await c(this, d).getForms((t = this.data) == null ? void 0 : t.module);
+  const { data: e } = await u(this, d).getForms((t = this.data) == null ? void 0 : t.module);
   e && (this._forms = e, this._filteredForms = e, this._loading = !1);
 };
 O = async function() {
   await h(this, a, F).call(this);
 };
 C = async function() {
-  this._filteredForms = [], await c(this, d).checkOauthConfiguration();
+  this._filteredForms = [], await u(this, d).checkOauthConfiguration();
 };
 M = function(e) {
   let t = e.target.value || "";
@@ -137,7 +138,7 @@ M = function(e) {
   this._filteredForms = i;
 };
 r.styles = [
-  I`
+  $`
             #filter {
                 width: 100%;
                 margin-bottom: var(--uui-size-3);
@@ -150,27 +151,27 @@ r.styles = [
         `
 ];
 l([
-  u()
+  c()
 ], r.prototype, "_loading", 2);
 l([
-  u()
+  c()
 ], r.prototype, "_forms", 2);
 l([
-  u()
+  c()
 ], r.prototype, "_filteredForms", 2);
 l([
-  u()
+  c()
 ], r.prototype, "_selectedForm", 2);
 l([
-  u()
+  c()
 ], r.prototype, "renderWithIFrame", 2);
 l([
-  u()
+  c()
 ], r.prototype, "toggleLabel", 2);
 r = l([
-  T(U)
+  I(U)
 ], r);
 export {
   r as default
 };
-//# sourceMappingURL=dynamics-form-modal.element-DgdpDQZy.js.map
+//# sourceMappingURL=dynamics-form-modal.element-BNMzIemA.js.map

@@ -30,7 +30,7 @@ const Oe = {
   type: "propertyEditorUi",
   alias: "Dynamics.PropertyEditorUi.FormPicker",
   name: "Dynamics Form Picker Property Editor UI",
-  js: () => import("./dynamics-form-picker-property-editor.element-B2xMC8sb.js"),
+  js: () => import("./dynamics-form-picker-property-editor.element-Cgxy5Xad.js"),
   meta: {
     label: "Dynamics Form Picker",
     icon: "icon-handshake",
@@ -61,7 +61,7 @@ const Oe = {
   type: "modal",
   alias: "Dynamics.Modal",
   name: "Dynamics Modal",
-  js: () => import("./dynamics-form-modal.element-DgdpDQZy.js")
+  js: () => import("./dynamics-form-modal.element-BNMzIemA.js")
 }, $e = {
   bodySerializer: (r) => JSON.stringify(r, (e, t) => typeof t == "bigint" ? t.toString() : t)
 };
@@ -958,4 +958,4 @@ export {
   j as a,
   yt as o
 };
-//# sourceMappingURL=index-ya19u6ji.js.map
+//# sourceMappingURL=index-BfjxV_Ia.js.map
