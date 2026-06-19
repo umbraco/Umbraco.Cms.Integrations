@@ -154,7 +154,12 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
                                             ?selected=${this._selectedForm.id == form.id}
                                             name=${form.name ?? ""}
                                             @click=${() => this._onSelect(form)}
-                                            @keydown=${(e: KeyboardEvent) => e.key === ' ' && this._onSelect(form)}>
+                                            @keydown=${(e: KeyboardEvent) => {
+                                                if (e.key === ' ' || e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    this._onSelect(form);
+                                                }
+                                            }}>
                                         </uui-ref-node-form>
                                     `)}
                                     <uui-toggle
