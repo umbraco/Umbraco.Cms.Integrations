@@ -137,7 +137,12 @@ export default class HubspotFormsModalElement
                               name=${form.name ?? ""}
                               detail=${form.fields ?? ""}
                               @click=${() => this._onSelect(form)}
-                              @keydown=${(e: KeyboardEvent) => e.key === ' ' && this._onSelect(form)}>
+                              @keydown=${(e: KeyboardEvent) => {
+                                  if (e.key === ' ' || e.key === 'Enter') {
+                                      e.preventDefault();
+                                      this._onSelect(form);
+                                  }
+                              }}>
                             </uui-ref-node-form>
                         `;
                     })}
