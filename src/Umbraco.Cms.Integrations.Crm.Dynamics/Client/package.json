@@ -18,14 +18,14 @@
     "generate:api": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 openapi-ts -f openapi-ts.config.ts"
   },
   "peerDependencies": {
-    "@umbraco-cms/backoffice": "18.0.0-beta2"
+    "@umbraco-cms/backoffice": "18.0.0"
   },
   "devDependencies": {
     "@hey-api/client-fetch": "^0.13.0",
     "@hey-api/openapi-ts": "^0.97.0",
     "@typescript-eslint/eslint-plugin": "^7.13.0",
     "@typescript-eslint/parser": "^7.13.0",
-    "@umbraco-cms/backoffice": "18.0.0-beta2",
+    "@umbraco-cms/backoffice": "18.0.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",

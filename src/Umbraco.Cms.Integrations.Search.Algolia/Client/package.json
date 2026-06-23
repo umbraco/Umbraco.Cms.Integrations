@@ -18,7 +18,7 @@
     "lint": "eslint src"
   },
   "peerDependencies": {
-    "@umbraco-cms/backoffice": "18.0.0-beta2"
+    "@umbraco-cms/backoffice": "18.0.0"
   },
   "devDependencies": {
     "@hey-api/client-fetch": "^0.13.0",
@@ -28,7 +28,7 @@
     "@types/node": "^20.5.9",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
     "@typescript-eslint/parser": "^6.14.0",
-    "@umbraco-cms/backoffice": "18.0.0-beta2",
+    "@umbraco-cms/backoffice": "18.0.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
