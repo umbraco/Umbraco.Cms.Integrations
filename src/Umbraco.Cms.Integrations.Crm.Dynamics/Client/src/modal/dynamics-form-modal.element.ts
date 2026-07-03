@@ -150,7 +150,7 @@ export default class DynamicsFormModalElement extends UmbModalBaseElement<Dynami
                                             selectable
                                             ?selected=${this._selectedForm.id == form.id}
                                             name=${form.name ?? ""}
-                                            @selected=${() => this._onSelect(form)}>
+                                            @open=${() => this._onSelect(form)}>
                                         </uui-ref-node-form>
                                     `)}
                                     <uui-toggle
