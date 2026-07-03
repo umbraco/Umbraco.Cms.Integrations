@@ -1,7 +1,7 @@
 import { UmbElementMixin as M } from "@umbraco-cms/backoffice/element-api";
 import { LitElement as E, html as o, nothing as A, css as b, property as w, state as y, customElement as O } from "@umbraco-cms/backoffice/external/lit";
 import { UmbModalToken as k, UMB_MODAL_MANAGER_CONTEXT as T } from "@umbraco-cms/backoffice/modal";
-import { ACTIVECAMPAIGN_FORMS_CONTEXT_TOKEN as F } from "./activecampaign-forms.context-Bf-ZynOA.js";
+import { ACTIVECAMPAIGN_FORMS_CONTEXT_TOKEN as F } from "./activecampaign-forms.context-CtsKAXiI.js";
 const P = new k("ActiveCampaignForms.Modal", {
   modal: {
     type: "sidebar",
@@ -62,7 +62,7 @@ let n = class extends M(E) {
 				        label=${this.localize.term("general_add")}
 				        look="placeholder"></uui-button>
                 ` : o`
-                    <uui-ref-node-form selectable name=${((e = this._form) == null ? void 0 : e.name) ?? ""}>
+                    <uui-ref-node-form name=${((e = this._form) == null ? void 0 : e.name) ?? ""}>
                         <uui-action-bar slot="actions">
                             <uui-button label="Remove" @click=${W(this, v, C)}>Remove</uui-button>
                         </uui-action-bar>
@@ -81,6 +81,9 @@ C = function() {
 };
 n.styles = [
   b`
+            :host {
+                display: block;
+            }
             .add-button {
                 width: 100%;
             }
@@ -108,4 +111,4 @@ n = f([
 export {
   n as default
 };
-//# sourceMappingURL=form-picker-property-editor.element-DGpBjwMm.js.map
+//# sourceMappingURL=form-picker-property-editor.element-CKlPPCzM.js.map

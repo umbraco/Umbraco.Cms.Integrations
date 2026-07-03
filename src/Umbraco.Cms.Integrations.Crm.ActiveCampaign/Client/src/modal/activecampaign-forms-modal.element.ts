@@ -151,9 +151,8 @@ export default class ActiveCampaignFormsModalElement
     private _renderForm(form: FormDtoModel) {
         return html`
             <uui-ref-node-form
-                selectable
                 name=${form.name ?? ""}
-                @selected=${() => this._onSelect(form)}>
+                @open=${() => this._onSelect(form)}>
             </uui-ref-node-form>
         `;
     }
