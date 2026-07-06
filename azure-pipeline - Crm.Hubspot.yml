@@ -22,6 +22,11 @@ variables:
   DT_BASE_URL: $(dtBaseUrl)
 
 steps:
+- task: NodeTool@0
+  displayName: 'Use Node 24'
+  inputs:
+    versionSpec: '24.x'
+
 - task: UseDotNet@2
   displayName: 'Use SDK version 10.0.100'
   inputs:

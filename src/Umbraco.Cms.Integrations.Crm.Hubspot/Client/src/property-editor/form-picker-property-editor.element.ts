@@ -123,7 +123,7 @@ export class HubspotFormPickerElement extends UmbElementMixin(LitElement) {
 				        look="placeholder"></uui-button>
                 `
                 : html`
-                    <uui-ref-node-form selectable name=${this._form?.name ?? ""} detail=${this._form?.fields ?? ""}>
+                    <uui-ref-node-form name=${this._form?.name ?? ""} detail=${this._form?.fields ?? ""}>
                         <uui-action-bar slot="actions">
                             <uui-button label="Remove" @click=${this.#deleteForm}>Remove</uui-button>
                         </uui-action-bar>
@@ -134,6 +134,9 @@ export class HubspotFormPickerElement extends UmbElementMixin(LitElement) {
 
     static styles = [
         css`
+            :host {
+                display: block;
+            }
             .add-button {
                 width: 100%;
             }
