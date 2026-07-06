@@ -7,7 +7,7 @@ import { UmbControllerBase as A } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken as l } from "@umbraco-cms/backoffice/context-api";
 import { UmbObjectState as d } from "@umbraco-cms/backoffice/observable-api";
 import { tryExecute as o } from "@umbraco-cms/backoffice/resources";
-import { c as u } from "./index-B_xpApWS.js";
+import { c as u } from "./index-Cn40Y89p.js";
 class g {
   static getApiAccess(e) {
     return ((e == null ? void 0 : e.client) ?? u).get({
@@ -77,4 +77,4 @@ export {
   F as ActiveCampaignFormsContext,
   F as default
 };
-//# sourceMappingURL=activecampaign-forms.context-Bf-ZynOA.js.map
+//# sourceMappingURL=activecampaign-forms.context-CtsKAXiI.js.map

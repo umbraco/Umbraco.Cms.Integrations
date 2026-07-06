@@ -1,20 +1,20 @@
 import { UmbModalBaseElement as T } from "@umbraco-cms/backoffice/modal";
 import { html as c, repeat as M, nothing as $, css as E, state as h, customElement as A } from "@umbraco-cms/backoffice/external/lit";
-import { ACTIVECAMPAIGN_FORMS_CONTEXT_TOKEN as O } from "./activecampaign-forms.context-Bf-ZynOA.js";
+import { ACTIVECAMPAIGN_FORMS_CONTEXT_TOKEN as O } from "./activecampaign-forms.context-CtsKAXiI.js";
 import { UMB_NOTIFICATION_CONTEXT as k } from "@umbraco-cms/backoffice/notification";
 var I = Object.defineProperty, x = Object.getOwnPropertyDescriptor, P = (t) => {
   throw TypeError(t);
-}, u = (t, e, i, _) => {
+}, l = (t, e, i, _) => {
   for (var n = _ > 1 ? void 0 : _ ? x(e, i) : e, g = t.length - 1, v; g >= 0; g--)
     (v = t[g]) && (n = (_ ? v(e, i, n) : v(n)) || n);
   return _ && n && I(e, i, n), n;
-}, b = (t, e, i) => e.has(t) || P("Cannot " + i), s = (t, e, i) => (b(t, e, "read from private field"), e.get(t)), p = (t, e, i) => e.has(t) ? P("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(t) : e.set(t, i), y = (t, e, i, _) => (b(t, e, "write to private field"), e.set(t, i), i), o = (t, e, i) => (b(t, e, "access private method"), i), d, m, l, a, C, f, w, F, N;
+}, b = (t, e, i) => e.has(t) || P("Cannot " + i), s = (t, e, i) => (b(t, e, "read from private field"), e.get(t)), p = (t, e, i) => e.has(t) ? P("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(t) : e.set(t, i), y = (t, e, i, _) => (b(t, e, "write to private field"), e.set(t, i), i), o = (t, e, i) => (b(t, e, "access private method"), i), m, d, u, a, C, f, w, F, N;
 const S = "activecampaign-forms-modal";
 let r = class extends T {
   constructor() {
-    super(), p(this, a), p(this, d), p(this, m), this._loading = !1, this._forms = [], this._filteredForms = [], this._currentPageNumber = 1, this._totalPages = 1, this._searchQuery = "", p(this, l), this.consumeContext(O, (t) => {
-      t && (y(this, d, t), this.observe(t.configurationModel, (e) => {
-        y(this, m, e);
+    super(), p(this, a), p(this, m), p(this, d), this._loading = !1, this._forms = [], this._filteredForms = [], this._currentPageNumber = 1, this._totalPages = 1, this._searchQuery = "", p(this, u), this.consumeContext(O, (t) => {
+      t && (y(this, m, t), this.observe(t.configurationModel, (e) => {
+        y(this, d, e);
       }));
     });
   }
@@ -22,7 +22,7 @@ let r = class extends T {
     super.connectedCallback(), o(this, a, C).call(this);
   }
   disconnectedCallback() {
-    super.disconnectedCallback(), s(this, l) && clearTimeout(s(this, l));
+    super.disconnectedCallback(), s(this, u) && clearTimeout(s(this, u));
   }
   _renderFilter() {
     return c` <uui-input
@@ -46,9 +46,8 @@ let r = class extends T {
   _renderForm(t) {
     return c`
             <uui-ref-node-form
-                selectable
                 name=${t.name ?? ""}
-                @selected=${() => this._onSelect(t)}>
+                @open=${() => this._onSelect(t)}>
             </uui-ref-node-form>
         `;
   }
@@ -67,13 +66,13 @@ let r = class extends T {
         `;
   }
 };
-d = /* @__PURE__ */ new WeakMap();
 m = /* @__PURE__ */ new WeakMap();
-l = /* @__PURE__ */ new WeakMap();
+d = /* @__PURE__ */ new WeakMap();
+u = /* @__PURE__ */ new WeakMap();
 a = /* @__PURE__ */ new WeakSet();
 C = async function() {
-  if (!(!s(this, d) || !s(this, m))) {
-    if (!s(this, m).isApiConfigurationValid) {
+  if (!(!s(this, m) || !s(this, d))) {
+    if (!s(this, d).isApiConfigurationValid) {
       this._showError("Invalid API configuration.");
       return;
     }
@@ -82,7 +81,7 @@ C = async function() {
 };
 f = async function(t, e) {
   this._loading = !0;
-  const { data: i } = await s(this, d).getForms(t, e);
+  const { data: i } = await s(this, m).getForms(t, e);
   if (!i) {
     this._loading = !1;
     return;
@@ -91,7 +90,7 @@ f = async function(t, e) {
 };
 w = async function(t) {
   let e = t.target.value || "";
-  e = e.toLowerCase(), this._searchQuery = e, s(this, l) && clearTimeout(s(this, l)), y(this, l, setTimeout(async () => {
+  e = e.toLowerCase(), this._searchQuery = e, s(this, u) && clearTimeout(s(this, u)), y(this, u, setTimeout(async () => {
     this._currentPageNumber = 1, await o(this, a, f).call(this, this._currentPageNumber, this._searchQuery);
   }, 500));
 };
@@ -141,28 +140,28 @@ r.styles = [
             }
         `
 ];
-u([
+l([
   h()
 ], r.prototype, "_loading", 2);
-u([
+l([
   h()
 ], r.prototype, "_forms", 2);
-u([
+l([
   h()
 ], r.prototype, "_filteredForms", 2);
-u([
+l([
   h()
 ], r.prototype, "_currentPageNumber", 2);
-u([
+l([
   h()
 ], r.prototype, "_totalPages", 2);
-u([
+l([
   h()
 ], r.prototype, "_searchQuery", 2);
-r = u([
+r = l([
   A(S)
 ], r);
 export {
   r as default
 };
-//# sourceMappingURL=activecampaign-forms-modal.element-ihgDBgoL.js.map
+//# sourceMappingURL=activecampaign-forms-modal.element-nHGD1sQ7.js.map
