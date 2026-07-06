@@ -1,6 +1,6 @@
 import { html as n, repeat as E, css as I, state as u, customElement as T } from "@umbraco-cms/backoffice/external/lit";
 import { UmbModalBaseElement as $ } from "@umbraco-cms/backoffice/modal";
-import { D as S } from "./index-ya19u6ji.js";
+import { D as S } from "./index-4U7V6RVH.js";
 import { UMB_NOTIFICATION_CONTEXT as k } from "@umbraco-cms/backoffice/notification";
 const _ = {
   OUTBOUND: 1,
@@ -86,7 +86,7 @@ let r = class extends $ {
                                             selectable
                                             ?selected=${this._selectedForm.id == e.id}
                                             name=${e.name ?? ""}
-                                            @selected=${() => this._onSelect(e)}>
+                                            @open=${() => this._onSelect(e)}>
                                         </uui-ref-node-form>
                                     `)}
                                     <uui-toggle
@@ -173,4 +173,4 @@ r = l([
 export {
   r as default
 };
-//# sourceMappingURL=dynamics-form-modal.element-DgdpDQZy.js.map
+//# sourceMappingURL=dynamics-form-modal.element-BmAJelhH.js.map
