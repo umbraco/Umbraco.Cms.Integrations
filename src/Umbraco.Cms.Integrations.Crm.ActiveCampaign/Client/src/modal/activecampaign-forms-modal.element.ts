@@ -79,7 +79,7 @@ export default class ActiveCampaignFormsModalElement
             return;
         }
 
-        this._totalPages = data.meta.totalPages;
+        this._totalPages = Number(data.meta.totalPages);
 
         this._forms = data.forms ?? [];
         this._filteredForms = this._forms;
@@ -151,9 +151,8 @@ export default class ActiveCampaignFormsModalElement
     private _renderForm(form: FormDtoModel) {
         return html`
             <uui-ref-node-form
-                selectable
                 name=${form.name ?? ""}
-                @selected=${() => this._onSelect(form)}>
+                @open=${() => this._onSelect(form)}>
             </uui-ref-node-form>
         `;
     }

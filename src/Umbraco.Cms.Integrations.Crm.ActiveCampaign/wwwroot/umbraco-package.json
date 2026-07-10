@@ -1,11 +1,11 @@
 ﻿{
   "id": "Umbraco.Cms.Integrations.Crm.ActiveCampaign",
   "name": "Umbraco CMS Integrations: CRM - ActiveCampaign",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "extensions": [
     {
       "name": "Umbraco EntryPoint",
-      "alias": "Umb.Hubspot.EntryPoint",
+      "alias": "Umb.ActiveCampaign.EntryPoint",
       "type": "backofficeEntryPoint",
       "js": "/App_Plugins/ActiveCampaignForms/activecampaign.js"
     }

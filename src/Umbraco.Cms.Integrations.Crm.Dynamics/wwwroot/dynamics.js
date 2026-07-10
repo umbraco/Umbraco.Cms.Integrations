@@ -1,5 +1,5 @@
 import "@umbraco-cms/backoffice/auth";
-import { a as m, o as n } from "./index-ClxzTTMf.js";
+import { a as m, o as n } from "./index-BR4ZtEYT.js";
 import "@umbraco-cms/backoffice/http-client";
 export {
   m as DynamicsAuthorizationElement,
