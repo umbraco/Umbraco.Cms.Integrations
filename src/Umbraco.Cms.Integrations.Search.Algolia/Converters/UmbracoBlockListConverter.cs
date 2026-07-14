@@ -33,14 +33,14 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters {
             List<string> stringValues = new List<string>();
 
             if (rawValue == null || string.IsNullOrWhiteSpace(rawValue.ToString())) {
-                return "";
+                return stringValues;
             }
 
             // Use Umbraco's built-in IJsonSerializer to deserialize the raw JSON
             var blockListModel = _jsonSerializer.Deserialize<BlockListModelFromJson>(rawValue.ToString());
 
             if (blockListModel == null) {
-                return "";
+                return stringValues;
             }
 
             //go through the content blocks and try to get them as some useful type
@@ -50,10 +50,14 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters {
                 if (content == null) continue;
 
                 //now we can go through the properties and convert their values, creating a big old list to return 
-                foreach(var prop in content.Properties) {
-                    bool isText = prop.PropertyType.DataType.Id == DataTypes.Textbox 
-                        || prop.PropertyType.DataType.Id == DataTypes.Textarea
-                        || prop.PropertyType.DataType.Id == DataTypes.RichtextEditor;
+                foreach(var prop in content.Properties) {                 
+                    var alias = prop.PropertyType.EditorAlias;
+                    bool isText =
+                        alias == PropertyEditors.Aliases.TextBox
+                        || alias == PropertyEditors.Aliases.TextArea
+                        || alias == PropertyEditors.Aliases.MarkdownEditor
+                        || alias == PropertyEditors.Aliases.TinyMce
+                        || alias == PropertyEditors.Aliases.MultipleTextstring;
 
                     if (isText && !string.IsNullOrEmpty(content.Value<string>(prop.Alias))) {
                         var toAdd = content.Value<string>(prop.Alias) ?? "";
@@ -68,7 +72,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters {
 
             }
 
-            _logger.LogInformation("Converted block list to string: {stringValues}", stringValues);
+            _logger.LogDebug("Converted block list to string: {stringValues}", stringValues);
 
             return stringValues;
         }
