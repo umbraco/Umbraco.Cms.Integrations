@@ -13,8 +13,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Extensions
                 .Append<UmbracoDecimalConverter>()
                 .Append<UmbracoIntegerConverter>()
                 .Append<UmbracoBooleanConverter>()
-                .Append<UmbracoTagsConverter>()
-                .Append<UmbracoBlockListConverter>();
+                .Append<UmbracoTagsConverter>();
 
             return builder;
         }
