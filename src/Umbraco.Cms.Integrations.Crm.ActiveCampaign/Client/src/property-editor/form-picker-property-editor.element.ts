@@ -90,7 +90,7 @@ export default class ActiveCampaignFormPickerElement extends UmbElementMixin(Lit
 				        look="placeholder"></uui-button>
                 `
                 : html`
-                    <uui-ref-node-form selectable name=${this._form?.name ?? ""}>
+                    <uui-ref-node-form name=${this._form?.name ?? ""}>
                         <uui-action-bar slot="actions">
                             <uui-button label="Remove" @click=${this.#deleteForm}>Remove</uui-button>
                         </uui-action-bar>
@@ -102,6 +102,9 @@ export default class ActiveCampaignFormPickerElement extends UmbElementMixin(Lit
 
     static styles = [
         css`
+            :host {
+                display: block;
+            }
             .add-button {
                 width: 100%;
             }
