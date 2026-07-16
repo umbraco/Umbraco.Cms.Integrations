@@ -1,6 +1,6 @@
 import { UmbElementMixin as f } from "@umbraco-cms/backoffice/element-api";
 import { LitElement as _, html as c, customElement as u } from "@umbraco-cms/backoffice/external/lit";
-import { ACTIVECAMPAIGN_FORMS_CONTEXT_TOKEN as m } from "./activecampaign-forms.context-CtsKAXiI.js";
+import { ACTIVECAMPAIGN_FORMS_CONTEXT_TOKEN as m } from "./activecampaign-forms.context-DO6P_YQW.js";
 var h = Object.getOwnPropertyDescriptor, l = (t) => {
   throw TypeError(t);
 }, C = (t, e, r, n) => {
@@ -35,4 +35,4 @@ v = C([
 export {
   v as default
 };
-//# sourceMappingURL=configuration-property-editor.element-hThKr8NX.js.map
+//# sourceMappingURL=configuration-property-editor.element-C1jwmW2n.js.map
