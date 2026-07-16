@@ -33,7 +33,7 @@ const me = {
   type: "propertyEditorUi",
   alias: "Dynamics.PropertyEditorUi.FormPicker",
   name: "Dynamics Form Picker Property Editor UI",
-  js: () => import("./dynamics-form-picker-property-editor.element-D-SutgyU.js"),
+  js: () => import("./dynamics-form-picker-property-editor.element-Bl1JkvgJ.js"),
   meta: {
     label: "Dynamics Form Picker",
     icon: "icon-handshake",
@@ -64,7 +64,7 @@ const me = {
   type: "modal",
   alias: "Dynamics.Modal",
   name: "Dynamics Modal",
-  js: () => import("./dynamics-form-modal.element-BdAAWIYo.js")
+  js: () => import("./dynamics-form-modal.element-BAaz1nKB.js")
 };
 var we = async (r, e) => {
   let t = typeof e == "function" ? await e(r) : e;
@@ -633,4 +633,4 @@ export {
   v as a,
   Qe as o
 };
-//# sourceMappingURL=index-BR4ZtEYT.js.map
+//# sourceMappingURL=index-DAz-CdMR.js.map

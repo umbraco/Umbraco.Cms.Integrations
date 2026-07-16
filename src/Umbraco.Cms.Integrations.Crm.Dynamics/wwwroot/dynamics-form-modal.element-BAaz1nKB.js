@@ -1,6 +1,6 @@
-import { html as n, repeat as T, css as $, state as u, customElement as I } from "@umbraco-cms/backoffice/external/lit";
-import { UmbModalBaseElement as S } from "@umbraco-cms/backoffice/modal";
-import { D as k } from "./index-BR4ZtEYT.js";
+import { html as n, repeat as T, css as $, state as d, customElement as I } from "@umbraco-cms/backoffice/external/lit";
+import { UmbModalBaseElement as k } from "@umbraco-cms/backoffice/modal";
+import { D as S } from "./index-DAz-CdMR.js";
 import { UMB_NOTIFICATION_CONTEXT as M } from "@umbraco-cms/backoffice/notification";
 var c = /* @__PURE__ */ ((e) => (e.OUTBOUND = "Outbound", e.REAL_TIME = "RealTime", e.BOTH = "Both", e))(c || {});
 function W(e) {
@@ -11,26 +11,26 @@ function W(e) {
       return c.REAL_TIME;
   }
 }
-var N = Object.defineProperty, U = Object.getOwnPropertyDescriptor, v = (e) => {
+var N = Object.defineProperty, D = Object.getOwnPropertyDescriptor, b = (e) => {
   throw TypeError(e);
 }, l = (e, t, i, o) => {
-  for (var r = o > 1 ? void 0 : o ? U(t, i) : t, f = e.length - 1, p; f >= 0; f--)
+  for (var r = o > 1 ? void 0 : o ? D(t, i) : t, f = e.length - 1, p; f >= 0; f--)
     (p = e[f]) && (r = (o ? p(t, i, r) : p(r)) || r);
   return o && r && N(t, i, r), r;
-}, y = (e, t, i) => t.has(e) || v("Cannot " + i), m = (e, t, i) => (y(e, t, "read from private field"), i ? i.call(e) : t.get(e)), g = (e, t, i) => t.has(e) ? v("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), b = (e, t, i, o) => (y(e, t, "write to private field"), t.set(e, i), i), h = (e, t, i) => (y(e, t, "access private method"), i), d, _, a, w, F, O, C, E;
-const A = "dynamics-forms-modal";
-let s = class extends S {
+}, y = (e, t, i) => t.has(e) || b("Cannot " + i), m = (e, t, i) => (y(e, t, "read from private field"), i ? i.call(e) : t.get(e)), g = (e, t, i) => t.has(e) ? b("Cannot add the same private member more than once") : t instanceof WeakSet ? t.add(e) : t.set(e, i), F = (e, t, i, o) => (y(e, t, "write to private field"), t.set(e, i), i), h = (e, t, i) => (y(e, t, "access private method"), i), u, _, a, w, v, O, C, E;
+const U = "dynamics-forms-modal";
+let s = class extends k {
   constructor() {
-    super(), g(this, a), g(this, d), g(this, _), this._loading = !1, this._forms = [], this._filteredForms = [], this._selectedForm = {
+    super(), g(this, a), g(this, u), g(this, _), this._loading = !1, this._forms = [], this._filteredForms = [], this._selectedForm = {
       id: "",
       module: c.BOTH,
       name: "",
       rawHtml: "",
       standaloneHtml: "",
       iframeEmbedded: !1
-    }, this.renderWithIFrame = !1, this.toggleLabel = "Render with Script", this.consumeContext(k, (e) => {
-      e && (b(this, d, e), this.observe(e.settingsModel, (t) => {
-        b(this, _, t);
+    }, this.renderWithIFrame = !1, this.toggleLabel = "Render with Script", this.consumeContext(S, (e) => {
+      e && (F(this, u, e), this.observe(e.settingsModel, (t) => {
+        F(this, _, t);
       }));
     });
   }
@@ -42,7 +42,7 @@ let s = class extends S {
   }
   async _onSubmit() {
     if (this.renderWithIFrame && W(this._selectedForm.module.toString()) == c.OUTBOUND) {
-      var { data: e } = await m(this, d).getEmbedCode(this._selectedForm.id);
+      var { data: e } = await m(this, u).getEmbedCode(this._selectedForm.id);
       if (!e || e.result.length == 0)
         return this._showError("Unable to embed selected form. Please check if it is live."), !1;
     }
@@ -83,7 +83,9 @@ let s = class extends S {
                                             ?selected=${this._selectedForm.id == e.id}
                                             name=${e.name ?? ""}
                                             @click=${() => this._onSelect(e)}
-                                            @keydown=${(t) => t.key === " " && this._onSelect(e)}>
+                                            @keydown=${(t) => {
+      (t.key === " " || t.key === "Enter") && (t.preventDefault(), this._onSelect(e));
+    }}>
                                         </uui-ref-node-form>
                                     `)}
                                     <uui-toggle
@@ -106,23 +108,23 @@ let s = class extends S {
         `;
   }
 };
-d = /* @__PURE__ */ new WeakMap();
+u = /* @__PURE__ */ new WeakMap();
 _ = /* @__PURE__ */ new WeakMap();
 a = /* @__PURE__ */ new WeakSet();
 w = async function() {
-  m(this, _) && m(this, _).isAuthorized && await h(this, a, F).call(this);
+  m(this, _) && m(this, _).isAuthorized && await h(this, a, v).call(this);
 };
-F = async function() {
+v = async function() {
   var t;
   this._loading = !0;
-  const { data: e } = await m(this, d).getForms((t = this.data) == null ? void 0 : t.module);
+  const { data: e } = await m(this, u).getForms((t = this.data) == null ? void 0 : t.module);
   e && (this._forms = e, this._filteredForms = e, this._loading = !1);
 };
 O = async function() {
-  await h(this, a, F).call(this);
+  await h(this, a, v).call(this);
 };
 C = async function() {
-  this._filteredForms = [], await m(this, d).checkOauthConfiguration();
+  this._filteredForms = [], await m(this, u).checkOauthConfiguration();
 };
 E = function(e) {
   let t = e.target.value || "";
@@ -147,27 +149,27 @@ s.styles = [
         `
 ];
 l([
-  u()
+  d()
 ], s.prototype, "_loading", 2);
 l([
-  u()
+  d()
 ], s.prototype, "_forms", 2);
 l([
-  u()
+  d()
 ], s.prototype, "_filteredForms", 2);
 l([
-  u()
+  d()
 ], s.prototype, "_selectedForm", 2);
 l([
-  u()
+  d()
 ], s.prototype, "renderWithIFrame", 2);
 l([
-  u()
+  d()
 ], s.prototype, "toggleLabel", 2);
 s = l([
-  I(A)
+  I(U)
 ], s);
 export {
   s as default
 };
-//# sourceMappingURL=dynamics-form-modal.element-BdAAWIYo.js.map
+//# sourceMappingURL=dynamics-form-modal.element-BAaz1nKB.js.map

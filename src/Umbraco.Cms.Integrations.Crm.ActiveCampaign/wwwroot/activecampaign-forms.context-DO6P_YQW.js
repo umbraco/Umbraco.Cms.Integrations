@@ -7,25 +7,40 @@ import { UmbControllerBase as A } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken as l } from "@umbraco-cms/backoffice/context-api";
 import { UmbObjectState as d } from "@umbraco-cms/backoffice/observable-api";
 import { tryExecute as o } from "@umbraco-cms/backoffice/resources";
-import { c as u } from "./index-Cn40Y89p.js";
+import { c as u } from "./index-CVOpZ6ob.js";
 class g {
   static getApiAccess(e) {
     return ((e == null ? void 0 : e.client) ?? u).get({
-      security: [{ scheme: "bearer", type: "http" }],
+      security: [
+        {
+          scheme: "bearer",
+          type: "http"
+        }
+      ],
       url: "/umbraco/activecampaign-forms/management/api/v1/api-access",
       ...e
     });
   }
   static getForms(e) {
     return ((e == null ? void 0 : e.client) ?? u).get({
-      security: [{ scheme: "bearer", type: "http" }],
+      security: [
+        {
+          scheme: "bearer",
+          type: "http"
+        }
+      ],
       url: "/umbraco/activecampaign-forms/management/api/v1/forms",
       ...e
     });
   }
   static getFormsById(e) {
     return (e.client ?? u).get({
-      security: [{ scheme: "bearer", type: "http" }],
+      security: [
+        {
+          scheme: "bearer",
+          type: "http"
+        }
+      ],
       url: "/umbraco/activecampaign-forms/management/api/v1/forms/{id}",
       ...e
     });
@@ -77,4 +92,4 @@ export {
   F as ActiveCampaignFormsContext,
   F as default
 };
-//# sourceMappingURL=activecampaign-forms.context-CtsKAXiI.js.map
+//# sourceMappingURL=activecampaign-forms.context-DO6P_YQW.js.map
