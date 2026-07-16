@@ -47,7 +47,15 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
         {
             var result = new List<string>();
 
-            var rawValue = property.GetValue()?.ToString();
+            // Prefer the value for the culture being indexed, falling back to the invariant value for
+            // block properties that don't vary by culture.
+            var culture = indexValue?.Culture;
+            var rawValue = property.GetValue(culture)?.ToString();
+            if (string.IsNullOrWhiteSpace(rawValue) && culture is not null)
+            {
+                rawValue = property.GetValue()?.ToString();
+            }
+
             if (string.IsNullOrWhiteSpace(rawValue))
             {
                 return result;
