@@ -11,7 +11,12 @@
 
 param(
     [string]$SourceBranch = $env:BUILD_SOURCEBRANCH,
-    [string]$RootPath = (Get-Location).Path
+    [string]$RootPath = (Get-Location).Path,
+
+    # Overrides the "last released state" ref that a release/hotfix build compares
+    # against. Defaults to origin/main-v<N>, derived from the branch. Exists so the
+    # release-selection logic can be exercised locally without pushing a branch.
+    [string]$ReleaseCompareRef = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -35,6 +40,18 @@ function Get-Products {
     $srcPath = Join-Path $RootPath "src"
     $products = @{}
 
+    # Map lowercased folder name -> the casing git actually tracks.
+    # `git show <ref>:<path>` and `git diff -- <path>` are case-SENSITIVE even on
+    # Windows, because they look paths up inside tree objects rather than on disk.
+    # A working copy whose folder casing has drifted from the index (this repo has
+    # `...GoogleSearchConsole.URLInspectionTool` in git but has been seen on disk as
+    # `...UrlInspectionTool`) would otherwise make every git path lookup miss.
+    $gitCasing = @{}
+    git ls-tree -d --name-only HEAD src/ 2>$null | Where-Object { $_ -is [string] } | ForEach-Object {
+        $gitName = Split-Path $_ -Leaf
+        $gitCasing[$gitName.ToLower()] = $gitName
+    }
+
     Get-ChildItem -Path $srcPath -Directory | Where-Object {
         $_.Name -like "Umbraco.Cms.Integrations.*"
     } | ForEach-Object {
@@ -51,14 +68,24 @@ function Get-Products {
         # A package builds client assets when it has a Client/package.json.
         $hasNpm = Test-Path (Join-Path $_.FullName "Client\package.json")
 
-        $products[$name] = @{
-            Name    = $name
-            Path    = "src/$name"
-            Project = "src/$name/$name.csproj"
+        # Prefer the casing git tracks; fall back to the disk name for a package
+        # that is new and not yet committed.
+        $gitName = $gitCasing[$name.ToLower()]
+        if (-not $gitName) { $gitName = $name }
+
+        $products[$gitName] = @{
+            Name    = $gitName
+            Path    = "src/$gitName"
+            Project = "src/$gitName/$gitName.csproj"
             HasNpm  = $hasNpm
         }
 
-        Write-Host "  + $name (client assets: $hasNpm)" -ForegroundColor Green
+        if ($gitName -ne $name) {
+            Write-Host "  + $gitName (client assets: $hasNpm) [disk casing differs: $name]" -ForegroundColor Yellow
+        }
+        else {
+            Write-Host "  + $gitName (client assets: $hasNpm)" -ForegroundColor Green
+        }
     }
 
     if ($products.Count -eq 0) {
@@ -66,6 +93,73 @@ function Get-Products {
     }
 
     return $products
+}
+
+function Test-IsReleaseBranch {
+    param([string]$SourceBranch)
+    return $SourceBranch -match '^refs/heads/v\d+/(release|hotfix)/'
+}
+
+function Get-ReleaseProducts {
+    <#
+    .SYNOPSIS
+    On a release/hotfix branch, selects the packages that have a new version to
+    publish - those whose version.json differs from the released state on main-v<N>.
+
+    .DESCRIPTION
+    This is what makes a release-manifest.json unnecessary. A release branch exists
+    to publish specific packages, and what marks a package as "being released" is a
+    bumped version.json. Comparing against main-v<N> (the last released state)
+    therefore yields exactly the set to build and pack, and never picks up a package
+    that merely has unreleased code changes.
+    #>
+    param(
+        [hashtable]$Products,
+        [string]$SourceBranch,
+        [string]$CompareRef = ""
+    )
+
+    $changed = @{}
+    $Products.Keys | ForEach-Object { $changed[$_] = $false }
+
+    if ($CompareRef) {
+        $releasedRef = $CompareRef
+    }
+    else {
+        $line = if ($SourceBranch -match '^refs/heads/(v\d+)/') { $Matches[1] } else { 'v18' }
+        $releasedRef = "origin/main-$line"
+    }
+
+    Write-Host "  Release branch build - selecting packages bumped vs $releasedRef" -ForegroundColor Cyan
+
+    foreach ($name in ($Products.Keys | Sort-Object)) {
+        $versionFile = "$($Products[$name].Path)/version.json"
+
+        $releasedJson = git show "${releasedRef}:${versionFile}" 2>$null
+        if ($LASTEXITCODE -ne 0) {
+            # No version.json on the released ref yet - new to this line, so release it.
+            $changed[$name] = $true
+            Write-Host "  * $name is new on $releasedRef - including" -ForegroundColor Green
+            continue
+        }
+
+        $releasedVersion = ($releasedJson | ConvertFrom-Json).version
+        $currentVersion = (Get-Content $versionFile -Raw | ConvertFrom-Json).version
+
+        if ($releasedVersion -ne $currentVersion) {
+            $changed[$name] = $true
+            Write-Host "  * $name $releasedVersion -> $currentVersion" -ForegroundColor Green
+        }
+        else {
+            Write-Host "    $name unchanged at $currentVersion" -ForegroundColor Gray
+        }
+    }
+
+    if (-not ($changed.Values | Where-Object { $_ })) {
+        throw "No package has a bumped version.json compared with $releasedRef. A release branch must bump at least one package - run /release-management."
+    }
+
+    return $changed
 }
 
 function Get-ComparisonBase {
@@ -172,6 +266,11 @@ function Get-ChangedProducts {
 
     Write-Host ""
     Write-Host "Detecting changes..." -ForegroundColor Cyan
+
+    # A release/hotfix branch publishes whatever it bumped, not whatever it touched.
+    if (Test-IsReleaseBranch -SourceBranch $SourceBranch) {
+        return Get-ReleaseProducts -Products $Products -SourceBranch $SourceBranch -CompareRef $ReleaseCompareRef
+    }
 
     $base = Get-ComparisonBase -SourceBranch $SourceBranch
     if (-not $base) {

@@ -4,6 +4,6 @@
     "assemblyVersion": { "precision": "build" },
     "gitCommitIdShortFixedLength": 7,
     "nugetPackageVersion": { "semVer": 2 },
-    "publicReleaseRefSpec": ["^refs/heads/main-v18$"],
+    "publicReleaseRefSpec": ["^refs/heads/main-v18$", "^refs/heads/v18/release/", "^refs/heads/v18/hotfix/"],
     "cloudBuild": { "buildNumber": { "enabled": false } }
 }

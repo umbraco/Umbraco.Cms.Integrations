@@ -19,6 +19,10 @@ trigger:
         include:
             - main-v18
             - v18/dev
+            # Release/hotfix branches are where publishable (clean-versioned)
+            # artifacts are built - see publicReleaseRefSpec in each version.json.
+            - v18/release/*
+            - v18/hotfix/*
     paths:
         include:
             - src/**

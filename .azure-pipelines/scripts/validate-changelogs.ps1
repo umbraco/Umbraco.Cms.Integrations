@@ -26,6 +26,15 @@ function Get-ComparisonBase {
         return $null
     }
 
+    # Release/hotfix branch: compare against the released state, so every bump the
+    # release carries is checked - not just the most recent commit's worth.
+    if ($SourceBranch -match '^refs/heads/(v\d+)/(release|hotfix)/') {
+        $mainBranch = "main-$($Matches[1])"
+        $mergeBase = git merge-base "origin/$mainBranch" HEAD 2>&1
+        if ($LASTEXITCODE -eq 0) { return $mergeBase.Trim() }
+        return $null
+    }
+
     if ($SourceBranch -match '^refs/heads/(main-v\d+|v\d+/dev)$') {
         return "HEAD~1"
     }
