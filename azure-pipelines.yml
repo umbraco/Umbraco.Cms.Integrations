@@ -1,0 +1,80 @@
+# Azure DevOps CI pipeline for Umbraco.Cms.Integrations (v18 line)
+#
+# One pipeline for every package in the repo, replacing the previous
+# one-yml-per-package arrangement.
+#
+# How it works:
+#   1. DetectChanges discovers the packages under src/ (any folder with both a
+#      .csproj and a version.json) and diffs against the appropriate base to
+#      work out which ones actually changed.
+#   2. Pack fans out over just those packages via a matrix, one job each.
+#
+# Packages here are independent siblings - none references another - so there is
+# no build ordering, no dependency tiers and no shared runtime library.
+# Adding a package needs no change to this file: give the new folder a
+# version.json and it is picked up automatically.
+
+trigger:
+    branches:
+        include:
+            - main-v18
+            - v18/dev
+    paths:
+        include:
+            - src/**
+            - Directory.Packages.props
+            - azure-pipelines.yml
+            - .azure-pipelines/**
+            - NuGet.config
+
+pr:
+    branches:
+        include:
+            - main-v18
+            - v18/dev
+
+pool:
+    vmImage: "windows-latest"
+
+variables:
+    buildConfiguration: "Release"
+    productGroup: "DXP"
+    productVersion: "v18"
+    DT_API_KEY: $(dtApiKey)
+    DT_BASE_URL: $(dtBaseUrl)
+
+stages:
+    - stage: DetectChanges
+      displayName: "Detect changed packages"
+      jobs:
+          - job: Detect
+            displayName: "Detect changes"
+            steps:
+                - checkout: self
+                  # Full history so merge-base comparisons work.
+                  fetchDepth: 0
+
+                - task: PowerShell@2
+                  name: detect
+                  displayName: "Run change detection"
+                  inputs:
+                      filePath: ".azure-pipelines/scripts/detect-changes.ps1"
+                      pwsh: true
+
+    - stage: Pack
+      displayName: "Build & pack"
+      dependsOn: DetectChanges
+      condition: eq(dependencies.DetectChanges.outputs['Detect.detect.AnyChanged'], 'true')
+      jobs:
+          - job: PackProduct
+            displayName: "Pack"
+            strategy:
+                # Cross-stage output variables need stageDependencies, not dependencies.
+                matrix: $[ stageDependencies.DetectChanges.Detect.outputs['detect.BuildMatrix'] ]
+            steps:
+                - template: .azure-pipelines/templates/pack-product.yml
+                  parameters:
+                      productName: $(name)
+                      productPath: $(path)
+                      projectPath: $(project)
+                      hasNpm: $(hasNpm)
