@@ -186,16 +186,23 @@ For an urgent fix on top of an already-released state, cut
 
 ---
 
-## Phase 5: Update version.json
+## Phase 5: Update the version files
 
-Now on the release branch. For each confirmed package, edit **only** the `version`
-field of `src/<PackageName>/version.json`. Leave every other property untouched.
+Now on the release branch. For each confirmed package:
+
+1. Edit the `version` field of `src/<PackageName>/version.json`. Leave every other
+   property untouched. This is the one that actually drives the build.
+2. Set the same value in `src/<PackageName>/Client/public/umbraco-package.json`, if
+   the package has one (Analytics.Cookiebot does not). CI does **not** stamp this
+   source manifest, so it drifts if skipped - `Search.Algolia` shipped as `7.0.1`
+   with `7.0.0` still recorded here.
 
 Do **not** touch:
 
 - the `.csproj` (it has no `<Version>` - the version comes from `version.json`)
-- `wwwroot/umbraco-package.json` (CI stamps it)
-- `Client/public/umbraco-package.json` (keeps a placeholder)
+- `wwwroot/umbraco-package.json` - the `UpdatePackageManifestVersion` target in the
+  root `Directory.Build.targets` stamps it on CI builds, so any value committed here
+  is overwritten anyway
 
 ---
 
@@ -279,7 +286,7 @@ Confirm each bumped `version.json` has a matching changelog heading, then commit
 push the release branch:
 
 ```bash
-git add src/*/version.json src/*/CHANGELOG.md
+git add src/*/version.json src/*/CHANGELOG.md src/*/Client/public/umbraco-package.json
 git commit -m "chore(release): Prepare release 2026.08.1
 
 - Umbraco.Cms.Integrations.Search.Algolia: 7.0.1 -> 7.1.0

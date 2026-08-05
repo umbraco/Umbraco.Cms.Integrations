@@ -156,6 +156,9 @@ For each released package, increment the patch in `src/<PackageName>/version.jso
 Always bump the **patch**, whatever kind of bump the release itself was. This is
 mechanical - it only exists to keep preview builds sorting above the release.
 
+Set the same value in that package's `Client/public/umbraco-package.json` where it
+has one. CI does not stamp that source manifest, so skipping it lets the two drift.
+
 > **Changelog gate.** CI fails a version bump with no matching changelog entry. A
 > bare patch bump has no user-facing content, so add a short entry:
 > ```markdown
@@ -173,7 +176,7 @@ mechanical - it only exists to keep preview builds sorting above the release.
 Commit and push:
 
 ```bash
-git add src/*/version.json src/*/CHANGELOG.md
+git add src/*/version.json src/*/CHANGELOG.md src/*/Client/public/umbraco-package.json
 git commit -m "chore(release): Bump dev versions after release 2026.08.1
 
 - Umbraco.Cms.Integrations.Search.Algolia: 7.1.0 -> 7.1.1

@@ -15,19 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   this repository, so this release jumps from 2.x to 4.x on the v18 line (3.x is
   the v17 line).
 
-### fix
-
-* Both partial views now render nothing when `Umbraco:Cookiebot:Settings:Id` is not
-  configured. Previously the banner emitted a script tag with an empty `data-cbid`,
-  and the declaration built the src `https://consent.cookiebot.com//cd.js`, causing
-  a request that could never succeed. **Behaviour change from the 2.x line:** a site
-  with no configured domain group ID now outputs no Cookiebot markup at all.
-
 ### Internal
 
 * Brought forward from the `main-v15` branch, where the package was last
-  maintained at 2.0.1. The partial views only use `IConfiguration`, so no CMS API
-  updates were needed beyond the guard noted above.
+  maintained at 2.0.1. The Cookiebot banner and declaration partial views are
+  unchanged; they only use `IConfiguration`, so no CMS API updates were needed.
 
 ## [2.0.0] - 2024-12-02
 

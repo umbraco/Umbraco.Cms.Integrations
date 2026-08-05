@@ -1,16 +1,12 @@
-@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 @{
     var cbid = Configuration["Umbraco:Cookiebot:Settings:Id"];
 }
 
-@* Without a configured domain group ID the script cannot work, so render nothing
-   rather than emit a tag with an empty data-cbid. *@
-@if (!string.IsNullOrWhiteSpace(cbid))
-{
-    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js"
-            data-cbid="@cbid"
-            data-blockingmode="auto"
-            type="text/javascript">
-    </script>
-}
+<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js"
+        data-cbid="@cbid"
+        data-blockingmode="auto"
+        type="text/javascript">
+</script>
+

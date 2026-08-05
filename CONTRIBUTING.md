@@ -141,11 +141,19 @@ Based on the commits affecting that package, using [Conventional Commits][cc]:
 Each package keeps **one major per Umbraco major** (e.g. Search.Algolia `6.x` = v17,
 `7.x` = v18). A new Umbraco major means a new major for every package.
 
-### What you must NOT hand-edit
+### The other version-carrying files
 
-- **`<Version>` in the `.csproj`** — removed; the version comes from `version.json`.
-- **`wwwroot/umbraco-package.json`** — CI stamps the computed version into it.
-- **`Client/public/umbraco-package.json`** — keeps a placeholder version.
+- **`<Version>` in the `.csproj`** — removed. The version comes from `version.json`.
+  Do not add it back.
+- **`wwwroot/umbraco-package.json`** — do not hand-edit. CI stamps the computed
+  version into it on every build (`ContinuousIntegrationBuild=true`), so whatever is
+  committed is overwritten in the published package. Local builds leave it alone.
+- **`Client/public/umbraco-package.json`** — this is the *source* manifest that the
+  Vite build copies into `wwwroot`. CI does **not** stamp it. It currently carries a
+  real version number in every package, so **keep it in step with `version.json`**
+  when you bump. Its value does not reach the published package (the `wwwroot` copy
+  is stamped afterwards), but letting it drift is confusing — `Search.Algolia` sat at
+  `7.0.0` while the package shipped as `7.0.1` for exactly this reason.
 
 On `main-v18` a build produces a clean version (`7.0.2`). On any other branch NBGV
 appends a preview suffix (`7.0.2--preview.4.gabc1234`), so dev builds always sort
