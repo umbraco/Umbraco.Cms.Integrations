@@ -26,6 +26,7 @@ trigger:
     paths:
         include:
             - src/**
+            - tests/**
             - Directory.Packages.props
             - azure-pipelines.yml
             - .azure-pipelines/**
@@ -72,10 +73,46 @@ stages:
                       filePath: ".azure-pipelines/scripts/validate-changelogs.ps1"
                       pwsh: true
 
+    - stage: Test
+      displayName: "Test"
+      dependsOn: DetectChanges
+      # succeeded() is required - see the note on the Pack stage.
+      condition: and(succeeded(), eq(dependencies.DetectChanges.outputs['Detect.detect.AnyChanged'], 'true'))
+      jobs:
+          - job: RunTests
+            displayName: "Run tests"
+            steps:
+                - checkout: self
+
+                - task: UseDotNet@2
+                  displayName: "Use SDK version 10.0.100"
+                  inputs:
+                      packageType: "sdk"
+                      version: "10.0.100"
+
+                # Runs every test project in the solution. There is one today
+                # (Crm.Hubspot); any project added under tests/ is picked up with no
+                # change here. The client asset build is skipped - it produces no
+                # inputs the tests use, and needs npm.
+                - task: DotNetCoreCLI@2
+                  displayName: "dotnet test"
+                  inputs:
+                      command: "test"
+                      projects: "tests/**/*Tests.csproj"
+                      arguments: '--configuration $(buildConfiguration) -p:ShouldRunClientAssetsBuild=false --logger trx --results-directory "$(Agent.TempDirectory)/TestResults" --collect "XPlat Code Coverage"'
+                      publishTestResults: true
+                      nugetConfigPath: "NuGet.config"
+
     - stage: Pack
       displayName: "Build & pack"
-      dependsOn: DetectChanges
-      condition: eq(dependencies.DetectChanges.outputs['Detect.detect.AnyChanged'], 'true')
+      # Depends on Test as well as DetectChanges, so a failing test blocks packing
+      # and therefore blocks anything being promoted to NuGet.
+      dependsOn:
+          - DetectChanges
+          - Test
+      # succeeded() is required: a custom condition REPLACES the implicit
+      # succeeded() check, so without it Pack would run even when Test failed.
+      condition: and(succeeded(), eq(dependencies.DetectChanges.outputs['Detect.detect.AnyChanged'], 'true'))
       jobs:
           - job: PackProduct
             displayName: "Pack"

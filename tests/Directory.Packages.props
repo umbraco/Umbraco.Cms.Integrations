@@ -1,9 +1,0 @@
-<Project>
-  <PropertyGroup>
-    <!-- Opt tests out of the repo-root central package management.
-         The Hubspot test project is stale (targets net80, references an Umbraco 14 beta
-         and a project path that no longer exists) and is not part of the v18 build.
-         Keeping CPM off here avoids NU1008 without silently rewriting its dependencies. -->
-    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
-  </PropertyGroup>
-</Project>

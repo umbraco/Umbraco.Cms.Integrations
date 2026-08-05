@@ -20,7 +20,7 @@ This file is for **navigation, structure, and release workflow**. Package-specif
 
 ```
 /src              - The integration packages (one .NET project per package)
-/tests            - Test projects (sparse; the one Hubspot test project is stale)
+/tests            - Test projects, `<PackageName>.Tests` (sparse; only Crm.Hubspot so far)
 /examples         - Test sites (e.g. Umbraco.Cms.Integrations.Testsite.V18)
 /.azure-pipelines - Pipeline scripts + templates (v18 line)
 azure-pipelines.yml       - ONE pipeline for the whole repo (v18 line)
@@ -158,7 +158,11 @@ Full sequence:
    A `Directory.Packages.props` change is traced to only the packages referencing the packages whose versions moved. Then `validate-changelogs.ps1` runs (on a release branch it compares against `main-v18`, so every bump the release carries is checked).
 
    > Package paths are resolved to the casing **git** tracks, not the casing on disk. `git show <ref>:<path>` is case-sensitive even on Windows, and this repo has `...GoogleSearchConsole.URLInspectionTool` in the index while working copies have appeared with `...UrlInspectionTool` on disk. Without this, that package was reported as brand new and force-included in every release.
-2. **Pack** — a matrix over only the changed packages, one job each, via `.azure-pipelines/templates/pack-product.yml`. `nbgv cloud` runs with `workingDirectory` set to the package folder so it picks up that package's `version.json`.
+
+2. **Test** — `dotnet test` over `tests/**/*Tests.csproj`, publishing `.trx` results and Cobertura coverage. **`Pack` depends on this stage**, so a failing test blocks packing and therefore blocks any promotion to NuGet.
+
+   > Both the `Test` and `Pack` stage conditions are wrapped in `and(succeeded(), ...)`. A custom `condition:` **replaces** the implicit `succeeded()` check, so without it `Pack` would run even after `Test` failed.
+3. **Pack** — a matrix over only the changed packages, one job each, via `.azure-pipelines/templates/pack-product.yml`. `nbgv cloud` runs with `workingDirectory` set to the package folder so it picks up that package's `version.json`.
 
 Adding a package needs **no pipeline change** — give it a `version.json`.
 

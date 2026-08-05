@@ -48,5 +48,8 @@
     <File Path="NuGet.config" />
     <File Path="README.md" />
   </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="tests/Umbraco.Cms.Integrations.Crm.Hubspot.Tests/Umbraco.Cms.Integrations.Crm.Hubspot.Tests.csproj" />
+  </Folder>
   <Project Path="examples/Umbraco.Cms.Integrations.Testsite.V18/Umbraco.Cms.Integrations.Testsite.V18.csproj" />
 </Solution>

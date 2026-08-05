@@ -49,6 +49,41 @@ Umbraco instance.
 
 ---
 
+## Tests
+
+```bash
+dotnet test Umbraco.Cms.Integrations.slnx -p:ShouldRunClientAssetsBuild=false
+```
+
+Test projects live under `tests/`, one per package that has them, named
+`<PackageName>.Tests`. Coverage is currently partial — only `Crm.Hubspot` has tests.
+
+They use **xunit + Moq**, matching `Umbraco.Automate` and `Umbraco.AI` (the versions
+are pinned in the root `Directory.Packages.props` to the same values those repos
+use). Note this repo previously used NUnit; the HubSpot tests were rewritten when
+the controllers they covered were restructured.
+
+Writing tests for the management API controllers:
+
+- Controllers take `IHttpClientFactory`, so fake HTTP responses by mocking
+  `HttpMessageHandler` and handing back an `HttpClient` — see
+  `TestHelpers.HttpClientFactory`.
+- Controllers returning `IActionResult` need the result unwrapped
+  (`Assert.IsType<OkObjectResult>(result)`); those returning a DTO can be asserted
+  directly.
+- `ILogger.LogInformation`/`LogError` are extension methods and cannot be verified
+  directly. Use `TestHelpers.VerifyLogged`, which targets the underlying `Log` call.
+- Shared fixtures and settings builders live in `TestHelpers`. `HubspotSettings`
+  has `UseUmbracoAuthorization = true` by default, which matters when testing
+  configuration validity — use `NoAuthorizationSettings()` for the "nothing
+  configured" case.
+
+CI runs the tests in their own stage, and **`Pack` depends on it** — a failing test
+blocks packing, so nothing can be promoted to NuGet from a red build. Any project
+added under `tests/` matching `*Tests.csproj` is picked up with no pipeline change.
+
+---
+
 ## Dependency versions
 
 Dependency versions are **centrally managed**. Do not put a `Version` attribute on
