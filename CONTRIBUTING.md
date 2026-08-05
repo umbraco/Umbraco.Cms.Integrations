@@ -17,9 +17,12 @@ released on its own schedule. There is no shared runtime library between them.
 | `v18/dev` | Working branch. All changes land here first. |
 | `main-v18` | Reflects the **last released** state. Never commit working changes here. |
 | `v18/feature/*` | Feature branches, cut from and merged back to `v18/dev`. |
+| `v18/release/*` | Cut from `v18/dev` per release; builds the publishable artifacts. |
+| `v18/hotfix/*` | Cut from `main-v18` for an urgent fix on the released state. |
 
-The flow is: work on a feature branch → PR into `v18/dev` → release from `v18/dev`
-→ merge `v18/dev` into `main-v18` so it matches what shipped.
+The flow is: work on a feature branch → PR into `v18/dev` → cut a release branch
+from `v18/dev` → publish from there → merge the release branch back into both
+`main-v18` and `v18/dev`.
 
 ---
 
@@ -170,38 +173,54 @@ Then add it to `Umbraco.Cms.Integrations.slnx`.
 
 ## Releasing
 
-**A release must be built from `main-v18`.** `version.json` sets
-`publicReleaseRefSpec` to `^refs/heads/main-v18$`, and NBGV only drops the preview
-suffix on a branch matching it:
+**A release is built from a release branch.** `version.json` lists `main-v18`,
+`v18/release/*` and `v18/hotfix/*` as public release refs, and NBGV only drops the
+preview suffix on a branch matching one of them:
 
 | Branch built | Version produced |
 |---|---|
-| `main-v18` | `7.1.0` ← publishable |
+| `v18/release/2026.08.1` | `7.1.0` ← publishable |
+| `main-v18` | `7.1.0` |
 | `v18/dev`, feature branches | `7.1.0--preview.4.gabc1234` |
 
-So the merge into `main-v18` happens **before** anything is promoted to NuGet.
-Promoting a `v18/dev` artifact would publish a preview version.
+So the release branch is what produces the artifact you publish, and `main-v18` /
+`v18/dev` stay untouched until the release is proven. This matches how
+`Umbraco.Automate` and `Umbraco.AI` work.
+
+Release branches are named `v<N>/release/YYYY.MM.N` (calendar-based, e.g.
+`v18/release/2026.08.1`). That is independent of the package versions — one branch
+can carry several packages at different versions. Urgent fixes on top of an
+already-released state use `v<N>/hotfix/YYYY.MM.N`, cut from `main-v<N>`.
+
+> **No release manifest.** On a release branch, CI treats a package as shipping when
+> its `version.json` differs from `main-v18` — the bump *is* the declaration. There
+> is no `include`/`exclude` list to maintain.
 
 Two Claude Code skills guide the process:
 
 - **`/release-management`** — detects changed packages, recommends the bump per the
-  table above, updates `version.json`, writes the changelog entry, commits, and
-  (once CI is green on dev) merges `v18/dev` into `main-v18`.
-- **`/post-release-cleanup`** — bumps the patch again on `v18/dev` so the next dev
-  build sorts above the release.
+  table above, cuts the release branch, updates `version.json`, writes the changelog
+  entry, and pushes.
+- **`/post-release-cleanup`** — merges the release branch into `main-v18` and back
+  into `v18/dev`, bumps the patch on dev so the next dev build sorts above the
+  release, and offers to delete the branch.
 
 Full sequence:
 
-1. `/release-management` on `v18/dev` — bump, changelog, push, merge to `main-v18`.
-2. CI builds `main-v18`. **Check the artifact is clean-versioned** (`7.1.0`, not
-   `7.1.0--preview.N`) before continuing.
+1. `/release-management` on `v18/dev` — cuts `v18/release/YYYY.MM.N`, bumps,
+   writes changelogs, pushes the branch.
+2. CI builds the release branch. **Check the artifact is clean-versioned**
+   (`7.1.0`, not `7.1.0--preview.N`) before continuing.
 3. Promote the artifact to NuGet.
 4. Create an annotated tag: `release/<slug>-<version>`
    (e.g. `release/search-algolia-7.1.0`).
 5. Create a GitHub release titled with the tag, linking the relevant PRs.
-6. `/post-release-cleanup` on `v18/dev`.
+6. `/post-release-cleanup` — merges back and bumps the dev versions.
 
 > Tagging is easy to forget and has been missed before. Do steps 4 and 5 every time.
+>
+> The branch is `v18/release/<date>` while tags are `release/<slug>-<version>`. They
+> live in different ref namespaces and do not collide.
 
 ---
 

@@ -71,9 +71,12 @@ src/Umbraco.Cms.Integrations.<Area>.<Name>/
 
 - **`main-v<N>`** — reflects the **last released** state for that major.
 - **`v<N>/dev`** — the **working branch**; always ahead of `main-v<N>` with unreleased work.
+- **`v<N>/release/YYYY.MM.N`** — cut from dev per release; **this is what builds publishable artifacts** (v18 line).
+- **`v<N>/hotfix/YYYY.MM.N`** — cut from `main-v<N>` for an urgent fix on the released state (v18 line).
+- **`v<N>/feature/*`** — feature branches, cut from and merged back to `v<N>/dev`.
 - **`main`** (no suffix) — the **legacy Umbraco 10–13** line.
 
-**Flow:** work lands on `v<N>/dev` → a release is cut from dev → published to NuGet → dev is merged back into `main-v<N>` so `main-v<N>` matches what shipped. Do **not** commit release/working changes directly to `main-v<N>` — it re-diverges it from dev.
+**Flow:** work lands on `v<N>/dev` → a **release branch** is cut from dev → the pipeline builds *that branch* to get clean versions → published to NuGet and tagged → the release branch is merged back into **both** `main-v<N>` (so it matches what shipped) and `v<N>/dev`. Do **not** commit release/working changes directly to `main-v<N>` — it re-diverges it from dev.
 
 ### Versioning — v18 line (NBGV)
 
@@ -112,21 +115,27 @@ Managed centrally in the root `Directory.Packages.props`. A `PackageReference` *
 
 The pipeline **only builds + packs the `.nupkg` + SBOM as artifacts** — it does **not** push to NuGet or create tags.
 
-> **A release artifact must be built from `main-v<N>`.** `publicReleaseRefSpec` is `^refs/heads/main-v18$`, so only a `main-v18` build drops the preview suffix (`7.1.0`); a `v18/dev` build gives `7.1.0--preview.N.gSHA`. **The merge into `main-v<N>` therefore happens before promoting to NuGet**, not after. Promoting a dev artifact would publish a preview version. (This differs from the old manual process, where the csproj `<Version>` was clean on every branch.)
+> **A release artifact is built from a release branch.** `publicReleaseRefSpec` lists `main-v18`, `v18/release/*` and `v18/hotfix/*`, so a build on any of those drops the preview suffix (`7.1.0`); a `v18/dev` or feature-branch build gives `7.1.0--preview.N.gSHA`. Publishing a dev artifact would put a preview version on NuGet. This mirrors `Umbraco.Automate`/`Umbraco.AI`, which use the same three-pattern spec (with `v18/main` in place of `main-v18`).
+>
+> This is a real behavioural difference from the old manual process, where the csproj `<Version>` was clean on every branch and any build was publishable.
+
+**Release branches:** `v<N>/release/YYYY.MM.N` (calendar-based, cut from `v<N>/dev`), and `v<N>/hotfix/YYYY.MM.N` for an urgent fix cut from `main-v<N>`. The name is independent of package versions — one branch can carry several packages at different versions. Note the branch (`v18/release/2026.08.1`) and the tags (`release/<slug>-<version>`) are different ref namespaces and do not collide.
+
+**No release manifest.** Unlike `Umbraco.AI`, there is no `release-manifest.json`. On a release branch, CI treats a package as shipping when its `version.json` differs from `main-v<N>` — the bump itself is the declaration.
 
 Two skills cover the repeatable parts:
 
-- **`/release-management`** — detect changed packages, recommend the bump, update `version.json`, write the `CHANGELOG.md` entry, commit, and merge `v<N>/dev` into `main-v<N>` once dev CI is green.
-- **`/post-release-cleanup`** — bump each released package's patch on dev afterwards.
+- **`/release-management`** — detect changed packages, recommend the bump, **cut the release branch**, update `version.json`, write the `CHANGELOG.md` entry, push.
+- **`/post-release-cleanup`** — merge the release branch into `main-v<N>` **and** back into `v<N>/dev`, bump each released package's patch on dev, optionally delete the branch.
 
 Full sequence:
 
-1. `/release-management` on `v<N>/dev` — bump, changelog, push, merge to `main-v<N>`.
-2. Pipeline builds `main-v<N>`. **Verify the artifact is clean-versioned** before continuing.
+1. `/release-management` on `v<N>/dev` — cuts `v<N>/release/YYYY.MM.N`, bumps, changelogs, pushes.
+2. Pipeline builds the release branch. **Verify the artifact is clean-versioned** before continuing.
 3. **Promote** it to NuGet (separate step).
 4. Create an annotated tag `release/<slug>-<version>` (e.g. `release/crm-hubspot-9.0.1`).
 5. Create a GitHub release (title = tag name), linking the relevant PRs.
-6. `/post-release-cleanup` on `v<N>/dev`.
+6. `/post-release-cleanup` — merges back into both branches and bumps dev.
 
 > Tagging/releasing is easy to forget — the v18 `.0.0` tags were missing entirely and had to be backfilled. Always do steps 3–5 after promoting.
 >
@@ -140,7 +149,15 @@ Full sequence:
 
 `azure-pipelines.yml` covers the whole repo in two stages:
 
-1. **DetectChanges** — `.azure-pipelines/scripts/detect-changes.ps1` discovers packages (a `src/` folder with both a `.csproj` and a `version.json`) and diffs against the right base for the context: merge-base with the target branch for PRs, `HEAD~1` on `main-v18`/`v18/dev`, merge-base with `v18/dev` on feature branches. A `Directory.Packages.props` change is traced to only the packages referencing the packages whose versions moved. Then `validate-changelogs.ps1` runs.
+1. **DetectChanges** — `.azure-pipelines/scripts/detect-changes.ps1` discovers packages (a `src/` folder with both a `.csproj` and a `version.json`), then selects what to build based on the branch:
+   - **`v18/release/*` / `v18/hotfix/*`** — selects packages whose `version.json` differs from `main-v18`, i.e. those with a new version to publish. Throws if nothing was bumped.
+   - **PRs** — diffs against the merge-base with the target branch.
+   - **`main-v18` / `v18/dev`** — diffs against `HEAD~1`.
+   - **feature branches** — diffs against the merge-base with `v18/dev`.
+
+   A `Directory.Packages.props` change is traced to only the packages referencing the packages whose versions moved. Then `validate-changelogs.ps1` runs (on a release branch it compares against `main-v18`, so every bump the release carries is checked).
+
+   > Package paths are resolved to the casing **git** tracks, not the casing on disk. `git show <ref>:<path>` is case-sensitive even on Windows, and this repo has `...GoogleSearchConsole.URLInspectionTool` in the index while working copies have appeared with `...UrlInspectionTool` on disk. Without this, that package was reported as brand new and force-included in every release.
 2. **Pack** — a matrix over only the changed packages, one job each, via `.azure-pipelines/templates/pack-product.yml`. `nbgv cloud` runs with `workingDirectory` set to the package folder so it picks up that package's `version.json`.
 
 Adding a package needs **no pipeline change** — give it a `version.json`.
@@ -164,6 +181,8 @@ Still **one pipeline per package**, path-filtered to `src/<project>/**`.
 **Key directories:** `/src` (packages) · `/tests` · `/examples` (test sites) · `/.azure-pipelines` (scripts + templates, v18)
 
 **Branches:** `main-v18` / `v18/dev` (Umbraco 18) · `main-v17` / `v17/dev` (Umbraco 17) · `main` (legacy v10–13)
+
+**Publishable builds come from** `main-v<N>`, `v<N>/release/*` or `v<N>/hotfix/*` only — everything else is `--preview` suffixed
 
 **Release tag convention:** `release/<slug>-<version>` (annotated), e.g. `release/search-algolia-7.0.1`
 
