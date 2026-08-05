@@ -57,11 +57,4 @@
 	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
 		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../wwwroot';" Overwrite="true" />
 	</Target>
-
-	<!-- Stamp the NBGV-computed version into the built backoffice manifest (CI only).
-	     The source manifest at Client\public\umbraco-package.json keeps its placeholder version. -->
-	<Target Name="UpdatePackageManifestVersion" BeforeTargets="CoreCompile"
-			Condition="Exists('wwwroot\umbraco-package.json') AND '$(PackageVersion)' != '' AND '$(ContinuousIntegrationBuild)' == 'true'">
-		<JsonPathUpdateValue JsonFile="wwwroot\umbraco-package.json" Path="$.version" Value="&quot;$(PackageVersion)&quot;" />
-	</Target>
 </Project>

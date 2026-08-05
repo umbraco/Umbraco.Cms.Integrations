@@ -76,9 +76,17 @@ steps:
     - script: npm install --global @cyclonedx/cdxgen
       displayName: "Install cdxgen"
 
-    - script: |
-          mkdir -p $(Build.ArtifactStagingDirectory)/bom
-          cdxgen --recurse --output $(Build.ArtifactStagingDirectory)\bom\bom.json --json-pretty --project-group "$(productGroup)" --project-name "${{ parameters.productName }}" --project-version "$(productVersion)" --server-url "$(DT_BASE_URL)" --api-key "$(DT_API_KEY)" --deep --spec-version 1.6
+    # pwsh, not `script`: the pool is windows-latest, where `script` runs under
+    # cmd.exe. cmd's mkdir has no -p, so `mkdir -p <path>` silently creates a junk
+    # directory called "-p" next to the real one. (The old per-package pipelines
+    # had this and got away with it.)
+    - pwsh: |
+          $bomDir = Join-Path "$(Build.ArtifactStagingDirectory)" "bom"
+          New-Item -ItemType Directory -Force -Path $bomDir | Out-Null
+          $bomFile = Join-Path $bomDir "bom.json"
+
+          cdxgen --recurse --output $bomFile --json-pretty --project-group "$(productGroup)" --project-name "${{ parameters.productName }}" --project-version "$(productVersion)" --server-url "$(DT_BASE_URL)" --api-key "$(DT_API_KEY)" --deep --spec-version 1.6
+          if ($LASTEXITCODE -ne 0) { throw "cdxgen failed with exit code $LASTEXITCODE" }
       displayName: "Generate & Upload SBOM with cdxgen"
       workingDirectory: $(Build.SourcesDirectory)
       env:
@@ -88,5 +96,5 @@ steps:
     - task: PublishPipelineArtifact@1
       displayName: "Publish SBOM Artifact"
       inputs:
-          targetPath: $(Build.ArtifactStagingDirectory)/bom
+          targetPath: "$(Build.ArtifactStagingDirectory)/bom"
           artifactName: "SBOM-${{ parameters.productName }}"

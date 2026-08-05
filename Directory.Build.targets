@@ -1,0 +1,32 @@
+<Project>
+
+  <!--
+    Stamps the NBGV-computed version into each package's built backoffice manifest.
+
+    Lives here rather than in each .csproj so it cannot drift between packages.
+    The condition keeps it a no-op where it does not apply:
+
+      - packages with no client assets (Analytics.Cookiebot has no wwwroot)
+      - the test project and the example site
+      - local builds, so a developer's working tree is never modified
+
+    The source manifest at Client/public/umbraco-package.json keeps a placeholder
+    version and is deliberately left alone.
+
+    JsonPathUpdateValue comes from Umbraco.JsonSchema.Extensions, referenced as a
+    GlobalPackageReference in Directory.Packages.props.
+
+    NOTE: MSBuild resolves Directory.Build.targets nearest-first and does NOT
+    auto-import parents. If a package ever needs its own Directory.Build.targets,
+    it must import this one explicitly or it will lose this target.
+  -->
+  <Target Name="UpdatePackageManifestVersion" BeforeTargets="CoreCompile"
+          Condition="Exists('$(MSBuildProjectDirectory)\wwwroot\umbraco-package.json')
+                     AND '$(PackageVersion)' != ''
+                     AND '$(ContinuousIntegrationBuild)' == 'true'">
+    <JsonPathUpdateValue JsonFile="$(MSBuildProjectDirectory)\wwwroot\umbraco-package.json"
+                         Path="$.version"
+                         Value="&quot;$(PackageVersion)&quot;" />
+  </Target>
+
+</Project>

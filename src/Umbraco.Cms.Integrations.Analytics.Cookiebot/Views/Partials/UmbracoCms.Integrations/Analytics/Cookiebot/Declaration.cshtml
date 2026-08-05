@@ -1,11 +1,16 @@
-﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 
 @{
-    var scriptSrc = "https://consent.cookiebot.com/" + Configuration["Umbraco:Cookiebot:Settings:Id"] + "/cd.js";
+    var cbid = Configuration["Umbraco:Cookiebot:Settings:Id"];
 }
 
-<script id="CookieDeclaration"
-        src="@scriptSrc"
-        type="text/javascript" async>
-</script>
-
+@* Without a configured domain group ID the src would be
+   https://consent.cookiebot.com//cd.js - a guaranteed failing request - so render
+   nothing instead. *@
+@if (!string.IsNullOrWhiteSpace(cbid))
+{
+    <script id="CookieDeclaration"
+            src="https://consent.cookiebot.com/@cbid/cd.js"
+            type="text/javascript" async>
+    </script>
+}
