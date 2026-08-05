@@ -16,22 +16,28 @@ machinery removed, because this repo is shaped differently:
   dependency cascade, no forced bumps, no `Directory.Packages.props` range
   updates and no npm peer-dependency syncing. If you find yourself reasoning
   about "which other packages does this one affect", stop - the answer is none.
-- **No release branch.** Bumps are committed straight to `v18/dev` (or
-  `v17/dev`). Do not create a `release/*` branch.
-- **No release manifest.** `release-manifest.json` does not exist here; CI
-  decides what to build from the file diff alone.
+- **No release manifest.** `release-manifest.json` does not exist here. On a
+  release branch, CI treats a package as shipping when its `version.json`
+  differs from `main-v<N>` - the bump itself is the declaration. Nothing to
+  maintain, and no `include`/`exclude` lists to keep in sync.
 - **Tags are `release/<slug>-<version>`**, e.g. `release/search-algolia-7.1.0` -
-  not `Product@Version`.
+  not `Product@Version`. Note the branch is `v18/release/<date>` while tags are
+  `release/<slug>-<version>`; they live in different ref namespaces and do not
+  collide.
+- **`main-v<N>`, not `v<N>/main`.** This repo names its released branch
+  `main-v18`; `Umbraco.AI`/`Umbraco.Automate` use `v18/main`. The
+  `publicReleaseRefSpec` entries reflect that difference.
 
 ## Task
 
 1. Detect which packages changed since their last release tag.
 2. Recommend a version bump per package from the commit history.
 3. Confirm with the user.
-4. Update each package's `version.json`.
-5. Write each package's `CHANGELOG.md` entry.
-6. Review the changelogs for noise and completeness.
-7. Validate and commit.
+4. **Cut the release branch** - before any file changes.
+5. Update each package's `version.json`.
+6. Write each package's `CHANGELOG.md` entry.
+7. Review the changelogs for noise and completeness.
+8. Validate, commit and push the release branch.
 
 ---
 
@@ -136,10 +142,54 @@ Do not proceed until the user has confirmed.
 
 ---
 
-## Phase 4: Update version.json
+## Phase 4: Cut the release branch
 
-For each confirmed package, edit **only** the `version` field of
-`src/<PackageName>/version.json`. Leave every other property untouched.
+**Do this before touching any file.** The bump belongs on the release branch, not
+on `v18/dev`.
+
+Why it matters: `version.json` sets `publicReleaseRefSpec` to `main-v18`,
+`v18/release/*` and `v18/hotfix/*`. NBGV only drops the preview suffix on a branch
+matching one of those:
+
+| Branch built | Version produced |
+|---|---|
+| `v18/release/2026.08.1` | `7.1.0` ← publishable |
+| `main-v18` | `7.1.0` |
+| `v18/dev`, feature branches | `7.1.0--preview.4.gabc1234` |
+
+So the release branch is what produces the artifact you publish. This is the same
+arrangement `Umbraco.AI` and `Umbraco.Automate` use.
+
+**Naming:** `v<N>/release/YYYY.MM.N` - calendar-based, matching the sibling repos.
+It is independent of the package versions: one release branch can carry several
+packages at different versions.
+
+Work out the name:
+
+```bash
+git branch --show-current            # the line prefix, e.g. v18/dev -> v18
+date +%Y.%m                          # e.g. 2026.08
+git fetch origin --tags
+git branch -r --list "origin/v18/release/*"      # existing branches this month
+git tag --list "2026.08.*"                       # and any date tags
+```
+
+Take the highest trailing number for the current month and add one; start at `1` if
+there is none. Confirm the name with the user, then:
+
+```bash
+git checkout -b v18/release/2026.08.1
+```
+
+For an urgent fix on top of an already-released state, cut
+`v18/hotfix/YYYY.MM.N` from `main-v18` instead of from dev.
+
+---
+
+## Phase 5: Update version.json
+
+Now on the release branch. For each confirmed package, edit **only** the `version`
+field of `src/<PackageName>/version.json`. Leave every other property untouched.
 
 Do **not** touch:
 
@@ -149,7 +199,7 @@ Do **not** touch:
 
 ---
 
-## Phase 5: Write the changelog entry
+## Phase 6: Write the changelog entry
 
 For each package, add a new entry at the top of `src/<PackageName>/CHANGELOG.md`,
 below the header block, in [Keep a Changelog][kac] format:
@@ -175,7 +225,7 @@ Rules:
 
 ---
 
-## Phase 6: Review the changelogs
+## Phase 7: Review the changelogs
 
 Before committing, review each entry you just wrote.
 
@@ -216,92 +266,66 @@ Clean
 
 ---
 
-## Phase 7: Validate and commit
 
-Run the same check CI runs, so a failure surfaces here and not in the pipeline:
+## Phase 8: Validate, commit and push the release branch
+
+Run the same check CI runs, so a failure surfaces here rather than in the pipeline:
 
 ```bash
 pwsh -File .azure-pipelines/scripts/validate-changelogs.ps1
 ```
 
-Then confirm each bumped `version.json` matches its changelog heading, and commit:
+Confirm each bumped `version.json` has a matching changelog heading, then commit and
+push the release branch:
 
 ```bash
 git add src/*/version.json src/*/CHANGELOG.md
-git commit -m "chore(release): Prepare release of <packages>
+git commit -m "chore(release): Prepare release 2026.08.1
 
 - Umbraco.Cms.Integrations.Search.Algolia: 7.0.1 -> 7.1.0
 - Umbraco.Cms.Integrations.Crm.Hubspot: 9.0.1 -> 9.0.2"
+
+git push -u origin v18/release/2026.08.1
 ```
 
-Push the bump to `v18/dev` and let CI run, so the build is known green before it
-reaches `main-v18`:
+Use the **release branch name** in the commit subject, not the package versions -
+one branch can carry several packages at different versions.
 
-```bash
-git push origin v18/dev
-```
+Pushing a new release branch is safe: it touches no shared branch, and nothing is
+published until a human promotes the artifact. `main-v18` and `v18/dev` are left
+untouched until `/post-release-cleanup` runs.
 
----
-
-## Phase 8: Merge to main-v&lt;N&gt; so the version comes out clean
-
-**This is the step that produces the publishable version number, so it must happen
-before anything is promoted to NuGet.**
-
-`version.json` sets `publicReleaseRefSpec` to `^refs/heads/main-v18$`. NBGV only
-drops the preview suffix on a branch matching that spec:
-
-| Branch built | Version produced |
-|---|---|
-| `main-v18` | `7.1.0` ← publishable |
-| `v18/dev`, feature branches | `7.1.0--preview.4.gabc1234` |
-
-So an artifact built from `v18/dev` is **not** the release. Promoting it would put
-a preview-versioned package on NuGet.
-
-Once CI is green on `v18/dev`, confirm with the user, then merge:
-
-```bash
-git checkout main-v18
-git pull origin main-v18
-git merge v18/dev --no-ff -m "Merge v18/dev into main-v18 for release"
-git push origin main-v18
-git checkout v18/dev
-```
-
-Ask before this push - it updates a shared branch. Resolve any conflicts as:
-`version.json` keep the **higher** version; `CHANGELOG.md` keep **both** sets of
-entries. Never force-push.
-
-> **Tradeoff to be aware of.** `main-v18` is meant to reflect the last released
-> state, and this merge lands the bump there *before* the packages are actually on
-> NuGet. If the release is then abandoned, `main-v18` carries a version that never
-> shipped and needs a follow-up. That is why the merge waits for green CI on dev.
+CI will then build this branch and produce **clean-versioned** artifacts. Because
+the branch matches `publicReleaseRefSpec`, and because the pipeline selects the
+packages whose `version.json` differs from `main-v18`, only the packages you just
+bumped are built and packed.
 
 ---
 
 ## Phase 9: Report what remains manual
 
 ```
-Prepared on v18/dev and merged into main-v18:
+Release branch v18/release/2026.08.1 pushed, carrying:
   - Search.Algolia 7.0.1 -> 7.1.0
   - Crm.Hubspot    9.0.1 -> 9.0.2
 
+main-v18 and v18/dev are untouched so far.
+
 Still to do by hand:
-  1. Let CI build main-v18. Confirm the artifacts are clean-versioned
-     (7.1.0, NOT 7.1.0--preview.N) before going further.
+  1. Wait for CI on v18/release/2026.08.1. Confirm the artifacts are
+     clean-versioned (7.1.0, NOT 7.1.0--preview.N) before going further.
   2. Promote each artifact to NuGet.
-  3. Tag each released package, on main-v18:
+  3. Tag each released package, on the release branch:
        git tag -a release/search-algolia-7.1.0 -m "Search.Algolia 7.1.0"
        git tag -a release/crm-hubspot-9.0.2    -m "Crm.Hubspot 9.0.2"
        git push origin --tags
   4. Create a GitHub release per tag, titled with the tag, linking the PRs.
-  5. Run /post-release-cleanup to bump the dev patch versions.
+  5. Run /post-release-cleanup to merge the release branch into main-v18
+     and v18/dev, and bump the dev patch versions.
 ```
 
-Do not promote, tag, or create releases yourself unless the user explicitly asks -
-those are outward-facing and irreversible. Pushing branches is covered by the
-confirmations above.
+Do not promote, tag, or create GitHub releases yourself unless the user explicitly
+asks - those are outward-facing and irreversible.
 
 ## Error handling
 
@@ -309,6 +333,9 @@ confirmations above.
   anyway (a deliberate no-op release is occasionally wanted).
 - **No release tag for a package** - fall back to `version.json` and say so.
 - **Malformed `version.json`** - report it and stop; do not guess the format.
-- **On a `main-v*` branch** - stop; releases are prepared on the dev branch.
+- **Started from `main-v*`** - a normal release is cut from `v<N>/dev`. Only a
+  hotfix is cut from `main-v<N>`; confirm which the user means.
+- **A release branch for this month already exists** - it may be an in-flight
+  release. Show it and ask whether to add to it or start the next number.
 
 [kac]: https://keepachangelog.com/en/1.0.0/
