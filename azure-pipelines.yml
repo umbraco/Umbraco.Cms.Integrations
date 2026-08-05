@@ -61,6 +61,13 @@ stages:
                       filePath: ".azure-pipelines/scripts/detect-changes.ps1"
                       pwsh: true
 
+                # Fails the build if a version was bumped without a changelog entry.
+                - task: PowerShell@2
+                  displayName: "Validate changelogs"
+                  inputs:
+                      filePath: ".azure-pipelines/scripts/validate-changelogs.ps1"
+                      pwsh: true
+
     - stage: Pack
       displayName: "Build & pack"
       dependsOn: DetectChanges
