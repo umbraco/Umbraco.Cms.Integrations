@@ -110,18 +110,23 @@ Managed centrally in the root `Directory.Packages.props`. A `PackageReference` *
 
 ### Releasing (per package)
 
-The pipeline **only builds + packs the `.nupkg` + SBOM as artifacts** — it does **not** push to NuGet or create tags. Two skills cover the repeatable parts:
+The pipeline **only builds + packs the `.nupkg` + SBOM as artifacts** — it does **not** push to NuGet or create tags.
 
-- **`/release-management`** — detect changed packages, recommend the bump, update `version.json`, write the `CHANGELOG.md` entry, commit.
-- **`/post-release-cleanup`** — merge `v<N>/dev` into `main-v<N>`, then bump each released package's patch on dev.
+> **A release artifact must be built from `main-v<N>`.** `publicReleaseRefSpec` is `^refs/heads/main-v18$`, so only a `main-v18` build drops the preview suffix (`7.1.0`); a `v18/dev` build gives `7.1.0--preview.N.gSHA`. **The merge into `main-v<N>` therefore happens before promoting to NuGet**, not after. Promoting a dev artifact would publish a preview version. (This differs from the old manual process, where the csproj `<Version>` was clean on every branch.)
+
+Two skills cover the repeatable parts:
+
+- **`/release-management`** — detect changed packages, recommend the bump, update `version.json`, write the `CHANGELOG.md` entry, commit, and merge `v<N>/dev` into `main-v<N>` once dev CI is green.
+- **`/post-release-cleanup`** — bump each released package's patch on dev afterwards.
 
 Full sequence:
 
-1. `/release-management` on `v<N>/dev`.
-2. Push; the pipeline produces the artifact. **Promote** it to NuGet (separate step).
-3. Create an annotated tag `release/<slug>-<version>` (e.g. `release/crm-hubspot-9.0.1`).
-4. Create a GitHub release (title = tag name), linking the relevant PRs.
-5. `/post-release-cleanup`.
+1. `/release-management` on `v<N>/dev` — bump, changelog, push, merge to `main-v<N>`.
+2. Pipeline builds `main-v<N>`. **Verify the artifact is clean-versioned** before continuing.
+3. **Promote** it to NuGet (separate step).
+4. Create an annotated tag `release/<slug>-<version>` (e.g. `release/crm-hubspot-9.0.1`).
+5. Create a GitHub release (title = tag name), linking the relevant PRs.
+6. `/post-release-cleanup` on `v<N>/dev`.
 
 > Tagging/releasing is easy to forget — the v18 `.0.0` tags were missing entirely and had to be backfilled. Always do steps 3–5 after promoting.
 >

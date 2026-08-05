@@ -170,21 +170,38 @@ Then add it to `Umbraco.Cms.Integrations.slnx`.
 
 ## Releasing
 
+**A release must be built from `main-v18`.** `version.json` sets
+`publicReleaseRefSpec` to `^refs/heads/main-v18$`, and NBGV only drops the preview
+suffix on a branch matching it:
+
+| Branch built | Version produced |
+|---|---|
+| `main-v18` | `7.1.0` ← publishable |
+| `v18/dev`, feature branches | `7.1.0--preview.4.gabc1234` |
+
+So the merge into `main-v18` happens **before** anything is promoted to NuGet.
+Promoting a `v18/dev` artifact would publish a preview version.
+
 Two Claude Code skills guide the process:
 
 - **`/release-management`** — detects changed packages, recommends the bump per the
-  table above, updates `version.json`, writes the changelog entry, and commits.
-- **`/post-release-cleanup`** — merges `v18/dev` into `main-v18` and bumps the
-  patch again on `v18/dev` so the next dev build sorts above the release.
+  table above, updates `version.json`, writes the changelog entry, commits, and
+  (once CI is green on dev) merges `v18/dev` into `main-v18`.
+- **`/post-release-cleanup`** — bumps the patch again on `v18/dev` so the next dev
+  build sorts above the release.
 
-Between the two, done manually:
+Full sequence:
 
-1. Promote the CI-built artifact to NuGet.
-2. Create an annotated tag: `release/<slug>-<version>`
+1. `/release-management` on `v18/dev` — bump, changelog, push, merge to `main-v18`.
+2. CI builds `main-v18`. **Check the artifact is clean-versioned** (`7.1.0`, not
+   `7.1.0--preview.N`) before continuing.
+3. Promote the artifact to NuGet.
+4. Create an annotated tag: `release/<slug>-<version>`
    (e.g. `release/search-algolia-7.1.0`).
-3. Create a GitHub release titled with the tag, linking the relevant PRs.
+5. Create a GitHub release titled with the tag, linking the relevant PRs.
+6. `/post-release-cleanup` on `v18/dev`.
 
-> Tagging is easy to forget and has been missed before. Do steps 2 and 3 every time.
+> Tagging is easy to forget and has been missed before. Do steps 4 and 5 every time.
 
 ---
 

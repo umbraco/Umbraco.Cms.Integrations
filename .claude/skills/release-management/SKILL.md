@@ -234,26 +234,74 @@ git commit -m "chore(release): Prepare release of <packages>
 - Umbraco.Cms.Integrations.Crm.Hubspot: 9.0.1 -> 9.0.2"
 ```
 
-Then report what remains manual:
+Push the bump to `v18/dev` and let CI run, so the build is known green before it
+reaches `main-v18`:
+
+```bash
+git push origin v18/dev
+```
+
+---
+
+## Phase 8: Merge to main-v&lt;N&gt; so the version comes out clean
+
+**This is the step that produces the publishable version number, so it must happen
+before anything is promoted to NuGet.**
+
+`version.json` sets `publicReleaseRefSpec` to `^refs/heads/main-v18$`. NBGV only
+drops the preview suffix on a branch matching that spec:
+
+| Branch built | Version produced |
+|---|---|
+| `main-v18` | `7.1.0` ← publishable |
+| `v18/dev`, feature branches | `7.1.0--preview.4.gabc1234` |
+
+So an artifact built from `v18/dev` is **not** the release. Promoting it would put
+a preview-versioned package on NuGet.
+
+Once CI is green on `v18/dev`, confirm with the user, then merge:
+
+```bash
+git checkout main-v18
+git pull origin main-v18
+git merge v18/dev --no-ff -m "Merge v18/dev into main-v18 for release"
+git push origin main-v18
+git checkout v18/dev
+```
+
+Ask before this push - it updates a shared branch. Resolve any conflicts as:
+`version.json` keep the **higher** version; `CHANGELOG.md` keep **both** sets of
+entries. Never force-push.
+
+> **Tradeoff to be aware of.** `main-v18` is meant to reflect the last released
+> state, and this merge lands the bump there *before* the packages are actually on
+> NuGet. If the release is then abandoned, `main-v18` carries a version that never
+> shipped and needs a follow-up. That is why the merge waits for green CI on dev.
+
+---
+
+## Phase 9: Report what remains manual
 
 ```
-Prepared and committed on v18/dev:
+Prepared on v18/dev and merged into main-v18:
   - Search.Algolia 7.0.1 -> 7.1.0
   - Crm.Hubspot    9.0.1 -> 9.0.2
 
 Still to do by hand:
-  1. Push, and let CI build and pack the artifacts.
+  1. Let CI build main-v18. Confirm the artifacts are clean-versioned
+     (7.1.0, NOT 7.1.0--preview.N) before going further.
   2. Promote each artifact to NuGet.
-  3. Tag each released package:
+  3. Tag each released package, on main-v18:
        git tag -a release/search-algolia-7.1.0 -m "Search.Algolia 7.1.0"
-       git tag -a release/crm-hubspot-9.0.2   -m "Crm.Hubspot 9.0.2"
+       git tag -a release/crm-hubspot-9.0.2    -m "Crm.Hubspot 9.0.2"
        git push origin --tags
   4. Create a GitHub release per tag, titled with the tag, linking the PRs.
-  5. Run /post-release-cleanup to merge into main-v18 and bump dev versions.
+  5. Run /post-release-cleanup to bump the dev patch versions.
 ```
 
-Do not push, tag, or publish yourself unless the user explicitly asks - those are
-outward-facing and irreversible.
+Do not promote, tag, or create releases yourself unless the user explicitly asks -
+those are outward-facing and irreversible. Pushing branches is covered by the
+confirmations above.
 
 ## Error handling
 
