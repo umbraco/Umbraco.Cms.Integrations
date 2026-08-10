@@ -8,7 +8,7 @@ This file is for **navigation, structure, and release workflow**. Package-specif
 
 ## 1. Overview
 
-- **What it is:** 8 independent integration packages (CRM, commerce, search, SEO, automation, analytics), each versioned and released separately to NuGet.
+- **What it is:** 9 independent integration packages (CRM, commerce, search, SEO, automation, analytics), each versioned and released separately to NuGet.
 - **Stack:** .NET (net10.0 on the v17/v18 lines), Umbraco CMS as the host, per-package **TypeScript + Vite** backoffice client compiled into `wwwroot`, built/packed via **Azure Pipelines**.
 - **Not a single product:** there is no shared runtime library across packages — they are sibling projects that share only the repo, tooling, and release conventions. No package references another.
 
@@ -82,8 +82,9 @@ Consequences worth knowing:
 | `SEO.Semrush` | SEO | 4.x | 5.x |
 | `SEO.GoogleSearchConsole.URLInspectionTool` | SEO | 2.x | 3.x |
 | `Automation.Zapier` | Automation | 5.x | 6.x |
+| `Analytics.Cookiebot` | Analytics | 3.x | 4.x |
 
-**Cookiebot** is not on this line. It was last maintained on `main-v15` at 2.0.1 (Umbraco 15–16) and has been revived on v18 only, at `4.0.0`. The dead `azure-pipeline - Script.Cookiebot.yml`, which pointed at a project that does not exist here, has been deleted.
+**Cookiebot** was dormant: last maintained on `main-v15` at 2.0.1 (Umbraco 15–16) and absent from the v17/v18 lines, which carried only a dead `azure-pipeline - Script.Cookiebot.yml` pointing at a project that did not exist. It is now on both, at `3.0.0` here and `4.0.0` on v18. It is a plain Razor Class Library — server-side banner/declaration partial views, no TypeScript client and no `wwwroot`.
 
 > The legacy `main` branch (Umbraco 10–13) additionally carries packages on no active line (PIM.Inriver, DAM.Aprimo, Crm.ActiveCampaign.Core, Commerce.CommerceTools). Per [UmbracoDocs#8300](https://github.com/umbraco/UmbracoDocs/pull/8300) these support Umbraco 13 or lower and their docs are being removed; Cookiebot was deliberately kept.
 

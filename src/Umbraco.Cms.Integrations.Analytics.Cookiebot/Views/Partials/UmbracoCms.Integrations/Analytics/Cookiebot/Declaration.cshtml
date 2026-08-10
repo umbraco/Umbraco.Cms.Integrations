@@ -1,0 +1,11 @@
+﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+
+@{
+    var scriptSrc = "https://consent.cookiebot.com/" + Configuration["Umbraco:Cookiebot:Settings:Id"] + "/cd.js";
+}
+
+<script id="CookieDeclaration"
+        src="@scriptSrc"
+        type="text/javascript" async>
+</script>
+
