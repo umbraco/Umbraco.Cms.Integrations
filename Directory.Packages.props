@@ -1,6 +1,17 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+
+    <!--
+      One place to move the Umbraco CMS floor for every package. Referenced by the
+      Umbraco.Cms.* PackageVersion entries below.
+
+      The v17 line has a property of the same name, but declared in all eight
+      csprojs rather than once - and it has already drifted, six of them reading
+      "[17.0.0, 18)" and two "[17.0.0, 18.0.0)". Central package management plus a
+      single property is the same idea without the copies.
+    -->
+    <UmbracoCmsPackageVersion>[18.0.0, 19.0.0)</UmbracoCmsPackageVersion>
   </PropertyGroup>
 
   <!-- Global tooling: SourceLink, versioning, Umbraco analyzers -->
@@ -12,12 +23,12 @@
     <GlobalPackageReference Include="Umbraco.JsonSchema.Extensions" Version="0.4.3" PrivateAssets="all" />
   </ItemGroup>
 
-  <!-- Umbraco CMS v18 -->
+  <!-- Umbraco CMS v18 - version comes from UmbracoCmsPackageVersion above -->
   <ItemGroup>
-    <PackageVersion Include="Umbraco.Cms.Api.Common" Version="[18.0.0, 19.0.0)" />
-    <PackageVersion Include="Umbraco.Cms.Api.Management" Version="[18.0.0, 19.0.0)" />
-    <PackageVersion Include="Umbraco.Cms.Web.Common" Version="[18.0.0, 19.0.0)" />
-    <PackageVersion Include="Umbraco.Cms.Web.Website" Version="[18.0.0, 19.0.0)" />
+    <PackageVersion Include="Umbraco.Cms.Api.Common" Version="$(UmbracoCmsPackageVersion)" />
+    <PackageVersion Include="Umbraco.Cms.Api.Management" Version="$(UmbracoCmsPackageVersion)" />
+    <PackageVersion Include="Umbraco.Cms.Web.Common" Version="$(UmbracoCmsPackageVersion)" />
+    <PackageVersion Include="Umbraco.Cms.Web.Website" Version="$(UmbracoCmsPackageVersion)" />
   </ItemGroup>
 
   <!-- Package-specific third-party dependencies -->
