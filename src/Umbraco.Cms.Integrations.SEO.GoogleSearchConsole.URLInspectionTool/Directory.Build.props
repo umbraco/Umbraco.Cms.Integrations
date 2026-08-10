@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Compute this package's version from its own commits, not the repo's. -->
+    <GitVersionBaseDirectory>$(MSBuildThisFileDirectory)</GitVersionBaseDirectory>
+  </PropertyGroup>
+</Project>

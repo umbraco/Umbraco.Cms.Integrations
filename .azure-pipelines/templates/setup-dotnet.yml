@@ -1,0 +1,41 @@
+# Makes the .NET SDK from global.json available, without using UseDotNet@2.
+#
+# That task does not work on this pool. Before running anything it shells out to
+# a helper to detect the OS, and the helper is missing on the agent images here:
+#
+#   windows-latest / windows-2022 -> "Unable to locate executable file: 'powershell'"
+#   ubuntu-latest                 -> "/usr/bin/env: 'bash': No such file or directory"
+#
+# The agents are build agents, so an SDK is already installed; global.json
+# (rollForward: latestFeature) selects it. This step only proves that is true and
+# fails with something readable if it ever is not.
+#
+# pwsh, not `script`: `script` runs under bash on Linux and cmd.exe on Windows,
+# and the failure above means we cannot assume either is present.
+
+steps:
+    - pwsh: |
+          Write-Host "OS         : $([System.Runtime.InteropServices.RuntimeInformation]::OSDescription)"
+          Write-Host "PowerShell : $($PSVersionTable.PSVersion)"
+          foreach ($tool in 'dotnet', 'npm', 'node', 'bash') {
+              $found = Get-Command $tool -ErrorAction SilentlyContinue
+              Write-Host ("{0,-10} : {1}" -f $tool, $(if ($found) { $found.Source } else { 'NOT FOUND' }))
+          }
+
+          $dotnet = Get-Command dotnet -ErrorAction SilentlyContinue
+          if (-not $dotnet) { throw "No dotnet on PATH. The agent image needs a .NET SDK preinstalled." }
+
+          Write-Host ""
+          Write-Host "Installed SDKs:"
+          $sdks = & dotnet --list-sdks
+          $sdks | ForEach-Object { Write-Host "  $_" }
+
+          $required = (Get-Content "$(Build.SourcesDirectory)/global.json" -Raw | ConvertFrom-Json).sdk.version
+          $major = $required.Split('.')[0]
+          if (-not ($sdks | Where-Object { $_ -match "^$major\." })) {
+              throw "global.json needs a $major.x SDK and the agent has none of that major. Installed: $($sdks -join '; ')"
+          }
+
+          Write-Host ""
+          Write-Host "Using: $(& dotnet --version) (global.json asks for $required, rollForward latestFeature)"
+      displayName: "Setup .NET"
