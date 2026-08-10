@@ -1,12 +1,13 @@
-# Changelog
+# Changelog - Umbraco.Cms.Integrations.Automation.Zapier
 
-All notable changes to this package are documented here. The format follows
-[Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and this package adheres
-to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+All notable changes to Umbraco.Cms.Integrations.Automation.Zapier will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [5.0.0] - 2026-08-10
 
-### Changed
+### Internal
 
-- Versioning now comes from `version.json` (Nerdbank.GitVersioning) instead of a
-  hand-edited `<Version>` in the project file. No functional change to the package.
+* Baseline entry, recorded when this repo moved to per-package `version.json` versioning.
+  Changes before this version are in the git history and the GitHub releases.
