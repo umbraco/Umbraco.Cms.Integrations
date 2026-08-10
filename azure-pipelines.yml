@@ -130,10 +130,13 @@ stages:
                 # Cross-stage output variables need stageDependencies, not dependencies.
                 matrix: $[ stageDependencies.DetectChanges.Detect.outputs['detect.BuildMatrix'] ]
             steps:
+                # Matrix variable names are deliberately prefixed - a variable named
+                # `path` would be exported as PATH and break the whole job. See the
+                # note in detect-changes.ps1.
                 - template: .azure-pipelines/templates/pack-product.yml
                   parameters:
-                      productName: $(name)
-                      productPath: $(path)
-                      projectPath: $(project)
+                      productName: $(productName)
+                      productPath: $(productPath)
+                      projectPath: $(projectPath)
                       hasNpm: $(hasNpm)
                       clientName: $(clientName)

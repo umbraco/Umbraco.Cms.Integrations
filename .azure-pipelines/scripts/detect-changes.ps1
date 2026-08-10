@@ -339,12 +339,19 @@ function Write-PipelineVariables {
         if ($Changed[$name]) {
             # Matrix keys cannot contain dots.
             $key = $name -replace '[.-]', '_'
+            # Every key here becomes a job VARIABLE, and job variables are exported
+            # as environment variables. A key called `path` therefore overwrites
+            # PATH with a relative source folder, and the job can no longer find
+            # any executable - pwsh, bash, powershell, dotnet, all of them.
+            # That is what killed every Pack job in builds 279692-279725 while
+            # DetectChanges and Test, which have no matrix, ran fine.
+            # Keep these prefixed; do not shorten them back.
             $matrix[$key] = @{
-                name       = $Products[$name].Name
-                path       = $Products[$name].Path
-                project    = $Products[$name].Project
-                hasNpm     = $Products[$name].HasNpm.ToString().ToLower()
-                clientName = $Products[$name].ClientName
+                productName = $Products[$name].Name
+                productPath = $Products[$name].Path
+                projectPath = $Products[$name].Project
+                hasNpm      = $Products[$name].HasNpm.ToString().ToLower()
+                clientName  = $Products[$name].ClientName
             }
             Write-Host "  BUILD $name" -ForegroundColor Green
         }
