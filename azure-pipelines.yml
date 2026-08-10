@@ -99,7 +99,11 @@ stages:
                   inputs:
                       command: "test"
                       projects: "tests/**/*Tests.csproj"
-                      arguments: '--configuration $(buildConfiguration) -p:ShouldRunClientAssetsBuild=false --logger trx --results-directory "$(Agent.TempDirectory)/TestResults" --collect "XPlat Code Coverage"'
+                      # Do NOT pass --logger/--results-directory here: publishTestResults
+                      # appends its own pair, and dotnet test rejects the command line with
+                      # "Option '--results-directory' expects a single argument but 2 were
+                      # provided."
+                      arguments: '--configuration $(buildConfiguration) -p:ShouldRunClientAssetsBuild=false --collect "XPlat Code Coverage"'
                       publishTestResults: true
                       nugetConfigPath: "NuGet.config"
 

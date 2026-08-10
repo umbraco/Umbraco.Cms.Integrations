@@ -27,9 +27,12 @@ steps:
           packageType: "sdk"
           version: "10.0.100"
 
+    # Unconditional: the client asset build needs it for packages that have a
+    # Client/ folder, but cdxgen needs npm for ALL of them - including Cookiebot,
+    # which has no client. Gating this on hasNpm left the SBOM step running on
+    # whatever Node the hosted image happened to ship.
     - task: NodeTool@0
       displayName: "Use Node 22.x"
-      condition: eq('${{ parameters.hasNpm }}', 'true')
       inputs:
           versionSpec: "22.x"
 
