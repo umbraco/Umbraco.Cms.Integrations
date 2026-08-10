@@ -1,0 +1,144 @@
+# Builds, packs and SBOMs a single package.
+#
+# Runs once per changed package via the matrix in azure-pipelines.yml.
+# The version comes from the package's own version.json via NBGV - `nbgv cloud`
+# is run with workingDirectory set to the package folder so it picks up that
+# file and not another package's.
+
+parameters:
+    - name: productName
+      type: string
+    - name: productPath
+      type: string
+    - name: projectPath
+      type: string
+    - name: clientName
+      type: string
+      default: ""
+
+steps:
+    - checkout: self
+      # NBGV needs history to compute the version height.
+      fetchDepth: 0
+
+    - template: setup-dotnet.yml
+
+    # Unconditional: the client build needs it for packages that have a Client/
+    # folder, but cdxgen needs npm for ALL of them - including Cookiebot, which
+    # has no client. Version matches the `engines` field in the root package.json.
+    - task: NodeTool@0
+      displayName: "Use Node 24.x"
+      inputs:
+          versionSpec: "24.x"
+
+    # wwwroot is NOT committed - it is build output. Every job that packs a
+    # package with a client has to produce it first, or the package ships with no
+    # backoffice assets. `npm ci` runs at the repo root because the clients are
+    # workspaces of one root package-lock.json; only this package's workspace is
+    # then built.
+    # pwsh throughout rather than `script` - see the note in setup-dotnet.yml about
+    # bash and cmd.exe not being reliably present on this pool's agents.
+    #
+    # The condition reads the matrix variable directly. It must NOT be written as
+    # eq('${{ parameters.hasNpm }}', 'true'): a template parameter is substituted at
+    # compile time, so that becomes the literal eq('$(hasNpm)', 'true'), and macro
+    # syntax is not expanded inside a condition. It silently compares the string
+    # "$(hasNpm)" to "true", is always false, and both steps skip - which is exactly
+    # what happened in build 279734.
+    # Cached per client, not once for the repo. Azure cache entries are immutable:
+    # the first job to finish writes the key and everyone else's save is a no-op. A
+    # single shared key would therefore freeze whichever product happened to run
+    # first and leave the other eight downloading their own packages on every build.
+    # Keyed on the lockfile, so any dependency change invalidates it.
+    - task: Cache@2
+      displayName: "Restore npm cache (${{ parameters.clientName }})"
+      condition: and(succeeded(), eq(variables['hasNpm'], 'true'))
+      inputs:
+          key: 'npm | "$(Agent.OS)" | ${{ parameters.clientName }} | package-lock.json'
+          restoreKeys: |
+              npm | "$(Agent.OS)" | ${{ parameters.clientName }}
+              npm | "$(Agent.OS)"
+          path: $(npm_config_cache)
+
+    # Scoped to the workspace this job actually builds. Be aware the saving is
+    # small - 441 packages against 461 for all eight - because the clients share
+    # almost all of their dev dependencies. It is kept because it is the honest
+    # description of what the job needs, and it keeps each cached tree to just
+    # that client's packages.
+    - pwsh: npm ci --workspace ${{ parameters.clientName }} --include-workspace-root --include=optional
+      displayName: "Install client dependencies"
+      condition: and(succeeded(), eq(variables['hasNpm'], 'true'))
+
+    - pwsh: npm run build --workspace ${{ parameters.clientName }}
+      displayName: "Build client assets (${{ parameters.clientName }})"
+      condition: and(succeeded(), eq(variables['hasNpm'], 'true'))
+
+    # On Linux ~/.dotnet/tools is not on PATH by default, so the next step would
+    # not find nbgv without the prependpath.
+    - pwsh: |
+          dotnet tool install --global nbgv
+          Write-Host "##vso[task.prependpath]$HOME/.dotnet/tools"
+      displayName: "Install NBGV"
+
+    - pwsh: nbgv cloud --all-vars
+      displayName: "Set version from version.json"
+      workingDirectory: ${{ parameters.productPath }}
+
+    - task: DotNetCoreCLI@2
+      displayName: "Restore"
+      inputs:
+          command: "restore"
+          feedsToUse: "config"
+          projects: ${{ parameters.projectPath }}
+          nugetConfigPath: "NuGet.config"
+
+    - task: DotNetCoreCLI@2
+      displayName: "Build ${{ parameters.productName }}"
+      inputs:
+          command: "build"
+          projects: ${{ parameters.projectPath }}
+          arguments: "--configuration $(buildConfiguration) --no-restore -p:ContinuousIntegrationBuild=true"
+
+    - task: DotNetCoreCLI@2
+      displayName: "Pack ${{ parameters.productName }}"
+      inputs:
+          command: "pack"
+          packagesToPack: ${{ parameters.projectPath }}
+          # Version comes from version.json via NBGV, never from the pipeline.
+          versioningScheme: "off"
+          arguments: "--configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)"
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Build Artifacts"
+      inputs:
+          PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+          ArtifactName: "drop-${{ parameters.productName }}"
+          publishLocation: "Container"
+
+    # Generate/upload SBOM with cdxgen.
+    # --spec-version 1.6 is required; cdxgen fails without it.
+    - pwsh: npm install --global @cyclonedx/cdxgen
+      displayName: "Install cdxgen"
+
+    # pwsh rather than `script` so the directory creation and the exit-code check
+    # read the same on any agent OS. The old per-package pipelines ran `mkdir -p`
+    # under cmd.exe, where -p is not a flag, and silently created a junk directory
+    # called "-p" next to the real one.
+    - pwsh: |
+          $bomDir = Join-Path "$(Build.ArtifactStagingDirectory)" "bom"
+          New-Item -ItemType Directory -Force -Path $bomDir | Out-Null
+          $bomFile = Join-Path $bomDir "bom.json"
+
+          cdxgen --recurse --output $bomFile --json-pretty --project-group "$(productGroup)" --project-name "${{ parameters.productName }}" --project-version "$(productVersion)" --server-url "$(DT_BASE_URL)" --api-key "$(DT_API_KEY)" --deep --spec-version 1.6
+          if ($LASTEXITCODE -ne 0) { throw "cdxgen failed with exit code $LASTEXITCODE" }
+      displayName: "Generate & Upload SBOM with cdxgen"
+      workingDirectory: $(Build.SourcesDirectory)
+      env:
+          DT_API_KEY: $(DT_API_KEY)
+          DT_BASE_URL: $(DT_BASE_URL)
+
+    - task: PublishPipelineArtifact@1
+      displayName: "Publish SBOM Artifact"
+      inputs:
+          targetPath: "$(Build.ArtifactStagingDirectory)/bom"
+          artifactName: "SBOM-${{ parameters.productName }}"

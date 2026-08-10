@@ -1,0 +1,26 @@
+{
+    "name": "umbraco-cms-integrations-monorepo",
+    "version": "0.0.0",
+    "private": true,
+    "description": "Root package for Umbraco.Cms.Integrations backoffice client development",
+    "engines": {
+        "node": ">=24.13",
+        "npm": ">=11"
+    },
+    "workspaces": [
+        "src/Umbraco.Cms.Integrations.Automation.Zapier/Client",
+        "src/Umbraco.Cms.Integrations.Commerce.Shopify/Client",
+        "src/Umbraco.Cms.Integrations.Crm.ActiveCampaign/Client",
+        "src/Umbraco.Cms.Integrations.Crm.Dynamics/Client",
+        "src/Umbraco.Cms.Integrations.Crm.Hubspot/Client",
+        "src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool/Client",
+        "src/Umbraco.Cms.Integrations.SEO.Semrush/Client",
+        "src/Umbraco.Cms.Integrations.Search.Algolia/Client"
+    ],
+    "scripts": {
+        "build": "npm run build --workspaces",
+        "watch": "npm run watch --workspaces",
+        "lint": "npm run lint --workspaces --if-present",
+        "generate:api": "npm run generate:api --workspaces --if-present"
+    }
+}
