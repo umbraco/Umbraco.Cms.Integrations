@@ -94,12 +94,7 @@ stages:
                 - checkout: self
                   fetchDepth: 0
 
-                # Version comes from global.json so the pipeline and a developer's
-                # machine can never disagree about the SDK.
-                - task: UseDotNet@2
-                  displayName: "Setup .NET"
-                  inputs:
-                      useGlobalJson: true
+                - template: .azure-pipelines/templates/setup-dotnet.yml
 
                 # Runs every test project in the solution. There is one today
                 # (Crm.Hubspot); any project added under tests/ is picked up with no

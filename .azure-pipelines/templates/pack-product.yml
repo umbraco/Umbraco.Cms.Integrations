@@ -24,11 +24,7 @@ steps:
       # NBGV needs history to compute the version height.
       fetchDepth: 0
 
-    # Version comes from global.json - see the note in azure-pipelines.yml.
-    - task: UseDotNet@2
-      displayName: "Setup .NET"
-      inputs:
-          useGlobalJson: true
+    - template: setup-dotnet.yml
 
     # Unconditional: the client build needs it for packages that have a Client/
     # folder, but cdxgen needs npm for ALL of them - including Cookiebot, which
@@ -43,22 +39,24 @@ steps:
     # backoffice assets. `npm ci` runs at the repo root because the clients are
     # workspaces of one root package-lock.json; only this package's workspace is
     # then built.
-    - script: npm ci --include=optional
+    # pwsh throughout rather than `script` - see the note in setup-dotnet.yml about
+    # bash and cmd.exe not being reliably present on this pool's agents.
+    - pwsh: npm ci --include=optional
       displayName: "Install client dependencies"
       condition: eq('${{ parameters.hasNpm }}', 'true')
 
-    - script: npm run build --workspace ${{ parameters.clientName }}
+    - pwsh: npm run build --workspace ${{ parameters.clientName }}
       displayName: "Build client assets (${{ parameters.clientName }})"
       condition: eq('${{ parameters.hasNpm }}', 'true')
 
     # On Linux ~/.dotnet/tools is not on PATH by default, so the next step would
     # not find nbgv without the prependpath.
-    - script: |
+    - pwsh: |
           dotnet tool install --global nbgv
-          echo "##vso[task.prependpath]$HOME/.dotnet/tools"
+          Write-Host "##vso[task.prependpath]$HOME/.dotnet/tools"
       displayName: "Install NBGV"
 
-    - script: nbgv cloud --all-vars
+    - pwsh: nbgv cloud --all-vars
       displayName: "Set version from version.json"
       workingDirectory: ${{ parameters.productPath }}
 
@@ -95,7 +93,7 @@ steps:
 
     # Generate/upload SBOM with cdxgen.
     # --spec-version 1.6 is required; cdxgen fails without it.
-    - script: npm install --global @cyclonedx/cdxgen
+    - pwsh: npm install --global @cyclonedx/cdxgen
       displayName: "Install cdxgen"
 
     # pwsh rather than `script` so the directory creation and the exit-code check
