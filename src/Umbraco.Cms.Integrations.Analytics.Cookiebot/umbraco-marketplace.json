@@ -1,0 +1,25 @@
+{
+  "AuthorDetails": {
+    "Description": "Umbraco HQ",
+    "Url": "https://umbraco.com/",
+    "ImageUrl": "https://avatars.githubusercontent.com/u/1419552?s=200&v=4"
+  },
+  "Category": "Analytics & Insights",
+  "LicenseType": "Free",
+  "PackageType": "Integration",
+  "PackagesByAuthor": [
+    "Umbraco.Cms.Integrations.Commerce.CommerceTools",
+    "Umbraco.Cms.Integrations.Commerce.Shopify",
+    "Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool",
+    "Umbraco.Cms.Integrations.SEO.Semrush",
+    "Umbraco.Cms.Integrations.Crm.Hubspot",
+    "Umbraco.Cms.Integrations.Crm.Dynamics",
+    "Umbraco.Cms.Integrations.Crm.ActiveCampaign",
+    "Umbraco.Cms.Integrations.Automation.Zapier",
+    "Umbraco.Cms.Integrations.Search.Algolia",
+    "Umbraco.Cms.Integrations.PIM.Inriver"
+  ],
+  "RelatedPackages": [],
+  "Tags": [],
+  "Title": "Cookiebot"
+}
