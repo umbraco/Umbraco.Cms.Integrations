@@ -82,7 +82,11 @@ stages:
           - job: RunTests
             displayName: "Run tests"
             steps:
+                # Full history: the test project references Crm.Hubspot, which imports
+                # NBGV, and NBGV throws on a shallow clone ("lacks the objects required
+                # to calculate version height"). The agent default is a depth-1 fetch.
                 - checkout: self
+                  fetchDepth: 0
 
                 - task: UseDotNet@2
                   displayName: "Use SDK version 10.0.100"
