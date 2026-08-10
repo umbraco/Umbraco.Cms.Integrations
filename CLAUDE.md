@@ -158,6 +158,7 @@ Two skills cover the repeatable parts:
 
 - **`/release-management`** — detect changed packages, recommend the bump, **cut the release branch**, update `version.json`, write the `CHANGELOG.md` entry, push.
 - **`/post-release-cleanup`** — merge the release branch into `main-v<N>` **and** back into `v<N>/dev`, bump each released package's patch on dev, optionally delete the branch.
+- **`/changelog-management`** — changelog work on its own: preview what a package would release, backfill a missing entry, or fix a `validate-changelogs.ps1` failure. Unlike `Umbraco.Automate`/`Umbraco.AI` there is no generation script behind it; entries come from reading `git log`.
 
 Full sequence:
 
