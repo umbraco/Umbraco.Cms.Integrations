@@ -94,7 +94,18 @@ foreach ($versionFile in $changedVersionFiles) {
     $packageDir = Split-Path $versionFile -Parent
     $packageName = Split-Path $packageDir -Leaf
 
-    $version = Get-VersionFromJson -Path (Join-Path $RootPath $versionFile)
+    # git diff reports deletions too. A removed version.json means the package is
+    # leaving the line (or has not joined it yet) - there is no version to
+    # document, so there is nothing to validate. Without this the file shows up as
+    # "changed", the read returns nothing, and the build fails on a package that
+    # is deliberately absent.
+    $versionPath = Join-Path $RootPath $versionFile
+    if (-not (Test-Path $versionPath)) {
+        Write-Host "  skip $packageName (version.json removed)" -ForegroundColor DarkGray
+        continue
+    }
+
+    $version = Get-VersionFromJson -Path $versionPath
     if (-not $version) {
         $problems += "$packageName : version.json has no 'version' value"
         continue
