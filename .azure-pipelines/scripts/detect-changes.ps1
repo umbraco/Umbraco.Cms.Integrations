@@ -68,7 +68,7 @@ function Get-Products {
         # A package builds client assets when it has a Client/package.json. That
         # folder is also an npm workspace of the root package.json, so capture its
         # workspace name - CI builds just that one with `npm run build -w <name>`.
-        $clientManifest = Join-Path $_.FullName "Client\package.json"
+        $clientManifest = Join-Path (Join-Path $_.FullName "Client") "package.json"
         $hasNpm = Test-Path $clientManifest
         $clientName = if ($hasNpm) { (Get-Content $clientManifest -Raw | ConvertFrom-Json).name } else { "" }
 

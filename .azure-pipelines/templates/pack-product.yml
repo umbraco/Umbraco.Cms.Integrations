@@ -24,11 +24,11 @@ steps:
       # NBGV needs history to compute the version height.
       fetchDepth: 0
 
+    # Version comes from global.json - see the note in azure-pipelines.yml.
     - task: UseDotNet@2
-      displayName: "Use SDK version 10.0.100"
+      displayName: "Setup .NET"
       inputs:
-          packageType: "sdk"
-          version: "10.0.100"
+          useGlobalJson: true
 
     # Unconditional: the client build needs it for packages that have a Client/
     # folder, but cdxgen needs npm for ALL of them - including Cookiebot, which
@@ -51,7 +51,11 @@ steps:
       displayName: "Build client assets (${{ parameters.clientName }})"
       condition: eq('${{ parameters.hasNpm }}', 'true')
 
-    - script: dotnet tool install --global nbgv
+    # On Linux ~/.dotnet/tools is not on PATH by default, so the next step would
+    # not find nbgv without the prependpath.
+    - script: |
+          dotnet tool install --global nbgv
+          echo "##vso[task.prependpath]$HOME/.dotnet/tools"
       displayName: "Install NBGV"
 
     - script: nbgv cloud --all-vars
@@ -94,10 +98,10 @@ steps:
     - script: npm install --global @cyclonedx/cdxgen
       displayName: "Install cdxgen"
 
-    # pwsh, not `script`: the pool is windows-latest, where `script` runs under
-    # cmd.exe. cmd's mkdir has no -p, so `mkdir -p <path>` silently creates a junk
-    # directory called "-p" next to the real one. (The old per-package pipelines
-    # had this and got away with it.)
+    # pwsh rather than `script` so the directory creation and the exit-code check
+    # read the same on any agent OS. The old per-package pipelines ran `mkdir -p`
+    # under cmd.exe, where -p is not a flag, and silently created a junk directory
+    # called "-p" next to the real one.
     - pwsh: |
           $bomDir = Join-Path "$(Build.ArtifactStagingDirectory)" "bom"
           New-Item -ItemType Directory -Force -Path $bomDir | Out-Null

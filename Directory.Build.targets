@@ -21,10 +21,10 @@
     it must import this one explicitly or it will lose this target.
   -->
   <Target Name="UpdatePackageManifestVersion" BeforeTargets="CoreCompile"
-          Condition="Exists('$(MSBuildProjectDirectory)\wwwroot\umbraco-package.json')
+          Condition="Exists('$(MSBuildProjectDirectory)/wwwroot/umbraco-package.json')
                      AND '$(PackageVersion)' != ''
                      AND '$(ContinuousIntegrationBuild)' == 'true'">
-    <JsonPathUpdateValue JsonFile="$(MSBuildProjectDirectory)\wwwroot\umbraco-package.json"
+    <JsonPathUpdateValue JsonFile="$(MSBuildProjectDirectory)/wwwroot/umbraco-package.json"
                          Path="$.version"
                          Value="&quot;$(PackageVersion)&quot;" />
   </Target>
@@ -39,8 +39,8 @@
     Vite build, so its presence there is a reliable "the client was built" marker.
   -->
   <Target Name="EnsureClientAssetsBuilt" BeforeTargets="GenerateNuspec"
-          Condition="Exists('$(MSBuildProjectDirectory)\Client\package.json')
-                     AND !Exists('$(MSBuildProjectDirectory)\wwwroot\umbraco-package.json')">
+          Condition="Exists('$(MSBuildProjectDirectory)/Client/package.json')
+                     AND !Exists('$(MSBuildProjectDirectory)/wwwroot/umbraco-package.json')">
     <Error Text="$(MSBuildProjectName) has a Client folder but wwwroot has not been built. Run `npm ci` then `npm run build` at the repo root (or `npm run build --workspace &lt;name&gt;` for just this one) before packing." />
   </Target>
 
