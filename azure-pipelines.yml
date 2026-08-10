@@ -39,7 +39,12 @@ pr:
             - v18/dev
 
 pool:
-    vmImage: "windows-latest"
+    # Pinned, NOT windows-latest. That alias is rolling over to the windows-2025
+    # image, which does not ship Windows PowerShell 5.1 on PATH, and UseDotNet@2
+    # shells out to `powershell` to detect the OS. Build 279692 landed on a mix of
+    # images: the Test job got one that worked and all 9 Pack jobs got one that
+    # failed with "Unable to locate executable file: 'powershell'".
+    vmImage: "windows-2022"
 
 variables:
     buildConfiguration: "Release"
