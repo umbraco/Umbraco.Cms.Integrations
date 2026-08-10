@@ -1,0 +1,47 @@
+<Project>
+
+  <!--
+    Stamps the NBGV-computed version into each package's built backoffice manifest.
+
+    Lives here rather than in each .csproj so it cannot drift between packages.
+    The condition keeps it a no-op where it does not apply:
+
+      - packages with no client assets (Analytics.Cookiebot has no wwwroot)
+      - the test project and the example site
+      - local builds, so a developer's working tree is never modified
+
+    The source manifest at Client/public/umbraco-package.json keeps a placeholder
+    version and is deliberately left alone.
+
+    JsonPathUpdateValue comes from Umbraco.JsonSchema.Extensions, referenced as a
+    GlobalPackageReference in Directory.Packages.props.
+
+    NOTE: MSBuild resolves Directory.Build.targets nearest-first and does NOT
+    auto-import parents. If a package ever needs its own Directory.Build.targets,
+    it must import this one explicitly or it will lose this target.
+  -->
+  <Target Name="UpdatePackageManifestVersion" BeforeTargets="CoreCompile"
+          Condition="Exists('$(MSBuildProjectDirectory)/wwwroot/umbraco-package.json')
+                     AND '$(PackageVersion)' != ''
+                     AND '$(ContinuousIntegrationBuild)' == 'true'">
+    <JsonPathUpdateValue JsonFile="$(MSBuildProjectDirectory)/wwwroot/umbraco-package.json"
+                         Path="$.version"
+                         Value="&quot;$(PackageVersion)&quot;" />
+  </Target>
+
+  <!--
+    wwwroot is build output and is not committed, so a clean checkout has none
+    until `npm run build` has run. Without this guard a pack in that state
+    succeeds and produces a package with no backoffice assets at all - broken,
+    but only discoverable after install.
+
+    Client/public/umbraco-package.json is copied to wwwroot by every client's
+    Vite build, so its presence there is a reliable "the client was built" marker.
+  -->
+  <Target Name="EnsureClientAssetsBuilt" BeforeTargets="GenerateNuspec"
+          Condition="Exists('$(MSBuildProjectDirectory)/Client/package.json')
+                     AND !Exists('$(MSBuildProjectDirectory)/wwwroot/umbraco-package.json')">
+    <Error Text="$(MSBuildProjectName) has a Client folder but wwwroot has not been built. Run `npm ci` then `npm run build` at the repo root (or `npm run build --workspace &lt;name&gt;` for just this one) before packing." />
+  </Target>
+
+</Project>

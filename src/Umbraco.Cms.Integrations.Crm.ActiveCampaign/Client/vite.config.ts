@@ -1,6 +1,5 @@
-﻿import { defineConfig } from "vite";
+import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { outputPath } from "./config.outputPath.js";
 
 export default defineConfig({
     build: {
@@ -8,7 +7,7 @@ export default defineConfig({
             entry: "src/index.ts",
             formats: ["es"],
         },
-        outDir: outputPath,
+        outDir: "../wwwroot",
         emptyOutDir: true,
         sourcemap: true,
         rollupOptions: {

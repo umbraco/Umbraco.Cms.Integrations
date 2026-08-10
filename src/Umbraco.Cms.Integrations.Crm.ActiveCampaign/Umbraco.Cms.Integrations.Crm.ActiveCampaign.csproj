@@ -16,7 +16,6 @@
 		<PackageIconUrl></PackageIconUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main-v17/src/Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>6.0.1</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
@@ -24,9 +23,6 @@
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
 	</PropertyGroup>
 
-	<PropertyGroup>
-		<UmbracoCmsPackageVersion>[17.0.0, 18)</UmbracoCmsPackageVersion>
-	</PropertyGroup>
 
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
@@ -34,10 +30,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Umbraco.Cms.Api.Common" Version="$(UmbracoCmsPackageVersion)" />
-		<PackageReference Include="Umbraco.Cms.Api.Management" Version="$(UmbracoCmsPackageVersion)"/>
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="$(UmbracoCmsPackageVersion)" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="$(UmbracoCmsPackageVersion)" />
+		<PackageReference Include="Umbraco.Cms.Api.Common" />
+		<PackageReference Include="Umbraco.Cms.Api.Management"/>
+		<PackageReference Include="Umbraco.Cms.Web.Website" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -58,14 +54,4 @@
 	<ItemGroup>
 		<Content Include="Views\**" />
 	</ItemGroup>
-
-	<!-- Build client assets using NPM -->
-	<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
-	<PropertyGroup>
-		<!-- Use this to (temporarily) disable building client assets, e.g. to start the project and generate updated API models -->
-		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
-	</PropertyGroup>
-	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
-		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../wwwroot';" Overwrite="true" />
-	</Target>
 </Project>
