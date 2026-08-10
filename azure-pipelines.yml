@@ -53,6 +53,9 @@ variables:
     productVersion: "v18"
     DT_API_KEY: $(dtApiKey)
     DT_BASE_URL: $(dtBaseUrl)
+    # npm reads this, so pointing it at the workspace puts the download cache
+    # somewhere Cache@2 can save and restore. See pack-product.yml.
+    npm_config_cache: $(Pipeline.Workspace)/.npm
 
 stages:
     - stage: DetectChanges

@@ -67,7 +67,7 @@ Consequences worth knowing:
 
 - **A fresh clone has no `wwwroot`.** Run `npm ci && npm run build` before running the test site, or the backoffice loads no extensions.
 - **Packing without building fails loudly.** An `EnsureClientAssetsBuilt` target in the root `Directory.Build.targets` errors if a package has a `Client/` but no built `wwwroot`, so a package can never ship with its assets missing.
-- **CI builds only the workspace it needs.** `detect-changes.ps1` reads each `Client/package.json` name into the matrix as `clientName`, and the pack template runs `npm ci` then `npm run build --workspace <clientName>`.
+- **CI builds only the workspace it needs.** `detect-changes.ps1` reads each `Client/package.json` name into the matrix as `clientName`, and the pack template installs and builds just that workspace (`npm ci --workspace <clientName> --include-workspace-root`). npm's download cache is restored per client via `Cache@2`, keyed on `package-lock.json` — per client rather than once for the repo, because Azure cache entries are immutable and a shared key would only ever serve whichever job finished first.
 - Adding a package with a client means adding its `Client` folder to the root `package.json` `workspaces` array — use the casing **git** tracks (`...GoogleSearchConsole.URLInspectionTool`), not the disk casing.
 
 ### Packages (v17/v18 lines)

@@ -45,7 +45,27 @@ steps:
     # syntax is not expanded inside a condition. It silently compares the string
     # "$(hasNpm)" to "true", is always false, and both steps skip - which is exactly
     # what happened in build 279734.
-    - pwsh: npm ci --include=optional
+    # Cached per client, not once for the repo. Azure cache entries are immutable:
+    # the first job to finish writes the key and everyone else's save is a no-op. A
+    # single shared key would therefore freeze whichever product happened to run
+    # first and leave the other eight downloading their own packages on every build.
+    # Keyed on the lockfile, so any dependency change invalidates it.
+    - task: Cache@2
+      displayName: "Restore npm cache (${{ parameters.clientName }})"
+      condition: and(succeeded(), eq(variables['hasNpm'], 'true'))
+      inputs:
+          key: 'npm | "$(Agent.OS)" | ${{ parameters.clientName }} | package-lock.json'
+          restoreKeys: |
+              npm | "$(Agent.OS)" | ${{ parameters.clientName }}
+              npm | "$(Agent.OS)"
+          path: $(npm_config_cache)
+
+    # Scoped to the workspace this job actually builds. Be aware the saving is
+    # small - 441 packages against 461 for all eight - because the clients share
+    # almost all of their dev dependencies. It is kept because it is the honest
+    # description of what the job needs, and it keeps each cached tree to just
+    # that client's packages.
+    - pwsh: npm ci --workspace ${{ parameters.clientName }} --include-workspace-root --include=optional
       displayName: "Install client dependencies"
       condition: and(succeeded(), eq(variables['hasNpm'], 'true'))
 
