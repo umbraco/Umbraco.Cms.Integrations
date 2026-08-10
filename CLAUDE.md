@@ -152,6 +152,8 @@ The pipeline **only builds + packs the `.nupkg` + SBOM as artifacts** — it doe
 
 **No release manifest.** Unlike `Umbraco.AI`, there is no `release-manifest.json`. On a release branch, CI treats a package as shipping when its `version.json` differs from `main-v<N>` — the bump itself is the declaration.
 
+> **`main-v<N>` must carry `version.json` before the first release branch is cut.** The comparison is `git show main-v<N>:src/<pkg>/version.json`; when that file does not exist there, `detect-changes.ps1` treats the package as new to the line and force-includes it. Until this work is merged, `main-v18` has no `version.json` for any package, so a release branch cut now selects **all nine** regardless of what was bumped — and because a release branch drops the preview suffix, it would hand you nine clean-versioned `.nupkg` files at versions several of which are already on NuGet (`Search.Algolia` `7.0.1`, for one). Merge to `main-v<N>` first and this never arises; it is a one-time condition, not an ongoing hazard.
+
 Two skills cover the repeatable parts:
 
 - **`/release-management`** — detect changed packages, recommend the bump, **cut the release branch**, update `version.json`, write the `CHANGELOG.md` entry, push.

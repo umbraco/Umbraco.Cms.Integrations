@@ -20,6 +20,19 @@ machinery removed, because this repo is shaped differently:
   release branch, CI treats a package as shipping when its `version.json`
   differs from `main-v<N>` - the bump itself is the declaration. Nothing to
   maintain, and no `include`/`exclude` lists to keep in sync.
+- **Check `main-v<N>` actually has `version.json` before cutting.** The
+  comparison is `git show main-v<N>:src/<pkg>/version.json`. When that file is
+  absent, `detect-changes.ps1` treats the package as new to the line and
+  force-includes it - so a release branch cut against a `main-v<N>` that
+  predates NBGV selects *every* package and produces clean-versioned artifacts
+  for all of them, including versions already published to NuGet. Verify with:
+
+  ```bash
+  git ls-tree -r --name-only origin/main-v18 | grep -c version.json
+  ```
+
+  A `0` means stop: the build/versioning work has not been merged to
+  `main-v<N>` yet, and that must happen before any release branch is cut.
 - **Tags are `release/<slug>-<version>`**, e.g. `release/search-algolia-7.1.0` -
   not `Product@Version`. Note the branch is `v18/release/<date>` while tags are
   `release/<slug>-<version>`; they live in different ref namespaces and do not
@@ -344,5 +357,9 @@ asks - those are outward-facing and irreversible.
   hotfix is cut from `main-v<N>`; confirm which the user means.
 - **A release branch for this month already exists** - it may be an in-flight
   release. Show it and ask whether to add to it or start the next number.
+- **`main-v<N>` has no `version.json` files** - stop. Cutting a release branch
+  in that state force-includes every package and builds clean-versioned
+  artifacts for versions already on NuGet. Say that the build/versioning work
+  has to reach `main-v<N>` first, and do not cut the branch.
 
 [kac]: https://keepachangelog.com/en/1.0.0/
