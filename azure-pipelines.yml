@@ -1,0 +1,144 @@
+# Azure DevOps CI pipeline for Umbraco.Cms.Integrations (v18 line)
+#
+# One pipeline for every package in the repo, replacing the previous
+# one-yml-per-package arrangement.
+#
+# How it works:
+#   1. DetectChanges discovers the packages under src/ (any folder with both a
+#      .csproj and a version.json) and diffs against the appropriate base to
+#      work out which ones actually changed.
+#   2. Pack fans out over just those packages via a matrix, one job each.
+#
+# Packages here are independent siblings - none references another - so there is
+# no build ordering, no dependency tiers and no shared runtime library.
+# Adding a package needs no change to this file: give the new folder a
+# version.json and it is picked up automatically.
+
+trigger:
+    branches:
+        include:
+            - main-v18
+            - v18/dev
+            # Release/hotfix branches are where publishable (clean-versioned)
+            # artifacts are built - see publicReleaseRefSpec in each version.json.
+            - v18/release/*
+            - v18/hotfix/*
+    paths:
+        include:
+            - src/**
+            - tests/**
+            - Directory.Packages.props
+            - azure-pipelines.yml
+            - .azure-pipelines/**
+            - NuGet.config
+
+pr:
+    branches:
+        include:
+            - main-v18
+            - v18/dev
+
+pool:
+    # Linux, matching Umbraco.Automate and Umbraco.AI. The hosted Windows images
+    # no longer have Windows PowerShell 5.1 on PATH, and UseDotNet@2 shells out to
+    # `powershell` to detect the OS - every Pack job died on
+    # "Unable to locate executable file: 'powershell'" on both windows-latest
+    # (build 279692) and windows-2022 (build 279699). Linux is also cheaper and
+    # faster, and nothing here is Windows-specific.
+    vmImage: "ubuntu-latest"
+
+variables:
+    buildConfiguration: "Release"
+    productGroup: "DXP"
+    productVersion: "v18"
+    DT_API_KEY: $(dtApiKey)
+    DT_BASE_URL: $(dtBaseUrl)
+    # npm reads this, so pointing it at the workspace puts the download cache
+    # somewhere Cache@2 can save and restore. See pack-product.yml.
+    npm_config_cache: $(Pipeline.Workspace)/.npm
+
+stages:
+    - stage: DetectChanges
+      displayName: "Detect changed packages"
+      jobs:
+          - job: Detect
+            displayName: "Detect changes"
+            steps:
+                - checkout: self
+                  # Full history so merge-base comparisons work.
+                  fetchDepth: 0
+
+                - task: PowerShell@2
+                  name: detect
+                  displayName: "Run change detection"
+                  inputs:
+                      filePath: ".azure-pipelines/scripts/detect-changes.ps1"
+                      pwsh: true
+
+                # Fails the build if a version was bumped without a changelog entry.
+                - task: PowerShell@2
+                  displayName: "Validate changelogs"
+                  inputs:
+                      filePath: ".azure-pipelines/scripts/validate-changelogs.ps1"
+                      pwsh: true
+
+    - stage: Test
+      displayName: "Test"
+      dependsOn: DetectChanges
+      # succeeded() is required - see the note on the Pack stage.
+      condition: and(succeeded(), eq(dependencies.DetectChanges.outputs['Detect.detect.AnyChanged'], 'true'))
+      jobs:
+          - job: RunTests
+            displayName: "Run tests"
+            steps:
+                # Full history: the test project references Crm.Hubspot, which imports
+                # NBGV, and NBGV throws on a shallow clone ("lacks the objects required
+                # to calculate version height"). The agent default is a depth-1 fetch.
+                - checkout: self
+                  fetchDepth: 0
+
+                - template: .azure-pipelines/templates/setup-dotnet.yml
+
+                # Runs every test project in the solution. There is one today
+                # (Crm.Hubspot); any project added under tests/ is picked up with no
+                # change here. The client asset build is skipped - it produces no
+                # inputs the tests use, and needs npm.
+                - task: DotNetCoreCLI@2
+                  displayName: "dotnet test"
+                  inputs:
+                      command: "test"
+                      projects: "tests/**/*Tests.csproj"
+                      # Do NOT pass --logger/--results-directory here: publishTestResults
+                      # appends its own pair, and dotnet test rejects the command line with
+                      # "Option '--results-directory' expects a single argument but 2 were
+                      # provided."
+                      arguments: '--configuration $(buildConfiguration) --collect "XPlat Code Coverage"'
+                      publishTestResults: true
+                      nugetConfigPath: "NuGet.config"
+
+    - stage: Pack
+      displayName: "Build & pack"
+      # Depends on Test as well as DetectChanges, so a failing test blocks packing
+      # and therefore blocks anything being promoted to NuGet.
+      dependsOn:
+          - DetectChanges
+          - Test
+      # succeeded() is required: a custom condition REPLACES the implicit
+      # succeeded() check, so without it Pack would run even when Test failed.
+      condition: and(succeeded(), eq(dependencies.DetectChanges.outputs['Detect.detect.AnyChanged'], 'true'))
+      jobs:
+          - job: PackProduct
+            displayName: "Pack"
+            strategy:
+                # Cross-stage output variables need stageDependencies, not dependencies.
+                matrix: $[ stageDependencies.DetectChanges.Detect.outputs['detect.BuildMatrix'] ]
+            steps:
+                # Matrix variable names are deliberately prefixed - a variable named
+                # `path` would be exported as PATH and break the whole job. See the
+                # note in detect-changes.ps1.
+                - template: .azure-pipelines/templates/pack-product.yml
+                  parameters:
+                      productName: $(productName)
+                      productPath: $(productPath)
+                      projectPath: $(projectPath)
+                      clientName: $(clientName)

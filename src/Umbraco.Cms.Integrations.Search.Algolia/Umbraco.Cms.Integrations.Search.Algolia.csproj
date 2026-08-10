@@ -16,7 +16,6 @@
 		<PackageIconUrl></PackageIconUrl>
 		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main-v18/src/Umbraco.Cms.Integrations.Search.Algolia</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<Version>7.0.1</Version>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
@@ -24,14 +23,11 @@
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
 	</PropertyGroup>
 
-	<PropertyGroup>
-		<UmbracoCmsPackageVersion>[18.0.0, 19.0.0)</UmbracoCmsPackageVersion>
-	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Algolia.Search" Version="6.13.0" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="$(UmbracoCmsPackageVersion)" />
-		<PackageReference Include="Umbraco.Cms.Api.Common" Version="$(UmbracoCmsPackageVersion)" />
-		<PackageReference Include="Umbraco.Cms.Api.Management" Version="$(UmbracoCmsPackageVersion)"/>
+		<PackageReference Include="Algolia.Search" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" />
+		<PackageReference Include="Umbraco.Cms.Api.Common" />
+		<PackageReference Include="Umbraco.Cms.Api.Management" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -39,14 +35,4 @@
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
 		<Content Include="wwwroot\**\*" Pack="true" PackagePath="staticwebassets\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
-
-	<!-- Build client assets using NPM -->
-	<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
-	<PropertyGroup>
-		<!-- Use this to (temporarily) disable building client assets, e.g. to start the project and generate updated API models -->
-		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
-	</PropertyGroup>
-	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
-		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../wwwroot';" Overwrite="true" />
-	</Target>
 </Project>

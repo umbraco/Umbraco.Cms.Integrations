@@ -1,0 +1,57 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Analytics/" />
+  <Folder Name="/Analytics/Cookiebot/">
+    <Project Path="src/Umbraco.Cms.Integrations.Analytics.Cookiebot/Umbraco.Cms.Integrations.Analytics.Cookiebot.csproj" />
+  </Folder>
+  <Folder Name="/Automation/" />
+  <Folder Name="/Automation/Zapier/">
+    <Project Path="src/Umbraco.Cms.Integrations.Automation.Zapier/Umbraco.Cms.Integrations.Automation.Zapier.csproj" />
+  </Folder>
+  <Folder Name="/Commerce/" />
+  <Folder Name="/Commerce/Shopify/">
+    <Project Path="src/Umbraco.Cms.Integrations.Commerce.Shopify/Umbraco.Cms.Integrations.Commerce.Shopify.csproj" />
+  </Folder>
+  <Folder Name="/Crm/" />
+  <Folder Name="/Crm/ActiveCampaign/">
+    <Project Path="src/Umbraco.Cms.Integrations.Crm.ActiveCampaign/Umbraco.Cms.Integrations.Crm.ActiveCampaign.csproj" />
+  </Folder>
+  <Folder Name="/Crm/Dynamics/">
+    <Project Path="src/Umbraco.Cms.Integrations.Crm.Dynamics/Umbraco.Cms.Integrations.Crm.Dynamics.csproj" />
+  </Folder>
+  <Folder Name="/Crm/HubSpot/">
+    <Project Path="src/Umbraco.Cms.Integrations.Crm.Hubspot/Umbraco.Cms.Integrations.Crm.Hubspot.csproj" />
+  </Folder>
+  <Folder Name="/Search/" />
+  <Folder Name="/Search/Algolia/">
+    <Project Path="src/Umbraco.Cms.Integrations.Search.Algolia/Umbraco.Cms.Integrations.Search.Algolia.csproj" />
+  </Folder>
+  <Folder Name="/SEO/" />
+  <Folder Name="/SEO/GoogleSearchConsole/">
+    <Project Path="src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool.csproj" />
+  </Folder>
+  <Folder Name="/SEO/Semrush/">
+    <Project Path="src/Umbraco.Cms.Integrations.SEO.Semrush/Umbraco.Cms.Integrations.SEO.Semrush.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".azure-pipelines/scripts/detect-changes.ps1" />
+    <File Path=".azure-pipelines/scripts/validate-changelogs.ps1" />
+    <File Path=".azure-pipelines/templates/pack-product.yml" />
+    <File Path=".gitignore" />
+    <File Path="azure-pipelines.yml" />
+    <File Path="CONTRIBUTING.md" />
+    <File Path="Directory.Build.targets" />
+    <File Path="Directory.Packages.props" />
+    <File Path="NuGet.config" />
+    <File Path="package.json" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="tests/Umbraco.Cms.Integrations.Crm.Hubspot.Tests/Umbraco.Cms.Integrations.Crm.Hubspot.Tests.csproj" />
+  </Folder>
+  <Project Path="examples/Umbraco.Cms.Integrations.Testsite.V18/Umbraco.Cms.Integrations.Testsite.V18.csproj" />
+</Solution>
