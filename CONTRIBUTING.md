@@ -29,20 +29,31 @@ from `v18/dev` → publish from there → merge the release branch back into bot
 ## Getting set up
 
 ```bash
+```bash
 git clone https://github.com/umbraco/Umbraco.Cms.Integrations.git
 cd Umbraco.Cms.Integrations
 git checkout v18/dev
+npm ci                                  # installs every package's client, once
+npm run build                           # builds them into each package's wwwroot
 dotnet build Umbraco.Cms.Integrations.slnx
 ```
 
-Requires the **.NET 10 SDK** and **Node 22+** (for the packages that build client
-assets).
+Requires the **.NET 10 SDK** and **Node 24+ / npm 11+**.
 
-To compile the .NET side only and skip the npm/Vite client build:
+**The npm steps are not optional on a fresh clone.** `wwwroot` holds compiled client
+assets and is *not* committed, so until you have run `npm run build` the packages have
+no backoffice assets. `dotnet build` does not run npm for you; `dotnet pack` will fail
+with a clear error rather than produce a package with nothing in it.
+
+Every package's `Client/` folder is a workspace of the root `package.json`, so there is
+a single `package-lock.json` for the whole repo. To rebuild just one:
 
 ```bash
-dotnet build Umbraco.Cms.Integrations.slnx -p:ShouldRunClientAssetsBuild=false
+npm run build --workspace algolia
 ```
+
+Workspace names are `algolia`, `hubspot`, `shopify`, `dynamics`, `semrush`, `zapier`,
+`activecampaign` and `googlesearchconsole`. `npm run watch` works the same way.
 
 Use `examples/Umbraco.Cms.Integrations.Testsite.V18` to run the packages in a real
 Umbraco instance.
@@ -52,7 +63,7 @@ Umbraco instance.
 ## Tests
 
 ```bash
-dotnet test Umbraco.Cms.Integrations.slnx -p:ShouldRunClientAssetsBuild=false
+dotnet test Umbraco.Cms.Integrations.slnx
 ```
 
 Test projects live under `tests/`, one per package that has them, named
@@ -145,15 +156,15 @@ Each package keeps **one major per Umbraco major** (e.g. Search.Algolia `6.x` = 
 
 - **`<Version>` in the `.csproj`** — removed. The version comes from `version.json`.
   Do not add it back.
-- **`wwwroot/umbraco-package.json`** — do not hand-edit. CI stamps the computed
-  version into it on every build (`ContinuousIntegrationBuild=true`), so whatever is
-  committed is overwritten in the published package. Local builds leave it alone.
-- **`Client/public/umbraco-package.json`** — this is the *source* manifest that the
-  Vite build copies into `wwwroot`. CI does **not** stamp it. It currently carries a
-  real version number in every package, so **keep it in step with `version.json`**
-  when you bump. Its value does not reach the published package (the `wwwroot` copy
-  is stamped afterwards), but letting it drift is confusing — `Search.Algolia` sat at
-  `7.0.0` while the package shipped as `7.0.1` for exactly this reason.
+- **`wwwroot/umbraco-package.json`** — not in git at all. The Vite build copies it out
+  of `Client/public`, and CI then stamps the computed version into it
+  (`ContinuousIntegrationBuild=true`). Nothing to hand-edit.
+- **`Client/public/umbraco-package.json`** — the *source* manifest, and now the only
+  one in git. CI does **not** stamp it. It carries a real version number in every
+  package, so **keep it in step with `version.json`** when you bump. Its value does not
+  reach the published package (the `wwwroot` copy is stamped afterwards), but letting
+  it drift is confusing — `Search.Algolia` sat at `7.0.0` while the package shipped as
+  `7.0.1` for exactly this reason.
 
 On `main-v18` a build produces a clean version (`7.0.2`). On any other branch NBGV
 appends a preview suffix (`7.0.2--preview.4.gabc1234`), so dev builds always sort
@@ -203,14 +214,17 @@ containing:
 - `CHANGELOG.md`
 - `readme.md`, `docs/readme.md`, `umbraco-marketplace-readme.md`
 
-Then add it to `Umbraco.Cms.Integrations.slnx`.
+Then add it to `Umbraco.Cms.Integrations.slnx`. If it has a `Client/` folder, also add
+that folder to the `workspaces` array in the root `package.json` — using the casing
+**git** tracks, not the casing on your disk.
 
 ### Gotchas
 
-- **Committed `wwwroot` must match a fresh client build.** When you change
-  `Client/src`, rebuild (`npm install && npm run build`) and commit the result, or
-  the .NET `StaticWebAssets` step fails on a stale chunk hash.
+- **Never commit `wwwroot`.** It is gitignored build output. Rebuild it with
+  `npm run build` whenever you change `Client/src`; there is nothing to commit.
 - **cdxgen needs `--spec-version 1.6`** pinned, or the SBOM step fails.
+- **Every CI job that builds a package needs `fetchDepth: 0`.** NBGV cannot compute a
+  version from a shallow clone.
 
 ---
 

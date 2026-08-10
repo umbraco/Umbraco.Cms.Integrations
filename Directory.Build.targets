@@ -29,4 +29,19 @@
                          Value="&quot;$(PackageVersion)&quot;" />
   </Target>
 
+  <!--
+    wwwroot is build output and is not committed, so a clean checkout has none
+    until `npm run build` has run. Without this guard a pack in that state
+    succeeds and produces a package with no backoffice assets at all - broken,
+    but only discoverable after install.
+
+    Client/public/umbraco-package.json is copied to wwwroot by every client's
+    Vite build, so its presence there is a reliable "the client was built" marker.
+  -->
+  <Target Name="EnsureClientAssetsBuilt" BeforeTargets="GenerateNuspec"
+          Condition="Exists('$(MSBuildProjectDirectory)\Client\package.json')
+                     AND !Exists('$(MSBuildProjectDirectory)\wwwroot\umbraco-package.json')">
+    <Error Text="$(MSBuildProjectName) has a Client folder but wwwroot has not been built. Run `npm ci` then `npm run build` at the repo root (or `npm run build --workspace &lt;name&gt;` for just this one) before packing." />
+  </Target>
+
 </Project>

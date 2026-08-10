@@ -56,14 +56,4 @@
 	  <EmbeddedResource Include="EmbeddedResources\semrushColumns.json" />
 	  <EmbeddedResource Include="EmbeddedResources\semrushDataSources.json" />
 	</ItemGroup>
-
-	<!-- Build client assets using NPM -->
-	<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
-	<PropertyGroup>
-		<!-- Use this to (temporarily) disable building client assets, e.g. to start the project and generate updated API models -->
-		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
-	</PropertyGroup>
-	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
-		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../wwwroot';" Overwrite="true" />
-	</Target>
 </Project>

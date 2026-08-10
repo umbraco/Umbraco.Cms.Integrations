@@ -107,7 +107,7 @@ stages:
                       # appends its own pair, and dotnet test rejects the command line with
                       # "Option '--results-directory' expects a single argument but 2 were
                       # provided."
-                      arguments: '--configuration $(buildConfiguration) -p:ShouldRunClientAssetsBuild=false --collect "XPlat Code Coverage"'
+                      arguments: '--configuration $(buildConfiguration) --collect "XPlat Code Coverage"'
                       publishTestResults: true
                       nugetConfigPath: "NuGet.config"
 
@@ -134,3 +134,4 @@ stages:
                       productPath: $(path)
                       projectPath: $(project)
                       hasNpm: $(hasNpm)
+                      clientName: $(clientName)

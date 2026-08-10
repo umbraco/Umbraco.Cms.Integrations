@@ -65,8 +65,12 @@ function Get-Products {
             return
         }
 
-        # A package builds client assets when it has a Client/package.json.
-        $hasNpm = Test-Path (Join-Path $_.FullName "Client\package.json")
+        # A package builds client assets when it has a Client/package.json. That
+        # folder is also an npm workspace of the root package.json, so capture its
+        # workspace name - CI builds just that one with `npm run build -w <name>`.
+        $clientManifest = Join-Path $_.FullName "Client\package.json"
+        $hasNpm = Test-Path $clientManifest
+        $clientName = if ($hasNpm) { (Get-Content $clientManifest -Raw | ConvertFrom-Json).name } else { "" }
 
         # Prefer the casing git tracks; fall back to the disk name for a package
         # that is new and not yet committed.
@@ -74,10 +78,11 @@ function Get-Products {
         if (-not $gitName) { $gitName = $name }
 
         $products[$gitName] = @{
-            Name    = $gitName
-            Path    = "src/$gitName"
-            Project = "src/$gitName/$gitName.csproj"
-            HasNpm  = $hasNpm
+            Name       = $gitName
+            Path       = "src/$gitName"
+            Project    = "src/$gitName/$gitName.csproj"
+            HasNpm     = $hasNpm
+            ClientName = $clientName
         }
 
         if ($gitName -ne $name) {
@@ -335,10 +340,11 @@ function Write-PipelineVariables {
             # Matrix keys cannot contain dots.
             $key = $name -replace '[.-]', '_'
             $matrix[$key] = @{
-                name    = $Products[$name].Name
-                path    = $Products[$name].Path
-                project = $Products[$name].Project
-                hasNpm  = $Products[$name].HasNpm.ToString().ToLower()
+                name       = $Products[$name].Name
+                path       = $Products[$name].Path
+                project    = $Products[$name].Project
+                hasNpm     = $Products[$name].HasNpm.ToString().ToLower()
+                clientName = $Products[$name].ClientName
             }
             Write-Host "  BUILD $name" -ForegroundColor Green
         }

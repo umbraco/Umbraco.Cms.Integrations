@@ -486,6 +486,11 @@ $RECYCLE.BIN/
 #
 # Umbraco specific gitignore
 #
-**/config.outputPath.js
+
+# Compiled backoffice client assets. Built from src/<package>/Client by the root
+# npm workspace (`npm ci && npm run build`) and by CI before pack - never committed.
+# Committing them meant every dependency resolution churned the Vite chunk hashes
+# and any stale copy failed the .NET StaticWebAssets check.
+src/**/wwwroot/
 
 appsettings.Local.json

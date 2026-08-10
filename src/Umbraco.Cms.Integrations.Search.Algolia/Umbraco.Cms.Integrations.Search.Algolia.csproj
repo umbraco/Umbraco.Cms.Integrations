@@ -35,14 +35,4 @@
 		<None Include="docs\readme.md" Pack="true" PackagePath="\" />
 		<Content Include="wwwroot\**\*" Pack="true" PackagePath="staticwebassets\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
-
-	<!-- Build client assets using NPM -->
-	<Import Project="build\Microsoft.AspNetCore.ClientAssets.targets" />
-	<PropertyGroup>
-		<!-- Use this to (temporarily) disable building client assets, e.g. to start the project and generate updated API models -->
-		<ShouldRunClientAssetsBuild>true</ShouldRunClientAssetsBuild>
-	</PropertyGroup>
-	<Target Name="ClientAssetsBuildOutputPath" BeforeTargets="ClientAssetsBuild">
-		<WriteLinesToFile File="Client\config.outputPath.js" Lines="export const outputPath = '../wwwroot';" Overwrite="true" />
-	</Target>
 </Project>

@@ -15,6 +15,9 @@ parameters:
     - name: hasNpm
       type: string
       default: "true"
+    - name: clientName
+      type: string
+      default: ""
 
 steps:
     - checkout: self
@@ -27,14 +30,26 @@ steps:
           packageType: "sdk"
           version: "10.0.100"
 
-    # Unconditional: the client asset build needs it for packages that have a
-    # Client/ folder, but cdxgen needs npm for ALL of them - including Cookiebot,
-    # which has no client. Gating this on hasNpm left the SBOM step running on
-    # whatever Node the hosted image happened to ship.
+    # Unconditional: the client build needs it for packages that have a Client/
+    # folder, but cdxgen needs npm for ALL of them - including Cookiebot, which
+    # has no client. Version matches the `engines` field in the root package.json.
     - task: NodeTool@0
-      displayName: "Use Node 22.x"
+      displayName: "Use Node 24.x"
       inputs:
-          versionSpec: "22.x"
+          versionSpec: "24.x"
+
+    # wwwroot is NOT committed - it is build output. Every job that packs a
+    # package with a client has to produce it first, or the package ships with no
+    # backoffice assets. `npm ci` runs at the repo root because the clients are
+    # workspaces of one root package-lock.json; only this package's workspace is
+    # then built.
+    - script: npm ci --include=optional
+      displayName: "Install client dependencies"
+      condition: eq('${{ parameters.hasNpm }}', 'true')
+
+    - script: npm run build --workspace ${{ parameters.clientName }}
+      displayName: "Build client assets (${{ parameters.clientName }})"
+      condition: eq('${{ parameters.hasNpm }}', 'true')
 
     - script: dotnet tool install --global nbgv
       displayName: "Install NBGV"
