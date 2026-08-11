@@ -213,6 +213,7 @@ Still **one pipeline per package**, path-filtered to `src/<project>/**`.
 - **`NU1507`** is expected on the v18 line: central package management plus the two feeds in `NuGet.config`. A warning, not an error; silencing it needs package source mapping.
 - **`dotnet test` arguments.** Do not pass `--logger`/`--results-directory` alongside `publishTestResults: true` — the `DotNetCoreCLI@2` task appends its own pair and `dotnet test` rejects two values for `--results-directory`.
 - **NBGV needs full history.** Every job that builds a package must `checkout` with `fetchDepth: 0`; the agent default is a depth-1 fetch and NBGV throws "Shallow clone lacks the objects required to calculate version height".
+- **The build number is set by `name:`, not by NBGV.** `nbgv cloud` sets the cloud build number by default — the `"cloudBuild": { "buildNumber": { "enabled": false } }` in each `version.json` does **not** stop it, as that setting only governs the MSBuild integration. Every Pack matrix job runs the CLI, so without `--skip-cloud-build-number` the last job to finish names the whole build after its own package (builds on one branch varied between `7.0.1--preview.38...` and `6.0.1--preview.40...`). The flag is passed in `pack-product.yml` and `name:` in `azure-pipelines.yml` supplies `branch-date-buildid` instead. `Umbraco.Automate`/`Umbraco.AI` reach the same result with a `SetBuildNumber` stage that runs after Pack.
 
 ---
 
