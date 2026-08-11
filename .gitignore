@@ -487,6 +487,11 @@ $RECYCLE.BIN/
 # Umbraco specific gitignore
 #
 
+# There is ONE lockfile for all clients, at the repo root - the Client folders are
+# npm workspaces of it. Per-client lockfiles were deleted in the build redesign and
+# must not come back; stale ones on disk get re-added by `git add -A` otherwise.
+src/*/Client/package-lock.json
+
 # Compiled backoffice client assets. Built from src/<package>/Client by the root
 # npm workspace (`npm ci && npm run build`) and by CI before pack - never committed.
 src/**/wwwroot/
