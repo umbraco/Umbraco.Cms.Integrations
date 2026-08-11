@@ -65,11 +65,13 @@ export type ResultModel = {
     success: boolean;
     error: string;
     readonly failure: boolean;
+    skippedItems: Array<string>;
 };
 
 export type ResultModelWritable = {
     success: boolean;
     error: string;
+    skippedItems: Array<string>;
 };
 
 export type GetContentTypesData = {
