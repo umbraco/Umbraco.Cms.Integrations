@@ -15,6 +15,7 @@ using Umbraco.Cms.Integrations.Search.Algolia.Models;
 using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Integrations.Search.Algolia.Models.ContentTypeDtos;
+using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
 {
@@ -89,13 +90,49 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Handlers
                     break;
             }
 
-            var refreshedContent = _contentService
-                .GetByIds(
-                    payloads
-                        .Where(p => p.ChangeTypes == TreeChangeTypes.RefreshNode || p.ChangeTypes == TreeChangeTypes.RefreshBranch)
-                        .Select(p => p.Id));
+            var refreshedContent = new List<IContent>();
+
+            foreach (var payload in payloads)
+            {
+                var isBranchChange = payload.ChangeTypes.HasType(TreeChangeTypes.RefreshBranch);
+
+                if (!isBranchChange && !payload.ChangeTypes.HasType(TreeChangeTypes.RefreshNode)) continue;
+
+                var content = _contentService.GetById(payload.Id);
+                if (content == null) continue;
+
+                refreshedContent.Add(content);
+
+                // A branch change - moving a node to the recycle bin, for example - only sends a payload for the
+                // branch root, so its descendants have to be collected here or they are left stale in the index.
+                if (isBranchChange)
+                {
+                    refreshedContent.AddRange(GetDescendants(content));
+                }
+            }
 
             await RebuildIndex(refreshedContent);
+        }
+
+        private IEnumerable<IContent> GetDescendants(IContent content)
+        {
+            const int pageSize = 500;
+
+            var pageIndex = 0;
+            long total;
+
+            do
+            {
+                var page = _contentService.GetPagedDescendants(content.Id, pageIndex, pageSize, out total);
+
+                foreach (var descendant in page)
+                {
+                    yield return descendant;
+                }
+
+                pageIndex++;
+            }
+            while (pageIndex * pageSize < total);
         }
 
         protected async Task RebuildIndex(IEnumerable<IContent> entities)

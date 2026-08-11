@@ -7,7 +7,9 @@ using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Api.Management.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Configuration;
+using Umbraco.Cms.Integrations.Commerce.Shopify.Migrations;
 using Umbraco.Cms.Integrations.Commerce.Shopify.Services;
 
 namespace Umbraco.Cms.Integrations.Commerce.Shopify
@@ -20,6 +22,8 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify
                 .Bind(builder.Config.GetSection(Constants.Configuration.Settings));
             var oauthOptions = builder.Services.AddOptions<ShopifyOAuthSettings>()
                 .Bind(builder.Config.GetSection(Constants.Configuration.OAuthSettings));
+
+            builder.AddNotificationAsyncHandler<UmbracoApplicationStartingNotification, RunShopifyMigrations>();
 
             builder.Services.AddSingleton<ITokenService, TokenService>();
 

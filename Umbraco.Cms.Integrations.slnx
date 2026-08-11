@@ -52,6 +52,7 @@
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="tests/Umbraco.Cms.Integrations.Crm.Hubspot.Tests/Umbraco.Cms.Integrations.Crm.Hubspot.Tests.csproj" />
+    <Project Path="tests/Umbraco.Cms.Integrations.Search.Algolia.Tests/Umbraco.Cms.Integrations.Search.Algolia.Tests.csproj" />
   </Folder>
-  <Project Path="examples/Umbraco.Cms.Integrations.Testsite.V18/Umbraco.Cms.Integrations.Testsite.V18.csproj" />
+  <Project Path="examples/Umbraco.Cms.Integrations.Testsite.V18/Umbraco.Cms.Integrations.Testsite.V18.csproj" DisplayName="Umbraco.Cms.Integrations.TestSite.V18" />
 </Solution>

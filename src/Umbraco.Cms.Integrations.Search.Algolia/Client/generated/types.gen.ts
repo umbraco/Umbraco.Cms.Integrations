@@ -50,6 +50,7 @@ export type ResultModel = {
     success: boolean;
     error: string;
     failure: boolean;
+    skippedItems: Array<string>;
 };
 
 export type GetContentTypesData = {

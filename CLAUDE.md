@@ -148,7 +148,9 @@ The pipeline **only builds + packs the `.nupkg` + SBOM as artifacts** — it doe
 >
 > This is a real behavioural difference from the old manual process, where the csproj `<Version>` was clean on every branch and any build was publishable.
 
-**Release branches:** `v<N>/release/YYYY.MM.N` (calendar-based, cut from `v<N>/dev`), and `v<N>/hotfix/YYYY.MM.N` for an urgent fix cut from `main-v<N>`. The name is independent of package versions — one branch can carry several packages at different versions. Note the branch (`v18/release/2026.08.1`) and the tags (`release/<slug>-<version>`) are different ref namespaces and do not collide.
+**Release branches:** `v<N>/release/YYYY.MM.N` (calendar-based, cut from `v<N>/dev`), and `v<N>/hotfix/YYYY.MM.N` for an urgent fix cut from `main-v<N>`. The name is independent of package versions — one branch can carry several packages at different versions.
+
+> **`N` counts release events across the whole repo, not per line.** It is derived from the `YYYY.MM.N` date tags, which carry no line prefix, so v17 and v18 releases share one sequence — `v18/release/2026.08.1` is followed by `v17/release/2026.08.2`, not a second `.1`. This matches `Umbraco.Automate` and `Umbraco.AI`, which both derive it from those tags. Two tag shapes are in play and cannot collide: `release/<slug>-<version>` identifies a published package, `YYYY.MM.N` identifies the release event and is what the next release counts from.
 
 **No release manifest.** Unlike `Umbraco.AI`, there is no `release-manifest.json`. On a release branch, CI treats a package as shipping when its `version.json` differs from `main-v<N>` — the bump itself is the declaration.
 
