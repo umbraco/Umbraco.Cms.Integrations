@@ -177,22 +177,36 @@ arrangement `Umbraco.AI` and `Umbraco.Automate` use.
 It is independent of the package versions: one release branch can carry several
 packages at different versions.
 
+**`N` counts release events across the whole repo, not per line.** It comes from
+the date tags, which have no line prefix, so a v17 release and a v18 release share
+one sequence. `Umbraco.Automate` and `Umbraco.AI` both work this way - Automate
+currently has `v18/release/2026.08.1` alongside `v17/release/2026.08.2`, because
+the v18 release took `.1` and the v17 one that followed took `.2`.
+
+Do **not** derive `N` from branch names. That gives both lines a `.1` in the same
+month, and the collision only shows up later when the date tags are created.
+
 Work out the name:
 
 ```bash
 git branch --show-current            # the line prefix, e.g. v17/dev -> v17
 date +%Y.%m                          # e.g. 2026.08
+
 git fetch origin --tags
-git branch -r --list "origin/v17/release/*"      # existing branches this month
-git tag --list "2026.08.*"                       # and any date tags
+git tag --list "2026.08.*" | sort -V | tail -1   # highest release event this month
 ```
 
-Take the highest trailing number for the current month and add one; start at `1` if
-there is none. Confirm the name with the user, then:
+`git tag --list "2026.08.*"` matches only date tags, never the
+`release/<slug>-<version>` package tags. Take the highest trailing number and add
+one; start at `1` if the month has none. Confirm the name with the user, then:
 
 ```bash
 git checkout -b v17/release/2026.08.1
 ```
+
+The matching date tag `2026.08.1` is created at release time, in Phase 9, next to
+the per-package tags. It is what lets the next release pick the right number, so
+skipping it breaks the sequence for whoever releases next - on either line.
 
 For an urgent fix on top of an already-released state, cut
 `v17/hotfix/YYYY.MM.N` from `main-v17` instead of from dev.
@@ -338,11 +352,22 @@ Still to do by hand:
   3. Tag each released package, on the release branch:
        git tag -a release/search-algolia-7.1.0 -m "Search.Algolia 7.1.0"
        git tag -a release/crm-hubspot-9.0.2    -m "Crm.Hubspot 9.0.2"
+  4. Tag the release event itself, on the same branch:
+       git tag -a 2026.08.1 -m "Release 2026.08.1"
+     This one is repo-wide and carries no line prefix. It is how the NEXT
+     release works out its number, on either line - skip it and the sequence
+     breaks.
        git push origin --tags
-  4. Create a GitHub release per tag, titled with the tag, linking the PRs.
-  5. Run /post-release-cleanup to merge the release branch into main-v17
+  5. Create a GitHub release per PACKAGE tag, titled with the tag, linking the
+     PRs. The date tag is bookkeeping and gets no GitHub release.
+  6. Run /post-release-cleanup to merge the release branch into main-v17
      and v17/dev, and bump the dev patch versions.
 ```
+
+> The two tag shapes answer different questions. `release/<slug>-<version>` is
+> "which commit is this published package", one per package. `YYYY.MM.N` is "which
+> commits went out together", one per release branch. They share the tag namespace
+> but cannot collide: one starts with `release/`, the other with a digit.
 
 Do not promote, tag, or create GitHub releases yourself unless the user explicitly
 asks - those are outward-facing and irreversible.
