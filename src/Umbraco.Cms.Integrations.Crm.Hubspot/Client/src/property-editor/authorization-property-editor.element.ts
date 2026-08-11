@@ -73,11 +73,13 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
 
         if (!this.#settingsModel) return;
 
+        const type = this.#settingsModel.type?.value ?? "";
+
         this._serviceStatus = {
             isValid: this.#settingsModel.isValid,
-            type: this.#settingsModel.type?.value!,
-            description: this.#getDescription(this._serviceStatus.type),
-            useOAuth: this.#settingsModel.isValid && this.#settingsModel.type?.value === "OAuth"
+            type: type,
+            description: this.#getDescription(type),
+            useOAuth: this.#settingsModel.isValid && type === "OAuth"
         }
 
         if (this._serviceStatus.useOAuth) {
@@ -108,11 +110,13 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
         }
     }
 
+    // The server sends the configuration type as "API" / "OAuth" (see ConfigurationType.cs),
+    // so match case-insensitively.
     #getDescription(type: string): string {
-        switch (type) {
+        switch (type?.toLowerCase()) {
             case "api": return ConfigDescription.api;
             case "oauth": return ConfigDescription.oauth;
-            case "oauthConnected": return ConfigDescription.oauthConnected;
+            case "oauthconnected": return ConfigDescription.oauthConnected;
             default: return ConfigDescription.none;
         }
     }
