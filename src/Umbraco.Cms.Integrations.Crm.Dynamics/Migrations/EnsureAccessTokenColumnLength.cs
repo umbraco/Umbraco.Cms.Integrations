@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using NPoco;
 using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
@@ -12,6 +13,15 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Migrations
         protected override Task MigrateAsync()
         {
             Logger.LogDebug("Running migration {0}", nameof(EnsureAccessTokenColumnLength));
+
+            // SQLite has no ALTER COLUMN, and does not need one: it types values dynamically, so
+            // VARCHAR(n) never enforced a length there and an access token of any size already
+            // stored fine. Without this guard the step throws on every startup, which also stops
+            // the plan ever recording its final state.
+            if (DatabaseType == DatabaseType.SQLite)
+            {
+                return Task.CompletedTask;
+            }
 
             Alter.Table(Constants.DynamicsOAuthConfigurationTable)
                 .AlterColumn(nameof(DynamicsOAuthConfigurationTable.AccessToken))
