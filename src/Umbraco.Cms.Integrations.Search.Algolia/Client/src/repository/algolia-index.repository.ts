@@ -98,6 +98,20 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
             return { error };
         }
 
+        // The endpoint answers 200 even when the build failed, so the payload has to be read.
+        if (data.success === false) {
+            this.#showError(data.error ?? "The index could not be built.");
+            return { data };
+        }
+
+        const skipped = data.skippedItems ?? [];
+        if (skipped.length > 0) {
+            this.#showWarning(
+                `Index built, but ${skipped.length} item(s) were skipped because Algolia rejected them: ${skipped.join(", ")}`
+            );
+            return { data };
+        }
+
         this.#showSuccess("Index built.");
 
         return { data };
@@ -140,6 +154,20 @@ export class AlgoliaIndexRepository extends UmbControllerBase {
     async #showSuccess(message: string) {
         const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
         notificationContext?.peek("positive", {
+            data: { message: message },
+        });
+    }
+
+    async #showWarning(message: string) {
+        const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
+        notificationContext?.peek("warning", {
+            data: { message: message },
+        });
+    }
+
+    async #showError(message: string) {
+        const notificationContext = await this.getContext(UMB_NOTIFICATION_CONTEXT);
+        notificationContext?.peek("danger", {
             data: { message: message },
         });
     }
