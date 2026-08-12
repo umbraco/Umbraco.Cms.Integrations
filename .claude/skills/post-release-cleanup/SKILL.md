@@ -10,13 +10,15 @@ You close out a release for **Umbraco.Cms.Integrations**.
 ## Where this sits in the flow
 
 ```
-1. /release-management        - cuts v17/release/YYYY.MM.N, bumps version.json
+1. /release-management        - cuts v17/release/YYYY.MM.N, writes
+                               release-manifest.json, bumps version.json
                                + CHANGELOG there, pushes the branch
 2. CI builds the release branch -> clean 7.1.0 artifacts
 3. Promote to NuGet           (manual)
 4. Tag release/<slug>-<version> (manual)
 5. GitHub release per tag     (manual)
-6. THIS SKILL                 - merge back, bump dev patches, tidy up
+6. THIS SKILL                 - delete the manifest, merge back, bump dev
+                               patches, tidy up
 ```
 
 ## When to run
@@ -38,8 +40,10 @@ Adapted from `Umbraco.AI`'s skill of the same name, minus:
 - **Major-version cutover.** A new Umbraco major gets a deliberately created
   `main-v<N>` / `v<N>/dev` pair as a planning decision. Never create those branches
   or change the repo's default branch from this skill.
-- **`release-manifest.json` deletion.** This repo has no manifest, so there is
-  nothing to clean up after the merge.
+- **Git hooks.** `Umbraco.AI` deletes `release-manifest.json` with a `.githooks`
+  post-merge hook. This repo has no `.githooks` directory, and adding one would
+  mean every contributor has to set `core.hooksPath` or the cleanup silently stops
+  happening. Phase 2 does it explicitly instead.
 
 ---
 
@@ -108,9 +112,26 @@ Options:
 
 ---
 
-## Phase 2: Merge into main-v&lt;N&gt;
+## Phase 2: Delete the manifest, then merge into main-v&lt;N&gt;
 
-Confirm before the first push - this updates a shared branch.
+`release-manifest.json` belongs only to the release branch. It is **required** on
+`v<N>/release/*`, so leaving it in place would carry it onto `main-v<N>` and
+`v<N>/dev`, where it is meaningless and where the next release branch would
+inherit a stale copy naming last release's packages.
+
+Delete it on the release branch first, so both merges are clean:
+
+```bash
+git checkout "$release_branch"
+git rm release-manifest.json
+git commit -m "chore(release): Remove release manifest after publishing"
+git push origin "$release_branch"
+```
+
+If the file is already absent, say so and move on - a hotfix release may not have
+had one.
+
+Then merge. Confirm before the first push - this updates a shared branch.
 
 ```bash
 git checkout main-v17
@@ -138,6 +159,8 @@ Resolve conflicts as:
 
 - `version.json` - keep the **higher** version (Phase 4 overwrites it anyway).
 - `CHANGELOG.md` - keep **both** sets of entries, newest version first.
+- `release-manifest.json` - delete it. It must not exist on dev. Phase 2 should
+  have removed it already, so seeing it here means that step was skipped.
 - Anything else - ask the user.
 
 Never force-push. If a push is rejected, pull and retry the merge.
@@ -156,8 +179,10 @@ For each released package, increment the patch in `src/<PackageName>/version.jso
 Always bump the **patch**, whatever kind of bump the release itself was. This is
 mechanical - it only exists to keep preview builds sorting above the release.
 
-Set the same value in that package's `Client/public/umbraco-package.json` where it
-has one. CI does not stamp that source manifest, so skipping it lets the two drift.
+**Do not touch `Client/public/umbraco-package.json`.** It is a fixed `1.0.0`
+placeholder; the real version is stamped into the `wwwroot` copy by
+`UpdatePackageManifestVersion` on CI builds. Bumping it here used to be required,
+and it is what made three packages look changed to release detection.
 
 > **Changelog gate.** CI fails a version bump with no matching changelog entry. A
 > bare patch bump has no user-facing content, so add a short entry:
@@ -168,6 +193,10 @@ has one. CI does not stamp that source manifest, so skipping it lets the two dri
 >
 > * Development version bump after the 7.1.0 release.
 > ```
+> Keep the literal word `Unreleased` and the `### Internal` bullet.
+> `/release-management` finalises this same entry at the next release, replacing
+> the word with a date and dropping the bullet - it does not add a second heading.
+>
 > Then confirm with:
 > ```bash
 > pwsh -File .azure-pipelines/scripts/validate-changelogs.ps1
@@ -176,7 +205,7 @@ has one. CI does not stamp that source manifest, so skipping it lets the two dri
 Commit and push:
 
 ```bash
-git add src/*/version.json src/*/CHANGELOG.md src/*/Client/public/umbraco-package.json
+git add src/*/version.json src/*/CHANGELOG.md
 git commit -m "chore(release): Bump dev versions after release 2026.08.1
 
 - Umbraco.Cms.Integrations.Search.Algolia: 7.1.0 -> 7.1.1
