@@ -12,7 +12,7 @@ This file is for **navigation, structure, and release workflow**. Package-specif
 - **Stack:** .NET (net10.0 on the v17/v18 lines), Umbraco CMS as the host, per-package **TypeScript + Vite** backoffice client compiled into `wwwroot`, built/packed via **Azure Pipelines**.
 - **Not a single product:** there is no shared runtime library across packages — they are sibling projects that share only the repo, tooling, and release conventions. No package references another.
 
-> **v18 vs v17.** The v18 line has moved to central package management, per-package `version.json` (NBGV) and a single pipeline — described below. **The v17 line and legacy `main` still use the older manual process** (hand-edited `<Version>` in three files, one pipeline per package). Sections 3 and 4 flag where the two differ.
+> **v18, v17 and legacy `main`.** The v18 and v17 lines both use central package management, per-package `version.json` (NBGV) and a single pipeline — described below. Their two pipeline scripts differ only in a fallback line default, so a change to one ports mechanically to the other. **Only the legacy `main` branch still uses the older manual process** (hand-edited `<Version>` in three files, one pipeline per package). Sections 3 and 4 flag where they differ.
 
 ---
 
@@ -40,8 +40,8 @@ src/Umbraco.Cms.Integrations.<Area>.<Name>/
   CHANGELOG.md                         - Keep a Changelog format; required when bumping
   Client/                              - TypeScript + Vite source; an npm workspace of the
                                          root package.json (no per-package lockfile)
-    src/, public/umbraco-package.json  - backoffice manifest; SOURCE copy, carries a real
-                                         version, NOT stamped by CI - keep in step by hand
+    src/, public/umbraco-package.json  - backoffice manifest; SOURCE copy, version is a
+                                         fixed 1.0.0 placeholder - never hand-edit
   wwwroot/                             - COMPILED client assets - GITIGNORED, never committed
                                          (+ umbraco-package.json, copied by Vite, CI-stamped)
   readme.md, docs/, umbraco-marketplace-readme.md
@@ -118,15 +118,19 @@ Bump rule, from the commits affecting that package ([Conventional Commits][cc]):
 
 **Do not hand-edit:** the csproj (`<Version>` is gone) or `wwwroot/umbraco-package.json` — an `UpdatePackageManifestVersion` target in the root `Directory.Build.targets` stamps the latter on CI builds, so the committed value is always overwritten in the published package.
 
-**Do keep in step:** `Client/public/umbraco-package.json`. It is the source manifest the Vite build copies into `wwwroot`, and CI does **not** stamp it. Every package carries a real version there, so bump it alongside `version.json`. Its value never reaches the published package (the `wwwroot` copy is stamped after the copy — verified with the client build enabled), but drift is confusing: `Search.Algolia` sat at `7.0.0` while shipping as `7.0.1`.
+**Also do not hand-edit:** `Client/public/umbraco-package.json`. It is a fixed `1.0.0` placeholder in all 8 packages that have one (Cookiebot has no client), matching `Umbraco.AI`. The Vite build copies it into `wwwroot`, and `UpdatePackageManifestVersion` stamps the real version into that copy on CI builds, so the placeholder never reaches a published package.
 
-> Reducing this to a true placeholder (as `Umbraco.AI` does) would remove the last hand-maintained version file. Not done here — it would touch all 9 packages and was out of scope.
+> It used to carry a real version, bumped by hand in both release skills. That churn is what made three packages look changed to release detection, so the placeholder is now load-bearing, not just tidiness. One consequence: a **local** `dotnet pack` has `ContinuousIntegrationBuild` false, so the stamp does not run and a locally built `.nupkg` carries `1.0.0`. Local packs are not published.
 
 On `main-v18` a build produces a clean version (`7.0.2`). On any other branch NBGV appends a preview suffix (`7.0.2--preview.4.gabc1234`), which sorts **below** the release — hence the post-release patch bump on dev.
 
 Each package keeps **one major per Umbraco major** (see the table in section 2).
 
-### Versioning — v17 line and legacy `main` (manual)
+### Versioning — v17 line
+
+**Same as v18.** The v17 line was migrated too: it carries `version.json`, per-package `CHANGELOG.md`, central package management and the same two pipeline scripts. The only difference between the lines' copies of `detect-changes.ps1` and `validate-changelogs.ps1` is the fallback line default (`v17` versus `v18`), so a change to either script ports mechanically.
+
+### Versioning — legacy `main` (manual)
 
 Still the old way: pipelines pack with `versioningScheme: off` and the version comes from the csproj `<Version>`. Bumping means editing **all three**:
 
@@ -152,19 +156,24 @@ The pipeline **only builds + packs the `.nupkg` + SBOM as artifacts** — it doe
 
 > **`N` counts release events across the whole repo, not per line.** It is derived from the `YYYY.MM.N` date tags, which carry no line prefix, so v17 and v18 releases share one sequence — `v18/release/2026.08.1` is followed by `v17/release/2026.08.2`, not a second `.1`. This matches `Umbraco.Automate` and `Umbraco.AI`, which both derive it from those tags. Two tag shapes are in play and cannot collide: `release/<slug>-<version>` identifies a published package, `YYYY.MM.N` identifies the release event and is what the next release counts from.
 
-**No release manifest.** Unlike `Umbraco.AI`, there is no `release-manifest.json`. On a release branch, CI treats a package as shipping when its `version.json` differs from `main-v<N>` — the bump itself is the declaration.
+**`release-manifest.json` declares what ships**, as in `Umbraco.AI`. Two layers, because "what changed" and "what are we publishing" are different questions:
 
-> **`main-v<N>` must carry `version.json` before the first release branch is cut.** The comparison is `git show main-v<N>:src/<pkg>/version.json`; when that file does not exist there, `detect-changes.ps1` treats the package as new to the line and force-includes it. Until this work is merged, `main-v18` has no `version.json` for any package, so a release branch cut now selects **all nine** regardless of what was bumped — and because a release branch drops the preview suffix, it would hand you nine clean-versioned `.nupkg` files at versions several of which are already on NuGet (`Search.Algolia` `7.0.1`, for one). Merge to `main-v<N>` first and this never arises; it is a one-time condition, not an ongoing hazard.
+1. **Detection proposes.** For each package, `detect-changes.ps1` diffs `merge-base(main-v<N>, HEAD)..HEAD` scoped to the package folder, ignoring `version.json` and `CHANGELOG.md` as release bookkeeping.
+2. **The manifest decides.** Required on `v<N>/release/*`, optional on `v<N>/hotfix/*`. Its `include` list replaces the build set outright, so a package with no changes still ships if listed. Anything detection found changed must appear in `include` or `exclude`, or the build fails — that guard is how you cannot silently forget a package.
+
+Written by `scripts/generate-release-manifest.ps1`, which validates names against the real package list. Deleted by `/post-release-cleanup` before the merge back, so it never lands on `main-v<N>` or `v<N>/dev`.
+
+> **Selecting on "`version.json` differs from `main-v<N>`" was tried first and does not work.** `/post-release-cleanup` bumps each released package's patch on dev, so that test reported every previously-released package as shipping on every subsequent release branch — five packages selected when one had changed. In the other direction, `SEO.GoogleSearchConsole.URLInspectionTool` reads the same version on dev and `main-v18` and has no release tag on either line, so it could never be selected at all. The manifest's `include` is what makes it releasable.
 
 Two skills cover the repeatable parts:
 
-- **`/release-management`** — detect changed packages, recommend the bump, **cut the release branch**, update `version.json`, write the `CHANGELOG.md` entry, push.
-- **`/post-release-cleanup`** — merge the release branch into `main-v<N>` **and** back into `v<N>/dev`, bump each released package's patch on dev, optionally delete the branch.
+- **`/release-management`** — detect changed packages, recommend the bump, **cut the release branch**, write `release-manifest.json`, update `version.json`, finalise the `CHANGELOG.md` entry, dry-run the selection, push.
+- **`/post-release-cleanup`** — delete `release-manifest.json`, merge the release branch into `main-v<N>` **and** back into `v<N>/dev`, bump each released package's patch on dev, optionally delete the branch.
 - **`/changelog-management`** — changelog work on its own: preview what a package would release, backfill a missing entry, or fix a `validate-changelogs.ps1` failure. Unlike `Umbraco.Automate`/`Umbraco.AI` there is no generation script behind it; entries come from reading `git log`.
 
 Full sequence:
 
-1. `/release-management` on `v<N>/dev` — cuts `v<N>/release/YYYY.MM.N`, bumps, changelogs, pushes.
+1. `/release-management` on `v<N>/dev` — cuts `v<N>/release/YYYY.MM.N`, writes the manifest, bumps, changelogs, dry-runs, pushes.
 2. Pipeline builds the release branch. **Verify the artifact is clean-versioned** before continuing.
 3. **Promote** it to NuGet (separate step).
 4. Create an annotated tag `release/<slug>-<version>` (e.g. `release/crm-hubspot-9.0.1`).
@@ -184,14 +193,22 @@ Full sequence:
 `azure-pipelines.yml` covers the whole repo in two stages:
 
 1. **DetectChanges** — `.azure-pipelines/scripts/detect-changes.ps1` discovers packages (a `src/` folder with both a `.csproj` and a `version.json`), then selects what to build based on the branch:
-   - **`v18/release/*` / `v18/hotfix/*`** — selects packages whose `version.json` differs from `main-v18`, i.e. those with a new version to publish. Throws if nothing was bumped.
+   - **`v18/release/*` / `v18/hotfix/*`** — diffs each package against `merge-base(main-v18, HEAD)`, ignoring `version.json` and `CHANGELOG.md`, then `release-manifest.json` decides. See the two-layer model in section 3. The manifest is required on `release/*` and optional on `hotfix/*`.
    - **PRs** — diffs against the merge-base with the target branch.
    - **`main-v18` / `v18/dev`** — diffs against `HEAD~1`.
    - **feature branches** — diffs against the merge-base with `v18/dev`.
 
    A `Directory.Packages.props` change is traced to only the packages referencing the packages whose versions moved. Then `validate-changelogs.ps1` runs (on a release branch it compares against `main-v18`, so every bump the release carries is checked).
 
-   > Package paths are resolved to the casing **git** tracks, not the casing on disk. `git show <ref>:<path>` is case-sensitive even on Windows, and this repo has `...GoogleSearchConsole.URLInspectionTool` in the index while working copies have appeared with `...UrlInspectionTool` on disk. Without this, that package was reported as brand new and force-included in every release.
+   > Package paths are resolved to the casing **git** tracks, not the casing on disk. `git show <ref>:<path>` and `git diff -- <path>` are case-sensitive even on Windows, and this repo has `...GoogleSearchConsole.URLInspectionTool` in the index while working copies have appeared with `...UrlInspectionTool` on disk. Manifest name lookup is deliberately case-insensitive for the same reason, resolving to the git-tracked name.
+
+   > **There are no tests for this logic**, matching `Umbraco.AI`. The safety net is a dry-run, which `/release-management` runs before pushing a release branch:
+   > ```bash
+   > pwsh -File .azure-pipelines/scripts/detect-changes.ps1 \
+   >   -SourceBranch "refs/heads/v18/release/2026.08.3" \
+   >   -ReleaseCompareRef "origin/main-v18"
+   > ```
+   > `-ReleaseCompareRef` exists for this. It is load-bearing, not a debug flag.
 
 2. **Test** — `dotnet test` over `tests/**/*Tests.csproj`, publishing `.trx` results and Cobertura coverage. **`Pack` depends on this stage**, so a failing test blocks packing and therefore blocks any promotion to NuGet.
 
@@ -200,7 +217,11 @@ Full sequence:
 
 Adding a package needs **no pipeline change** — give it a `version.json`.
 
-### v17 line and legacy `main`
+### v17 line
+
+Same single-pipeline arrangement as v18, with the same two scripts. Keep the two in step: a fix to `detect-changes.ps1` or `validate-changelogs.ps1` on one line belongs on the other.
+
+### Legacy `main`
 
 Still **one pipeline per package**, path-filtered to `src/<project>/**`.
 
@@ -213,12 +234,13 @@ Still **one pipeline per package**, path-filtered to `src/<project>/**`.
 - **`NU1507`** is expected on the v18 line: central package management plus the two feeds in `NuGet.config`. A warning, not an error; silencing it needs package source mapping.
 - **`dotnet test` arguments.** Do not pass `--logger`/`--results-directory` alongside `publishTestResults: true` — the `DotNetCoreCLI@2` task appends its own pair and `dotnet test` rejects two values for `--results-directory`.
 - **NBGV needs full history.** Every job that builds a package must `checkout` with `fetchDepth: 0`; the agent default is a depth-1 fetch and NBGV throws "Shallow clone lacks the objects required to calculate version height".
+- **The build number is set by `name:`, not by NBGV.** `nbgv cloud` sets the cloud build number by default — the `"cloudBuild": { "buildNumber": { "enabled": false } }` in each `version.json` does **not** stop it, as that setting only governs the MSBuild integration. Every Pack matrix job runs the CLI, so without `--skip-cloud-build-number` the last job to finish names the whole build after its own package (builds on one branch varied between `7.0.1--preview.38...` and `6.0.1--preview.40...`). The flag is passed in `pack-product.yml` and `name:` in `azure-pipelines.yml` supplies `branch-date-buildid` instead. `Umbraco.Automate`/`Umbraco.AI` reach the same result with a `SetBuildNumber` stage that runs after Pack.
 
 ---
 
 ## Quick Reference
 
-**Key directories:** `/src` (packages) · `/tests` · `/examples` (test sites) · `/.azure-pipelines` (scripts + templates, v18)
+**Key directories:** `/src` (packages) · `/tests` · `/examples` (test sites) · `/.azure-pipelines` (CI scripts + templates, v18) · `/scripts` (release tooling — kept out of `.azure-pipelines/` because a change there rebuilds every package)
 
 **Branches:** `main-v18` / `v18/dev` (Umbraco 18) · `main-v17` / `v17/dev` (Umbraco 17) · `main` (legacy v10–13)
 
@@ -227,8 +249,13 @@ Still **one pipeline per package**, path-filtered to `src/<project>/**`.
 **Release tag convention:** `release/<slug>-<version>` (annotated), e.g. `release/search-algolia-7.0.1`
 
 **Bump a version:**
-- **v18 line** → edit `src/<package>/version.json` only, and add a `CHANGELOG.md` entry
-- **v17 / legacy** → edit 3 files: csproj `<Version>`, `Client/public/umbraco-package.json`, `wwwroot/umbraco-package.json`
+- **v18 line** → edit `src/<package>/version.json` only, and add a `CHANGELOG.md` entry. Never `Client/public/umbraco-package.json` — it is a fixed `1.0.0` placeholder
+- **legacy `main`** → edit 3 files: csproj `<Version>`, `Client/public/umbraco-package.json`, `wwwroot/umbraco-package.json`
+
+**Declare a release** (v18 line, on the release branch):
+```bash
+pwsh -File scripts/generate-release-manifest.ps1 -Include Umbraco.Cms.Integrations.Crm.Dynamics
+```
 
 **First run after a clone (v18 line) — `wwwroot` is not in git:**
 ```bash
