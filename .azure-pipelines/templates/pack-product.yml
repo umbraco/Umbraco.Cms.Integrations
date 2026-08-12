@@ -80,7 +80,13 @@ steps:
           Write-Host "##vso[task.prependpath]$HOME/.dotnet/tools"
       displayName: "Install NBGV"
 
-    - pwsh: nbgv cloud --all-vars
+    # --skip-cloud-build-number: every job in the matrix runs this, and without
+    # the flag each one would overwrite the build number with its own package's
+    # version. The `name:` in azure-pipelines.yml names the build instead.
+    # The NBGV_* variables this still publishes are only for reading in the log;
+    # the package version itself comes from the Nerdbank.GitVersioning MSBuild
+    # targets (a GlobalPackageReference), not from here.
+    - pwsh: nbgv cloud --all-vars --skip-cloud-build-number
       displayName: "Set version from version.json"
       workingDirectory: ${{ parameters.productPath }}
 

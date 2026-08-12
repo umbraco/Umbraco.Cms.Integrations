@@ -5,6 +5,12 @@ All notable changes to Umbraco.Cms.Integrations.Crm.Dynamics will be documented 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.3] - 2026-08-12
+
+### fix
+
+* Render a real-time form in the iframe when Dynamics returns no `data-cached-form-url`. The standalone URL was empty in that case, so the iframe loaded nothing; the form HTML is now embedded via `srcdoc` and falls back to the raw form HTML when no standalone HTML is returned. Reported in [#257](https://github.com/umbraco/Umbraco.Cms.Integrations/pull/257)
+
 ## [5.0.2] - 2026-08-11
 
 ### fix

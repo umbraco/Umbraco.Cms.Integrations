@@ -14,6 +14,13 @@
 # Adding a package needs no change to this file: give the new folder a
 # version.json and it is picked up automatically.
 
+# A build packs several packages at different versions, so there is no single
+# version to name it after. Without this, each Pack matrix job's `nbgv cloud`
+# would set the build number to its OWN package's version and the last job to
+# finish would win - naming the whole build after one arbitrary package. The
+# pack template passes --skip-cloud-build-number so this value survives.
+name: $(SourceBranchName)-$(Date:yyyyMMdd)-$(BuildID)
+
 trigger:
     branches:
         include:
