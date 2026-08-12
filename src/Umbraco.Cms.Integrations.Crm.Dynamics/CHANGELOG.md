@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.0.3] - Unreleased
 
+### fix
+
+* Render a real-time form in the iframe when Dynamics returns no `data-cached-form-url`. The standalone URL was empty in that case, so the iframe loaded nothing; the form HTML is now embedded via `srcdoc` and falls back to the raw form HTML when no standalone HTML is returned. Reported in [#257](https://github.com/umbraco/Umbraco.Cms.Integrations/pull/257)
+
 ### Internal
 
 * Development version bump after the 5.0.2 release.
