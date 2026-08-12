@@ -16,23 +16,23 @@ machinery removed, because this repo is shaped differently:
   dependency cascade, no forced bumps, no `Directory.Packages.props` range
   updates and no npm peer-dependency syncing. If you find yourself reasoning
   about "which other packages does this one affect", stop - the answer is none.
-- **No release manifest.** `release-manifest.json` does not exist here. On a
-  release branch, CI treats a package as shipping when its `version.json`
-  differs from `main-v<N>` - the bump itself is the declaration. Nothing to
-  maintain, and no `include`/`exclude` lists to keep in sync.
-- **Check `main-v<N>` actually has `version.json` before cutting.** The
-  comparison is `git show main-v<N>:src/<pkg>/version.json`. When that file is
-  absent, `detect-changes.ps1` treats the package as new to the line and
-  force-includes it - so a release branch cut against a `main-v<N>` that
-  predates NBGV selects *every* package and produces clean-versioned artifacts
-  for all of them, including versions already published to NuGet. Verify with:
+- **`release-manifest.json` decides what ships.** As in `Umbraco.AI`. It is
+  required on `v<N>/release/*`, optional on `v<N>/hotfix/*`, and its `include`
+  list replaces the build set outright. Change detection in
+  `detect-changes.ps1` is only a cross-check: anything it finds changed must
+  appear in `include` or `exclude`, or CI fails.
 
-  ```bash
-  git ls-tree -r --name-only origin/main-v18 | grep -c version.json
-  ```
-
-  A `0` means stop: the build/versioning work has not been merged to
-  `main-v<N>` yet, and that must happen before any release branch is cut.
+  A bumped `version.json` is **not** the declaration, and selecting on it does
+  not work. `/post-release-cleanup` bumps each released package's patch on dev,
+  which used to make every previously-released package look like it was shipping
+  on every subsequent release branch, while a package whose version had never
+  moved could not be selected at all.
+- **The version is usually already bumped.** Because of that same dev patch bump,
+  the target version is often already in `version.json` when you cut the branch.
+  Check before editing.
+- **`Client/public/umbraco-package.json` is a fixed `1.0.0` placeholder.** Do not
+  bump it. The real version is stamped into the `wwwroot` copy by CI. Editing it
+  would also make the package look changed to release detection.
 - **Tags are `release/<slug>-<version>`**, e.g. `release/search-algolia-7.1.0` -
   not `Product@Version`. Note the branch is `v18/release/<date>` while tags are
   `release/<slug>-<version>`; they live in different ref namespaces and do not
@@ -47,10 +47,12 @@ machinery removed, because this repo is shaped differently:
 2. Recommend a version bump per package from the commit history.
 3. Confirm with the user.
 4. **Cut the release branch** - before any file changes.
-5. Update each package's `version.json`.
-6. Write each package's `CHANGELOG.md` entry.
-7. Review the changelogs for noise and completeness.
-8. Validate, commit and push the release branch.
+5. Write `release-manifest.json`.
+6. Update each package's `version.json`, where it is not already correct.
+7. Finalise each package's `CHANGELOG.md` entry.
+8. Review the changelogs for noise and completeness.
+9. Validate, dry-run the selection, commit and push the release branch.
+10. Report what remains manual.
 
 ---
 
@@ -204,7 +206,7 @@ one; start at `1` if the month has none. Confirm the name with the user, then:
 git checkout -b v18/release/2026.08.1
 ```
 
-The matching date tag `2026.08.1` is created at release time, in Phase 9, next to
+The matching date tag `2026.08.1` is created at release time, in Phase 10, next to
 the per-package tags. It is what lets the next release pick the right number, so
 skipping it breaks the sequence for whoever releases next - on either line.
 
@@ -213,30 +215,73 @@ For an urgent fix on top of an already-released state, cut
 
 ---
 
-## Phase 5: Update the version files
+## Phase 5: Write the release manifest
 
-Now on the release branch. For each confirmed package:
+Still on the release branch, before touching versions. **This is what CI treats as
+the decision on what ships** - see `Get-ManifestSelection` in
+`.azure-pipelines/scripts/detect-changes.ps1`. Change detection there is only a
+cross-check.
 
-1. Edit the `version` field of `src/<PackageName>/version.json`. Leave every other
-   property untouched. This is the one that actually drives the build.
-2. Set the same value in `src/<PackageName>/Client/public/umbraco-package.json`, if
-   the package has one (Analytics.Cookiebot does not). CI does **not** stamp this
-   source manifest, so it drifts if skipped - `Search.Algolia` shipped as `7.0.1`
-   with `7.0.0` still recorded here.
+```bash
+pwsh -File scripts/generate-release-manifest.ps1 \
+  -Include Umbraco.Cms.Integrations.Crm.Dynamics
+```
+
+Full package folder names. The script validates them against the real package
+list, so a typo fails here rather than in CI, and it is case-insensitive so you do
+not have to remember that git tracks `...URLInspectionTool`.
+
+If any package has substantive changes but is deliberately **not** shipping, name
+it in `-Exclude`. CI fails when a changed package appears in neither list - that
+guard is the whole point, so do not work around it by dropping the package from
+the release without saying so.
+
+`release-manifest.json` is **required** on `v<N>/release/*` and optional on
+`v<N>/hotfix/*`. `/post-release-cleanup` deletes it before merging back, so it
+never reaches `main-v<N>` or `v<N>/dev`.
+
+---
+
+## Phase 6: Update the version files
+
+For each confirmed package, edit the `version` field of
+`src/<PackageName>/version.json`. Leave every other property untouched. This is
+the only file that drives the version.
+
+**Usually it is already correct.** `/post-release-cleanup` bumps each released
+package's patch on dev after a release, so the target version is often already
+sitting there. Check before editing.
 
 Do **not** touch:
 
 - the `.csproj` (it has no `<Version>` - the version comes from `version.json`)
-- `wwwroot/umbraco-package.json` - the `UpdatePackageManifestVersion` target in the
-  root `Directory.Build.targets` stamps it on CI builds, so any value committed here
-  is overwritten anyway
+- `Client/public/umbraco-package.json` - it is a fixed `1.0.0` placeholder and is
+  no longer maintained by hand. The real version is stamped into the `wwwroot`
+  copy by `UpdatePackageManifestVersion` in the root `Directory.Build.targets`.
+  Bumping it would also make the package look changed to release detection.
+- `wwwroot/umbraco-package.json` - build output, stamped on CI builds, so any
+  value committed here is overwritten anyway
 
 ---
 
-## Phase 6: Write the changelog entry
+## Phase 7: Write the changelog entry
 
-For each package, add a new entry at the top of `src/<PackageName>/CHANGELOG.md`,
-below the header block, in [Keep a Changelog][kac] format:
+**Check for an existing entry first.** `/post-release-cleanup` leaves an
+`## [<version>] - Unreleased` heading on dev for the version being worked on, so
+the entry for the version you are releasing usually already exists. **Finalise it
+- do not add a second one**, or the changelog ends up with two headings for the
+same version.
+
+Finalising means:
+
+- Replace `Unreleased` with today's real date. Get it with `date +%Y-%m-%d` - do
+  not guess.
+- Delete the `### Internal` / "Development version bump after the X release."
+  bullet. That is bookkeeping, not a released change.
+- Add the real bullets underneath.
+
+Only write a fresh entry when there is genuinely no heading for that version.
+Either way the result is one entry, in [Keep a Changelog][kac] format:
 
 ```markdown
 ## [7.1.0] - 2026-08-12
@@ -252,14 +297,13 @@ below the header block, in [Keep a Changelog][kac] format:
 
 Rules:
 
-- Use today's real date. Get it with `date +%Y-%m-%d` - do not guess.
 - Group by commit type, using the type as the heading (`feat`, `fix`, `perf`).
 - One bullet per user-facing change, taken from the commit subject.
 - A breaking change gets its own `### Breaking` section, listed first.
 
 ---
 
-## Phase 7: Review the changelogs
+## Phase 8: Review the changelogs
 
 Before committing, review each entry you just wrote.
 
@@ -301,19 +345,38 @@ Clean
 ---
 
 
-## Phase 8: Validate, commit and push the release branch
+## Phase 9: Validate, dry-run, commit and push the release branch
 
-Run the same check CI runs, so a failure surfaces here rather than in the pipeline:
+Run the same changelog check CI runs, so a failure surfaces here rather than in
+the pipeline:
 
 ```bash
 pwsh -File .azure-pipelines/scripts/validate-changelogs.ps1
 ```
 
-Confirm each bumped `version.json` has a matching changelog heading, then commit and
-push the release branch:
+**Then dry-run the selection.** There are no automated tests for the selection
+logic, so this is the only check that what ships is what you meant:
 
 ```bash
-git add src/*/version.json src/*/CHANGELOG.md src/*/Client/public/umbraco-package.json
+pwsh -File .azure-pipelines/scripts/detect-changes.ps1 \
+  -SourceBranch "refs/heads/v18/release/2026.08.1" \
+  -ReleaseCompareRef "origin/main-v18"
+```
+
+Read the `Build plan:` block and confirm the `BUILD` lines are exactly the
+packages you intend to publish. Watch for two things:
+
+- A `note: <package> has no substantive changes but is being released` line.
+  Legitimate for a package that has never shipped, suspicious otherwise.
+- A throw about a changed package missing from the manifest. Add it to `include`
+  or `exclude` - do not delete the guard.
+
+Show the user that block before pushing.
+
+Then commit and push:
+
+```bash
+git add release-manifest.json src/*/version.json src/*/CHANGELOG.md
 git commit -m "chore(release): Prepare release 2026.08.1
 
 - Umbraco.Cms.Integrations.Search.Algolia: 7.0.1 -> 7.1.0
@@ -322,6 +385,10 @@ git commit -m "chore(release): Prepare release 2026.08.1
 git push -u origin v18/release/2026.08.1
 ```
 
+`release-manifest.json` must be in the commit, or CI fails on the release branch.
+Do not add `src/*/Client/public/umbraco-package.json` - it is a placeholder now
+and a release does not touch it.
+
 Use the **release branch name** in the commit subject, not the package versions -
 one branch can carry several packages at different versions.
 
@@ -329,14 +396,12 @@ Pushing a new release branch is safe: it touches no shared branch, and nothing i
 published until a human promotes the artifact. `main-v18` and `v18/dev` are left
 untouched until `/post-release-cleanup` runs.
 
-CI will then build this branch and produce **clean-versioned** artifacts. Because
-the branch matches `publicReleaseRefSpec`, and because the pipeline selects the
-packages whose `version.json` differs from `main-v18`, only the packages you just
-bumped are built and packed.
+CI will then build this branch and produce **clean-versioned** artifacts, for
+exactly the packages named in the manifest's `include` list.
 
 ---
 
-## Phase 9: Report what remains manual
+## Phase 10: Report what remains manual
 
 ```
 Release branch v18/release/2026.08.1 pushed, carrying:
@@ -382,9 +447,11 @@ asks - those are outward-facing and irreversible.
   hotfix is cut from `main-v<N>`; confirm which the user means.
 - **A release branch for this month already exists** - it may be an in-flight
   release. Show it and ask whether to add to it or start the next number.
-- **`main-v<N>` has no `version.json` files** - stop. Cutting a release branch
-  in that state force-includes every package and builds clean-versioned
-  artifacts for versions already on NuGet. Say that the build/versioning work
-  has to reach `main-v<N>` first, and do not cut the branch.
+- **The dry-run throws about an unaccounted changed package** - a package has
+  substantive changes and is in neither `include` nor `exclude`. Decide which it
+  belongs in with the user and regenerate the manifest. Never silence the guard.
+- **The dry-run notes a package with no substantive changes** - fine for a
+  package that has never shipped, or when rebuilding an already merged-back
+  release branch. Otherwise it is probably in `include` by mistake.
 
 [kac]: https://keepachangelog.com/en/1.0.0/
