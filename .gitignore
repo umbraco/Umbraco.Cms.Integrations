@@ -503,3 +503,7 @@ src/*/Client/package-lock.json
 src/**/wwwroot/
 
 appsettings.Local.json
+
+# Git worktrees (isolated workspaces). Created inside the repo, so they must be
+# ignored or every `git status` reports the whole checkout as untracked.
+.claude/worktrees/
