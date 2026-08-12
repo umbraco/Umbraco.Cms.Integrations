@@ -57,7 +57,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
                 var form = _dynamicsService.GetRealTimeForm(jsonObj["id"].ToString()).ConfigureAwait(false).GetAwaiter().GetResult();
                 if (form != null)
                 {
-                    vm.Html = form.StandaloneHtml;
+                    vm.Html = !string.IsNullOrWhiteSpace(form.StandaloneHtml) ? form.StandaloneHtml : form.RawHtml;
                 }
             }
 
