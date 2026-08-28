@@ -182,7 +182,7 @@ packages at different versions.
 **`N` counts release events across the whole repo, not per line.** It comes from
 the date tags, which have no line prefix, so a v17 release and a v18 release share
 one sequence. `Umbraco.Automate` and `Umbraco.AI` both work this way - Automate
-currently has `v18/release/2026.08.1` alongside `v17/release/2026.08.2`, because
+currently has `v17/release/2026.08.1` alongside `v17/release/2026.08.2`, because
 the v18 release took `.1` and the v17 one that followed took `.2`.
 
 Do **not** derive `N` from branch names. That gives both lines a `.1` in the same
@@ -281,9 +281,7 @@ Finalising means:
 - Add the real bullets underneath.
 
 Only write a fresh entry when there is genuinely no heading for that version.
-Either way the result is one entry at the top of
-`src/<PackageName>/CHANGELOG.md`, below the header block, in
-[Keep a Changelog][kac] format:
+Either way the result is one entry, in [Keep a Changelog][kac] format:
 
 ```markdown
 ## [7.1.0] - 2026-08-12
@@ -403,41 +401,37 @@ exactly the packages named in the manifest's `include` list.
 
 ---
 
-## Phase 10: Report what remains manual
+## Phase 10: Report what happens next
 
 ```
 Release branch v17/release/2026.08.1 pushed, carrying:
   - Search.Algolia 7.0.1 -> 7.1.0
   - Crm.Hubspot    9.0.1 -> 9.0.2
 
-main-v17 and v17/dev are untouched so far.
+main-v17 and v17/dev are untouched.
 
-Still to do by hand:
+Next:
   1. Wait for CI on v17/release/2026.08.1. Confirm the artifacts are
      clean-versioned (7.1.0, NOT 7.1.0--preview.N) before going further.
-  2. Promote each artifact to NuGet.
-  3. Tag each released package, on the release branch:
-       git tag -a release/search-algolia-7.1.0 -m "Search.Algolia 7.1.0"
-       git tag -a release/crm-hubspot-9.0.2    -m "Crm.Hubspot 9.0.2"
-  4. Tag the release event itself, on the same branch:
-       git tag -a 2026.08.1 -m "Release 2026.08.1"
-     This one is repo-wide and carries no line prefix. It is how the NEXT
-     release works out its number, on either line - skip it and the sequence
-     breaks.
-       git push origin --tags
-  5. Create a GitHub release per PACKAGE tag, titled with the tag, linking the
-     PRs. The date tag is bookkeeping and gets no GitHub release.
-  6. Run /post-release-cleanup to merge the release branch into main-v17
-     and v17/dev, and bump the dev patch versions.
+  2. Promote each artifact to NuGet. This is the one step no skill does.
+  3. Run /post-release-cleanup on this branch. It verifies the packages are
+     on NuGet, creates the tags and the GitHub releases, deletes the manifest,
+     merges into main-v17 and v17/dev, and bumps the dev patches.
 ```
+
+**Do not tag, and do not create GitHub releases here.** They belong to
+`/post-release-cleanup`, and the reason is timing, not squeamishness: at this point
+CI has not built anything, so nothing is published for a tag to point at. A tag
+created now becomes a lie the moment someone decides not to promote the artifact.
+
+That also means **do not** offer to tag as a convenience if the user asks "what's
+left" - point them at `/post-release-cleanup` instead, so the tag, the GitHub
+release and the merge-back all happen from one place with one confirmation.
 
 > The two tag shapes answer different questions. `release/<slug>-<version>` is
 > "which commit is this published package", one per package. `YYYY.MM.N` is "which
 > commits went out together", one per release branch. They share the tag namespace
 > but cannot collide: one starts with `release/`, the other with a digit.
-
-Do not promote, tag, or create GitHub releases yourself unless the user explicitly
-asks - those are outward-facing and irreversible.
 
 ## Error handling
 

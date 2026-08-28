@@ -163,22 +163,24 @@ Written by `scripts/generate-release-manifest.ps1`, which validates names agains
 
 Two skills cover the repeatable parts:
 
-- **`/release-management`** — detect changed packages, recommend the bump, **cut the release branch**, write `release-manifest.json`, update `version.json`, finalise the `CHANGELOG.md` entry, dry-run the selection, push.
-- **`/post-release-cleanup`** — delete `release-manifest.json`, merge the release branch into `main-v<N>` **and** back into `v<N>/dev`, bump each released package's patch on dev, optionally delete the branch.
+- **`/release-management`** — detect changed packages, recommend the bump, **cut the release branch**, write `release-manifest.json`, update `version.json`, finalise the `CHANGELOG.md` entry, dry-run the selection, push. It does **not** tag.
+- **`/post-release-cleanup`** — verify each package is on NuGet, create the **tags and GitHub releases**, delete `release-manifest.json`, merge the release branch into `main-v<N>` **and** back into `v<N>/dev`, bump each released package's patch on dev, optionally delete the branch.
 - **`/changelog-management`** — changelog work on its own: preview what a package would release, backfill a missing entry, or fix a `validate-changelogs.ps1` failure. Unlike `Umbraco.Automate`/`Umbraco.AI` there is no generation script behind it; entries come from reading `git log`.
 
 Full sequence:
 
 1. `/release-management` on `v<N>/dev` — cuts `v<N>/release/YYYY.MM.N`, writes the manifest, bumps, changelogs, dry-runs, pushes.
 2. Pipeline builds the release branch. **Verify the artifact is clean-versioned** before continuing.
-3. **Promote** it to NuGet (separate step).
-4. Create an annotated tag `release/<slug>-<version>` (e.g. `release/crm-hubspot-9.0.1`).
-5. Create a GitHub release (title = tag name), linking the relevant PRs.
-6. `/post-release-cleanup` — merges back into both branches and bumps dev.
+3. **Promote** it to NuGet. **This is the only manual step.**
+4. `/post-release-cleanup` on the release branch — verifies NuGet, tags, GitHub releases, merges back into both branches, bumps dev.
 
-> Tagging/releasing is easy to forget — on the v18 line the `.0.0` tags were missing entirely and had to be backfilled. Always do steps 3–5 after promoting.
+> **Tagging and GitHub releases used to be manual steps 4 and 5, and they are the steps that got skipped.** On the v18 line the `.0.0` tags went missing entirely and had to be backfilled; it happened again on `2026.08.3`/`2026.08.4`, where the cleanup had to stop because no tags existed. They belonged to neither skill, so nobody did them. `/post-release-cleanup` owns them now, behind one confirmation.
 >
-> Tag slugs are **not** perfectly consistent in the existing history (both `crm-activecampaign` and `crm-active-campaign` exist; Shopify has both `shopify-1.2.0` and `commerce-shopify-*`). Confirm a real tag with `git tag --list` rather than deriving the slug.
+> They cannot live in `/release-management` instead: that runs before CI has built anything, so nothing is published for a tag to point at, and a tag created then is a lie if the artifact is never promoted. `/post-release-cleanup` already requires the packages to be on NuGet, which is exactly when tagging becomes true.
+>
+> `release-manifest.json` is what tells the cleanup what shipped — the same declaration CI built from. The cleanup reads it, then deletes it.
+>
+> Tag slugs are **not** perfectly consistent in the existing history (both `crm-activecampaign` and `crm-active-campaign` exist; Shopify has both `shopify-1.2.0` and `commerce-shopify-*`). Derive the slug for a *new* tag; use `git tag --list` to find an *existing* one.
 
 ---
 
@@ -200,7 +202,9 @@ Full sequence:
 
    > **There are no tests for this logic**, matching `Umbraco.AI`. The safety net is a dry-run, which `/release-management` runs before pushing a release branch:
    > ```bash
-   > pwsh -File .azure-pipelines/scripts/detect-changes.ps1 \n   >   -SourceBranch "refs/heads/v17/release/2026.08.4" \n   >   -ReleaseCompareRef "origin/main-v17"
+   > pwsh -File .azure-pipelines/scripts/detect-changes.ps1 \
+   >   -SourceBranch "refs/heads/v17/release/2026.08.4" \
+   >   -ReleaseCompareRef "origin/main-v17"
    > ```
    > `-ReleaseCompareRef` exists for this. It is load-bearing, not a debug flag.
 
