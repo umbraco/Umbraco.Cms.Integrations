@@ -592,9 +592,16 @@ function Write-PipelineVariables {
     $anyChanged = ($matrix.Count -gt 0).ToString().ToLower()
     $matrixJson = if ($matrix.Count -gt 0) { $matrix | ConvertTo-Json -Depth 3 -Compress } else { "{}" }
 
+    # Comma-separated package names for the GenerateSBOM stage: the packages being built, and
+    # every package for a queue-time generateSbom run off a release/hotfix branch.
+    $changedProducts = @($Products.Keys | Sort-Object | Where-Object { $Changed[$_] }) -join ","
+    $allProducts = @($Products.Keys | Sort-Object) -join ","
+
     Write-Host ""
     Write-Host "##vso[task.setvariable variable=AnyChanged;isOutput=true]$anyChanged"
     Write-Host "##vso[task.setvariable variable=BuildMatrix;isOutput=true]$matrixJson"
+    Write-Host "##vso[task.setvariable variable=ChangedProducts;isOutput=true]$changedProducts"
+    Write-Host "##vso[task.setvariable variable=AllProducts;isOutput=true]$allProducts"
     Write-Host "  AnyChanged:  $anyChanged" -ForegroundColor Cyan
     Write-Host "  BuildMatrix: $matrixJson" -ForegroundColor Magenta
 }
