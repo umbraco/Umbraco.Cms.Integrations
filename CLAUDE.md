@@ -142,7 +142,7 @@ Managed centrally in the root `Directory.Packages.props`. A `PackageReference` *
 
 ### Releasing (per package)
 
-The pipeline **only builds + packs the `.nupkg` + SBOM as artifacts** — it does **not** push to NuGet or create tags.
+The pipeline **only builds + packs the `.nupkg` as artifacts** (plus an `SBOM` artifact on release/hotfix branches) — it does **not** push to NuGet or create tags.
 
 > **A release artifact is built from a release branch.** `publicReleaseRefSpec` lists `main-v17`, `v17/release/*` and `v17/hotfix/*`, so a build on any of those drops the preview suffix (`7.1.0`); a `v17/dev` or feature-branch build gives `7.1.0--preview.N.gSHA`. Publishing a dev artifact would put a preview version on NuGet. This mirrors `Umbraco.Automate`/`Umbraco.AI`, which use the same three-pattern spec (with `v<N>/main` in place of `main-v17`).
 >
@@ -188,7 +188,7 @@ Full sequence:
 
 ### v17 line — one pipeline
 
-`azure-pipelines.yml` covers the whole repo in two stages:
+`azure-pipelines.yml` covers the whole repo in four stages:
 
 1. **DetectChanges** — `.azure-pipelines/scripts/detect-changes.ps1` discovers packages (a `src/` folder with both a `.csproj` and a `version.json`), then selects what to build based on the branch:
    - **`v17/release/*` / `v17/hotfix/*`** — diffs each package against `merge-base(main-v17, HEAD)`, ignoring `version.json` and `CHANGELOG.md`, then `release-manifest.json` decides. See the two-layer model in section 3. The manifest is required on `release/*` and optional on `hotfix/*`.
@@ -210,8 +210,9 @@ Full sequence:
 
 2. **Test** — `dotnet test` over `tests/**/*Tests.csproj`, publishing `.trx` results and Cobertura coverage. **`Pack` depends on this stage**, so a failing test blocks packing and therefore blocks any promotion to NuGet.
 
-   > Both the `Test` and `Pack` stage conditions are wrapped in `and(succeeded(), ...)`. A custom `condition:` **replaces** the implicit `succeeded()` check, so without it `Pack` would run even after `Test` failed.
-3. **Pack** — a matrix over only the changed packages, one job each, via `.azure-pipelines/templates/pack-product.yml`. `nbgv cloud` runs with `workingDirectory` set to the package folder so it picks up that package's `version.json`.
+   > A custom `condition:` **replaces** the implicit `succeeded()` check. `Test` wraps its condition in `and(succeeded(), ...)`. `Pack` can't, because `succeeded()` is false when a dependency was skipped and `GenerateSBOM` is skipped on most branches, so it checks each dependency's `result` explicitly instead. Drop that and `Pack` runs even after `Test` failed.
+3. **GenerateSBOM** — release/hotfix pushes only, over the same packages `Pack` builds (`ChangedProducts` from detection). `.azure-pipelines/scripts/sbom/generate-sbom.ps1` scans each package's `.csproj` and its npm workspace (a runtime-only slice of the root lockfile, from `prune-npm-lockfile.js`) with `umbraco-sbom` ([Umbraco.Internal.Sbom](https://github.com/umbraco/Umbraco.Internal.Sbom)), merges them, and uploads to Dependency-Track as `<package> v<major>` at the full version, setting `isLatest` from NuGet.org. **A license policy violation fails the stage and `Pack` waits for it**, so a violation stops a release. An upload failure only gives `SucceededWithIssues`. The `generateSbom` queue-time parameter runs it on any branch over every package (`AllProducts`), with no upload. Ported from `Umbraco.AI` ([#486](https://github.com/umbraco/Umbraco.AI/pull/486)) and `Umbraco.Forms` ([#1597](https://github.com/umbraco/Forms/pull/1597)).
+4. **Pack** — a matrix over only the changed packages, one job each, via `.azure-pipelines/templates/pack-product.yml`. `nbgv cloud` runs with `workingDirectory` set to the package folder so it picks up that package's `version.json`.
 
 Adding a package needs **no pipeline change** — give it a `version.json`.
 
@@ -222,7 +223,7 @@ Still **one pipeline per package**, path-filtered to `src/<project>/**`.
 ### Gotchas
 
 - **Changelog required on a bump.** CI fails when a `version.json` changed with no matching `## [<version>]` entry in that package's `CHANGELOG.md`. Only bumped packages are checked. (v17 line.)
-- **SBOM (cdxgen):** the step fails unless `--spec-version 1.6` is pinned. Present on the active lines; the legacy `main` line does not have it.
+- **SBOM (umbraco-sbom):** pass the package's `.csproj`, never its folder. The folder also holds `Client/`, and `umbraco-sbom` rejects a path with both `.csproj` and `package.json` as mixed-ecosystem (exit 41). Exit 10 (unknown licenses) is a pass, so the script ends with an explicit `exit 0`, or `PowerShell@2` would fail on the leaked `$LASTEXITCODE`. License exceptions go in `.sbom-policy.json` at the root (none needed today). The legacy `main` line still runs cdxgen, which needs `--spec-version 1.6`.
 - **`wwwroot` is gitignored** on the v17 line — see [Client assets](#client-assets-v17-line). It used to be committed, which meant every dependency resolution churned the Vite chunk hashes and a stale copy failed the .NET `StaticWebAssets` step. Neither problem exists now, and `-p:ShouldRunClientAssetsBuild=false` no longer does anything (`dotnet build` never touches npm).
 - **A pack needs the client built first.** `npm ci && npm run build`, or the `EnsureClientAssetsBuilt` target fails the pack.
 - **`NU1507`** is expected on the v17 line: central package management plus the two feeds in `NuGet.config`. A warning, not an error; silencing it needs package source mapping.
