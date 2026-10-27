@@ -8,6 +8,9 @@
 #      .csproj and a version.json) and diffs against the appropriate base to
 #      work out which ones actually changed.
 #   2. Pack fans out over just those packages via a matrix, one job each.
+#   3. On release/hotfix branches, GenerateSBOM scans the same packages with
+#      umbraco-sbom, enforces license policy and uploads to Dependency-Track.
+#      Pack waits for it, so a policy violation stops a release being packed.
 #
 # Packages here are independent siblings - none references another - so there is
 # no build ordering, no dependency tiers and no shared runtime library.
@@ -20,6 +23,16 @@
 # finish would win - naming the whole build after one arbitrary package. The
 # pack template passes --skip-cloud-build-number so this value survives.
 name: $(SourceBranchName)-$(Date:yyyyMMdd)-$(BuildID)
+
+parameters:
+    # Queue-time override: generate SBOMs and run the license policy check on any
+    # branch. SBOMs normally only run on v17/release/* and v17/hotfix/*, where they
+    # are also uploaded to Dependency-Track. Elsewhere this covers every package and
+    # never uploads, so in-progress versions don't land in Dependency-Track.
+    - name: generateSbom
+      displayName: Generate SBOMs and check licenses (no upload off release/hotfix)
+      type: boolean
+      default: false
 
 trigger:
     branches:
@@ -56,8 +69,6 @@ pool:
 
 variables:
     buildConfiguration: "Release"
-    productGroup: "DXP"
-    productVersion: "v17"
     DT_API_KEY: $(dtApiKey)
     DT_BASE_URL: $(dtBaseUrl)
     # npm reads this, so pointing it at the workspace puts the download cache
@@ -123,16 +134,70 @@ stages:
                       publishTestResults: true
                       nugetConfigPath: "NuGet.config"
 
+    # Generates an SBOM per package with umbraco-sbom (Umbraco.Internal.Sbom), which
+    # also enforces license policy, and uploads it to Dependency-Track. Mirrors
+    # Umbraco.AI (umbraco/Umbraco.AI#486) and Umbraco.Forms (umbraco/Forms#1597).
+    #
+    # Runs on pushes to release/hotfix branches only - the builds that ship - over the
+    # same packages Pack builds (the release manifest's selection). With generateSbom
+    # ticked at queue time it runs on any branch over every package, with no upload.
+    #
+    # `contains` rather than a v18-prefixed startsWith, as in Umbraco.AI, so the stage
+    # ports to the v17 line unchanged; the trigger already limits release branches to
+    # this line's.
+    - stage: GenerateSBOM
+      displayName: "Generate SBOMs"
+      dependsOn: DetectChanges
+      condition: |
+          and(
+            succeeded(),
+            ne(variables['Build.Reason'], 'PullRequest'),
+            or(
+              eq('${{ parameters.generateSbom }}', 'true'),
+              contains(variables['Build.SourceBranch'], '/release/'),
+              contains(variables['Build.SourceBranch'], '/hotfix/')
+            )
+          )
+      jobs:
+          - job: GenerateSBOMs
+            displayName: "Generate SBOMs"
+            variables:
+                ${{ if or(contains(variables['Build.SourceBranch'], '/release/'), contains(variables['Build.SourceBranch'], '/hotfix/')) }}:
+                    sbomProducts: $[ stageDependencies.DetectChanges.Detect.outputs['detect.ChangedProducts'] ]
+                ${{ else }}:
+                    sbomProducts: $[ stageDependencies.DetectChanges.Detect.outputs['detect.AllProducts'] ]
+            steps:
+                # Full history: nbgv needs it to work out each package's version.
+                - checkout: self
+                  fetchDepth: 0
+
+                - template: .azure-pipelines/templates/sbom.yml
+                  parameters:
+                      products: $(sbomProducts)
+                      upload: ${{ or(contains(variables['Build.SourceBranch'], '/release/'), contains(variables['Build.SourceBranch'], '/hotfix/')) }}
+
     - stage: Pack
       displayName: "Build & pack"
       # Depends on Test as well as DetectChanges, so a failing test blocks packing
-      # and therefore blocks anything being promoted to NuGet.
+      # and therefore blocks anything being promoted to NuGet. Depends on
+      # GenerateSBOM too, so a license policy violation stops a release.
       dependsOn:
           - DetectChanges
           - Test
-      # succeeded() is required: a custom condition REPLACES the implicit
-      # succeeded() check, so without it Pack would run even when Test failed.
-      condition: and(succeeded(), eq(dependencies.DetectChanges.outputs['Detect.detect.AnyChanged'], 'true'))
+          - GenerateSBOM
+      # A custom condition REPLACES the implicit succeeded() check, so each
+      # dependency's result is checked explicitly. succeeded() can't be used: it is
+      # false when a dependency was skipped, and GenerateSBOM is skipped on every
+      # branch but release/hotfix. It succeeds with issues when only the
+      # Dependency-Track upload failed, which must not block a release.
+      condition: |
+          and(
+            not(canceled()),
+            in(dependencies.DetectChanges.result, 'Succeeded', 'SucceededWithIssues'),
+            in(dependencies.Test.result, 'Succeeded', 'SucceededWithIssues'),
+            in(dependencies.GenerateSBOM.result, 'Succeeded', 'SucceededWithIssues', 'Skipped'),
+            eq(dependencies.DetectChanges.outputs['Detect.detect.AnyChanged'], 'true')
+          )
       jobs:
           - job: PackProduct
             displayName: "Pack"
