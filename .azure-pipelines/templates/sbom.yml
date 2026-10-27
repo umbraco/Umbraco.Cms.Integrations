@@ -1,0 +1,61 @@
+# Generates SBOMs with umbraco-sbom (Umbraco.Internal.Sbom), enforces license policy, and
+# optionally uploads them to Dependency-Track.
+#
+# Ported from Umbraco.AI (.azure-pipelines/templates/sbom.yml). Differences, all down to this
+# pool's agents (see setup-dotnet.yml): no UseDotNet@2, and pwsh rather than `script`, since
+# neither bash nor powershell can be assumed. Call it from a job that has checked out the repo
+# with full history - nbgv needs it for the version.
+#
+# Writes <package>-bom.xml for each package to the SBOM pipeline artifact. A license policy
+# violation fails the step; a Dependency-Track upload failure only warns, so it can't block a
+# release. See scripts/sbom/generate-sbom.ps1 for how versions and isLatest are worked out.
+#
+# Parameters:
+#   products: Comma-separated package folder names under src/. Accepts a runtime macro.
+#   upload:   Upload each SBOM to Dependency-Track. Needs the DT_BASE_URL and DT_API_KEY
+#             variables.
+
+parameters:
+    - name: products
+      type: string
+    - name: upload
+      type: boolean
+      default: false
+
+steps:
+    - template: setup-dotnet.yml
+
+    # Only runs prune-npm-lockfile.js: the lockfile is read as-is, so there is no npm ci here.
+    - task: NodeTool@0
+      displayName: "Use Node 24.x"
+      inputs:
+          versionSpec: "24.x"
+
+    # Installed fresh every build so the centrally maintained license overrides are current.
+    # On Linux ~/.dotnet/tools is not on PATH by default, hence the prependpath.
+    - pwsh: |
+          dotnet tool install --global nbgv
+          dotnet tool install --global Umbraco.Internal.Sbom
+          Write-Host "##vso[task.prependpath]$HOME/.dotnet/tools"
+      displayName: "Install nbgv and umbraco-sbom"
+
+    - task: PowerShell@2
+      displayName: "Generate SBOMs and check licenses"
+      inputs:
+          filePath: ".azure-pipelines/scripts/sbom/generate-sbom.ps1"
+          pwsh: true
+          ${{ if parameters.upload }}:
+              arguments: -Products "${{ parameters.products }}" -OutputDir "$(Build.ArtifactStagingDirectory)/sbom" -Upload
+          ${{ else }}:
+              arguments: -Products "${{ parameters.products }}" -OutputDir "$(Build.ArtifactStagingDirectory)/sbom"
+      env:
+          DT_BASE_URL: $(DT_BASE_URL)
+          DT_API_KEY: $(DT_API_KEY)
+
+    - task: PublishPipelineArtifact@1
+      displayName: "Publish SBOM artifact"
+      condition: succeededOrFailed()
+      inputs:
+          targetPath: "$(Build.ArtifactStagingDirectory)/sbom"
+          artifact: "SBOM"
+          publishLocation: "pipeline"
