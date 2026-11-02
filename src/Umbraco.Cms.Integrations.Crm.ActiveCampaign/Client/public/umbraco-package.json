@@ -5,7 +5,7 @@
   "extensions": [
     {
       "name": "Umbraco EntryPoint",
-      "alias": "Umb.ActiveCampaign.EntryPoint",
+      "alias": "Umbraco.Cms.Integrations.Crm.ActiveCampaign.EntryPoint",
       "type": "backofficeEntryPoint",
       "js": "/App_Plugins/ActiveCampaignForms/activecampaign.js"
     }
