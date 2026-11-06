@@ -11,7 +11,7 @@
       "[17.0.0, 18)" and two "[17.0.0, 18.0.0)". Central package management plus a
       single property is the same idea without the copies.
     -->
-    <UmbracoCmsPackageVersion>[18.0.0, 19.0.0)</UmbracoCmsPackageVersion>
+    <UmbracoCmsPackageVersion>[19.0.0-beta1, 20.0.0)</UmbracoCmsPackageVersion>
   </PropertyGroup>
 
   <!-- Global tooling: SourceLink, versioning, Umbraco analyzers -->
@@ -23,7 +23,7 @@
     <GlobalPackageReference Include="Umbraco.JsonSchema.Extensions" Version="0.4.3" PrivateAssets="all" />
   </ItemGroup>
 
-  <!-- Umbraco CMS v18 - version comes from UmbracoCmsPackageVersion above -->
+  <!-- Umbraco CMS v19 - version comes from UmbracoCmsPackageVersion above -->
   <ItemGroup>
     <PackageVersion Include="Umbraco.Cms.Api.Common" Version="$(UmbracoCmsPackageVersion)" />
     <PackageVersion Include="Umbraco.Cms.Api.Management" Version="$(UmbracoCmsPackageVersion)" />
