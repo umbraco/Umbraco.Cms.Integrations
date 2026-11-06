@@ -12,7 +12,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 
         public UmbracoMediaPickerConverter(IMediaService mediaService) => _mediaService = mediaService;
 
-        public string Name => Core.Constants.PropertyEditors.Aliases.MediaPicker3;
+        public virtual string Name => Core.Constants.PropertyEditors.Aliases.MediaPicker3;
 
         public object ParseIndexValues(IProperty property, string? culture)
         {

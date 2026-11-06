@@ -13,6 +13,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Extensions
         {
             builder.AlgoliaConverters()
                 .Append<UmbracoMediaPickerConverter>()
+                .Append<UmbracoSingleMediaPickerConverter>()
                 .Append<UmbracoDecimalConverter>()
                 .Append<UmbracoIntegerConverter>()
                 .Append<UmbracoBooleanConverter>()

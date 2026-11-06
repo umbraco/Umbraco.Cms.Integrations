@@ -35,9 +35,24 @@ public class AlgoliaSearchPropertyIndexValueFactoryTests
                 new UmbracoTagsConverter(),
                 new UmbracoBlockListConverter(NullLogger<UmbracoBlockListConverter>.Instance),
                 new UmbracoSingleBlockConverter(NullLogger<UmbracoSingleBlockConverter>.Instance),
+                new UmbracoMediaPickerConverter(CreateMediaService()),
+                new UmbracoSingleMediaPickerConverter(CreateMediaService()),
             ]),
             Mock.Of<IContentTypeService>(),
             NullLogger<AlgoliaSearchPropertyIndexValueFactory>.Instance);
+    }
+
+    private const string MediaKey = "44444444-4444-4444-4444-444444444444";
+    private const string MediaPickerJson = "[{\"key\":\"55555555-5555-5555-5555-555555555555\",\"mediaKey\":\"" + MediaKey + "\"}]";
+
+    private static IMediaService CreateMediaService()
+    {
+        var media = new Mock<IMedia>();
+        media.Setup(m => m.GetValue("umbracoFile")).Returns("/media/a.jpg");
+
+        var mediaService = new Mock<IMediaService>();
+        mediaService.Setup(s => s.GetById(Guid.Parse(MediaKey))).Returns(media.Object);
+        return mediaService.Object;
     }
 
     private static object? GetValue(string editorAlias, object? storedValue)
@@ -80,6 +95,7 @@ public class AlgoliaSearchPropertyIndexValueFactoryTests
     [InlineData("Umbraco.EntityDataPicker")]
     [InlineData("Umbraco.ImageCropper")]
     [InlineData("Umbraco.MultiUrlPicker")]
+    [InlineData("Umbraco.UrlPicker.Single")]
     public void Editors_that_were_not_indexed_in_18_index_an_empty_string(string alias)
         => Assert.Equal(string.Empty, GetValue(alias, "[{\"x\":1}]"));
 
@@ -188,6 +204,20 @@ public class AlgoliaSearchPropertyIndexValueFactoryTests
         Assert.Equal(12.5m, GetValue("Umbraco.Decimal", 12.5m));
         Assert.Equal(0m, GetValue("Umbraco.Decimal", null));
     }
+
+    // Single pickers store the same JSON array as the multiple picker, so both index the file path.
+    [Theory]
+    [InlineData("Umbraco.MediaPicker3")]
+    [InlineData("Umbraco.MediaPicker.Single")]
+    public void Media_pickers_index_the_file_of_the_picked_media(string alias)
+        => AssertSequence(GetValue(alias, MediaPickerJson), "/media/a.jpg");
+
+    // No converter handles dropdowns; the stored JSON array is indexed in a single item array in 18 and 19.
+    [Theory]
+    [InlineData("Umbraco.DropDown.Flexible")]
+    [InlineData("Umbraco.DropDown.Single")]
+    public void Dropdowns_index_the_stored_value_in_a_single_item_array(string alias)
+        => AssertSequence(GetValue(alias, "[\"a\"]"), "[\"a\"]");
 
     private const string SingleBlockJson =
         "{\"layout\":{\"Umbraco.SingleBlock\":[{\"contentKey\":\"11111111-1111-1111-1111-111111111111\"}]}," +

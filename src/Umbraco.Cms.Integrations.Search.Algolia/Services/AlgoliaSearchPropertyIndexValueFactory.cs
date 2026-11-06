@@ -18,6 +18,7 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
             Core.Constants.PropertyEditors.Aliases.EntityDataPicker,
             Core.Constants.PropertyEditors.Aliases.ImageCropper,
             Core.Constants.PropertyEditors.Aliases.MultiUrlPicker,
+            Core.Constants.PropertyEditors.Aliases.SingleUrlPicker,
         };
 
         private readonly PropertyEditorCollection _propertyEditorsCollection;
