@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Requires Umbraco CMS 19 (built against 19.0.0-beta1) and .NET 11. The package targets `net11.0` and depends on `Umbraco.Cms.*` `[19.0.0-beta1, 20.0.0)`. Use the 7.x line for Umbraco 18.
 
+### fix
+
+* The forms endpoints return 502 Bad Gateway with ProblemDetails ("ActiveCampaign authorization failed.") when ActiveCampaign rejects the API key, instead of passing on its 401/403. On Umbraco 19 a passed-on 401 opened the backoffice login dialog and a 403 failed silently.
+
 ### Internal
 
 * The backoffice client now authenticates with the Umbraco 19 cookie (`authContext.configureClient`) instead of a bearer token, and is built against `@umbraco-cms/backoffice` 19.0.0-beta1.

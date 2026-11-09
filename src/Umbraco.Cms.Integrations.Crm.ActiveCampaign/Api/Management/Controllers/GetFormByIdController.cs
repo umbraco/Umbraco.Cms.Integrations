@@ -19,7 +19,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
         [HttpGet("forms/{id}")]
         [ProducesResponseType(typeof(FormResponseDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status502BadGateway)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetForm(string id)
         {
