@@ -34,11 +34,11 @@ machinery removed, because this repo is shaped differently:
   bump it. The real version is stamped into the `wwwroot` copy by CI. Editing it
   would also make the package look changed to release detection.
 - **Tags are `release/<slug>-<version>`**, e.g. `release/search-algolia-7.1.0` -
-  not `Product@Version`. Note the branch is `v18/release/<date>` while tags are
+  not `Product@Version`. Note the branch is `v19/release/<date>` while tags are
   `release/<slug>-<version>`; they live in different ref namespaces and do not
   collide.
 - **`main-v<N>`, not `v<N>/main`.** This repo names its released branch
-  `main-v18`; `Umbraco.AI`/`Umbraco.Automate` use `v18/main`. The
+  `main-v19`; `Umbraco.AI`/`Umbraco.Automate` use `v<N>/main`. The
   `publicReleaseRefSpec` entries reflect that difference.
 
 ## Task
@@ -61,10 +61,10 @@ machinery removed, because this repo is shaped differently:
 Confirm the current branch is a dev branch:
 
 ```bash
-git branch --show-current    # expect v18/dev or v17/dev
+git branch --show-current    # expect v19/dev, v18/dev or v17/dev
 ```
 
-If it is `main-v18`/`main-v17`, stop and tell the user - releases are prepared on
+If it is `main-v19`/`main-v18`/`main-v17`, stop and tell the user - releases are prepared on
 the dev branch.
 
 Discover the packages (any `src/` folder with both a `.csproj` and a
@@ -128,7 +128,7 @@ Read the current version from the package's `version.json`, then:
 
 **Never** change a package's major to a number that does not match its Umbraco
 line. Each package keeps one major per Umbraco major (Search.Algolia `6.x` = v17,
-`7.x` = v18). If the commits genuinely warrant a major bump within a line, raise
+`7.x` = v18, `8.x` = v19). If the commits genuinely warrant a major bump within a line, raise
 it with the user rather than silently jumping the major - it would collide with
 the next Umbraco major's numbering.
 
@@ -160,17 +160,17 @@ Do not proceed until the user has confirmed.
 ## Phase 4: Cut the release branch
 
 **Do this before touching any file.** The bump belongs on the release branch, not
-on `v18/dev`.
+on `v19/dev`.
 
-Why it matters: `version.json` sets `publicReleaseRefSpec` to `main-v18`,
-`v18/release/*` and `v18/hotfix/*`. NBGV only drops the preview suffix on a branch
+Why it matters: `version.json` sets `publicReleaseRefSpec` to `main-v19`,
+`v19/release/*` and `v19/hotfix/*`. NBGV only drops the preview suffix on a branch
 matching one of those:
 
 | Branch built | Version produced |
 |---|---|
-| `v18/release/2026.08.1` | `7.1.0` ← publishable |
-| `main-v18` | `7.1.0` |
-| `v18/dev`, feature branches | `7.1.0--preview.4.gabc1234` |
+| `v19/release/2026.08.1` | `7.1.0` ← publishable |
+| `main-v19` | `7.1.0` |
+| `v19/dev`, feature branches | `7.1.0--preview.4.gabc1234` |
 
 So the release branch is what produces the artifact you publish. This is the same
 arrangement `Umbraco.AI` and `Umbraco.Automate` use.
@@ -191,7 +191,7 @@ month, and the collision only shows up later when the date tags are created.
 Work out the name:
 
 ```bash
-git branch --show-current            # the line prefix, e.g. v18/dev -> v18
+git branch --show-current            # the line prefix, e.g. v19/dev -> v19
 date +%Y.%m                          # e.g. 2026.08
 
 git fetch origin --tags
@@ -203,7 +203,7 @@ git tag --list "2026.08.*" | sort -V | tail -1   # highest release event this mo
 one; start at `1` if the month has none. Confirm the name with the user, then:
 
 ```bash
-git checkout -b v18/release/2026.08.1
+git checkout -b v19/release/2026.08.1
 ```
 
 The matching date tag `2026.08.1` is created at release time, in Phase 10, next to
@@ -211,7 +211,7 @@ the per-package tags. It is what lets the next release pick the right number, so
 skipping it breaks the sequence for whoever releases next - on either line.
 
 For an urgent fix on top of an already-released state, cut
-`v18/hotfix/YYYY.MM.N` from `main-v18` instead of from dev.
+`v19/hotfix/YYYY.MM.N` from `main-v19` instead of from dev.
 
 ---
 
@@ -359,8 +359,8 @@ logic, so this is the only check that what ships is what you meant:
 
 ```bash
 pwsh -File .azure-pipelines/scripts/detect-changes.ps1 \
-  -SourceBranch "refs/heads/v18/release/2026.08.1" \
-  -ReleaseCompareRef "origin/main-v18"
+  -SourceBranch "refs/heads/v19/release/2026.08.1" \
+  -ReleaseCompareRef "origin/main-v19"
 ```
 
 Read the `Build plan:` block and confirm the `BUILD` lines are exactly the
@@ -382,7 +382,7 @@ git commit -m "chore(release): Prepare release 2026.08.1
 - Umbraco.Cms.Integrations.Search.Algolia: 7.0.1 -> 7.1.0
 - Umbraco.Cms.Integrations.Crm.Hubspot: 9.0.1 -> 9.0.2"
 
-git push -u origin v18/release/2026.08.1
+git push -u origin v19/release/2026.08.1
 ```
 
 `release-manifest.json` must be in the commit, or CI fails on the release branch.
@@ -393,7 +393,7 @@ Use the **release branch name** in the commit subject, not the package versions 
 one branch can carry several packages at different versions.
 
 Pushing a new release branch is safe: it touches no shared branch, and nothing is
-published until a human promotes the artifact. `main-v18` and `v18/dev` are left
+published until a human promotes the artifact. `main-v19` and `v19/dev` are left
 untouched until `/post-release-cleanup` runs.
 
 CI will then build this branch and produce **clean-versioned** artifacts, for
@@ -404,19 +404,19 @@ exactly the packages named in the manifest's `include` list.
 ## Phase 10: Report what happens next
 
 ```
-Release branch v18/release/2026.08.1 pushed, carrying:
+Release branch v19/release/2026.08.1 pushed, carrying:
   - Search.Algolia 7.0.1 -> 7.1.0
   - Crm.Hubspot    9.0.1 -> 9.0.2
 
-main-v18 and v18/dev are untouched.
+main-v19 and v19/dev are untouched.
 
 Next:
-  1. Wait for CI on v18/release/2026.08.1. Confirm the artifacts are
+  1. Wait for CI on v19/release/2026.08.1. Confirm the artifacts are
      clean-versioned (7.1.0, NOT 7.1.0--preview.N) before going further.
   2. Promote each artifact to NuGet. This is the one step no skill does.
   3. Run /post-release-cleanup on this branch. It verifies the packages are
      on NuGet, creates the tags and the GitHub releases, deletes the manifest,
-     merges into main-v18 and v18/dev, and bumps the dev patches.
+     merges into main-v19 and v19/dev, and bumps the dev patches.
 ```
 
 **Do not tag, and do not create GitHub releases here.** They belong to

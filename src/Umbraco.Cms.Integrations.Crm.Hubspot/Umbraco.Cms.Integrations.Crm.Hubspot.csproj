@@ -14,7 +14,7 @@
 		<Title>Umbraco CMS Integrations: CRM - Hubspot</Title>
 		<Description>An extension for Umbraco CMS providing a form picker and rendering component for Hubspot.</Description>
 		<PackageIconUrl></PackageIconUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main-v18/src/Umbraco.Cms.Integrations.Crm.Hubspot</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main-v19/src/Umbraco.Cms.Integrations.Crm.Hubspot</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>

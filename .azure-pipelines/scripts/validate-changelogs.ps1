@@ -39,7 +39,7 @@ function Get-ComparisonBase {
         return "HEAD~1"
     }
 
-    $line = if ($SourceBranch -match '^refs/heads/(v\d+)/') { $Matches[1] } else { 'v18' }
+    $line = if ($SourceBranch -match '^refs/heads/(v\d+)/') { $Matches[1] } else { 'v19' }
     $mergeBase = git merge-base "origin/$line/dev" HEAD 2>&1
     if ($LASTEXITCODE -eq 0) { return $mergeBase.Trim() }
     return $null

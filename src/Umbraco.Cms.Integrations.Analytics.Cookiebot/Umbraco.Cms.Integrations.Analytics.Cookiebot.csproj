@@ -13,7 +13,7 @@
 		<Title>Umbraco CMS Integrations: Analytics - Cookiebot</Title>
 		<Description>An extension for Umbraco CMS providing an implementation model for Cookiebot banner and declaration.</Description>
 		<PackageIconUrl></PackageIconUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main-v18/src/Umbraco.Cms.Integrations.Analytics.Cookiebot</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main-v19/src/Umbraco.Cms.Integrations.Analytics.Cookiebot</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>

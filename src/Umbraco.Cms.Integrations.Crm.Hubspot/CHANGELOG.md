@@ -5,11 +5,16 @@ All notable changes to Umbraco.Cms.Integrations.Crm.Hubspot will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [9.0.3] - Unreleased
+## [10.0.0] - Unreleased
+
+### Breaking
+
+* Requires Umbraco CMS 19 (built against 19.0.0-beta1) and .NET 11. The package targets `net11.0` and depends on `Umbraco.Cms.*` `[19.0.0-beta1, 20.0.0)`. Use the 9.x line for Umbraco 18.
 
 ### Internal
 
-* Development version bump after the 9.0.2 release.
+* The backoffice client now authenticates with the Umbraco 19 cookie (`authContext.configureClient`) instead of a bearer token, and is built against `@umbraco-cms/backoffice` 19.0.0-beta1.
+* Form picker value converters use `PropertyCacheLevel.Element` instead of the obsolete `Snapshot`; the converted value depends only on the stored value, so behaviour is unchanged.
 
 ## [9.0.2] - 2026-08-11
 
