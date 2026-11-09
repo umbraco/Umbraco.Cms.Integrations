@@ -14,10 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Single media pickers are indexed by the new `UmbracoSingleMediaPickerConverter`, a subclass of `UmbracoMediaPickerConverter` (whose `Name` is now virtual). A site that replaces `UmbracoMediaPickerConverter` must replace the single one too.
 * Media picker fields are now indexed (as file paths) instead of an empty string.
 * Editors without an Algolia converter: core editors get the package's own copy of the Umbraco 18 index output; any other (third-party or custom) editor is indexed as its raw stored value, because its own `PropertyIndexValueFactory` no longer exists in Umbraco 19. Sites with such editors should register an `IAlgoliaIndexValueConverter`.
+* A Single Block property is indexed by the new `UmbracoSingleBlockConverter` as a list of strings, like Block List and Block Grid, instead of one concatenated summary. A Single Block nested in a Block List or Grid is still skipped.
 
 ### feat
 
-* Add `UmbracoSingleBlockConverter`, which indexes a Single Block as a list of strings, like Block List and Block Grid. Umbraco 18 indexed one concatenated summary. A Single Block nested in a Block List or Grid is still skipped.
 * Build index values in the package, since Umbraco 19 removes `IDataEditor.PropertyIndexValueFactory` and `IndexValue`.
 
 ### fix

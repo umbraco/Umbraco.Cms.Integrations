@@ -13,8 +13,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Tests.Services;
 
 // Expected values are what the CMS 18 property index value factories (release-18.0.0) produced for the same
 // stored values, which is what existing Algolia indexes were built from. Two deliberate exceptions: times are
-// formatted with the invariant culture, and a Single Block property is indexed by UmbracoSingleBlockConverter
-// (see docs/upgrades/v19.md, Decisions).
+// formatted with the invariant culture (18 used the server culture), and a Single Block property is indexed by
+// UmbracoSingleBlockConverter as a list of strings (18 indexed one concatenated summary).
 public class AlgoliaSearchPropertyIndexValueFactoryTests
 {
     private const string TextBox = "Umbraco.TextBox";
