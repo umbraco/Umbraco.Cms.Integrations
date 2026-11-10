@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Internal
 
 * The backoffice client now authenticates with the Umbraco 19 cookie (`authContext.configureClient`) instead of a bearer token, and is built against `@umbraco-cms/backoffice` 19.0.0-beta1.
-* Form picker value converters use `PropertyCacheLevel.Element` instead of the obsolete `Snapshot`; the converted value depends only on the stored value, so behaviour is unchanged.
+* Form picker value converters use `PropertyCacheLevel.None` instead of the obsolete `Snapshot`; the real-time form is fetched from Dynamics, so it is not cached, as before.
 * Stop relying on `Json.More` from the CMS; the Dynamics form picker value converter now uses `System.Text.Json`.
 
 ## [6.0.3] - 2026-08-12

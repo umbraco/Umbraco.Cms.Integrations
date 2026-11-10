@@ -10,9 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking
 
 * Requires Umbraco CMS 19 (built against 19.0.0-beta1) and .NET 11. The package targets `net11.0` and depends on `Umbraco.Cms.*` `[19.0.0-beta1, 20.0.0)`. Use the 7.x line for Umbraco 18.
-* `IAlgoliaIndexValueConverter.ParseIndexValues(IProperty, IndexValue)` is now `ParseIndexValues(IProperty property, string? culture)`. The CMS type it took (`IndexValue`) is removed in Umbraco 19, so custom converters must be updated.
-* Single media pickers are indexed by the new `UmbracoSingleMediaPickerConverter`, a subclass of `UmbracoMediaPickerConverter` (whose `Name` is now virtual). A site that replaces `UmbracoMediaPickerConverter` must replace the single one too.
-* Media picker fields are now indexed (as file paths) instead of an empty string.
+* `IAlgoliaIndexValueConverter.ParseIndexValues(IProperty, IndexValue)` and `UmbracoBlockValueConverterBase.ParseIndexValues` are now `ParseIndexValues(IProperty property, string? culture)`. The CMS type they took (`IndexValue`) is removed in Umbraco 19, so custom converters must be updated.
 * Editors without an Algolia converter: core editors get the package's own copy of the Umbraco 18 index output; any other (third-party or custom) editor is indexed as its raw stored value, because its own `PropertyIndexValueFactory` no longer exists in Umbraco 19. Sites with such editors should register an `IAlgoliaIndexValueConverter`.
 * A Single Block property is indexed by the new `UmbracoSingleBlockConverter` as a list of strings, like Block List and Block Grid, instead of one concatenated summary. A Single Block nested in a Block List or Grid is still skipped.
 

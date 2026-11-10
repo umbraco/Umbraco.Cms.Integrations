@@ -36,7 +36,6 @@ public class AlgoliaSearchPropertyIndexValueFactoryTests
                 new UmbracoBlockListConverter(NullLogger<UmbracoBlockListConverter>.Instance),
                 new UmbracoSingleBlockConverter(NullLogger<UmbracoSingleBlockConverter>.Instance),
                 new UmbracoMediaPickerConverter(CreateMediaService()),
-                new UmbracoSingleMediaPickerConverter(CreateMediaService()),
             ]),
             Mock.Of<IContentTypeService>(),
             NullLogger<AlgoliaSearchPropertyIndexValueFactory>.Instance);
@@ -205,12 +204,13 @@ public class AlgoliaSearchPropertyIndexValueFactoryTests
         Assert.Equal(0m, GetValue("Umbraco.Decimal", null));
     }
 
-    // Single pickers store the same JSON array as the multiple picker, so both index the file path.
+    // CMS 18 parity: MediaPicker3 had a no-op index factory, so media pickers index an empty string. The media
+    // converter is not used for them; real URLs are a follow-up.
     [Theory]
     [InlineData("Umbraco.MediaPicker3")]
     [InlineData("Umbraco.MediaPicker.Single")]
-    public void Media_pickers_index_the_file_of_the_picked_media(string alias)
-        => AssertSequence(GetValue(alias, MediaPickerJson), "/media/a.jpg");
+    public void Media_pickers_index_an_empty_string(string alias)
+        => Assert.Equal(string.Empty, GetValue(alias, MediaPickerJson));
 
     // No converter handles dropdowns; the stored JSON array is indexed in a single item array in 18 and 19.
     [Theory]

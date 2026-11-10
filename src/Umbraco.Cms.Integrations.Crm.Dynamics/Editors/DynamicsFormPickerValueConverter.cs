@@ -19,7 +19,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
 
         public override bool IsConverter(IPublishedPropertyType propertyType) => propertyType.EditorAlias.Equals("Umbraco.Cms.Integrations.Crm.Dynamics.FormPicker");
 
-        public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType) => PropertyCacheLevel.Element;
+        public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType) => PropertyCacheLevel.None;
 
         public override Type GetPropertyValueType(IPublishedPropertyType propertyType) => typeof(FormViewModel);
 

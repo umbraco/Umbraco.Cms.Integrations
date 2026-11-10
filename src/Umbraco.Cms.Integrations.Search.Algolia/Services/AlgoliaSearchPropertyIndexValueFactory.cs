@@ -52,9 +52,16 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Services
                 return default;
             }
 
+            // CMS 18 had no-op index factories for the media pickers: they index "" and never reach a converter.
+            if (editorAlias is Core.Constants.PropertyEditors.Aliases.MediaPicker3
+                or Core.Constants.PropertyEditors.Aliases.SingleMediaPicker)
+            {
+                return new KeyValuePair<string, object>(property.Alias, string.Empty);
+            }
+
             try
             {
-                var converter = _converterCollection.FirstOrDefault(p => p.Name == editorAlias);
+                var converter =_converterCollection.FirstOrDefault(p => p.Name == editorAlias);
                 if (converter != null)
                 {
                     var result = converter.ParseIndexValues(property, culture);
