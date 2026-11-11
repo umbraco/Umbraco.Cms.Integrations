@@ -21,9 +21,9 @@
     4. Fails the package on a license policy violation (umbraco-sbom exit 50).
     5. With -Upload, posts the SBOM to Dependency-Track as one project per package major
        (e.g. "Umbraco.Cms.Integrations.Search.Algolia v7") with the full version (e.g. 7.0.2).
-       isLatest is set when the version is stable and at least as high as the newest stable
-       version of the same major on NuGet.org, so each major's project marks its newest stable
-       release. An upload failure is a warning, not a failure: it must not block a release.
+       Every upload is flagged isLatest, so each major's project marks the newest version
+       uploaded (Dependency-Track unflags the previous one). An upload failure is a
+       warning, not a failure: it must not block a release.
 
 .PARAMETER Products
     Comma-separated package folder names under src/ to generate SBOMs for.
@@ -229,35 +229,6 @@ function Merge-Sboms {
     $merged.Save($OutputFile)
 }
 
-# Newest stable release of its major: stable, and not below any stable release of the same major
-# on NuGet.org. Each major is its own Dependency-Track project, so each has its own latest.
-# The package folder name is the NuGet package ID for every package in this repo.
-function Test-IsLatest {
-    param([string]$Product, [string]$Version)
-
-    $current = [System.Management.Automation.SemanticVersion]$Version
-    if ($current.PreReleaseLabel) { return $false }
-
-    $uri = "https://api.nuget.org/v3-flatcontainer/$($Product.ToLowerInvariant())/index.json"
-    $index = Invoke-WithRetry -Description "NuGet lookup for $Product" -Action {
-        $response = Invoke-RestMethod -Uri $uri -SkipHttpErrorCheck -StatusCodeVariable status
-        if ($status -eq 404) { return $null } # never published
-        if ($status -ne 200) { throw "NuGet.org returned HTTP $status" }
-        return $response
-    }
-    if ($null -eq $index) { return $true } # first stable release of a new package or major
-
-    $published = @($index.versions |
-        ForEach-Object {
-            $parsed = $null
-            if ([System.Management.Automation.SemanticVersion]::TryParse($_, [ref]$parsed)) { $parsed }
-        } |
-        Where-Object { -not $_.PreReleaseLabel -and $_.Major -eq $current.Major } |
-        Sort-Object -Descending)
-
-    return $published.Count -eq 0 -or $current -ge $published[0]
-}
-
 function Get-DependencyTrackProjectName {
     param([string]$Product, [string]$Version)
 
@@ -266,7 +237,7 @@ function Get-DependencyTrackProjectName {
 }
 
 function Send-Sbom {
-    param([string]$Product, [string]$Version, [bool]$IsLatest, [string]$SbomFile)
+    param([string]$Product, [string]$Version, [string]$SbomFile)
 
     $baseUrl = $env:DT_BASE_URL
     if (-not $baseUrl -or -not $env:DT_API_KEY) {
@@ -278,7 +249,7 @@ function Send-Sbom {
         autoCreate     = "true"
         projectName    = Get-DependencyTrackProjectName -Product $Product -Version $Version
         projectVersion = $Version
-        isLatest       = $IsLatest.ToString().ToLowerInvariant()
+        isLatest       = "true"
         bom            = Get-Item $SbomFile
     }
 
@@ -331,10 +302,9 @@ foreach ($product in $productList) {
 
         if ($Upload) {
             try {
-                $isLatest = Test-IsLatest -Product $product -Version $version
                 $projectName = Get-DependencyTrackProjectName -Product $product -Version $version
-                Write-Host "Uploading to Dependency-Track as $projectName $version (isLatest: $isLatest)"
-                if (-not (Send-Sbom -Product $product -Version $version -IsLatest $isLatest -SbomFile $sbomFile)) {
+                Write-Host "Uploading to Dependency-Track as $projectName $version (isLatest: true)"
+                if (-not (Send-Sbom -Product $product -Version $version -SbomFile $sbomFile)) {
                     $uploadWarnings += $product
                 }
             }
