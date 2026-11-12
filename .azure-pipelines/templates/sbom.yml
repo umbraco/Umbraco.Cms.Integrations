@@ -8,7 +8,7 @@
 #
 # Writes <package>-bom.xml for each package to the SBOM pipeline artifact. A license policy
 # violation fails the step; a Dependency-Track upload failure only warns, so it can't block a
-# release. See scripts/sbom/generate-sbom.ps1 for how versions and isLatest are worked out.
+# release. See scripts/sbom/generate-sbom.ps1 for how versions are worked out (every upload is flagged isLatest).
 #
 # Parameters:
 #   products: Comma-separated package folder names under src/. Accepts a runtime macro.
