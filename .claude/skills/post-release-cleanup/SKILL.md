@@ -243,11 +243,17 @@ awk -v v="$version" '
 
 test -s /tmp/notes.md || { echo "No changelog body for $version - stopping"; exit 1; }
 
+# A version with a suffix (10.0.0-rc1) is a pre-release on GitHub too, so it is
+# never shown as the repo's latest release.
+prerelease=()
+case "$version" in *-*) prerelease=(--prerelease) ;; esac
+
 gh release create "$tag" \
   --repo umbraco/Umbraco.Cms.Integrations \
   --title "$tag" \
   --notes-file /tmp/notes.md \
-  --verify-tag
+  --verify-tag \
+  "${prerelease[@]}"
 ```
 
 Two guards worth keeping:
@@ -329,6 +335,17 @@ For each released package, increment the patch in `src/<PackageName>/version.jso
 
 Always bump the **patch**, whatever kind of bump the release itself was. This is
 mechanical - it only exists to keep preview builds sorting above the release.
+
+**After a release candidate** (`10.0.0-rc1`), don't bump the patch. Ask the user
+which comes next and set dev to it:
+
+- Another RC expected → `10.0.0-rc2`.
+- The Umbraco final is next → the final `10.0.0`.
+
+Preview builds of either (`10.0.0--rc2.preview.N`, `10.0.0--preview.N`) sort
+below `10.0.0-rc1`, because NBGV's extra `-` sorts before `r`. That's fine: they
+are never published, and the next real release (`-rc2` or the final) sorts
+above `-rc1`.
 
 **Do not touch `Client/public/umbraco-package.json`.** It is a fixed `1.0.0`
 placeholder; the real version is stamped into the `wwwroot` copy by

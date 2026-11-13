@@ -86,9 +86,14 @@ with dots replaced by hyphens (`Umbraco.Cms.Integrations.Search.Algolia` →
 > tag with `git tag --list` rather than assuming the derived slug.
 
 ```bash
-git tag --list "release/<slug>-*" --sort=-version:refname | head -n1
+git -c versionsort.suffix=- tag --list "release/<slug>-*" --sort=-version:refname | head -n1
 git log <tag>..HEAD --oneline -- src/<PackageName>/
 ```
+
+`versionsort.suffix=-` makes a pre-release tag (`...-10.0.0-rc1`) sort below its
+final (`...-10.0.0`). Without it git sorts the `-rc1` tag first, and once the
+final has shipped `head -n1` would pick the release candidate and count commits
+that already shipped.
 
 Ignore changes that are only to `CHANGELOG.md` or `version.json` - those are
 release-prep artifacts, not substantive changes.
@@ -132,6 +137,18 @@ line. Each package keeps one major per Umbraco major (Search.Algolia `6.x` = v17
 it with the user rather than silently jumping the major - it would collide with
 the next Umbraco major's numbering.
 
+**Pre-release versions.** While a new Umbraco major is in RC, a package's
+`version.json` holds a pre-release of its new major, such as `10.0.0-rc1`. The
+rules above don't apply to it: the commits that opened the line are
+`feat!`/`BREAKING CHANGE`, and they are already the major. Offer instead:
+
+- **Release the current pre-release** (`10.0.0-rc1`) - when it has not shipped yet.
+- **Next release candidate** (`10.0.0-rc1` → `10.0.0-rc2`) - for a new Umbraco RC.
+- **Final** (`10.0.0-rc2` → `10.0.0`) - only once the matching Umbraco final is on
+  NuGet, together with raising `UmbracoCmsPackageVersion` to the final floor.
+
+Keep the suffix undotted (`-rc1`, `-rc2`), as Umbraco CMS names its own RCs.
+
 Present the recommendation:
 
 ```
@@ -148,7 +165,8 @@ Present the recommendation:
 Use **AskUserQuestion** to confirm. Options:
 
 - **Use the recommended versions** (default)
-- **Adjust individual versions** - ask per package, validate the `X.Y.Z` format,
+- **Adjust individual versions** - ask per package, validate the `X.Y.Z` or
+  `X.Y.Z-rcN` format,
   warn if it breaks the one-major-per-Umbraco-major convention
 - **Drop a package from this release**
 - **Cancel**
