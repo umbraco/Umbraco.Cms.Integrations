@@ -5,11 +5,11 @@ All notable changes to Umbraco.Cms.Integrations.Search.Algolia will be documente
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [8.0.0] - Unreleased
+## [8.0.0-rc1] - Unreleased
 
 ### Breaking
 
-* Requires Umbraco CMS 19 (built against 19.0.0-beta1) and .NET 11. The package targets `net11.0` and depends on `Umbraco.Cms.*` `[19.0.0-beta1, 20.0.0)`. Use the 7.x line for Umbraco 18.
+* Requires Umbraco CMS 19 (built against 19.0.0-rc1) and .NET 11. The package targets `net11.0` and depends on `Umbraco.Cms.*` `[19.0.0-rc1, 20.0.0)`. Use the 7.x line for Umbraco 18.
 * `IAlgoliaIndexValueConverter.ParseIndexValues(IProperty, IndexValue)` and `UmbracoBlockValueConverterBase.ParseIndexValues` are now `ParseIndexValues(IProperty property, string? culture)`. The CMS type they took (`IndexValue`) is removed in Umbraco 19, so custom converters must be updated.
 * Editors without an Algolia converter: core editors get the package's own copy of the Umbraco 18 index output; any other (third-party or custom) editor is indexed as its raw stored value, because its own `PropertyIndexValueFactory` no longer exists in Umbraco 19. Sites with such editors should register an `IAlgoliaIndexValueConverter`.
 * A Single Block property is indexed by the new `UmbracoSingleBlockConverter` as a list of strings, like Block List and Block Grid, instead of one concatenated summary. A Single Block nested in a Block List or Grid is still skipped.
@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Internal
 
-* The backoffice client now authenticates with the Umbraco 19 cookie (`authContext.configureClient`) instead of a bearer token, and is built against `@umbraco-cms/backoffice` 19.0.0-beta1.
+* The backoffice client now authenticates with the Umbraco 19 cookie (`authContext.configureClient`) instead of a bearer token, and is built against `@umbraco-cms/backoffice` 19.0.0-rc1.
 
 
 ## [7.0.2] - 2026-08-11

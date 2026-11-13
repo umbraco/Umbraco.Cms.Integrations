@@ -38,7 +38,7 @@ npm run build                           # builds them into each package's wwwroo
 dotnet build Umbraco.Cms.Integrations.slnx
 ```
 
-Requires the **.NET 11 SDK** (`11.0.100-rc.3.26522.148`, pinned in `global.json`) and **Node 24.13+ / npm 11+**.
+Requires the **.NET 11 SDK** (`11.0.100`, pinned in `global.json`) and **Node 24.13+ / npm 11+**.
 
 **The npm steps are not optional on a fresh clone.** `wwwroot` holds compiled client
 assets and is *not* committed, so until you have run `npm run build` the packages have

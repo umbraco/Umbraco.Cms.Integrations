@@ -12,7 +12,7 @@ This file is for **navigation, structure, and release workflow**. Package-specif
 - **Stack:** .NET (net11.0 on the v19 line, net10.0 on v17/v18), Umbraco CMS as the host, per-package **TypeScript + Vite** backoffice client compiled into `wwwroot`, built/packed via **Azure Pipelines**.
 - **Not a single product:** there is no shared runtime library across packages — they are sibling projects that share only the repo, tooling, and release conventions. No package references another.
 
-> **v19, v18, v17 and legacy `main`.** The v19, v18 and v17 lines all use central package management, per-package `version.json` (NBGV) and a single pipeline — described below. Their pipeline scripts differ only in a fallback line default, so a change to one ports mechanically to the others. The v19 line also needs the .NET 11 SDK (`global.json` pins `11.0.100-rc.3.26522.148`); `setup-dotnet.yml` installs it on agents that lack it. **Only the legacy `main` branch still uses the older manual process** (hand-edited `<Version>` in three files, one pipeline per package). Sections 3 and 4 flag where they differ.
+> **v19, v18, v17 and legacy `main`.** The v19, v18 and v17 lines all use central package management, per-package `version.json` (NBGV) and a single pipeline — described below. Their pipeline scripts differ only in a fallback line default, so a change to one ports mechanically to the others. The v19 line also needs the .NET 11 SDK (`global.json` pins `11.0.100`); `setup-dotnet.yml` installs it on agents that lack it. **Only the legacy `main` branch still uses the older manual process** (hand-edited `<Version>` in three files, one pipeline per package). Sections 3 and 4 flag where they differ.
 
 ---
 
