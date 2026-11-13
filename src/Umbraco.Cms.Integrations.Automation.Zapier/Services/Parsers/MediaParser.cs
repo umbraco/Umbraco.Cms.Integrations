@@ -8,16 +8,11 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services.Parsers
     {
         public string GetValue(IPublishedProperty contentProperty)
         {
-            string value = string.Empty;
-            switch (contentProperty.PropertyType.EditorAlias)
-            {
-                case Core.Constants.PropertyEditors.Aliases.MediaPicker3:
-                    var mediaPicker3Value = contentProperty.GetValue() as MediaWithCrops;
-                    value = mediaPicker3Value != null ? mediaPicker3Value.LocalCrops.Src : string.Empty;
-                    break;
-            }
-
-            return value;
+            // The single media picker yields one MediaWithCrops. The multiple picker (MediaPicker3) yields a
+            // collection, which has always produced an empty value here, so that payload is kept as is.
+            return contentProperty.GetValue() is MediaWithCrops media
+                ? media.LocalCrops.Src
+                : string.Empty;
         }
     }
 }

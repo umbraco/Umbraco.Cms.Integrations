@@ -5,11 +5,17 @@ All notable changes to Umbraco.Cms.Integrations.Crm.Dynamics will be documented 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [6.0.4] - Unreleased
+## [7.0.0-rc1] - Unreleased
+
+### Breaking
+
+* Requires Umbraco CMS 19 (built against 19.0.0-rc1) and .NET 11. The package targets `net11.0` and depends on `Umbraco.Cms.*` `[19.0.0-rc1, 20.0.0)`. Use the 6.x line for Umbraco 18.
 
 ### Internal
 
-* Development version bump after the 6.0.3 release.
+* The backoffice client now authenticates with the Umbraco 19 cookie (`authContext.configureClient`) instead of a bearer token, and is built against `@umbraco-cms/backoffice` 19.0.0-rc1.
+* Form picker value converters use `PropertyCacheLevel.None` instead of the obsolete `Snapshot`; the real-time form is fetched from Dynamics, so it is not cached, as before.
+* Stop relying on `Json.More` from the CMS; the Dynamics form picker value converter now uses `System.Text.Json`.
 
 ## [6.0.3] - 2026-08-12
 

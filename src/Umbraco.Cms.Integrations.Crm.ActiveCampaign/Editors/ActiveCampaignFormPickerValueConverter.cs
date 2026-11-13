@@ -18,7 +18,7 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Editors
         public override bool IsConverter(IPublishedPropertyType propertyType) => 
             propertyType.EditorAlias.Equals(Constants.PropertyEditorAlias);
 
-        public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType) => PropertyCacheLevel.Snapshot;
+        public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType) => PropertyCacheLevel.Element;
 
         public override Type GetPropertyValueType(IPublishedPropertyType propertyType) => typeof(FormViewModel);
 

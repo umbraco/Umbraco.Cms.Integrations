@@ -18,7 +18,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Extensions
                 .Append<UmbracoBooleanConverter>()
                 .Append<UmbracoTagsConverter>()
                 .Append<UmbracoBlockListConverter>()
-                .Append<UmbracoBlockGridConverter>();
+                .Append<UmbracoBlockGridConverter>()
+                .Append<UmbracoSingleBlockConverter>();
 
             return builder;
         }

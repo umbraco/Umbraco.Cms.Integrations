@@ -2,7 +2,6 @@ using System.Text.Json.Nodes;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Extensions;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
@@ -43,13 +42,12 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
             global::Umbraco.Cms.Core.Constants.PropertyEditors.Aliases.BlockGrid,
         };
 
-        public object ParseIndexValues(IProperty property, IndexValue indexValue)
+        public object ParseIndexValues(IProperty property, string? culture)
         {
             var result = new List<string>();
 
             // Prefer the value for the culture being indexed, falling back to the invariant value for
             // block properties that don't vary by culture.
-            var culture = indexValue?.Culture;
             var rawValue = property.GetValue(culture)?.ToString();
             if (string.IsNullOrWhiteSpace(rawValue) && culture is not null)
             {

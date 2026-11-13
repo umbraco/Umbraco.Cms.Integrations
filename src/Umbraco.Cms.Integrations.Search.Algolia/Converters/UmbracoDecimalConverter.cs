@@ -1,5 +1,4 @@
 ﻿using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.PropertyEditors;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 {
@@ -7,18 +6,13 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
     {
         public string Name => Core.Constants.PropertyEditors.Aliases.Decimal;
 
-        public object ParseIndexValues(IProperty property, IndexValue indexValue)
+        public object ParseIndexValues(IProperty property, string? culture)
         {
-            if (indexValue != null && indexValue.Values.Any())
-            {
-                var value = indexValue.Values.FirstOrDefault();
+            var value = property.GetValue(culture, null, true);
 
-                return value != null
-                    ? decimal.Parse(value.ToString())
-                    : default;
-            }
-
-            return default(decimal);
+            return value != null
+                ? decimal.Parse(value.ToString()!)
+                : default(decimal);
         }
     }
 }

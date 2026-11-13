@@ -7,8 +7,16 @@
 #   ubuntu-latest                 -> "/usr/bin/env: 'bash': No such file or directory"
 #
 # The agents are build agents, so an SDK is already installed; global.json
-# (rollForward: latestFeature) selects it. This step only proves that is true and
-# fails with something readable if it ever is not.
+# (rollForward: latestFeature) selects it. This step proves that is true. When the
+# image has no SDK that satisfies global.json (the hosted images lag behind a
+# .NET release candidate), it installs the exact SDK global.json names with
+# Microsoft's dotnet-install script, which needs no task and no OS-detecting
+# helper (on Linux it does need bash; the step says so if bash is missing), then
+# fails with something readable if that did not work either.
+#
+# The .NET 10 runtime is installed alongside: the install folder is put first on
+# PATH with DOTNET_ROOT, which hides the image's own runtimes, and the global tools
+# installed later (nbgv, umbraco-sbom) target net10.0 (umbraco-sbom has no roll-forward).
 #
 # pwsh, not `script`: `script` runs under bash on Linux and cmd.exe on Windows,
 # and the failure above means we cannot assume either is present.
@@ -22,19 +30,53 @@ steps:
               Write-Host ("{0,-10} : {1}" -f $tool, $(if ($found) { $found.Source } else { 'NOT FOUND' }))
           }
 
-          $dotnet = Get-Command dotnet -ErrorAction SilentlyContinue
-          if (-not $dotnet) { throw "No dotnet on PATH. The agent image needs a .NET SDK preinstalled." }
+          $globalJson = "$(Build.SourcesDirectory)/global.json"
+          $required = (Get-Content $globalJson -Raw | ConvertFrom-Json).sdk.version
+
+          # `dotnet --version` run from the repo root resolves global.json, so it
+          # fails exactly when no installed SDK satisfies it.
+          function Test-GlobalJsonSdk {
+              if (-not (Get-Command dotnet -ErrorAction SilentlyContinue)) { return $false }
+              Push-Location "$(Build.SourcesDirectory)"
+              try { & dotnet --version *> $null; return ($LASTEXITCODE -eq 0) } finally { Pop-Location }
+          }
+
+          if (-not (Test-GlobalJsonSdk)) {
+              Write-Host ""
+              Write-Host "No installed SDK satisfies global.json ($required); installing it."
+              $installDir = Join-Path $HOME ".dotnet"
+              if ($IsWindows) {
+                  $script = Join-Path ([System.IO.Path]::GetTempPath()) "dotnet-install.ps1"
+                  Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile $script
+                  $global:LASTEXITCODE = 0
+                  & $script -JSonFile $globalJson -InstallDir $installDir
+                  & $script -Runtime dotnet -Channel 10.0 -InstallDir $installDir
+              }
+              else {
+                  if (-not (Get-Command bash -ErrorAction SilentlyContinue)) {
+                      throw "dotnet-install.sh needs bash and the agent has none. Preinstall the SDK $required on the image."
+                  }
+                  $script = Join-Path ([System.IO.Path]::GetTempPath()) "dotnet-install.sh"
+                  Invoke-WebRequest "https://dot.net/v1/dotnet-install.sh" -OutFile $script
+                  & bash $script --jsonfile $globalJson --install-dir $installDir
+                  if ($LASTEXITCODE -eq 0) { & bash $script --runtime dotnet --channel 10.0 --install-dir $installDir }
+              }
+              if ($LASTEXITCODE -ne 0) { throw "dotnet-install failed with exit code $LASTEXITCODE" }
+
+              # Later steps are separate processes: hand them the install location.
+              Write-Host "##vso[task.prependpath]$installDir"
+              Write-Host "##vso[task.setvariable variable=DOTNET_ROOT]$installDir"
+              $env:PATH = "$installDir$([System.IO.Path]::PathSeparator)$env:PATH"
+              $env:DOTNET_ROOT = $installDir
+          }
+
+          if (-not (Test-GlobalJsonSdk)) {
+              throw "global.json needs SDK $required and the agent has none that satisfies it."
+          }
 
           Write-Host ""
           Write-Host "Installed SDKs:"
-          $sdks = & dotnet --list-sdks
-          $sdks | ForEach-Object { Write-Host "  $_" }
-
-          $required = (Get-Content "$(Build.SourcesDirectory)/global.json" -Raw | ConvertFrom-Json).sdk.version
-          $major = $required.Split('.')[0]
-          if (-not ($sdks | Where-Object { $_ -match "^$major\." })) {
-              throw "global.json needs a $major.x SDK and the agent has none of that major. Installed: $($sdks -join '; ')"
-          }
+          & dotnet --list-sdks | ForEach-Object { Write-Host "  $_" }
 
           Write-Host ""
           Write-Host "Using: $(& dotnet --version) (global.json asks for $required, rollForward latestFeature)"

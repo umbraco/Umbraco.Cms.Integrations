@@ -12,6 +12,6 @@ namespace Umbraco.Cms.Integrations.Commerce.Shopify.Configuration
 
         public bool UseUmbracoAuthorization { get; set; } = true;
 
-        public PropertyCacheLevel PropertyCacheLevel { get; set; } = PropertyCacheLevel.Snapshot;
+        public PropertyCacheLevel PropertyCacheLevel { get; set; } = PropertyCacheLevel.None;
     }
 }

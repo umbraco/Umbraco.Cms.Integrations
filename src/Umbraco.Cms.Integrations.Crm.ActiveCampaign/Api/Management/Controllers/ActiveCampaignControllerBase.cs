@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Net;
@@ -45,19 +46,30 @@ namespace Umbraco.Cms.Integrations.Crm.ActiveCampaign.Api.Management.Controllers
                 return Ok(JsonSerializer.Deserialize<T>(content));
             }
 
+            // Upstream 401/403 means our ActiveCampaign credentials were rejected, not that the
+            // backoffice session expired. Forwarding it would make the backoffice open its login
+            // modal, so report it as a bad gateway and keep the upstream body out of the response.
+            if (IsUpstreamAuthFailure(httpResponse.StatusCode))
+            {
+                return StatusCode(StatusCodes.Status502BadGateway, new ProblemDetailsBuilder()
+                    .WithTitle(Constants.Resources.AuthorizationFailed)
+                    .Build());
+            }
+
             var responseMessage = content.Contains("message") 
                 ? JsonNode.Parse(content)!["message"]!.ToString() 
                 : content;
 
-            var message = httpResponse.StatusCode == HttpStatusCode.Forbidden
-                ? Constants.Resources.AuthorizationFailed
-                : string.IsNullOrEmpty(content)
-                    ? Constants.Resources.ApiAccessFailed
-                    : responseMessage;
+            var message = string.IsNullOrEmpty(content)
+                ? Constants.Resources.ApiAccessFailed
+                : responseMessage;
 
             return StatusCode((int)httpResponse.StatusCode, new ProblemDetailsBuilder()
                 .WithTitle(message)
                 .Build());
         }
+
+        internal static bool IsUpstreamAuthFailure(HttpStatusCode statusCode) =>
+            statusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden;
     }
 }
