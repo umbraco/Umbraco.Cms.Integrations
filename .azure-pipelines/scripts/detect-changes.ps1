@@ -182,7 +182,7 @@ function Get-ReleaseChangedProducts {
         $releasedRef = $CompareRef
     }
     else {
-        $line = if ($SourceBranch -match '^refs/heads/(v\d+)/') { $Matches[1] } else { 'v18' }
+        $line = if ($SourceBranch -match '^refs/heads/(v\d+)/') { $Matches[1] } else { 'v19' }
         $releasedRef = "origin/main-$line"
     }
 
@@ -421,7 +421,7 @@ function Get-ComparisonBase {
     }
 
     # Feature branch: diff against where it forked from its line's dev branch.
-    $line = if ($SourceBranch -match '^refs/heads/(v\d+)/') { $Matches[1] } else { 'v18' }
+    $line = if ($SourceBranch -match '^refs/heads/(v\d+)/') { $Matches[1] } else { 'v19' }
     Write-Host "  Feature branch build, comparing against origin/$line/dev" -ForegroundColor Cyan
 
     $mergeBase = git merge-base "origin/$line/dev" HEAD 2>&1

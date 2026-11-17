@@ -10,7 +10,7 @@ namespace Umbraco.Cms.Integrations.Crm.Hubspot.Editors
     {
 		public override bool IsConverter(IPublishedPropertyType propertyType) => propertyType.EditorUiAlias == "HubSpot.PropertyEditorUi.FormPicker";
 
-		public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType) => PropertyCacheLevel.Snapshot;
+		public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType) => PropertyCacheLevel.Element;
 
 		public override Type GetPropertyValueType(IPublishedPropertyType propertyType) => typeof(HubspotFormViewModel);
 

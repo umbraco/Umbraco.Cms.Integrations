@@ -1,5 +1,4 @@
-﻿using Json.More;
-using System.Text.Json.Nodes;
+﻿using System.Text.Json.Nodes;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Helpers;
@@ -20,7 +19,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
 
         public override bool IsConverter(IPublishedPropertyType propertyType) => propertyType.EditorAlias.Equals("Umbraco.Cms.Integrations.Crm.Dynamics.FormPicker");
 
-        public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType) => PropertyCacheLevel.Snapshot;
+        public override PropertyCacheLevel GetPropertyCacheLevel(IPublishedPropertyType propertyType) => PropertyCacheLevel.None;
 
         public override Type GetPropertyValueType(IPublishedPropertyType propertyType) => typeof(FormViewModel);
 
@@ -34,7 +33,7 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Editors
 
             var vm = new FormViewModel
             {
-                IframeEmbedded =  jsonObj.TryGetValue("iframeEmbedded", out var _, out var _) ? (bool)jsonObj["iframeEmbedded"] : false
+                IframeEmbedded = jsonObj.TryGetPropertyValue("iframeEmbedded", out var iframeEmbedded) ? (bool)iframeEmbedded : false
             };
 
             var module = (DynamicsModule)Enum.Parse(typeof(DynamicsModule), jsonObj["module"].ToString());

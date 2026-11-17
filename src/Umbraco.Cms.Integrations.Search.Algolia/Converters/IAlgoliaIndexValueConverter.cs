@@ -1,5 +1,4 @@
 ﻿using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.PropertyEditors;
 
 namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
 {
@@ -14,8 +13,8 @@ namespace Umbraco.Cms.Integrations.Search.Algolia.Converters
         string Name { get; }
 
         /// <summary>
-        /// Parses the index values.
+        /// Parses the index values for the given culture (<c>null</c> for invariant).
         /// </summary>
-        object ParseIndexValues(IProperty property, IndexValue indexValue);
+        object ParseIndexValues(IProperty property, string? culture);
     }
 }

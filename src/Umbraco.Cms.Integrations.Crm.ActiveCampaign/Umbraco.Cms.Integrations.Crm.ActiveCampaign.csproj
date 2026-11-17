@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
-		<TargetFramework>net10.0</TargetFramework>
+		<TargetFramework>net11.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
@@ -14,7 +14,7 @@
 		<Title>Umbraco CMS Integrations: CRM - ActiveCampaign</Title>
 		<Description>An extension for Umbraco CMS providing a form picker and rendering component for ActiveCampaign.</Description>
 		<PackageIconUrl></PackageIconUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main-v18/src/Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main-v19/src/Umbraco.Cms.Integrations.Crm.ActiveCampaign</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>

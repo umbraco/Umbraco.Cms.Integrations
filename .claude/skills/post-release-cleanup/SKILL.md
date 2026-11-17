@@ -10,7 +10,7 @@ You close out a release for **Umbraco.Cms.Integrations**.
 ## Where this sits in the flow
 
 ```
-1. /release-management        - cuts v18/release/YYYY.MM.N, writes
+1. /release-management        - cuts v19/release/YYYY.MM.N, writes
                                release-manifest.json, bumps version.json
                                + CHANGELOG there, pushes the branch
 2. CI builds the release branch -> clean 7.1.0 artifacts
@@ -49,7 +49,7 @@ this skill creates those, so at Phase 1 they do not exist yet.
 ## Why the version bump matters
 
 NBGV plus `Umbraco.GitVersioning.Extensions` produces preview versions like
-`7.1.0--preview.4.gabc1234` on `v18/dev`. That sorts **below** the stable `7.1.0`
+`7.1.0--preview.4.gabc1234` on `v19/dev`. That sorts **below** the stable `7.1.0`
 in SemVer, so without bumping the patch on dev after a release, dev builds look
 older than what just shipped and are useless for testing.
 
@@ -76,7 +76,7 @@ git fetch origin --tags
 
 Expect to be on `v<N>/release/*` or `v<N>/hotfix/*`. If not, ask the user which
 release branch to process. Derive the line from the branch name
-(`v18/release/2026.08.1` → line `v18`, released branch `main-v18`, dev `v18/dev`).
+(`v19/release/2026.08.1` → line `v19`, released branch `main-v19`, dev `v19/dev`).
 
 Read what shipped from the manifest:
 
@@ -92,7 +92,7 @@ is what everything below is built from.
 **If `release-manifest.json` is missing**, stop and offer choices. Do not guess:
 
 ```
-No release-manifest.json on v18/release/2026.08.1.
+No release-manifest.json on v19/release/2026.08.1.
 
 It is required on a release branch, so either this cleanup has already run
 (Phase 5 deletes it), or the branch was cut by hand.
@@ -150,7 +150,7 @@ created and changed, then use **AskUserQuestion**. Nothing below this point runs
 until the user says yes.
 
 ```
-Release branch: v18/release/2026.08.1
+Release branch: v19/release/2026.08.1
 On NuGet:       Search.Algolia 7.1.0, Crm.Hubspot 9.0.2
 
 Will create and push these tags:
@@ -165,9 +165,9 @@ Will create these GitHub releases:
 
 Then:
   1. delete release-manifest.json on the release branch
-  2. merge v18/release/2026.08.1 -> main-v18
-  3. merge v18/release/2026.08.1 -> v18/dev
-  4. bump on v18/dev: 7.1.0 -> 7.1.1, 9.0.2 -> 9.0.3
+  2. merge v19/release/2026.08.1 -> main-v19
+  3. merge v19/release/2026.08.1 -> v19/dev
+  4. bump on v19/dev: 7.1.0 -> 7.1.1, 9.0.2 -> 9.0.3
 
 Proceed?
 ```
@@ -243,11 +243,17 @@ awk -v v="$version" '
 
 test -s /tmp/notes.md || { echo "No changelog body for $version - stopping"; exit 1; }
 
+# A version with a suffix (10.0.0-rc1) is a pre-release on GitHub too, so it is
+# never shown as the repo's latest release.
+prerelease=()
+case "$version" in *-*) prerelease=(--prerelease) ;; esac
+
 gh release create "$tag" \
   --repo umbraco/Umbraco.Cms.Integrations \
   --title "$tag" \
   --notes-file /tmp/notes.md \
-  --verify-tag
+  --verify-tag \
+  "${prerelease[@]}"
 ```
 
 Two guards worth keeping:
@@ -285,13 +291,13 @@ had one.
 Then merge. Confirm before the first push - this updates a shared branch.
 
 ```bash
-git checkout main-v18
-git pull origin main-v18
-git merge "$release_branch" --no-ff -m "Merge $release_branch into main-v18"
-git push origin main-v18
+git checkout main-v19
+git pull origin main-v19
+git merge "$release_branch" --no-ff -m "Merge $release_branch into main-v19"
+git push origin main-v19
 ```
 
-`main-v18` now matches what shipped.
+`main-v19` now matches what shipped.
 
 ---
 
@@ -301,9 +307,9 @@ The release branch carries the bumped `version.json` and changelog entries, so d
 needs them too or the next release starts from stale versions.
 
 ```bash
-git checkout v18/dev
-git pull origin v18/dev
-git merge "$release_branch" --no-ff -m "Merge $release_branch into v18/dev"
+git checkout v19/dev
+git pull origin v19/dev
+git merge "$release_branch" --no-ff -m "Merge $release_branch into v19/dev"
 ```
 
 Resolve conflicts as:
@@ -329,6 +335,17 @@ For each released package, increment the patch in `src/<PackageName>/version.jso
 
 Always bump the **patch**, whatever kind of bump the release itself was. This is
 mechanical - it only exists to keep preview builds sorting above the release.
+
+**After a release candidate** (`10.0.0-rc1`), don't bump the patch. Ask the user
+which comes next and set dev to it:
+
+- Another RC expected → `10.0.0-rc2`.
+- The Umbraco final is next → the final `10.0.0`.
+
+Preview builds of either (`10.0.0--rc2.preview.N`, `10.0.0--preview.N`) sort
+below `10.0.0-rc1`, because NBGV's extra `-` sorts before `r`. That's fine: they
+are never published, and the next real release (`-rc2` or the final) sorts
+above `-rc1`.
 
 **Do not touch `Client/public/umbraco-package.json`.** It is a fixed `1.0.0`
 placeholder; the real version is stamped into the `wwwroot` copy by
@@ -361,7 +378,7 @@ git commit -m "chore(release): Bump dev versions after release 2026.08.1
 
 - Umbraco.Cms.Integrations.Search.Algolia: 7.1.0 -> 7.1.1
 - Umbraco.Cms.Integrations.Crm.Hubspot: 9.0.2 -> 9.0.3"
-git push origin v18/dev
+git push origin v19/dev
 ```
 
 ---
@@ -371,7 +388,7 @@ git push origin v18/dev
 Ask the user:
 
 ```
-Delete v18/release/2026.08.1?
+Delete v19/release/2026.08.1?
   - Local and remote
   - Local only
   - Keep it
@@ -381,8 +398,8 @@ The tags are what preserve the released history, so deleting the branch loses
 nothing. Only delete it once both merges are pushed.
 
 ```bash
-git branch -d v18/release/2026.08.1
-git push origin --delete v18/release/2026.08.1
+git branch -d v19/release/2026.08.1
+git push origin --delete v19/release/2026.08.1
 ```
 
 Use `-d`, not `-D`: if git refuses because the branch is unmerged, that is a real
@@ -405,16 +422,16 @@ GitHub releases:
   release/crm-hubspot-9.0.2
 
 Merged:
-  v18/release/2026.08.1 -> main-v18
-  v18/release/2026.08.1 -> v18/dev
+  v19/release/2026.08.1 -> main-v19
+  v19/release/2026.08.1 -> v19/dev
 
-Dev version bumps on v18/dev:
+Dev version bumps on v19/dev:
   - Search.Algolia: 7.1.0 -> 7.1.1
   - Crm.Hubspot:    9.0.2 -> 9.0.3
 
 Release branch: deleted / kept
 
-Preview builds on v18/dev now sort above the released versions.
+Preview builds on v19/dev now sort above the released versions.
 ```
 
 Verify rather than assert. Before reporting done:
@@ -423,7 +440,7 @@ Verify rather than assert. Before reporting done:
 git ls-remote --tags origin | grep -E "2026.08.1|search-algolia-7.1.0"
 gh release list --repo umbraco/Umbraco.Cms.Integrations --limit 5
 
-for b in origin/main-v18 origin/v18/dev; do
+for b in origin/main-v19 origin/v19/dev; do
   git cat-file -e "$b:release-manifest.json" 2>/dev/null \
     && echo "LEAKED on $b" || echo "clean: $b"
 done

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
-		<TargetFramework>net10.0</TargetFramework>
+		<TargetFramework>net11.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
@@ -15,7 +15,7 @@
 		<Title>Umbraco CMS Integrations: Automation - Zapier</Title>
 		<Description>An extension for Umbraco CMS providing an automation tool for calling Zapier triggers when specific content gets published.</Description>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main-v18/src/Umbraco.Cms.Integrations.Automation.Zapier</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/blob/main-v19/src/Umbraco.Cms.Integrations.Automation.Zapier</PackageProjectUrl>
 		<Product>Umbraco.Cms.Integrations.Automation.Zapier</Product>
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
 		<PackageIcon>zapier.png</PackageIcon>

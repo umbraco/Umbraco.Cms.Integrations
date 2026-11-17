@@ -4,8 +4,8 @@ This repository holds the official Umbraco CMS integration packages. Each packag
 is independent: it has its own version, ships its own NuGet package, and is
 released on its own schedule. There is no shared runtime library between them.
 
-> **Which branch?** This guide describes the **v18 line** (`main-v18` / `v18/dev`).
-> The v17 line is being brought onto the same setup; the legacy `main` branch
+> **Which branch?** This guide describes the **v19 line** (`main-v19` / `v19/dev`).
+> The v18 and v17 lines use the same setup under their own branch names; the legacy `main` branch
 > (Umbraco 10-13) still uses the older manual process.
 
 ---
@@ -14,15 +14,15 @@ released on its own schedule. There is no shared runtime library between them.
 
 | Branch | Purpose |
 |---|---|
-| `v18/dev` | Working branch. All changes land here first. |
-| `main-v18` | Reflects the **last released** state. Never commit working changes here. |
-| `v18/feature/*` | Feature branches, cut from and merged back to `v18/dev`. |
-| `v18/release/*` | Cut from `v18/dev` per release; builds the publishable artifacts. |
-| `v18/hotfix/*` | Cut from `main-v18` for an urgent fix on the released state. |
+| `v19/dev` | Working branch. All changes land here first. |
+| `main-v19` | Reflects the **last released** state. Never commit working changes here. |
+| `v19/feature/*` | Feature branches, cut from and merged back to `v19/dev`. |
+| `v19/release/*` | Cut from `v19/dev` per release; builds the publishable artifacts. |
+| `v19/hotfix/*` | Cut from `main-v19` for an urgent fix on the released state. |
 
-The flow is: work on a feature branch → PR into `v18/dev` → cut a release branch
-from `v18/dev` → publish from there → merge the release branch back into both
-`main-v18` and `v18/dev`.
+The flow is: work on a feature branch → PR into `v19/dev` → cut a release branch
+from `v19/dev` → publish from there → merge the release branch back into both
+`main-v19` and `v19/dev`.
 
 ---
 
@@ -32,13 +32,13 @@ from `v18/dev` → publish from there → merge the release branch back into bot
 ```bash
 git clone https://github.com/umbraco/Umbraco.Cms.Integrations.git
 cd Umbraco.Cms.Integrations
-git checkout v18/dev
+git checkout v19/dev
 npm ci                                  # installs every package's client, once
 npm run build                           # builds them into each package's wwwroot
 dotnet build Umbraco.Cms.Integrations.slnx
 ```
 
-Requires the **.NET 10 SDK** and **Node 24+ / npm 11+**.
+Requires the **.NET 11 SDK** (`11.0.100`, pinned in `global.json`) and **Node 24.13+ / npm 11+**.
 
 **The npm steps are not optional on a fresh clone.** `wwwroot` holds compiled client
 assets and is *not* committed, so until you have run `npm run build` the packages have
@@ -55,7 +55,7 @@ npm run build --workspace algolia
 Workspace names are `algolia`, `hubspot`, `shopify`, `dynamics`, `semrush`, `zapier`,
 `activecampaign` and `googlesearchconsole`. `npm run watch` works the same way.
 
-Use `examples/Umbraco.Cms.Integrations.Testsite.V18` to run the packages in a real
+Use `examples/Umbraco.Cms.Integrations.Testsite.V19` to run the packages in a real
 Umbraco instance.
 
 ---
@@ -67,7 +67,7 @@ dotnet test Umbraco.Cms.Integrations.slnx
 ```
 
 Test projects live under `tests/`, one per package that has them, named
-`<PackageName>.Tests`. Coverage is currently partial — only `Crm.Hubspot` has tests.
+`<PackageName>.Tests`. Coverage is currently partial — only `Crm.Hubspot` and `Search.Algolia` have tests.
 
 They use **xunit + Moq**, matching `Umbraco.Automate` and `Umbraco.AI` (the versions
 are pinned in the root `Directory.Packages.props` to the same values those repos
@@ -114,8 +114,9 @@ a `PackageReference` — it will fail the build with `NU1008`.
 Bumping the Umbraco CMS version is therefore a one-line change that applies to
 every package.
 
-> `tests/` and `examples/Umbraco.Cms.Integrations.Testsite.V18/` each have their own
-> scoped `Directory.Packages.props` and are deliberately outside the root one.
+> `examples/Umbraco.Cms.Integrations.Testsite.V19/` has its own scoped
+> `Directory.Packages.props` and is deliberately outside the root one. `tests/` has none:
+> the test projects use the root file.
 
 ---
 
@@ -128,8 +129,8 @@ hand.**
 ```jsonc
 // src/Umbraco.Cms.Integrations.Search.Algolia/version.json
 {
-    "version": "7.0.1",
-    "publicReleaseRefSpec": ["^refs/heads/main-v18$"]
+    "version": "8.0.1",
+    "publicReleaseRefSpec": ["^refs/heads/main-v19$"]
     // ...
 }
 ```
@@ -150,7 +151,7 @@ Based on the commits affecting that package, using [Conventional Commits][cc]:
 | Only `docs:` / `chore:` / `refactor:` | Usually none | — |
 
 Each package keeps **one major per Umbraco major** (e.g. Search.Algolia `6.x` = v17,
-`7.x` = v18). A new Umbraco major means a new major for every package.
+`7.x` = v18, `8.x` = v19). A new Umbraco major means a new major for every package.
 
 ### The other version-carrying files
 
@@ -166,8 +167,8 @@ Each package keeps **one major per Umbraco major** (e.g. Search.Algolia `6.x` = 
   it drift is confusing — `Search.Algolia` sat at `7.0.0` while the package shipped as
   `7.0.1` for exactly this reason.
 
-On `main-v18` a build produces a clean version (`7.0.2`). On any other branch NBGV
-appends a preview suffix (`7.0.2--preview.4.gabc1234`), so dev builds always sort
+On `main-v19` a build produces a clean version (`8.0.2`). On any other branch NBGV
+appends a preview suffix (`8.0.2--preview.4.gabc1234`), so dev builds always sort
 below the release.
 
 ---
@@ -237,41 +238,43 @@ that folder to the `workspaces` array in the root `package.json` — using the c
 
 ## Releasing
 
-**A release is built from a release branch.** `version.json` lists `main-v18`,
-`v18/release/*` and `v18/hotfix/*` as public release refs, and NBGV only drops the
+**A release is built from a release branch.** `version.json` lists `main-v19`,
+`v19/release/*` and `v19/hotfix/*` as public release refs, and NBGV only drops the
 preview suffix on a branch matching one of them:
 
 | Branch built | Version produced |
 |---|---|
-| `v18/release/2026.08.1` | `7.1.0` ← publishable |
-| `main-v18` | `7.1.0` |
-| `v18/dev`, feature branches | `7.1.0--preview.4.gabc1234` |
+| `v19/release/2026.09.1` | `8.1.0` ← publishable |
+| `main-v19` | `8.1.0` |
+| `v19/dev`, feature branches | `8.1.0--preview.4.gabc1234` |
 
-So the release branch is what produces the artifact you publish, and `main-v18` /
-`v18/dev` stay untouched until the release is proven. This matches how
+So the release branch is what produces the artifact you publish, and `main-v19` /
+`v19/dev` stay untouched until the release is proven. This matches how
 `Umbraco.Automate` and `Umbraco.AI` work.
 
 Release branches are named `v<N>/release/YYYY.MM.N` (calendar-based, e.g.
-`v18/release/2026.08.1`). That is independent of the package versions — one branch
+`v19/release/2026.09.1`). That is independent of the package versions — one branch
 can carry several packages at different versions. Urgent fixes on top of an
 already-released state use `v<N>/hotfix/YYYY.MM.N`, cut from `main-v<N>`.
 
-> **No release manifest.** On a release branch, CI treats a package as shipping when
-> its `version.json` differs from `main-v18` — the bump *is* the declaration. There
-> is no `include`/`exclude` list to maintain.
+> **`release-manifest.json` declares what ships.** On a release branch, CI diffs each
+> package against `main-v19` to propose what changed, and the manifest's `include`/`exclude`
+> lists decide what is built; a changed package missing from both fails the build.
+> `/release-management` writes it with `scripts/generate-release-manifest.ps1` and
+> `/post-release-cleanup` deletes it before the merge back. See `CLAUDE.md` section 3.
 
 Two Claude Code skills guide the process:
 
 - **`/release-management`** — detects changed packages, recommends the bump per the
   table above, cuts the release branch, updates `version.json`, writes the changelog
   entry, and pushes.
-- **`/post-release-cleanup`** — merges the release branch into `main-v18` and back
-  into `v18/dev`, bumps the patch on dev so the next dev build sorts above the
+- **`/post-release-cleanup`** — merges the release branch into `main-v19` and back
+  into `v19/dev`, bumps the patch on dev so the next dev build sorts above the
   release, and offers to delete the branch.
 
 Full sequence:
 
-1. `/release-management` on `v18/dev` — cuts `v18/release/YYYY.MM.N`, bumps,
+1. `/release-management` on `v19/dev` — cuts `v19/release/YYYY.MM.N`, bumps,
    writes changelogs, pushes the branch.
 2. CI builds the release branch. **Check the artifact is clean-versioned**
    (`7.1.0`, not `7.1.0--preview.N`) before continuing.
@@ -283,7 +286,7 @@ Full sequence:
 
 > Tagging is easy to forget and has been missed before. Do steps 4 and 5 every time.
 >
-> The branch is `v18/release/<date>` while tags are `release/<slug>-<version>`. They
+> The branch is `v19/release/<date>` while tags are `release/<slug>-<version>`. They
 > live in different ref namespaces and do not collide.
 
 ---

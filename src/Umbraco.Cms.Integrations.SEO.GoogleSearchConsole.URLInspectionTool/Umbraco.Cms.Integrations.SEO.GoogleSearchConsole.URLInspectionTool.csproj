@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 	<PropertyGroup>
-		<TargetFramework>net10.0</TargetFramework>
+		<TargetFramework>net11.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
@@ -13,7 +13,7 @@
 		<Title>Umbraco CMS Integrations: SEO - Google Search Console URL Inspection Tool</Title>
 		<Description>An extension for Umbraco CMS providing programmatic access to URL-level data for properties managed in Search Console and the indexed version of a URL.</Description>
 		<PackageIconUrl></PackageIconUrl>
-		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main-v18/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/umbraco/Umbraco.Cms.Integrations/tree/main-v19/src/Umbraco.Cms.Integrations.SEO.GoogleSearchConsole.URLInspectionTool</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/umbraco/Umbraco.Cms.Integrations</RepositoryUrl>
 		<Authors>Umbraco HQ</Authors>
 		<Company>Umbraco</Company>
