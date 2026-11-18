@@ -195,6 +195,7 @@ function Get-ReleaseChangedProducts {
         # so this degrades to "the cross-check is uninformative" rather than
         # "everything ships".
         Write-Host "  ! merge-base with $releasedRef failed - treating all packages as changed" -ForegroundColor Yellow
+        $global:LASTEXITCODE = 0
         $Products.Keys | ForEach-Object { $changed[$_] = $true }
         return $changed
     }
@@ -628,3 +629,8 @@ Write-PipelineVariables -Products $products -Changed $changed
 
 Write-Host ""
 Write-Host "Change detection complete" -ForegroundColor Green
+
+# Handled git failures above (e.g. merge-base against a main-v<N> that does
+# not exist yet, on a line's first release) leave $LASTEXITCODE non-zero,
+# and PowerShell@2 would report that as a failed step. Reaching here is success.
+exit 0
