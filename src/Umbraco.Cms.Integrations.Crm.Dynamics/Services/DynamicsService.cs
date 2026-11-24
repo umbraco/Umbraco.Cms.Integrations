@@ -1,6 +1,11 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 using System.Text.Json.Nodes;
+using Umbraco.Cms.Core.Cache;
+using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Extensions;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Configuration;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models;
 using Umbraco.Cms.Integrations.Crm.Dynamics.Models.Dtos;
@@ -19,11 +24,35 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
         // Access to the client within the class is via ClientFactory(), allowing us to mock the responses in tests.
         public static Func<HttpClient> ClientFactory = () => s_client;
 
+        private const string RealTimeFormCacheKeyPrefix = "Umbraco.Cms.Integrations.Crm.Dynamics.RealTimeForm_";
+
+        private readonly IAppPolicyCache _runtimeCache;
+
+        private readonly ILogger<DynamicsService> _logger;
+
+        [Obsolete("Use the constructor that takes AppCaches and ILogger<DynamicsService>. Scheduled for removal in the next major version.")]
         public DynamicsService(IOptions<DynamicsSettings> options, IDynamicsConfigurationStorage dynamicsConfigurationStorage)
+            : this(
+                options,
+                dynamicsConfigurationStorage,
+                StaticServiceProvider.Instance.GetRequiredService<AppCaches>(),
+                StaticServiceProvider.Instance.GetRequiredService<ILogger<DynamicsService>>())
+        {
+        }
+
+        public DynamicsService(
+            IOptions<DynamicsSettings> options,
+            IDynamicsConfigurationStorage dynamicsConfigurationStorage,
+            AppCaches appCaches,
+            ILogger<DynamicsService> logger)
         {
             _settings = options.Value;
 
             _dynamicsConfigurationStorage = dynamicsConfigurationStorage;
+
+            _runtimeCache = appCaches.RuntimeCache;
+
+            _logger = logger;
         }
 
         public async Task<IdentityDto> GetIdentity(string accessToken)
@@ -111,20 +140,49 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
             return list;
         }
 
+        /// <summary>
+        /// Gets a real-time form for rendering. The form is fetched with the stored access token, which
+        /// can expire. When the fetch fails, the last form fetched successfully is returned instead, so
+        /// the form keeps rendering until someone reconnects.
+        /// </summary>
         public async Task<FormDto> GetRealTimeForm(string id)
         {
+            var cacheKey = RealTimeFormCacheKeyPrefix + id;
+
             var oauthConfiguration = _dynamicsConfigurationStorage.GetOAuthConfiguration();
 
-            var forms = await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath);
+            var forms = oauthConfiguration != null
+                ? await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath)
+                : null;
 
-            if (forms == null || !forms.Value.Any(p => p.Id == id)) return null;
+            if (forms == null)
+            {
+                var cachedForm = _runtimeCache.GetCacheItem<FormDto>(cacheKey);
 
-            var form = forms.Value.First(p => p.Id == id);
-            return new FormDto
+                _logger.LogWarning(
+                    "Could not fetch Dynamics real-time form {FormId}. The access token may have expired; reconnect Dynamics in the backoffice. {Fallback}",
+                    id,
+                    cachedForm != null ? "Rendering the last version fetched." : "No earlier version is available, so the form is not rendered.");
+
+                return cachedForm;
+            }
+
+            var form = forms.Value.FirstOrDefault(p => p.Id == id);
+            if (form == null)
+            {
+                _runtimeCache.Clear(cacheKey);
+                return null;
+            }
+
+            var formDto = new FormDto
             {
                 RawHtml = form.FormHtml,
                 StandaloneHtml = form.StandaloneHtml
             };
+
+            _runtimeCache.Insert(cacheKey, () => formDto);
+
+            return formDto;
         }
 
         private async Task<IdentityDto> GetUser(string accessToken)
