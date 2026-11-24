@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### fix
 
-* **dynamics:** Real-time forms keep rendering, using the last version fetched, when the Dynamics access token has expired. A warning is logged so the connection can be renewed ([e7c9920](https://github.com/umbraco/Umbraco.Cms.Integrations/commit/e7c9920))
+* **dynamics:** When the Dynamics access token has expired or Dynamics can't be reached, real-time forms render the last version fetched since the application started, instead of disappearing. The fallback is in memory only, so reconnecting Dynamics is still needed; a warning is logged ([e7c9920](https://github.com/umbraco/Umbraco.Cms.Integrations/commit/e7c9920))
 
 ### Internal
 
