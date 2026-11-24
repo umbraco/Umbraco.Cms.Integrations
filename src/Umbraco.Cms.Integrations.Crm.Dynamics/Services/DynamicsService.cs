@@ -142,18 +142,32 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
 
         /// <summary>
         /// Gets a real-time form for rendering. The form is fetched with the stored access token, which
-        /// can expire. When the fetch fails, the last form fetched successfully is returned instead, so
-        /// the form keeps rendering until someone reconnects.
+        /// can expire. When the fetch fails, the last form fetched successfully since the application
+        /// started is returned instead. The cache is in memory, so it does not survive a restart and is
+        /// not shared between load-balanced servers.
         /// </summary>
         public async Task<FormDto> GetRealTimeForm(string id)
         {
             var cacheKey = RealTimeFormCacheKeyPrefix + id;
 
             var oauthConfiguration = _dynamicsConfigurationStorage.GetOAuthConfiguration();
+            if (oauthConfiguration == null || string.IsNullOrEmpty(oauthConfiguration.AccessToken))
+            {
+                _logger.LogWarning("Cannot render Dynamics real-time form {FormId}: Dynamics is not connected.", id);
 
-            var forms = oauthConfiguration != null
-                ? await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath)
-                : null;
+                return _runtimeCache.GetCacheItem<FormDto>(cacheKey);
+            }
+
+            ResponseDto<RealTimeFormDto> forms;
+            try
+            {
+                forms = await Get<RealTimeFormDto>(oauthConfiguration.AccessToken, Constants.Modules.RealTimePath);
+            }
+            catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException)
+            {
+                _logger.LogWarning(ex, "Could not reach Dynamics to fetch real-time form {FormId}.", id);
+                forms = null;
+            }
 
             if (forms == null)
             {
@@ -162,7 +176,9 @@ namespace Umbraco.Cms.Integrations.Crm.Dynamics.Services
                 _logger.LogWarning(
                     "Could not fetch Dynamics real-time form {FormId}. The access token may have expired; reconnect Dynamics in the backoffice. {Fallback}",
                     id,
-                    cachedForm != null ? "Rendering the last version fetched." : "No earlier version is available, so the form is not rendered.");
+                    cachedForm != null
+                        ? "Rendering the last version fetched since the application started."
+                        : "No earlier version is available, so the form is not rendered.");
 
                 return cachedForm;
             }
