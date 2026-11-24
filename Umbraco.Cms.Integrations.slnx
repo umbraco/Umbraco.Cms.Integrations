@@ -51,6 +51,7 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/Tests/">
+    <Project Path="tests/Umbraco.Cms.Integrations.Automation.Zapier.Tests/Umbraco.Cms.Integrations.Automation.Zapier.Tests.csproj" />
     <Project Path="tests/Umbraco.Cms.Integrations.Crm.Hubspot.Tests/Umbraco.Cms.Integrations.Crm.Hubspot.Tests.csproj" />
     <Project Path="tests/Umbraco.Cms.Integrations.Search.Algolia.Tests/Umbraco.Cms.Integrations.Search.Algolia.Tests.csproj" />
   </Folder>
