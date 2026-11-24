@@ -38,7 +38,9 @@ public class DynamicsServiceTests : IDisposable
                 "SendAsync",
                 ItExpr.IsAny<HttpRequestMessage>(),
                 ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(() => new HttpResponseMessage(_statusCode) { Content = new StringContent(_responseContent) });
+            .ReturnsAsync(() => _exception is null
+                ? new HttpResponseMessage(_statusCode) { Content = new StringContent(_responseContent) }
+                : throw _exception);
 
         var client = new HttpClient(handler.Object);
         DynamicsService.ClientFactory = () => client;
@@ -46,12 +48,16 @@ public class DynamicsServiceTests : IDisposable
 
     public void Dispose() => DynamicsService.ClientFactory = _originalClientFactory;
 
-    private static DynamicsService CreateSut(AppCaches appCaches)
+    private Exception? _exception;
+
+    private OAuthConfigurationDto? _oauthConfiguration = new() { AccessToken = "token" };
+
+    private DynamicsService CreateSut(AppCaches appCaches)
     {
         var storage = new Mock<IDynamicsConfigurationStorage>();
         storage
             .Setup(x => x.GetOAuthConfiguration())
-            .Returns(new OAuthConfigurationDto { AccessToken = "token" });
+            .Returns(() => _oauthConfiguration!);
 
         return new DynamicsService(
             Options.Create(new DynamicsSettings { HostUrl = "https://example.invalid/", ApiPath = "api/data/v9.2/" }),
@@ -110,5 +116,29 @@ public class DynamicsServiceTests : IDisposable
         _statusCode = HttpStatusCode.Unauthorized;
         _responseContent = string.Empty;
         Assert.Null(await sut.GetRealTimeForm(FormId));
+    }
+
+    [Fact]
+    public async Task GetRealTimeForm_WhenDynamicsCannotBeReached_ReturnsTheLastFormFetched()
+    {
+        var sut = CreateSut(CreateAppCaches());
+        await sut.GetRealTimeForm(FormId);
+
+        _exception = new HttpRequestException("No such host is known.");
+        var form = await sut.GetRealTimeForm(FormId);
+
+        Assert.NotNull(form);
+        Assert.Equal("<form>raw</form>", form.RawHtml);
+    }
+
+    [Fact]
+    public async Task GetRealTimeForm_WhenDynamicsIsNotConnected_ReturnsNullWithoutCallingDynamics()
+    {
+        _oauthConfiguration = null;
+        _exception = new InvalidOperationException("Dynamics should not be called.");
+
+        var form = await CreateSut(CreateAppCaches()).GetRealTimeForm(FormId);
+
+        Assert.Null(form);
     }
 }
