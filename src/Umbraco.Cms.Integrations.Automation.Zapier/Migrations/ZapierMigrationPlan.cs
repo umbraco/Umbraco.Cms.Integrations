@@ -7,7 +7,8 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
         public ZapierMigrationPlan() : base(Constants.MigrationPlanName)
         {
             From(string.Empty)
-                .To<ZapierMigration>(Constants.TargetStateName);
+                .To<ZapierMigration>(Constants.TargetStateName)
+                .To<AllowMultipleSubscriptionHooksPerEntity>(Constants.AllowMultipleHooksPerEntityTargetStateName);
         }
     }
 }

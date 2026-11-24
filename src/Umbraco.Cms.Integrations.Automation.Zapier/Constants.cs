@@ -9,6 +9,10 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier
 
         public const string TargetStateName = "zapiersubscriptionhook-db";
 
+        public const string AllowMultipleHooksPerEntityTargetStateName = "zapiersubscriptionhook-allow-multiple-hooks-per-entity-db";
+
+        public const string SubscriptionHookEntityIndexName = "IX_ZapierSubscriptionHook_EntityId_Type";
+
         public static class ManagementApi
         {
             public const string RootPath = "zapier/management/api";
