@@ -224,9 +224,7 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
     async #loadSelectionItems() {
         this.#initializeSelection();
 
-        this._selection = this._selectedItems.length > 0
-            ? this._selectedItems
-            : this.data!.selectedItemIdList;
+        this._selection = [...this._selectedItems];
         this._maximumItems = this.data?.config?.maxItems ?? 0;
         this._minimumItems = this.data?.config?.minItems ?? 0;
     }
