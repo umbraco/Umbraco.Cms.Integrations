@@ -7,7 +7,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
     /// Replaces the unique index on <c>EntityId, Type</c> with a non-unique one, so more than one
     /// Zap can subscribe to the same content type or form. <c>HookUrl</c> stays unique.
     /// </summary>
-    public class AllowMultipleSubscriptionHooksPerEntity : AsyncMigrationBase
+    public class AllowMultipleSubscriptionHooksPerEntity : MigrationBase
     {
         private const string LegacyUniqueIndexName = "IX_ZapierSubscriptionHook_Type";
 
@@ -15,7 +15,7 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
         {
         }
 
-        protected override Task MigrateAsync()
+        protected override void Migrate()
         {
             Logger.LogDebug("Running migration {Migration}", nameof(AllowMultipleSubscriptionHooksPerEntity));
 
@@ -29,8 +29,6 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Migrations
             {
                 CreateIndex<ZapierMigration.ZapierSubscriptionHookTable>(Constants.SubscriptionHookEntityIndexName);
             }
-
-            return Task.CompletedTask;
         }
     }
 }
