@@ -28,6 +28,7 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
 
     #hubspotFormsContext!: typeof HUBSPOT_FORMS_CONTEXT_TOKEN.TYPE;
     #settingsModel?: HubspotFormPickerSettingsModel;
+    #messageListener?: (event: MessageEvent) => void;
 
     @state()
     private _serviceStatus: HubspotServiceStatus = {
@@ -139,17 +140,34 @@ export class HubspotAuthorizationElement extends UmbElementMixin(LitElement) {
             }
         }, 7000);
 
-        window.addEventListener("message", async (event: MessageEvent) => {
+        // One listener per element, and only for messages from the window opened above. Adding a
+        // listener on every click meant a second Connect exchanged the same code twice, and the
+        // second exchange failed with "missing or unknown auth code".
+        this.#removeMessageListener();
+        this.#messageListener = async (event: MessageEvent) => {
+            if (event.source !== authWin || event.data?.type !== "hubspot:oauth:success") return;
 
-            if (event.data.type === "hubspot:oauth:success") {
-                const oauthRequestDtoModel: OAuthRequestDtoModel = {
-                    code: event.data.code
-                };
+            this.#removeMessageListener();
 
-                await this.getAccessToken(oauthRequestDtoModel);
+            const oauthRequestDtoModel: OAuthRequestDtoModel = {
+                code: event.data.code
+            };
 
-            }
-        }, false);
+            await this.getAccessToken(oauthRequestDtoModel);
+        };
+        window.addEventListener("message", this.#messageListener, false);
+    }
+
+    #removeMessageListener() {
+        if (!this.#messageListener) return;
+
+        window.removeEventListener("message", this.#messageListener, false);
+        this.#messageListener = undefined;
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        this.#removeMessageListener();
     }
 
     async #onRevoke() {
