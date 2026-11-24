@@ -101,6 +101,7 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 
     private _selectedItems: Array<string | null> = [];
     private _selectedProducts: Array<ProductDtoModel> = [];
+    #selectionInitialized = false;
 
     constructor() {
         super();
@@ -221,11 +222,27 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
 	}
 
     async #loadSelectionItems() {
+        this.#initializeSelection();
+
         this._selection = this._selectedItems.length > 0
             ? this._selectedItems
             : this.data!.selectedItemIdList;
         this._maximumItems = this.data?.config?.maxItems ?? 0;
         this._minimumItems = this.data?.config?.minItems ?? 0;
+    }
+
+    /**
+     * Starts from the products already saved on the property, so that products picked on
+     * another page are kept when more are added. Previously only the products ticked in this
+     * session were submitted, and the saved ones on other pages were dropped.
+     */
+    #initializeSelection() {
+        if (this.#selectionInitialized) return;
+        this.#selectionInitialized = true;
+
+        this._selectedItems = (this.data?.selectedItemIdList ?? []).filter((id): id is string => id !== null);
+        this._selectedProducts = [...(this.value?.productList ?? [])];
+        this._numberOfSelection = this._selectedItems.length;
     }
 
     #onSelected(event: UmbTableSelectedEvent) {
@@ -248,7 +265,8 @@ export default class ShopifyProductsModalElement extends UmbModalBaseElement<Sho
         this.#collectionContext?.selection.setSelection(selection);
 
         this.#getSelectedProduct(selection, items);
-        this._numberOfSelection = selection.length;
+        // Count the whole selection, not just the rows on the current page.
+        this._numberOfSelection = this._selectedItems.length;
     }
 
     private saveSelectedItems(items: UmbTableItem[], selection: string[]) {

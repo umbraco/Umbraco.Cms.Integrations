@@ -101,6 +101,9 @@ export class ShopifyProductPickerPropertyEditor extends UmbLitElement implements
                 selectedItemIdList: this.products.map(p => p.id.toString()),
                 config: this._config
             },
+            value: {
+                productList: this.products
+            },
         });
 
         const data = await pickerContext?.onSubmit();
