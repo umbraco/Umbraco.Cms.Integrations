@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [6.0.4] - Unreleased
 
+### fix
+
+* **dynamics:** Real-time forms keep rendering, using the last version fetched, when the Dynamics access token has expired. A warning is logged so the connection can be renewed ([e7c9920](https://github.com/umbraco/Umbraco.Cms.Integrations/commit/e7c9920))
+
 ### Internal
 
 * Development version bump after the 6.0.3 release.
