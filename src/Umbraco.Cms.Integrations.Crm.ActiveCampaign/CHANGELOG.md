@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [8.0.0-rc2] - Unreleased
 
+### fix
+
+* **activecampaign:** Use a unique backoffice entry point alias, so the form picker is registered when Umbraco.Forms.Integrations.Crm.ActiveCampaign is also installed ([3868067](https://github.com/umbraco/Umbraco.Cms.Integrations/commit/3868067))
+
 ### Internal
 
 * Development version bump after the 8.0.0-rc1 release.
