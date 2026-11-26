@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Security;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Integrations.Automation.Zapier.Configuration;
@@ -15,12 +17,28 @@ namespace Umbraco.Cms.Integrations.Automation.Zapier.Services
 
         private readonly IBackOfficeUserManager _backOfficeUserManager;
 
+        [Obsolete("Use the constructor that takes IUserService. Scheduled for removal in the next major version.")]
         public UserValidationService(
-            IOptions<ZapierSettings> options, 
+            IOptions<ZapierSettings> options,
             IOptions<ZapierFormsSettings> zapierFormsSettings,
             IBackOfficeUserManager backOfficeUserManager)
+            : this(
+                options,
+                zapierFormsSettings,
+                backOfficeUserManager,
+                StaticServiceProvider.Instance.GetRequiredService<IUserService>())
+        {
+        }
+
+        public UserValidationService(
+            IOptions<ZapierSettings> options,
+            IOptions<ZapierFormsSettings> zapierFormsSettings,
+            IBackOfficeUserManager backOfficeUserManager,
+            IUserService userService)
         {
             _backOfficeUserManager = backOfficeUserManager;
+
+            _userService = userService;
 
             _zapierSettings = options.Value;
 
