@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.0.2] - Unreleased
 
+### fix
+
+* **shopify:** The product picker keeps the saved products when more products are picked on another page, and counts the whole selection against the minimum and maximum ([319fa32](https://github.com/umbraco/Umbraco.Cms.Integrations/commit/319fa32))
+
 ### Internal
 
 * Development version bump after the 5.0.1 release.
