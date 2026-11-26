@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [7.0.0-rc2] - Unreleased
 
+### fix
+
+* **zapier:** Signing in with a username and password no longer fails with a NullReferenceException when `UserGroupAlias` is set ([05976f9](https://github.com/umbraco/Umbraco.Cms.Integrations/commit/05976f9))
+* **zapier:** More than one Zap can subscribe to the same content type or form. A migration replaces the unique index on `EntityId, Type` with a non-unique one; `HookUrl` stays unique ([9315afa](https://github.com/umbraco/Umbraco.Cms.Integrations/commit/9315afa))
+
 ### Internal
 
 * Development version bump after the 7.0.0-rc1 release.

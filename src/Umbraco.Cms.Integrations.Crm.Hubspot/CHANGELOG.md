@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [10.0.0-rc2] - Unreleased
 
+### fix
+
+* **hubspot:** The form picker refreshes an expired OAuth access token and retries, instead of showing "Unable to connect to HubSpot" until the data type settings are opened ([376b7b5](https://github.com/umbraco/Umbraco.Cms.Integrations/commit/376b7b5))
+* **hubspot:** Connecting with OAuth exchanges the authorization code once, so clicking Connect more than once no longer fails with "missing or unknown auth code" ([f1496dd](https://github.com/umbraco/Umbraco.Cms.Integrations/commit/f1496dd))
+
 ### Internal
 
 * Development version bump after the 10.0.0-rc1 release.
