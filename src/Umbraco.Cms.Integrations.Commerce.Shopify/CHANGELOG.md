@@ -5,15 +5,11 @@ All notable changes to Umbraco.Cms.Integrations.Commerce.Shopify will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [6.0.2] - Unreleased
+## [6.0.2] - 2026-11-26
 
 ### fix
 
 * **shopify:** The product picker keeps the saved products when more products are picked on another page, and counts the whole selection against the minimum and maximum ([64cd6d0](https://github.com/umbraco/Umbraco.Cms.Integrations/commit/64cd6d0))
-
-### Internal
-
-* Development version bump after the 6.0.1 release.
 
 ## [6.0.1] - 2026-08-11
 
