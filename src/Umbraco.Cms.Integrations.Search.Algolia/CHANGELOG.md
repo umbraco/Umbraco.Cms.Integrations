@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Internal
 
 * Development version bump after the 6.1.2 release.
+* The NuGet package now declares its MIT license.
 
 ## [6.1.2] - 2026-08-11
 
