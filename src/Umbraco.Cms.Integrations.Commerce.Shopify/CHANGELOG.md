@@ -5,6 +5,16 @@ All notable changes to Umbraco.Cms.Integrations.Commerce.Shopify will be documen
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.0.0-rc2] - 2026-11-27
+
+### fix
+
+* **shopify:** The product picker keeps the saved products when more products are picked on another page, and counts the whole selection against the minimum and maximum ([73cfadb](https://github.com/umbraco/Umbraco.Cms.Integrations/commit/73cfadb))
+
+### Internal
+
+* Built against Umbraco CMS 19.0.0-rc2; depends on `Umbraco.Cms.*` `[19.0.0-rc2, 20.0.0)`.
+
 ## [7.0.0-rc1] - 2026-11-17
 
 ### Breaking

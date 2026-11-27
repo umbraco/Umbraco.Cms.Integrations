@@ -5,6 +5,16 @@ All notable changes to Umbraco.Cms.Integrations.Crm.ActiveCampaign will be docum
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.0.0-rc2] - 2026-11-27
+
+### fix
+
+* **activecampaign:** Use a unique backoffice entry point alias, so the form picker is registered when Umbraco.Forms.Integrations.Crm.ActiveCampaign is also installed ([3868067](https://github.com/umbraco/Umbraco.Cms.Integrations/commit/3868067))
+
+### Internal
+
+* Built against Umbraco CMS 19.0.0-rc2; depends on `Umbraco.Cms.*` `[19.0.0-rc2, 20.0.0)`.
+
 ## [8.0.0-rc1] - 2026-11-17
 
 ### Breaking
