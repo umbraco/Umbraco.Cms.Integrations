@@ -20,6 +20,7 @@
 		<PackageTags>Umbraco;Umbraco-Marketplace</PackageTags>
 		<PackageIcon>semrush.png</PackageIcon>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 
 
