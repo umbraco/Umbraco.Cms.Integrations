@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Internal
 
 * Baseline entry, recorded when this repo moved to per-package `version.json`
+* The NuGet package now declares its MIT license.
   versioning. Unlike the other packages, no `release/` tag exists for this
   version, so it is recorded as unreleased rather than given a release date.
   Changes before this version are in the git history.
