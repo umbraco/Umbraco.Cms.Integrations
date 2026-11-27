@@ -5,6 +5,12 @@ All notable changes to Umbraco.Cms.Integrations.Crm.Dynamics will be documented 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.0.4] - 2026-11-26
+
+### fix
+
+* **dynamics:** When the Dynamics access token has expired or Dynamics can't be reached, real-time forms render the last version fetched since the application started, instead of disappearing. The fallback is in memory only, so reconnecting Dynamics is still needed; a warning is logged ([e7c9920](https://github.com/umbraco/Umbraco.Cms.Integrations/commit/e7c9920))
+
 ## [6.0.3] - 2026-08-12
 
 ### fix
