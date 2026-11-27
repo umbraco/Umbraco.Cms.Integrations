@@ -5,7 +5,7 @@ All notable changes to Umbraco.Cms.Integrations.Crm.Dynamics will be documented 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [7.0.0-rc2] - Unreleased
+## [7.0.0-rc2] - 2026-11-27
 
 ### fix
 
@@ -13,7 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Internal
 
-* Development version bump after the 7.0.0-rc1 release.
 * Built against Umbraco CMS 19.0.0-rc2; depends on `Umbraco.Cms.*` `[19.0.0-rc2, 20.0.0)`.
 
 ## [7.0.0-rc1] - 2026-11-17
