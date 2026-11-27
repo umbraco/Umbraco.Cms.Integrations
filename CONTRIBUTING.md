@@ -198,7 +198,11 @@ One pipeline, `azure-pipelines.yml`, covers the whole repo:
    discovers packages (any `src/` folder with both a `.csproj` and a
    `version.json`) and diffs against the right base for the build context.
 2. **Validate changelogs** — `.azure-pipelines/scripts/validate-changelogs.ps1`.
-3. **Build & pack** — fans out over only the changed packages.
+3. **Generate SBOMs** — release and hotfix branches only. Scans the packages being
+   released with `umbraco-sbom`, fails on a license policy violation, and uploads to
+   Dependency-Track. Tick **Generate SBOMs and check licenses** when queueing a run to
+   check every package on any other branch, without uploading.
+4. **Build & pack** — fans out over only the changed packages.
 
 The pipeline builds and packs artifacts. It does **not** push to NuGet or create
 tags; those are separate steps (see below).
@@ -222,7 +226,10 @@ that folder to the `workspaces` array in the root `package.json` — using the c
 
 - **Never commit `wwwroot`.** It is gitignored build output. Rebuild it with
   `npm run build` whenever you change `Client/src`; there is nothing to commit.
-- **cdxgen needs `--spec-version 1.6`** pinned, or the SBOM step fails.
+- **A license policy violation blocks a release.** The SBOM stage fails and `Pack`
+  waits for it. If a dependency is genuinely allowed, add a per-package exception to
+  `.sbom-policy.json` at the repo root (see the
+  [Umbraco.Internal.Sbom](https://github.com/umbraco/Umbraco.Internal.Sbom) readme).
 - **Every CI job that builds a package needs `fetchDepth: 0`.** NBGV cannot compute a
   version from a shallow clone.
 
